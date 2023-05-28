@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="9796a673-fb8c-44b6-b997-91b1fb8367b4" name="Changes" comment="" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Characters/KittyController/DataStorages/CharacterPhysicsDataStorage.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Characters/PlayerSpawnerInstaller.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Characters/KittyController/DataStorages/CharacterAnimatorDataStorage.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Plugins/Zenject/Source/Binding/Binders/ConcreteBinders/ConcreteBinderGeneric.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Items/ItemWorldObjectControl.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Services/CharacterSpawnerService/Factories/KittyFactory/ICharacterEntityFactory.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Services/AudioService/AudioSystemInstaller.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Characters/KittyController/PlayerCharacterController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Services/AudioService/AudioSystemManager.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Characters/KittyController/Components/AudioComponent/CharacterSoundComponent.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Characters/KittyController/Components/RaycastComponent/CharacterRayCastComponent.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Items/ItemData/MoneyItemData.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Characters/KittyController/Components/MovementComponent/KittyCharacterMovementComponent.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Services/AudioService/Ambients/AmbientLibrary.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Services/CharacterSpawnerService/Factories/KittyFactory/KittySpawnController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Services/CharacterSpawnerService/Factories/KittyFactory/PlayerCharacterComponentsInstaller.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Services/AudioService/Sounds/SoundsLibrary/GroundType.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/UI/Inventory/InventoryItemData.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Items/ItemType.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/UI/Inventory/InventoryPanelController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Characters/KittyController/AnimationReactionsController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Characters/OverlapSphereTest.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.inputsystem@1.4.3/InputSystem/Plugins/PlayerInput/PlayerInput.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Characters/KittyController/Components/AudioComponent/ICharacterSoundComponent.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Plugins/Zenject/Source/Providers/GameObjectProviders/PrefabGameObjectProvider.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Services/CameraServiceInstaller/CameraServiceInstaller.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Characters/KittyController/CharacterPhysicsInteraction.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/TestScript.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Characters/CharacterFactory.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Items/ItemData/ItemData.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Characters/KittyController/DataStorages/CharacterAudioDataStorage.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Tools/SerializableDictionary.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Mobile/CanvasInputs/UICanvasControllerInput.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Plugins/Zenject/OptionalExtras/UnitTests/Editor/Signals/TestSignals1.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Items/Collection/ItemCollectionData.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Characters/KittyController/Components/AnimatorComponent/CharacterAnimationComponent.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/UI/Inventory/InventoryCellController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Items/ItemFactory/IItemFactory.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Items/ItemFactory/WorldItemFactory.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Services/AudioService/Sounds/SoundsLibrary/SoundsLibrary.cs" root0="FORCE_HIGHLIGHTING" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/Assets/Scripts/Kitty/KittyController/DataStorages/CharacterPhysicsDataStorage.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Kitty/KittyController/DataStorages/CharacterVisualDataStorage.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Kitty/Data/PlayerCharacterDataSOInstaller.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Kitty/Data/PlayerCharacterParametersData.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Kitty/KittyController/Components/PlayerInteractionComponent/CharacterPlayerInteractionComponent.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Kitty/KittyController/Components/AnimatorComponent/ICharacterAnimatorComponent.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Kitty/KittyController/Components/AnimatorComponent/KittyCharacterAnimatorComponent.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Kitty/KittyController/Components/AnimatorComponent/ICharacterAnimationComponent.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Kitty/KittyController/DataStorages/CharacterAnimatorDataStorage.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Kitty/KittyController/Components/AnimatorComponent/CharacterAnimationComponent.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Kitty/KittyController/PlayerCharacterController.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Kitty/KittyController/Components/MovementComponent/KittyCharacterMovementComponent.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Kitty/KittyController/Components/RaycastComponent/CharacterRayCastComponent.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Characters/OverlapSphereTest.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Characters/KittyController/DataStorages/CharacterPhysicsDataStorage.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Characters/KittyController/Components/RaycastComponent/CharacterRayCastComponent.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/ThirdPersonController.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Mobile/CanvasInputs/UICanvasControllerInput.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Characters/KittyController/Components/AnimatorComponent/CharacterAnimationComponent.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Characters/KittyController/DataStorages/CharacterAnimatorDataStorage.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Characters/KittyController/Components/AudioComponent/CharacterSoundComponent.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Characters/KittyController/PlayerCharacterController.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Characters/KittyController/AnimationReactionsController.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Services/AudioService/Sounds/SoundsLibrary/SoundsLibrary.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Services/CharacterSpawnerService/Factories/KittyFactory/PlayerCharacterComponentsInstaller.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Characters/KittyController/DataStorages/CharacterAudioDataStorage.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Characters/PlayerSpawnerInstaller.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Characters/CharacterFactory.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Characters/KittyController/CharacterPhysicsInteraction.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Items/ItemType.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Items/Item.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Items/MoneyItemData.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Items/WeaponItemData.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Items/MaterialItemData.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Items/ItemData.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Items/ItemCollectionDataInstaller.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Items/ItemCollectionSOData.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Services/CharacterSpawnerService/Factories/KittyFactory/IKittyCharacterEntityFactory.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Items/Collection/ItemCollectionSOData.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Items/Collection/ItemCollectionData.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Items/ItemFactory/ItemFactory.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Items/ItemSpawnerInstaller.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Items/ItemFactory/IItemFactory.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Items/ItemFactory/WorldItemFactory.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Items/ItemWorldObjectControl.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Items/ItemData/MoneyItemData.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Items/ItemSpawner.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Items/ItemData/ItemData.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/UI/Inventory/InventoryItemData.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/UI/Inventory/InventoryCellController.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/UI/Inventory/InventoryPanelController.cs" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectId" id="2OvYLqVNf2F8b1rMGcaLrMVW0Qn" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="Discover.Launch.Via.Unity" value="true" />
+    <property name="Rider.DefaultBreakpoints.AreToggled" value="true" />
+    <property name="Rider.ProjectViewActivator.IsNotFirstRun" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor">
+    <configuration name="Start Unity" type="RunUnityExe" factoryName="Unity Executable">
+      <option name="EXE_PATH" value="C:\Program Files\Unity\Hub\Editor\2021.3.12f1\Editor\Unity.exe" />
+      <option name="PROGRAM_PARAMETERS" value="-projectPath D:\BuildAgent\beat-m-up -debugCodeOptimization" />
+      <option name="WORKING_DIRECTORY" value="D:\BuildAgent\beat-m-up" />
+      <option name="PASS_PARENT_ENVS" value="1" />
+      <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      <option name="USE_MONO" value="0" />
+      <option name="RUNTIME_ARGUMENTS" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="UnitTests (batch mode)" type="RunUnityExe" factoryName="Unity Executable">
+      <option name="EXE_PATH" value="C:\Program Files\Unity\Hub\Editor\2021.3.12f1\Editor\Unity.exe" />
+      <option name="PROGRAM_PARAMETERS" value="-runTests -batchmode -projectPath D:\BuildAgent\beat-m-up -testResults Logs/results.xml -testPlatform EditMode -debugCodeOptimization" />
+      <option name="WORKING_DIRECTORY" value="D:\BuildAgent\beat-m-up" />
+      <option name="PASS_PARENT_ENVS" value="1" />
+      <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      <option name="USE_MONO" value="0" />
+      <option name="RUNTIME_ARGUMENTS" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Attach to Unity Editor &amp; Play" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="UNITY_ATTACH_AND_PLAY" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
+      <option name="allowRunningInParallel" value="false" />
+      <option name="listenPortForConnections" value="false" />
+      <option name="pid" />
+      <option name="userSelectedPid" value="false" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" pid="11468">
+      <option name="allowRunningInParallel" value="false" />
+      <option name="listenPortForConnections" value="false" />
+      <option name="pid" value="11468" />
+      <option name="userSelectedPid" value="false" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" BundledDictionaries="0" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" Dictionaries="0" CorrectionsLimit="5" DefaultDictionary="application-level" UseSingleDictionary="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="9796a673-fb8c-44b6-b997-91b1fb8367b4" name="Changes" comment="" />
+      <created>1682442474429</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1682442474429</updated>
+      <workItem from="1682442478818" duration="79000" />
+      <workItem from="1682442615187" duration="1159000" />
+      <workItem from="1682443969327" duration="339000" />
+      <workItem from="1682444332620" duration="239000" />
+      <workItem from="1682930062875" duration="12053000" />
+      <workItem from="1683306616070" duration="5519000" />
+      <workItem from="1683353864978" duration="11661000" />
+      <workItem from="1684832821885" duration="2162000" />
+      <workItem from="1684917615410" duration="17774000" />
+      <workItem from="1685017751075" duration="8977000" />
+    </task>
+    <servers />
+  </component>
+  <component name="UnityProjectConfiguration" hasMinimizedUI="true" />
+  <component name="UnityUnitTestConfiguration" currentTestLauncher="EditMode" />
+  <component name="VcsManagerConfiguration">
+    <option name="LOCAL_CHANGES_DETAILS_PREVIEW_SHOWN" value="true" />
+    <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <breakpoint enabled="true" suspend="NONE" type="DotNet Exception Breakpoints">
+          <properties exception="System.Threading.ThreadAbortException" displayValue="System.Threading.ThreadAbortException" />
+          <option name="timeStamp" value="1" />
+        </breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>

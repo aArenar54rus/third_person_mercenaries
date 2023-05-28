@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 149b39322b90cc04695386aee09b5629, type: 3}
+  m_Name: PlayerCharacterDataSOInstaller
+  m_EditorClassIdentifier: 
+  playerCharacterPrefab: {fileID: 1425306378703721784, guid: 64dce48905ffd9b4293e595fa6941544,
+    type: 3}
+  playerCharacterParametersData:
+    moveSpeed: 3
+    sprintSpeed: 8.0025
+    rotationSmoothTime: 0.12
+    speedChangeRate: 10
+    jumpHeight: 1.5
+    gravity: -15
+    jumpTimeout: 0.5
+    fallTimeout: 0.15
+    lockCameraPosition: 0
+    topClamp: 70
+    bottomClamp: -30
+    groundedOffset: 0
+    groundedRadius: 0.25
+    groundedLayers:
+      serializedVersion: 2
+      m_Bits: 512
+    cameraAngleOverride: 10
+  kittyColorRangeData:
+    defaultColorsByLevel:
+      IsSingleLineView: 1
+      list: []
+    colorsList: []
