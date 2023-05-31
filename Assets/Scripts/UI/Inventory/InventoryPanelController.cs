@@ -63,9 +63,7 @@ public class InventoryPanelController : MonoBehaviour
 
     private InventoryCellController GetCell(ItemData addedItemData)
     {
-        InventoryCellController neededCellController = null;
-
-        // if can stack - first find cell with sameItem with free places for new items
+        // if can stack - first find cell with same item with free places for new items
         if (addedItemData.CanStack)
         {
             foreach (var cell in inventoryCells)
@@ -79,17 +77,14 @@ public class InventoryPanelController : MonoBehaviour
             }
         }
         
+        // search free cell
         foreach (var cell in inventoryCells)
         {
             if (cell.CurrentInventoryItemData == null)
-            {
-                
-            }
-            else
-            {
-                
-            }
+                return cell;
         }
+
+        return null;
     }
 
     private void UpdateMoneyCounterVisual()

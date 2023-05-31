@@ -4,7 +4,7 @@ public class InventoryItemData
     public int elementsCount;
 
 
-    public InventoryItemData(ItemData itemData = null, int elementsCount = 0)
+    public InventoryItemData(ItemData itemData = null, int elementsCount = 1)
     {
         this.itemData = itemData;
         this.elementsCount = elementsCount;

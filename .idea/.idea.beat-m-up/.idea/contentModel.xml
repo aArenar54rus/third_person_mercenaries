@@ -1025,6 +1025,9 @@
             </e>
             <e p="ItemType.cs" t="Include" />
             <e p="ItemWorldObjectControl.cs" t="Include" />
+            <e p="Visuals" t="Include">
+              <e p="ItemWorldVisual.cs" t="Include" />
+            </e>
           </e>
           <e p="Mobile" t="Include">
             <e p="CanvasInputs" t="Include">
@@ -1099,6 +1102,11 @@
               <e p="IFactoryProvider.cs" t="Include" />
               <e p="ISpawnerElement.cs" t="Include" />
               <e p="ISpawnerFactoriesService.cs" t="Include" />
+            </e>
+            <e p="InventoryService" t="Include">
+              <e p="IInventoryService.cs" t="Include" />
+              <e p="InventoryOptionsSOData.cs" t="Include" />
+              <e p="InventoryService.cs" t="Include" />
             </e>
             <e p="OptionsService" t="Include">
               <e p="Interfaces" t="Include">

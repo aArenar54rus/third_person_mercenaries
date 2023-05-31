@@ -8,26 +8,11 @@ using UnityEngine.UI;
 [Serializable]
 public abstract class ItemData : ScriptableObject
 {
-    [Serializable]
-    public class ItemWorldVisual
-    {
-        [SerializeField] private Mesh mesh = default;
-        [SerializeField] private float mass = default;
-        [SerializeField] private Material[] materials = default;
-        
-        
-        public float Mass => mass;
-    
-        public Mesh Mesh => mesh;
-    
-        public Material[] Materials => materials;
-    }
-    
-    
     [SerializeField] protected int id = default;
     [SerializeField] protected string nameKey = default;
     [SerializeField] protected string desckey = default;
     [SerializeField] private int stackCountMax = default;
+    [SerializeField] private float itemMass = default;
     [SerializeField] protected ItemWorldVisual[] worldVisuals = default;
 
 
@@ -38,6 +23,8 @@ public abstract class ItemData : ScriptableObject
     public string DescKey => desckey;
     
     public int StackCountMax => stackCountMax;
+
+    public float ItemMass => itemMass;
 
     public ItemWorldVisual[] WorldVisuals => worldVisuals;
 
