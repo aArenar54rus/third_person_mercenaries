@@ -1,7 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
 
 namespace Arenar.Services.InventoryService
@@ -11,12 +8,8 @@ namespace Arenar.Services.InventoryService
         event Action OnUpdateInventoryData;
         
         
-        Dictionary<int, InventoryItemData> InventoryItemDatas { get; }
-        
         bool IsMassOverbalance { get; }
-        
-        bool IsInventoryFull { get; }
-        
+
         int InventoryCellsCount { get; }
         
         float InventoryMass { get; }
@@ -24,8 +17,15 @@ namespace Arenar.Services.InventoryService
         int InventoryMassMax { get; }
 
 
-        void AddItem(InventoryItemData inventoryItemData);
+        bool TryAddItem(ItemData itemData,
+            int count,
+            out InventoryItemData restOfItems);
 
-        bool TryRemoveItem(InventoryItemData inventoryItemData);
+        bool TryAddItemInCurrentCell(int cellIndex,
+            ItemData itemData,
+            int count,
+            out InventoryItemData restOfItems);
+
+        void RemoveItemFromCell(int cellIndex, out InventoryItemData restOfItems);
     }
 }

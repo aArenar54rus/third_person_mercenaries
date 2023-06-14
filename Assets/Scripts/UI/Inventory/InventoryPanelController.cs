@@ -1,12 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
+
 public class InventoryPanelController : MonoBehaviour
 {
-    [SerializeField] private InventoryCellController[] inventoryCells = default;
-    [SerializeField] private TMP_Text moneyCountText = default;
+    [SerializeField] private InventoryCellController[] _inventoryCells = default;
+    [SerializeField] private TMP_Text _moneyCountText = default;
     
     
     public void AddToInventory(InventoryItemData inventoryItemData)
@@ -23,7 +22,7 @@ public class InventoryPanelController : MonoBehaviour
             {
                 bool isFindCellWithSameItem = false;
                 
-                foreach (var cell in inventoryCells)
+                foreach (var cell in _inventoryCells)
                 {
                     if (cell.CurrentInventoryItemData == null)
                         continue;
@@ -50,7 +49,7 @@ public class InventoryPanelController : MonoBehaviour
 
         void AddItem(InventoryItemData inventoryItemData)
         {
-            foreach (var cell in inventoryCells)
+            foreach (var cell in _inventoryCells)
             {
                 if (cell.CurrentInventoryItemData != null)
                     continue;
@@ -66,7 +65,7 @@ public class InventoryPanelController : MonoBehaviour
         // if can stack - first find cell with same item with free places for new items
         if (addedItemData.CanStack)
         {
-            foreach (var cell in inventoryCells)
+            foreach (var cell in _inventoryCells)
             {
                 if (cell.CurrentInventoryItemData == null)
                     continue;
@@ -78,7 +77,7 @@ public class InventoryPanelController : MonoBehaviour
         }
         
         // search free cell
-        foreach (var cell in inventoryCells)
+        foreach (var cell in _inventoryCells)
         {
             if (cell.CurrentInventoryItemData == null)
                 return cell;

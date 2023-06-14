@@ -1,7 +1,5 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 
 namespace Arenar.Services.InventoryService
@@ -11,16 +9,13 @@ namespace Arenar.Services.InventoryService
         public event Action OnUpdateInventoryData;
         
         
+        private Dictionary<int, InventoryItemData> _inventoryItemDatas;
         private float _currentInventoryMass = 0.0f;
         private InventoryOptionsSOData _inventoryOptionsSoData;
 
-        
-        public Dictionary<int, InventoryItemData> InventoryItemDatas { get; private set; }
 
         public bool IsMassOverbalance =>
             _currentInventoryMass > InventoryMassMax;
-        
-        public bool IsInventoryFull { get; }
 
         public int InventoryCellsCount =>
             _inventoryOptionsSoData.DefaultInventoryCellsCount;
@@ -32,29 +27,125 @@ namespace Arenar.Services.InventoryService
             _inventoryOptionsSoData.DefaultMassMax;
         
         
-        public void AddItem(InventoryItemData inventoryItemData)
+        public bool TryAddItem(ItemData itemData, int count, out InventoryItemData restOfItems)
         {
-            throw new System.NotImplementedException();
+            // first, check mass
+            if (itemData.ItemMass * count > InventoryMassMax - InventoryMass)
+            {
+                restOfItems = new InventoryItemData(itemData, count);
+                return false;
+            }
+            
+            if (!itemData.CanStack)
+                return TryAddInFreeCell(itemData, count, out restOfItems);
+
+            //check cells with same item
+            foreach (var inventoryItemData in _inventoryItemDatas)
+            {
+                if (inventoryItemData.Value.itemData.Id != itemData.Id
+                    || inventoryItemData.Value.StackIsFull)
+                    continue;
+
+                inventoryItemData.Value.elementsCount += count;
+                count = inventoryItemData.Value.elementsCount - inventoryItemData.Value.itemData.StackCountMax;
+                CalculateMass();
+                OnUpdateInventoryData?.Invoke();
+
+                if (count > 0)
+                    continue;
+                
+                restOfItems = null;
+                return true;
+            }
+            
+            return TryAddInFreeCell(itemData, count, out restOfItems);
         }
 
-        public bool TryRemoveItem(InventoryItemData inventoryItemData)
+        public bool TryAddItemInCurrentCell(int cellIndex,
+                                            ItemData itemData,
+                                            int count,
+                                            out InventoryItemData restOfItems)
         {
-            throw new System.NotImplementedException();
-        }
+            InventoryItemData inventoryItemData = GetInventoryItemDataByCellIndex(cellIndex);
 
+            if (!itemData.CanStack)
+            {
+                if (inventoryItemData.itemData == null)
+                {
+                    inventoryItemData.itemData = itemData;
+                    inventoryItemData.elementsCount = count;
+                    CalculateMass();
+                    restOfItems = null;
+                    
+                    OnUpdateInventoryData?.Invoke();
+                    return true;
+                }
+
+                restOfItems = new InventoryItemData(itemData, count);
+                return false;
+            }
+
+            if (inventoryItemData.itemData.Id != itemData.Id
+                || inventoryItemData.StackIsFull)
+            {
+                restOfItems = new InventoryItemData(itemData, count);
+                return false;
+            }
+
+            inventoryItemData.elementsCount += count;
+            count = inventoryItemData.elementsCount - inventoryItemData.itemData.StackCountMax;
+            CalculateMass();
+            OnUpdateInventoryData?.Invoke();
+
+            if (count > 0)
+            {
+                restOfItems = new InventoryItemData(itemData, count);
+                return false;
+            }
+            
+            restOfItems = null;
+            return true;
+        }
+        
         private void Initialize()
         {
-            InventoryItemDatas = new Dictionary<int, InventoryItemData>(InventoryCellsCount);
+            _inventoryItemDatas = new Dictionary<int, InventoryItemData>(InventoryCellsCount);
             for (int i = 0; i < InventoryCellsCount; i++)
-                InventoryItemDatas.Add(i, new InventoryItemData(null, 0));
+                _inventoryItemDatas.Add(i, new InventoryItemData(null, 0));
 
             CalculateMass();
+        }
+        
+        private InventoryItemData GetInventoryItemDataByCellIndex(int cellIndex)
+        {
+            return _inventoryItemDatas[cellIndex];
+        }
+        
+        private bool TryAddInFreeCell(ItemData itemData, int count, out InventoryItemData restOfItems)
+        {
+            foreach (var inventoryItemData in _inventoryItemDatas)
+            {
+                if (inventoryItemData.Value.itemData != null)
+                    continue;
+                    
+                inventoryItemData.Value.itemData = itemData;
+                inventoryItemData.Value.elementsCount = count;
+                CalculateMass();
+                restOfItems = null;
+                    
+                OnUpdateInventoryData?.Invoke();
+                    
+                return true;
+            }
+
+            restOfItems = new InventoryItemData(itemData, count);
+            return false;
         }
 
         private void CalculateMass()
         {
             _currentInventoryMass = 0.0f;
-            foreach (var inventoryItemData in InventoryItemDatas)
+            foreach (var inventoryItemData in _inventoryItemDatas)
             {
                 if (inventoryItemData.Value == null)
                     continue;

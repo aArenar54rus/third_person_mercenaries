@@ -28,7 +28,8 @@ public abstract class ItemData : ScriptableObject
 
     public ItemWorldVisual[] WorldVisuals => worldVisuals;
 
-    public abstract bool CanStack { get; }
+    public bool CanStack =>
+        stackCountMax > 1;
     
     public abstract ItemType ItemType { get; }
 
