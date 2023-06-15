@@ -106,7 +106,12 @@ namespace Arenar.Services.InventoryService
             restOfItems = null;
             return true;
         }
-        
+
+        public void RemoveItemFromCell(int cellIndex, int count, out InventoryItemData restOfItems)
+        {
+            throw new NotImplementedException();
+        }
+
         private void Initialize()
         {
             _inventoryItemDatas = new Dictionary<int, InventoryItemData>(InventoryCellsCount);
