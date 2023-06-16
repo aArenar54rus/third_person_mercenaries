@@ -1105,6 +1105,9 @@
             </e>
             <e p="InventoryService" t="Include">
               <e p="IInventoryService.cs" t="Include" />
+              <e p="Installer" t="Include">
+                <e p="InventoryServiceInstaller.cs" t="Include" />
+              </e>
               <e p="InventoryOptionsSOData.cs" t="Include" />
               <e p="InventoryService.cs" t="Include" />
             </e>
@@ -1139,6 +1142,7 @@
           </e>
           <e p="UI" t="Include">
             <e p="Inventory" t="Include">
+              <e p="InventoryCanvasWindow.cs" t="Include" />
               <e p="InventoryCellController.cs" t="Include" />
               <e p="InventoryItemData.cs" t="Include" />
               <e p="InventoryPanelController.cs" t="Include" />

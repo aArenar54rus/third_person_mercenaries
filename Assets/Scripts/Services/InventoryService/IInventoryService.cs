@@ -16,22 +16,15 @@ namespace Arenar.Services.InventoryService
         
         int InventoryMassMax { get; }
 
+        
+        InventoryItemData GetInventoryItemData(int cellIndex);
 
         bool TryAddItem(ItemData itemData,
             int count,
             out InventoryItemData restOfItems);
         
-        bool TryAddItem(int itemIndex,
-            int count,
-            out InventoryItemData restOfItems);
-
         bool TryAddItemInCurrentCell(int cellIndex,
             ItemData itemData,
-            int count,
-            out InventoryItemData restOfItems);
-
-        bool TryAddItemInCurrentCell(int cellIndex,
-            int itemIndex,
             int count,
             out InventoryItemData restOfItems);
 
@@ -43,11 +36,11 @@ namespace Arenar.Services.InventoryService
         
         bool IsEnoughItems(int itemIndex, int neededCount);
 
-        void RemoveItems(ItemData itemData,
+        bool TryRemoveItems(ItemData itemData,
             int neededCount,
             out InventoryItemData restOfItems);
         
-        void RemoveItems(int itemIndex,
+        bool TryRemoveItems(int itemIndex,
             int neededCount,
             out InventoryItemData restOfItems);
     }

@@ -9,24 +9,36 @@ namespace Arenar.Services.InventoryService
         public event Action OnUpdateInventoryData;
         
         
-        private Dictionary<int, InventoryItemData> _inventoryItemDatas;
+        private Dictionary<int, InventoryItemData> _inventoryItemDataCells;
         private float _currentInventoryMass = 0.0f;
-        private InventoryOptionsSOData _inventoryOptionsSoData;
+        private InventoryOptionsSOData.Parameters _parameters;
 
 
         public bool IsMassOverbalance =>
             _currentInventoryMass > InventoryMassMax;
 
         public int InventoryCellsCount =>
-            _inventoryOptionsSoData.DefaultInventoryCellsCount;
+            _parameters.DefaultInventoryCellsCount;
 
         public float InventoryMass =>
             _currentInventoryMass;
 
         public int InventoryMassMax =>
-            _inventoryOptionsSoData.DefaultMassMax;
-        
-        
+            _parameters.DefaultMassMax;
+
+
+        public InventoryService(InventoryOptionsSOData.Parameters parameters)
+        {
+            _parameters = parameters;
+            Initialize();
+        }
+
+
+        public InventoryItemData GetInventoryItemData(int cellIndex)
+        {
+            return _inventoryItemDataCells[cellIndex];
+        }
+
         public bool TryAddItem(ItemData itemData, int count, out InventoryItemData restOfItems)
         {
             // first, check mass
@@ -40,7 +52,7 @@ namespace Arenar.Services.InventoryService
                 return TryAddInFreeCell(itemData, count, out restOfItems);
 
             //check cells with same item
-            foreach (var inventoryItemData in _inventoryItemDatas)
+            foreach (var inventoryItemData in _inventoryItemDataCells)
             {
                 if (inventoryItemData.Value.itemData.Id != itemData.Id
                     || inventoryItemData.Value.StackIsFull)
@@ -66,14 +78,14 @@ namespace Arenar.Services.InventoryService
                                             int count,
                                             out InventoryItemData restOfItems)
         {
-            InventoryItemData inventoryItemData = GetInventoryItemDataByCellIndex(cellIndex);
+            InventoryItemData dataCell = _inventoryItemDataCells[cellIndex];
 
             if (!itemData.CanStack)
             {
-                if (inventoryItemData.itemData == null)
+                if (dataCell.itemData == null)
                 {
-                    inventoryItemData.itemData = itemData;
-                    inventoryItemData.elementsCount = count;
+                    dataCell.itemData = itemData;
+                    dataCell.elementsCount = count;
                     CalculateMass();
                     restOfItems = null;
                     
@@ -85,15 +97,15 @@ namespace Arenar.Services.InventoryService
                 return false;
             }
 
-            if (inventoryItemData.itemData.Id != itemData.Id
-                || inventoryItemData.StackIsFull)
+            if (dataCell.itemData.Id != itemData.Id
+                || dataCell.StackIsFull)
             {
                 restOfItems = new InventoryItemData(itemData, count);
                 return false;
             }
 
-            inventoryItemData.elementsCount += count;
-            count = inventoryItemData.elementsCount - inventoryItemData.itemData.StackCountMax;
+            dataCell.elementsCount += count;
+            count = dataCell.elementsCount - dataCell.itemData.StackCountMax;
             CalculateMass();
             OnUpdateInventoryData?.Invoke();
 
@@ -109,26 +121,133 @@ namespace Arenar.Services.InventoryService
 
         public void RemoveItemFromCell(int cellIndex, int count, out InventoryItemData restOfItems)
         {
-            throw new NotImplementedException();
+            var dataCell =  _inventoryItemDataCells[cellIndex];
+            if (dataCell.elementsCount < count)
+            {
+                restOfItems = null;
+                return;
+            }
+            
+            restOfItems = new InventoryItemData(dataCell.itemData, count);
+            dataCell.elementsCount -= count;
+            if (dataCell.elementsCount == 0)
+                dataCell.itemData = null;
+            
+            CalculateMass();
+        }
+
+        public bool IsEnoughItems(ItemData itemData, int neededCount)
+        {
+            return IsEnoughItems(itemData.Id, neededCount);
+        }
+
+        public bool IsEnoughItems(int itemIndex, int neededCount)
+        {
+            int counter = 0;
+            foreach (var dataCell in _inventoryItemDataCells)
+            {
+                if (dataCell.Value.itemData.Id != itemIndex)
+                    continue;
+
+                counter += dataCell.Value.elementsCount;
+                if (counter >= neededCount)
+                    return true;
+            }
+
+            return false;
+        }
+
+        public bool TryRemoveItems(ItemData itemData, int neededCount, out InventoryItemData restOfItems)
+        {
+            if (!IsEnoughItems(itemData.Id, neededCount))
+            {
+                restOfItems = null;
+                return false;
+            }
+
+            int counter = 0;
+            
+            foreach (var dataCell in _inventoryItemDataCells)
+            {
+                if (dataCell.Value.itemData.Id != itemData.Id)
+                    continue;
+
+                if (dataCell.Value.elementsCount <= neededCount)
+                {
+                    counter += dataCell.Value.elementsCount;
+                    neededCount -= dataCell.Value.elementsCount;
+                    dataCell.Value.itemData = null;
+                    dataCell.Value.elementsCount = 0;
+
+                    if (neededCount == 0)
+                        break;
+                }
+                else
+                {
+                    counter += neededCount;
+                    dataCell.Value.elementsCount -= neededCount;
+                    break;
+                }
+            }
+
+            CalculateMass();
+            restOfItems = new InventoryItemData(itemData, counter);
+            return true;
+        }
+
+        public bool TryRemoveItems(int itemIndex, int neededCount, out InventoryItemData restOfItems)
+        {
+            if (!IsEnoughItems(itemIndex, neededCount))
+            {
+                restOfItems = null;
+                return false;
+            }
+
+            int counter = 0;
+
+            ItemData neededItemData = null;
+            foreach (var dataCell in _inventoryItemDataCells)
+            {
+                if (dataCell.Value.itemData.Id != itemIndex)
+                    continue;
+
+                neededItemData ??= dataCell.Value.itemData;
+                
+                if (dataCell.Value.elementsCount <= neededCount)
+                {
+                    counter += dataCell.Value.elementsCount;
+                    neededCount -= dataCell.Value.elementsCount;
+                    dataCell.Value.itemData = null;
+                    dataCell.Value.elementsCount = 0;
+
+                    if (neededCount == 0)
+                        break;
+                }
+                else
+                {
+                    counter += neededCount;
+                    dataCell.Value.elementsCount -= neededCount;
+                    break;
+                }
+            }
+
+            CalculateMass();
+            restOfItems = new InventoryItemData(neededItemData, counter);
+            return true;
         }
 
         private void Initialize()
         {
-            _inventoryItemDatas = new Dictionary<int, InventoryItemData>(InventoryCellsCount);
+            _inventoryItemDataCells = new Dictionary<int, InventoryItemData>(InventoryCellsCount);
             for (int i = 0; i < InventoryCellsCount; i++)
-                _inventoryItemDatas.Add(i, new InventoryItemData(null, 0));
+                _inventoryItemDataCells.Add(i, new InventoryItemData(null, 0));
 
             CalculateMass();
         }
-        
-        private InventoryItemData GetInventoryItemDataByCellIndex(int cellIndex)
-        {
-            return _inventoryItemDatas[cellIndex];
-        }
-        
+
         private bool TryAddInFreeCell(ItemData itemData, int count, out InventoryItemData restOfItems)
         {
-            foreach (var inventoryItemData in _inventoryItemDatas)
+            foreach (var inventoryItemData in _inventoryItemDataCells)
             {
                 if (inventoryItemData.Value.itemData != null)
                     continue;
@@ -150,7 +269,7 @@ namespace Arenar.Services.InventoryService
         private void CalculateMass()
         {
             _currentInventoryMass = 0.0f;
-            foreach (var inventoryItemData in _inventoryItemDatas)
+            foreach (var inventoryItemData in _inventoryItemDataCells)
             {
                 if (inventoryItemData.Value == null)
                     continue;
