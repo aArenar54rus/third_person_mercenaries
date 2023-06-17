@@ -1,10 +1,10 @@
-using CatSimulator.Character;
+using Arenar.Character;
 using UnityEngine;
 using Zenject;
 using Object = UnityEngine.Object;
 
 
-namespace CatSimulator
+namespace Arenar
 {
     public class CharacterFactory : ICharacterEntityFactory<PlayerCharacterController>
     {

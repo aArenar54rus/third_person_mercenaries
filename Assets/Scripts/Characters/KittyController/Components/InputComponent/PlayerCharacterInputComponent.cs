@@ -1,7 +1,7 @@
 using UnityEngine;
 
 
-namespace CatSimulator.Character
+namespace Arenar.Character
 {
     public class PlayerCharacterInputComponent : ICharacterInputComponent
     {
@@ -29,7 +29,10 @@ namespace CatSimulator.Character
 
         public bool SprintAction =>
             PlayerInputs.Player.Sprint.IsPressed();
-        
+
+        public bool InteractAction =>
+            PlayerInputs.Player.Interact.WasPressedThisFrame();
+
 
         public void SetControlStatus(bool status)
         {

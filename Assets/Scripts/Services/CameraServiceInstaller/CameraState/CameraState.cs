@@ -2,7 +2,7 @@ using Cinemachine;
 using UnityEngine;
 
 
-namespace CatSimulator.CameraService
+namespace Arenar.CameraService
 {
     public abstract class CameraState : ICameraState
     {

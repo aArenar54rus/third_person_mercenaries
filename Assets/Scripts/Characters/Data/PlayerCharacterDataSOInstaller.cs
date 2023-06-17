@@ -1,9 +1,9 @@
-using CatSimulator.Character;
+using Arenar.Character;
 using UnityEngine;
 using Zenject;
 
 
-namespace CatSimulator
+namespace Arenar
 {
     [CreateAssetMenu(fileName = "Kitty", menuName = "Kitties Data", order = 51)]
     public class PlayerCharacterDataSOInstaller : ScriptableObjectInstaller<PlayerCharacterDataSOInstaller>

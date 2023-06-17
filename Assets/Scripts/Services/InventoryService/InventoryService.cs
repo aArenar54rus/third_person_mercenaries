@@ -54,6 +54,9 @@ namespace Arenar.Services.InventoryService
             //check cells with same item
             foreach (var inventoryItemData in _inventoryItemDataCells)
             {
+                if (inventoryItemData.Value.itemData == null)
+                    continue;
+                
                 if (inventoryItemData.Value.itemData.Id != itemData.Id
                     || inventoryItemData.Value.StackIsFull)
                     continue;
@@ -134,6 +137,7 @@ namespace Arenar.Services.InventoryService
                 dataCell.itemData = null;
             
             CalculateMass();
+            OnUpdateInventoryData?.Invoke();
         }
 
         public bool IsEnoughItems(ItemData itemData, int neededCount)
@@ -191,6 +195,7 @@ namespace Arenar.Services.InventoryService
             }
 
             CalculateMass();
+            OnUpdateInventoryData?.Invoke();
             restOfItems = new InventoryItemData(itemData, counter);
             return true;
         }
@@ -232,6 +237,7 @@ namespace Arenar.Services.InventoryService
             }
 
             CalculateMass();
+            OnUpdateInventoryData?.Invoke();
             restOfItems = new InventoryItemData(neededItemData, counter);
             return true;
         }
@@ -271,7 +277,8 @@ namespace Arenar.Services.InventoryService
             _currentInventoryMass = 0.0f;
             foreach (var inventoryItemData in _inventoryItemDataCells)
             {
-                if (inventoryItemData.Value == null)
+                if (inventoryItemData.Value == null
+                    || inventoryItemData.Value.itemData == null)
                     continue;
 
                 _currentInventoryMass +=

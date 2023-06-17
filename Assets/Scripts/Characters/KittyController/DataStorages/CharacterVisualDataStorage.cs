@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 
-namespace CatSimulator.Character
+namespace Arenar.Character
 {
     [Serializable]
     public class CharacterVisualDataStorage

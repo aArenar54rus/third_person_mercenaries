@@ -1,7 +1,7 @@
 using System;
 
 
-namespace CatSimulator.Character
+namespace Arenar.Character
 {
     public interface ICharacterLiveComponent : ICharacterComponent
     {

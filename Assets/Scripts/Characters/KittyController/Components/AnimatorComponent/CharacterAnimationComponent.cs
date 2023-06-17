@@ -2,7 +2,7 @@ using UnityEngine;
 using Zenject;
 
 
-namespace CatSimulator.Character
+namespace Arenar.Character
 {
     public class CharacterAnimationComponent
         : ICharacterAnimationComponent<CharacterAnimationComponent.KittyAnimation, CharacterAnimationComponent.KittyAnimationValue>

@@ -13,7 +13,7 @@ namespace Arenar.Services.InventoryService
 
         public override void InstallBindings()
         {
-            
+            Container.Bind<Parameters>().FromInstance(_parameters).AsSingle();
         }
 
 

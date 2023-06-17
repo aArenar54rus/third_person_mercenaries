@@ -1,4 +1,4 @@
-using CatSimulator.CameraService;
+using Arenar.CameraService;
 using Cinemachine;
 using UnityEngine;
 using Zenject;
@@ -25,7 +25,7 @@ namespace Arenar.Services
                 .NonLazy();
 
             Container.Bind<ICameraService>()
-                .To<CameraService>()
+                .To< Arenar.CameraService.CameraService>()
                 .AsSingle()
                 .NonLazy();
             

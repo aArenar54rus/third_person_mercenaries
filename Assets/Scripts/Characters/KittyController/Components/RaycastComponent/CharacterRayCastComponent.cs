@@ -1,36 +1,63 @@
+using System.Collections.Generic;
+using Arenar;
+using Arenar.CameraService;
 using UnityEngine;
 using Zenject;
 
 
-namespace CatSimulator.Character
+namespace Arenar.Character
 {
     public class CharacterRayCastComponent : ICharacterRayCastComponent
     {
-        private ICharacterEntity characterEntity;
-        private bool isGrounded = true;
-        private PlayerCharacterParametersData playerCharacterParametersData;
+        private ICharacterEntity _characterEntity;
+        private Camera _camera;
+        private bool _isGrounded = true;
+        private PlayerCharacterParametersData _playerCharacterParametersData;
+        private Transform _characterCenterPoint;
+        private float _maxSqrDistance;
    
 
         private Transform characterTransform =>
-            characterEntity.CharacterTransform;
+            _characterEntity.CharacterTransform;
 
 
         [Inject]
-        public void Construct(ICharacterEntity characterEntity, PlayerCharacterParametersData playerCharacterParametersData)
+        public void Construct(ICharacterEntity characterEntity, ICharacterDataStorage<CharacterPhysicsDataStorage> characterPhysicsDataStorage, PlayerCharacterParametersData playerCharacterParametersData, ICameraService cameraService)
         {
-            this.characterEntity = characterEntity;
-            this.playerCharacterParametersData = playerCharacterParametersData;
+            _characterEntity = characterEntity;
+            _playerCharacterParametersData = playerCharacterParametersData;
+            _characterCenterPoint = characterPhysicsDataStorage.Data.CharacterCenterPoint;
+            _maxSqrDistance = playerCharacterParametersData.InteractElementDistance
+                              * playerCharacterParametersData.InteractElementDistance;
+            _camera = cameraService.GameCamera;
         }
 
         public bool IsGroundedCheck()
         {
             Vector3 spherePosition = new Vector3(characterTransform.position.x, 
-                characterTransform.position.y + playerCharacterParametersData.GroundedOffset,
+                characterTransform.position.y + _playerCharacterParametersData.GroundedOffset,
                 characterTransform.position.z);
-            isGrounded = Physics.CheckSphere(spherePosition, playerCharacterParametersData.GroundedRadius, playerCharacterParametersData.GroundedLayers,
+            _isGrounded = Physics.CheckSphere(spherePosition, _playerCharacterParametersData.GroundedRadius, _playerCharacterParametersData.GroundedLayers,
                 QueryTriggerInteraction.Ignore);
 
-            return isGrounded;
+            return _isGrounded;
+        }
+
+        public InteractableElement GetInteractableElementsOnCross()
+        {
+            Ray ray = _camera.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));
+            if (!Physics.Raycast(ray, out RaycastHit hit))
+                return null;
+            
+            Transform objectHit = hit.transform;
+            if (!objectHit.gameObject.TryGetComponent<InteractableElement>(out InteractableElement element))
+                return null;
+            
+            float heading = (objectHit.position - _characterCenterPoint.position).sqrMagnitude;
+            if (heading > _maxSqrDistance)
+                return null;
+            
+            return element;
         }
 
         public void Initialize() { }

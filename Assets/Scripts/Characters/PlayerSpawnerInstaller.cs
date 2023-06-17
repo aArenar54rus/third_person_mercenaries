@@ -1,5 +1,5 @@
-using CatSimulator;
-using CatSimulator.Character;
+using Arenar;
+using Arenar.Character;
 using Zenject;
 
 

@@ -1,8 +1,8 @@
-using CatSimulator.Character;
+using Arenar.Character;
 using UnityEngine;
 
 
-namespace CatSimulator
+namespace Arenar
 {
     public class KittySpawnController 
     {

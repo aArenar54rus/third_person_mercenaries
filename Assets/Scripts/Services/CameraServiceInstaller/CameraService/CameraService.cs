@@ -5,7 +5,7 @@ using UnityEngine;
 using Zenject;
 
 
-namespace CatSimulator.CameraService
+namespace Arenar.CameraService
 {
     public class CameraService : ICameraService, ITickable, ILateTickable
     {

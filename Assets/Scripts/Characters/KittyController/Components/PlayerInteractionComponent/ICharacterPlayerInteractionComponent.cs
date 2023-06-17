@@ -1,7 +1,10 @@
-namespace CatSimulator.Character
+namespace Arenar.Character
 {
     public interface ICharacterPlayerInteractionComponent : ICharacterComponent
     {
-        void OnUpdate();
+        bool CanInteract { get; }
+
+
+        void InteractWithInteractObject(InteractableElement element);
     }
 }

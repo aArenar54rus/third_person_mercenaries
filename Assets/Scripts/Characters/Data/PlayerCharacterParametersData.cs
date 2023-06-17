@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 
-namespace CatSimulator
+namespace Arenar
 {
     [Serializable]
     public class PlayerCharacterParametersData
@@ -47,6 +47,10 @@ namespace CatSimulator
         [Tooltip("Additional degress to override the camera. Useful for fine tuning camera position when locked")]
         [SerializeField] private float cameraAngleOverride = 0.0f;
         
+        [Space(10), Header("InteractionParameters")]
+        [Tooltip("Distance for interact with InteractElement components")]
+        [SerializeField] private float interactElementDistance = default;
+        
         
         public float MoveSpeed => moveSpeed;
         public float SprintSpeed => sprintSpeed;
@@ -69,5 +73,8 @@ namespace CatSimulator
         public float GroundedOffset => groundedOffset;
         public float GroundedRadius => groundedRadius;
         public LayerMask GroundedLayers => groundedLayers;
+
+
+        public float InteractElementDistance => interactElementDistance;
     }
 }

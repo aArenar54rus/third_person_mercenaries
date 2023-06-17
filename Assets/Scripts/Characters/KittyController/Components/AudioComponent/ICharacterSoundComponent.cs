@@ -1,11 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using CatSimulator.Character;
+using Arenar.Character;
 using UnityEngine;
 
 
-namespace CatSimulator.Character
+namespace Arenar.Character
 {
     public interface ICharacterSoundComponent : ICharacterComponent
     {

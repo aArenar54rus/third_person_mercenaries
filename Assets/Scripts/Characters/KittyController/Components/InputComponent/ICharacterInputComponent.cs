@@ -1,7 +1,7 @@
 using UnityEngine;
 
 
-namespace CatSimulator.Character
+namespace Arenar.Character
 {
     public interface ICharacterInputComponent : ICharacterComponent
     {
@@ -13,6 +13,8 @@ namespace CatSimulator.Character
         bool JumpAction { get; }
 
         bool SprintAction { get; }
+        
+        bool InteractAction { get; }
 
 
         void SetControlStatus(bool status);

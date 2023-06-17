@@ -4,7 +4,7 @@ using UnityEngine;
 using Zenject;
 
 
-namespace CatSimulator.Character
+namespace Arenar.Character
 {
     public class PlayerCharacterController : MonoBehaviour,
                                    ICharacterEntity,

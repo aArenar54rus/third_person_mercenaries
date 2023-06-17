@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 
-namespace CatSimulator.Character
+namespace Arenar.Character
 {
     public class AnimationReactionsController : MonoBehaviour
     {

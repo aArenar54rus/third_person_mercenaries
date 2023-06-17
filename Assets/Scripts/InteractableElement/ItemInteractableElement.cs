@@ -1,0 +1,64 @@
+using Arenar;
+using UnityEngine;
+
+namespace Arenar
+{
+   public class ItemInteractableElement : InteractableElement
+   {
+      [SerializeField] private BoxCollider boxCollider = default;
+      [SerializeField] private Rigidbody rigidbody = default;
+      [SerializeField] private MeshFilter meshFilter = default;
+      [SerializeField] private MeshRenderer meshRenderer = default;
+
+      [SerializeField] private ItemData itemData;
+      [SerializeField] private int _count;
+      private bool isInitialized = false;
+
+
+      public ItemData ItemData => itemData;
+      public int Count => _count;
+
+
+      public override string InteractableElementType
+      {
+         get
+         {
+            if (isInitialized)
+               return _elementType;
+
+            return null;
+         }
+      }
+
+
+      private void Start()
+      {
+         if (itemData != null)
+         {
+            SetItem(itemData, _count);
+         }
+         else
+         {
+            isInitialized = false;
+         }
+      }
+
+      public void SetItem(ItemData itemData, int count)
+      {
+         this.itemData = itemData;
+         this._count = count;
+
+         UpdateItemObjectVisual();
+
+         isInitialized = true;
+      }
+
+      private void UpdateItemObjectVisual()
+      {
+         rigidbody.mass = itemData.WorldVisuals[0].Mass;
+         meshRenderer.materials = itemData.WorldVisuals[0].Materials;
+         meshFilter.mesh = itemData.WorldVisuals[0].Mesh;
+         boxCollider.size = meshFilter.mesh.bounds.size;
+      }
+   }
+}

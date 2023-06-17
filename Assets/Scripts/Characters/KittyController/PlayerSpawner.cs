@@ -1,10 +1,10 @@
-using CatSimulator.CameraService;
-using CatSimulator.Character;
+using Arenar.CameraService;
+using Arenar.Character;
 using UnityEngine;
 using Zenject;
 
 
-namespace CatSimulator
+namespace Arenar
 {
     public class PlayerSpawner : MonoBehaviour
     {

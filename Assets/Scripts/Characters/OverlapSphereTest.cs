@@ -1,8 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using CatSimulator;
-using CatSimulator.Character;
+using Arenar;
+using Arenar.Character;
 using Unity.VisualScripting;
 using UnityEngine;
 using Zenject;

@@ -4,7 +4,7 @@ using Cinemachine;
 using UnityEngine;
 
 
-namespace CatSimulator.CameraService
+namespace Arenar.CameraService
 {
     public interface ICameraService 
     {

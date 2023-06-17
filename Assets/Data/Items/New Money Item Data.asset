@@ -16,7 +16,9 @@ MonoBehaviour:
   nameKey: money_key
   desckey: money_desk
   stackCountMax: 999999
+  itemMass: 0
   worldVisuals:
   - mesh: {fileID: 4300000, guid: 0aee836645b89374583afeb4ca36b969, type: 3}
     mass: 0
-    materials: []
+    materials:
+    - {fileID: 2100000, guid: eb5742f306f875b42b8501036398d900, type: 2}

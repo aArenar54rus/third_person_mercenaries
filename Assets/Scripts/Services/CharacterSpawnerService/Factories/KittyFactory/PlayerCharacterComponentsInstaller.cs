@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using Zenject;
 
 
-namespace CatSimulator.Character
+namespace Arenar.Character
 {
-    public class PlayerCharacterComponentsInstaller : Installer
+    public class PlayerCharacterComponentsInstaller : Zenject.Installer
     {
         public override void InstallBindings()
         {

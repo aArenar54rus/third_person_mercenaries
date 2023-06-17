@@ -1,7 +1,7 @@
 using UnityEngine;
 
 
-namespace CatSimulator
+namespace Arenar
 {
     public interface ICharacterEntityFactory<TCharacter>
     {

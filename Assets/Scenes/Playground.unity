@@ -2347,8 +2347,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc0e64f00d54c374684ef4fbc1f0bbd8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _inventoryCells: []
-  _moneyCountText: {fileID: 0}
+  _cellPrefab: {fileID: 1595801413370657453, guid: 1bd4705746c436147a0b1fd8a3386989,
+    type: 3}
+  _cellsContainer: {fileID: 243176566}
+  _moneyCountText: {fileID: 1690223372}
 --- !u!1 &1690223370
 GameObject:
   m_ObjectHideFlags: 0

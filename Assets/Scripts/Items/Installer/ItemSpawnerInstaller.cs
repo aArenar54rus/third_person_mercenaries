@@ -2,19 +2,22 @@ using UnityEngine;
 using Zenject;
 
 
-public class ItemSpawnerInstaller : MonoInstaller<ItemSpawnerInstaller>
+namespace Arenar.Installers
 {
-    [SerializeField] private ItemCollectionData itemCollectionData;
-    
-    
-    public override void InstallBindings()
+    public class ItemSpawnerInstaller : MonoInstaller<ItemSpawnerInstaller>
     {
-        Container.Bind<IItemFactory<ItemWorldObjectControl>>()
-            .To<WorldItemFactory>()
-            .AsSingle();
+        [SerializeField] private ItemCollectionData itemCollectionData;
 
-        Container.Bind<ItemCollectionData>()
-            .FromInstance(itemCollectionData)
-            .AsSingle();
+
+        public override void InstallBindings()
+        {
+            Container.Bind<IItemFactory<ItemInteractableElement>>()
+                .To<WorldItemFactory>()
+                .AsSingle();
+
+            Container.Bind<ItemCollectionData>()
+                .FromInstance(itemCollectionData)
+                .AsSingle();
+        }
     }
 }

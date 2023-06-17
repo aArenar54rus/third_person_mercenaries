@@ -2,7 +2,7 @@ using System;
 using Zenject;
 
 
-namespace CatSimulator.CameraService
+namespace Arenar.CameraService
 {
     public class CameraStatesFactory : IFactory<Type, ICameraState>
     {

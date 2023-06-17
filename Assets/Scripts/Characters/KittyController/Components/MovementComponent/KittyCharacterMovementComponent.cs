@@ -3,7 +3,7 @@ using UnityEngine;
 using Zenject;
 
 
-namespace CatSimulator.Character
+namespace Arenar.Character
 {
     public class KittyCharacterMovementComponent : ICharacterMovementComponent, ITickable
     {

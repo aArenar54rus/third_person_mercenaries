@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 
-namespace CatSimulator
+namespace Arenar
 {
     [Serializable]
     public class KittyColorRangeData

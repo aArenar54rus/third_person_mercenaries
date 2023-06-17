@@ -1,85 +1,41 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 
 public class InventoryCellController : MonoBehaviour
 {
+    
     [Header("Cell")]
-    [SerializeField] private Image containerImage = default;
-    [SerializeField] private Image iconImage = default;
-    [SerializeField] private TMP_Text countText = default;
-
-
-    public InventoryItemData CurrentInventoryItemData { get; private set; }
+    [FormerlySerializedAs("containerImage")][SerializeField] private Image _containerImage = default;
+    [FormerlySerializedAs("iconImage")] [SerializeField] private Image _iconImage = default;
+    [FormerlySerializedAs("countText")][SerializeField] private TMP_Text _countText = default;
     
-    public bool CanAddToCurrentItem =>
-        CurrentInventoryItemData.itemData.CanStack
-        && CurrentInventoryItemData.elementsCount < CurrentInventoryItemData.itemData.StackCountMax;
+    public int CellIndex { get; private set; }
+    
     
 
-    public void AddItem(InventoryItemData inventoryItemData)
+    public void Initialize(int cellIndex)
     {
-        containerImage.raycastTarget = true;
+        CellIndex = cellIndex;
+    }
+
+    public void SetItem(InventoryItemData inventoryItemData)
+    {
+        _containerImage.raycastTarget = true;
         
-        iconImage.enabled = true;
-        iconImage.sprite = inventoryItemData.itemData.Icon;
+        _iconImage.enabled = true;
+        _iconImage.sprite = inventoryItemData.itemData.Icon;
 
-        countText.enabled = inventoryItemData.itemData.CanStack;
-        countText.text = $"{inventoryItemData.elementsCount}/{inventoryItemData.itemData.StackCountMax}";
-
-        this.CurrentInventoryItemData = inventoryItemData;
+        _countText.enabled = inventoryItemData.itemData.CanStack;
+        _countText.text = $"{inventoryItemData.elementsCount}/{inventoryItemData.itemData.StackCountMax}";
     }
 
-    public void TryAddCountToCurrentItem(InventoryItemData addedInventoryItemData, out InventoryItemData returnedInventoryItemData)
+    public void SetEmpty()
     {
-        if (CurrentInventoryItemData == null)
-        {
-            AddItem(addedInventoryItemData);
-            returnedInventoryItemData = null;
-            return;
-        }
-
-        if (!CanAddToCurrentItem)
-        {
-            returnedInventoryItemData = addedInventoryItemData;
-            return;
-        }
-
-        CurrentInventoryItemData.elementsCount += addedInventoryItemData.elementsCount;
-        if (CurrentInventoryItemData.elementsCount > CurrentInventoryItemData.itemData.StackCountMax)
-        {
-            returnedInventoryItemData = new InventoryItemData(CurrentInventoryItemData.itemData, 
-                CurrentInventoryItemData.elementsCount - CurrentInventoryItemData.itemData.StackCountMax);
-        }
-        else
-        {
-            returnedInventoryItemData = null;
-        }
+        _containerImage.raycastTarget = false;
+        _iconImage.enabled = false;
+        _countText.enabled = false;
     }
-
-    public void ReplaceItem(InventoryItemData addedInventoryItemData, out InventoryItemData returnedInventoryItemData)
-    {
-        if (CurrentInventoryItemData != null
-            && IsSameItem(addedInventoryItemData.itemData))
-        {
-            TryAddCountToCurrentItem(addedInventoryItemData, out returnedInventoryItemData);
-            return;
-        }
-        
-        returnedInventoryItemData = CurrentInventoryItemData ?? null;
-        AddItem(addedInventoryItemData);
-    }
-
-    public void DropItem()
-    {
-        containerImage.raycastTarget = false;
-        iconImage.enabled = false;
-        countText.enabled = false;
-        
-        this.CurrentInventoryItemData = null;
-    }
-    
-    public bool IsSameItem(ItemData addedItemData) =>
-        addedItemData.Id == CurrentInventoryItemData.itemData.Id;
 }

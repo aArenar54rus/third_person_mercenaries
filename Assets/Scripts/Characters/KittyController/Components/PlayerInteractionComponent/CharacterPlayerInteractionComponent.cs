@@ -1,8 +1,8 @@
-using UnityEngine;
+using Arenar.Services.InventoryService;
 using Zenject;
 
 
-namespace CatSimulator.Character
+namespace Arenar.Character
 {
     public class CharacterPlayerInteractionComponent : ICharacterPlayerInteractionComponent, ITickable
     {
@@ -16,68 +16,59 @@ namespace CatSimulator.Character
             Low = 2,
         }
         
-
-        private ICharacterAnimationComponent<CharacterAnimationComponent.KittyAnimation,
-            CharacterAnimationComponent.KittyAnimationValue> _characterAnimationComponent;
-
-        private ICharacterEntity kittyController;
+        
+        private ICharacterEntity character;
         private CharacterPhysicsDataStorage characterPhysicsDataStorage;
         private PlayerCharacterParametersData playerCharacterParameters;
+        private IInventoryService inventorySystem;
         private TickableManager tickableManager;
-        private Camera camera;
         private bool isInteractible;
-
-
-        private ICharacterLiveComponent characterLiveComponent =>
-            kittyController.TryGetCharacterComponent<ICharacterLiveComponent>(out bool isSuccess);
         
-
         private ICharacterAnimationComponent<CharacterAnimationComponent.KittyAnimation,
-            CharacterAnimationComponent.KittyAnimationValue> CharacterAnimationComponent
-        {
-            get
-            {
-                if (_characterAnimationComponent != null)
-                    return _characterAnimationComponent;
-
-                var component =
-                    kittyController.TryGetCharacterComponent<ICharacterAnimationComponent>(out bool isSuccess);
-                if (isSuccess)
-                {
-                    if (component is ICharacterAnimationComponent<CharacterAnimationComponent.KittyAnimation,
-                        CharacterAnimationComponent.KittyAnimationValue> animationComponent)
-                    {
-                        _characterAnimationComponent = animationComponent;
-                        return animationComponent;
-                    }
-                }
-                
-                return null;
-            }
-        }
+            CharacterAnimationComponent.KittyAnimationValue> _characterAnimationComponent;
+        private ICharacterLiveComponent _liveComponent;
+        private ICharacterRayCastComponent _rayCastComponent;
+        private ICharacterInputComponent _inputComponent;
 
 
-        private Transform kittyTransform =>
-            characterPhysicsDataStorage.CharacterTransform;
-        
-        
+        public bool CanInteract { get; private set; }
+
+
         [Inject]
         public void Construct(ICharacterEntity kittyController,
             ICharacterDataStorage<CharacterPhysicsDataStorage> characterPhysicsDataStorage,
             PlayerCharacterParametersData playerCharacterParameters,
             TickableManager tickableManager,
-            Camera camera)
+            IInventoryService inventorySystem)
         {
             this.characterPhysicsDataStorage = characterPhysicsDataStorage.Data;
-            this.kittyController = kittyController;
+            this.character = kittyController;
             this.playerCharacterParameters = playerCharacterParameters;
+            this.inventorySystem = inventorySystem;
             this.tickableManager = tickableManager;
-            this.camera = camera;
         }
         
         public void Initialize()
         {
             tickableManager.Add(this);
+            
+            bool isSuccess = false;
+            _liveComponent = character.TryGetCharacterComponent<ICharacterLiveComponent>(out isSuccess);
+            _rayCastComponent = character.TryGetCharacterComponent<ICharacterRayCastComponent>(out isSuccess);
+            _inputComponent = character.TryGetCharacterComponent<ICharacterInputComponent>(out isSuccess);
+            
+            var component = character.TryGetCharacterComponent<ICharacterAnimationComponent>(out isSuccess);
+            if (isSuccess)
+            {
+                if (component is ICharacterAnimationComponent<CharacterAnimationComponent.KittyAnimation,
+                    CharacterAnimationComponent.KittyAnimationValue> animationComponent)
+                {
+                    _characterAnimationComponent = animationComponent;
+                }
+            }
+
+
+            CanInteract = true;
         }
 
         public void DeInitialize()
@@ -90,17 +81,37 @@ namespace CatSimulator.Character
             isInteractible = true;
         }
 
-        public void OnUpdate()
-        {
-
-        }
-
         public void Tick()
         {
-            if (!characterLiveComponent.IsAlive)
+            if (!_liveComponent.IsAlive)
                 return;
 
-            OnUpdate();
+            InteractableElement element = _rayCastComponent.GetInteractableElementsOnCross();
+
+            if (element != null && _inputComponent.InteractAction)
+                InteractWithInteractObject(element);
+        }
+        
+        public void InteractWithInteractObject(InteractableElement element)
+        {
+            if (element.InteractableElementType == "Item")
+            {
+                if (element is ItemInteractableElement itemElement)
+                {
+                    if (!inventorySystem.TryAddItem(itemElement.ItemData, itemElement.Count,
+                        out InventoryItemData inventoryItemData))
+                        return;
+
+                    if (inventoryItemData != null)
+                    {
+                        itemElement.SetItem(inventoryItemData.itemData, inventoryItemData.elementsCount);
+                    }
+                    else
+                    {
+                        element.gameObject.SetActive(false);
+                    }
+                }
+            }
         }
     }
 }

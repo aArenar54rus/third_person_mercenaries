@@ -1,4 +1,4 @@
-namespace CatSimulator.Character
+namespace Arenar.Character
 {
     public interface ICharacterComponent
     {
