@@ -1,11 +1,12 @@
 using System;
+using System.Collections.Generic;
 
 
 namespace Arenar.Services.InventoryService
 {
     public interface IInventoryService
     {
-        event Action OnUpdateInventoryData;
+        event Action<List<int>> OnUpdateInventoryCells;
         
         
         bool IsMassOverbalance { get; }
@@ -19,7 +20,7 @@ namespace Arenar.Services.InventoryService
         
         InventoryItemData GetInventoryItemData(int cellIndex);
 
-        bool TryAddItem(ItemData itemData,
+        bool TryAddItems(ItemData itemData,
             int count,
             out InventoryItemData restOfItems);
         

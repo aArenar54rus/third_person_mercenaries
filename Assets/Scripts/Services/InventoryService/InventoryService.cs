@@ -6,7 +6,7 @@ namespace Arenar.Services.InventoryService
 {
     public class InventoryService : IInventoryService
     {
-        public event Action OnUpdateInventoryData;
+        public event Action<List<int>> OnUpdateInventoryCells;
         
         
         private Dictionary<int, InventoryItemData> _inventoryItemDataCells;
@@ -39,7 +39,7 @@ namespace Arenar.Services.InventoryService
             return _inventoryItemDataCells[cellIndex];
         }
 
-        public bool TryAddItem(ItemData itemData, int count, out InventoryItemData restOfItems)
+        public bool TryAddItems(ItemData itemData, int count, out InventoryItemData restOfItems)
         {
             // first, check mass
             if (itemData.ItemMass * count > InventoryMassMax - InventoryMass)
@@ -52,6 +52,7 @@ namespace Arenar.Services.InventoryService
                 return TryAddInFreeCell(itemData, count, out restOfItems);
 
             //check cells with same item
+            List<int> updatedCellIndexes = new List<int>();
             foreach (var inventoryItemData in _inventoryItemDataCells)
             {
                 if (inventoryItemData.Value.itemData == null)
@@ -63,11 +64,13 @@ namespace Arenar.Services.InventoryService
 
                 inventoryItemData.Value.elementsCount += count;
                 count = inventoryItemData.Value.elementsCount - inventoryItemData.Value.itemData.StackCountMax;
-                CalculateMass();
-                OnUpdateInventoryData?.Invoke();
-
+                updatedCellIndexes.Add(inventoryItemData.Key);
+                
                 if (count > 0)
                     continue;
+                
+                CalculateMass();
+                OnUpdateInventoryCells?.Invoke(new List<int>(updatedCellIndexes));
                 
                 restOfItems = null;
                 return true;
@@ -92,7 +95,7 @@ namespace Arenar.Services.InventoryService
                     CalculateMass();
                     restOfItems = null;
                     
-                    OnUpdateInventoryData?.Invoke();
+                    OnUpdateInventoryCells?.Invoke(new List<int>(cellIndex));
                     return true;
                 }
 
@@ -109,8 +112,9 @@ namespace Arenar.Services.InventoryService
 
             dataCell.elementsCount += count;
             count = dataCell.elementsCount - dataCell.itemData.StackCountMax;
+            
             CalculateMass();
-            OnUpdateInventoryData?.Invoke();
+            OnUpdateInventoryCells?.Invoke(new List<int>(1){ cellIndex });
 
             if (count > 0)
             {
@@ -137,7 +141,7 @@ namespace Arenar.Services.InventoryService
                 dataCell.itemData = null;
             
             CalculateMass();
-            OnUpdateInventoryData?.Invoke();
+            OnUpdateInventoryCells?.Invoke(new List<int>(cellIndex));
         }
 
         public bool IsEnoughItems(ItemData itemData, int neededCount)
@@ -170,12 +174,14 @@ namespace Arenar.Services.InventoryService
             }
 
             int counter = 0;
+            List<int> changedCellsIndexes = new List<int>();
             
             foreach (var dataCell in _inventoryItemDataCells)
             {
                 if (dataCell.Value.itemData.Id != itemData.Id)
                     continue;
 
+                changedCellsIndexes.Add(dataCell.Key);
                 if (dataCell.Value.elementsCount <= neededCount)
                 {
                     counter += dataCell.Value.elementsCount;
@@ -195,7 +201,7 @@ namespace Arenar.Services.InventoryService
             }
 
             CalculateMass();
-            OnUpdateInventoryData?.Invoke();
+            OnUpdateInventoryCells?.Invoke(changedCellsIndexes);
             restOfItems = new InventoryItemData(itemData, counter);
             return true;
         }
@@ -211,13 +217,14 @@ namespace Arenar.Services.InventoryService
             int counter = 0;
 
             ItemData neededItemData = null;
+            List<int> changedCellsIndexes = new List<int>();
             foreach (var dataCell in _inventoryItemDataCells)
             {
                 if (dataCell.Value.itemData.Id != itemIndex)
                     continue;
 
                 neededItemData ??= dataCell.Value.itemData;
-                
+                changedCellsIndexes.Add(dataCell.Key);
                 if (dataCell.Value.elementsCount <= neededCount)
                 {
                     counter += dataCell.Value.elementsCount;
@@ -237,7 +244,7 @@ namespace Arenar.Services.InventoryService
             }
 
             CalculateMass();
-            OnUpdateInventoryData?.Invoke();
+            OnUpdateInventoryCells?.Invoke(changedCellsIndexes);
             restOfItems = new InventoryItemData(neededItemData, counter);
             return true;
         }
@@ -263,8 +270,8 @@ namespace Arenar.Services.InventoryService
                 CalculateMass();
                 restOfItems = null;
                     
-                OnUpdateInventoryData?.Invoke();
-                    
+                OnUpdateInventoryCells?.Invoke(new List<int>(1){ inventoryItemData.Key });
+
                 return true;
             }
 

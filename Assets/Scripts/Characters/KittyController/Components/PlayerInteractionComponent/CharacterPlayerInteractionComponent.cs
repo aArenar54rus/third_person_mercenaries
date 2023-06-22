@@ -98,7 +98,7 @@ namespace Arenar.Character
             {
                 if (element is ItemInteractableElement itemElement)
                 {
-                    if (!inventorySystem.TryAddItem(itemElement.ItemData, itemElement.Count,
+                    if (!inventorySystem.TryAddItems(itemElement.ItemData, itemElement.Count,
                         out InventoryItemData inventoryItemData))
                         return;
 

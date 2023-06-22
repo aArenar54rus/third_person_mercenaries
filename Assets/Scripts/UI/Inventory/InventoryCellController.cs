@@ -2,40 +2,50 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
+using Arenar.Services.InventoryService;
 
 
-public class InventoryCellController : MonoBehaviour
+namespace Arenar
 {
-    
-    [Header("Cell")]
-    [FormerlySerializedAs("containerImage")][SerializeField] private Image _containerImage = default;
-    [FormerlySerializedAs("iconImage")] [SerializeField] private Image _iconImage = default;
-    [FormerlySerializedAs("countText")][SerializeField] private TMP_Text _countText = default;
-    
-    public int CellIndex { get; private set; }
-    
-    
-
-    public void Initialize(int cellIndex)
+    public class InventoryCellController : MonoBehaviour
     {
-        CellIndex = cellIndex;
-    }
 
-    public void SetItem(InventoryItemData inventoryItemData)
-    {
-        _containerImage.raycastTarget = true;
+        [Header("Cell")] [FormerlySerializedAs("containerImage")] [SerializeField]
+        private Image _containerImage = default;
+
+        [FormerlySerializedAs("iconImage")] [SerializeField]
+        private Image _iconImage = default;
+
+        [FormerlySerializedAs("countText")] [SerializeField]
+        private TMP_Text _countText = default;
+
+        public int CellIndex { get; private set; }
+
+
+        private IInventoryService inventoryService;
+
         
-        _iconImage.enabled = true;
-        _iconImage.sprite = inventoryItemData.itemData.Icon;
+        public void Initialize(int cellIndex)
+        {
+            CellIndex = cellIndex;
+        }
 
-        _countText.enabled = inventoryItemData.itemData.CanStack;
-        _countText.text = $"{inventoryItemData.elementsCount}/{inventoryItemData.itemData.StackCountMax}";
-    }
+        public void SetItem(InventoryItemData inventoryItemData)
+        {
+            _containerImage.raycastTarget = true;
 
-    public void SetEmpty()
-    {
-        _containerImage.raycastTarget = false;
-        _iconImage.enabled = false;
-        _countText.enabled = false;
+            _iconImage.enabled = true;
+            _iconImage.sprite = inventoryItemData.itemData.Icon;
+
+            _countText.enabled = inventoryItemData.itemData.CanStack;
+            _countText.text = $"{inventoryItemData.elementsCount}/{inventoryItemData.itemData.StackCountMax}";
+        }
+
+        public void SetEmpty()
+        {
+            _containerImage.raycastTarget = false;
+            _iconImage.enabled = false;
+            _countText.enabled = false;
+        }
     }
 }

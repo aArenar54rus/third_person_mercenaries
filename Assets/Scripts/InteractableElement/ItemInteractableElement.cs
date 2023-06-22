@@ -1,5 +1,5 @@
-using Arenar;
 using UnityEngine;
+
 
 namespace Arenar
 {
@@ -55,9 +55,9 @@ namespace Arenar
 
       private void UpdateItemObjectVisual()
       {
-         rigidbody.mass = itemData.WorldVisuals[0].Mass;
-         meshRenderer.materials = itemData.WorldVisuals[0].Materials;
-         meshFilter.mesh = itemData.WorldVisuals[0].Mesh;
+         rigidbody.mass = itemData.WorldVisual.Mass;
+         meshRenderer.materials = itemData.WorldVisual.Materials;
+         meshFilter.mesh = itemData.WorldVisual.Mesh;
          boxCollider.size = meshFilter.mesh.bounds.size;
       }
    }

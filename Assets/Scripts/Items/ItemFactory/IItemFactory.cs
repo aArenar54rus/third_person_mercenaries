@@ -1,7 +1,10 @@
 using UnityEngine;
 
 
-public interface IItemFactory<TItem>
+namespace Arenar
 {
-    TItem Create(ItemData prototypePrefab, int count, Transform parent, Vector3 instancePosition);
+    public interface IItemFactory<TItem>
+    {
+         TItem Create(ItemData prototypePrefab, int count, Transform parent, Vector3 instancePosition);
+     }
 }

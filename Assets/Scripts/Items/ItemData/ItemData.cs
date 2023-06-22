@@ -1,45 +1,38 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 
-[Serializable]
-public abstract class ItemData : ScriptableObject
+namespace Arenar
 {
-    [SerializeField] protected int id = default;
-    [SerializeField] protected string nameKey = default;
-    [SerializeField] protected string desckey = default;
-    [SerializeField] private int stackCountMax = default;
-    [SerializeField] private float itemMass = default;
-    [SerializeField] protected ItemWorldVisual[] worldVisuals = default;
-
-
-    public int Id => id;
-    
-    public string NameKey => nameKey;
-    
-    public string DescKey => desckey;
-    
-    public int StackCountMax => stackCountMax;
-
-    public float ItemMass => itemMass;
-
-    public ItemWorldVisual[] WorldVisuals => worldVisuals;
-
-    public bool CanStack =>
-        stackCountMax > 1;
-    
-    public abstract ItemType ItemType { get; }
-
-    public virtual Sprite Icon =>
-        Resources.Load<Sprite>("Sprites/Items/" + id);
-    
-    
-    public virtual ItemWorldVisual GetItemWorldVisual(int value)
+    [CreateAssetMenu(menuName = "Items/ItemData")]
+    public class ItemData : ScriptableObject
     {
-        // TODO: need complete
-        return worldVisuals[0];
+        [SerializeField] protected int _id = default;
+        [SerializeField] protected string _nameKey = default;
+        [SerializeField] protected string _desckey = default;
+        [SerializeField] protected ItemType _itemType = default;
+        [SerializeField] private int _stackCountMax = default;
+        [SerializeField] private float _itemMass = default;
+        [SerializeField] protected ItemWorldVisual _worldVisual = default;
+
+
+        public int Id => _id;
+
+        public string NameKey => _nameKey;
+
+        public string DescKey => _desckey;
+
+        public int StackCountMax => _stackCountMax;
+
+        public float ItemMass => _itemMass;
+
+        public bool CanStack =>
+            _stackCountMax > 1;
+
+        public ItemType ItemType => _itemType;
+
+        public Sprite Icon =>
+            Resources.Load<Sprite>("Sprites/Items/" + _id);
+
+        public ItemWorldVisual WorldVisual => _worldVisual;
     }
 }
