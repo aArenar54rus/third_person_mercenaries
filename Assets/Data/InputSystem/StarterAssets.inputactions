@@ -49,6 +49,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "MousePosition",
+                    "type": "Value",
+                    "id": "4e091e04-8062-49d0-a25a-f00b5217a5bb",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Aim",
+                    "type": "PassThrough",
+                    "id": "e11b7c90-7559-4d6b-bff9-79774a185701",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -157,7 +175,7 @@
                     "path": "<Gamepad>/leftStick",
                     "interactions": "",
                     "processors": "StickDeadzone",
-                    "groups": "Gamepad",
+                    "groups": "Gamepad;Xbox Controller;PS4 Controller",
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -179,7 +197,7 @@
                     "path": "<Gamepad>/rightStick",
                     "interactions": "",
                     "processors": "InvertVector2(invertX=false),StickDeadzone,ScaleVector2(x=300,y=300)",
-                    "groups": "Gamepad",
+                    "groups": "Gamepad;Xbox Controller;PS4 Controller",
                     "action": "Look",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -201,7 +219,7 @@
                     "path": "<Gamepad>/buttonSouth",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Gamepad",
+                    "groups": "Gamepad;Xbox Controller;PS4 Controller",
                     "action": "Jump",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -220,10 +238,10 @@
                 {
                     "name": "",
                     "id": "c8fcd86e-dcfd-4f88-8e93-b638cdbf3320",
-                    "path": "<Gamepad>/leftTrigger",
+                    "path": "<Gamepad>/leftStickPress",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Gamepad",
+                    "groups": "Gamepad;PS4 Controller;Xbox Controller",
                     "action": "Sprint",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -234,7 +252,7 @@
                     "path": "<Keyboard>/e",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "KeyboardMouse",
                     "action": "Interact",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -245,8 +263,41 @@
                     "path": "<Gamepad>/buttonEast",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "Xbox Controller;PS4 Controller;Gamepad",
                     "action": "Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a0894e5e-054b-4e41-b3aa-66cbe42c3c65",
+                    "path": "<Mouse>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "MousePosition",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a33a7444-c93c-4210-9a4c-895f47308113",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "Aim",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "93e8f8fa-bcde-4875-904b-c20332a90f82",
+                    "path": "<Gamepad>/leftTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad;Xbox Controller;PS4 Controller",
+                    "action": "Aim",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

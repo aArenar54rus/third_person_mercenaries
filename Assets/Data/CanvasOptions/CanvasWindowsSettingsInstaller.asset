@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 286e0e0d1c742594b8c46ee34ca24de4, type: 3}
+  m_Name: CanvasWindowsSettingsInstaller
+  m_EditorClassIdentifier: 
+  canvasWindowsSettings:
+    sceneRootName: Playground
+    canvasWindows:
+    - {fileID: 4765142800376440301, guid: 9c4a57b67b32ef4409bf3e9a31ff6414, type: 3}
+    defaultWindow: {fileID: 4765142800376440301, guid: 9c4a57b67b32ef4409bf3e9a31ff6414,
+      type: 3}
+    transitionWindow: {fileID: 6074149996065963569, guid: d3ab062d3e80aae4d9e6f475f8084d7c,
+      type: 3}
+    canvasScalerBaseResolution: {x: 1080, y: 1920}
+    renderMode: 1
+    sortingOffset: 100
+    planeDistance: 0.3

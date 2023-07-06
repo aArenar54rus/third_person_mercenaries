@@ -15,6 +15,8 @@ namespace Arenar.Character
         bool SprintAction { get; }
         
         bool InteractAction { get; }
+        
+        bool AimAction { get; }
 
 
         void SetControlStatus(bool status);

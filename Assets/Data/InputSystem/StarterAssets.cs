@@ -73,6 +73,24 @@ namespace Arenar
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""MousePosition"",
+                    ""type"": ""Value"",
+                    ""id"": ""4e091e04-8062-49d0-a25a-f00b5217a5bb"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Aim"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""e11b7c90-7559-4d6b-bff9-79774a185701"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -181,7 +199,7 @@ namespace Arenar
                     ""path"": ""<Gamepad>/leftStick"",
                     ""interactions"": """",
                     ""processors"": ""StickDeadzone"",
-                    ""groups"": ""Gamepad"",
+                    ""groups"": ""Gamepad;Xbox Controller;PS4 Controller"",
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -203,7 +221,7 @@ namespace Arenar
                     ""path"": ""<Gamepad>/rightStick"",
                     ""interactions"": """",
                     ""processors"": ""InvertVector2(invertX=false),StickDeadzone,ScaleVector2(x=300,y=300)"",
-                    ""groups"": ""Gamepad"",
+                    ""groups"": ""Gamepad;Xbox Controller;PS4 Controller"",
                     ""action"": ""Look"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -225,7 +243,7 @@ namespace Arenar
                     ""path"": ""<Gamepad>/buttonSouth"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Gamepad"",
+                    ""groups"": ""Gamepad;Xbox Controller;PS4 Controller"",
                     ""action"": ""Jump"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -244,10 +262,10 @@ namespace Arenar
                 {
                     ""name"": """",
                     ""id"": ""c8fcd86e-dcfd-4f88-8e93-b638cdbf3320"",
-                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""path"": ""<Gamepad>/leftStickPress"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Gamepad"",
+                    ""groups"": ""Gamepad;PS4 Controller;Xbox Controller"",
                     ""action"": ""Sprint"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -258,7 +276,7 @@ namespace Arenar
                     ""path"": ""<Keyboard>/e"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""KeyboardMouse"",
                     ""action"": ""Interact"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -269,8 +287,41 @@ namespace Arenar
                     ""path"": ""<Gamepad>/buttonEast"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Xbox Controller;PS4 Controller;Gamepad"",
                     ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a0894e5e-054b-4e41-b3aa-66cbe42c3c65"",
+                    ""path"": ""<Mouse>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""MousePosition"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a33a7444-c93c-4210-9a4c-895f47308113"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Aim"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""93e8f8fa-bcde-4875-904b-c20332a90f82"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad;Xbox Controller;PS4 Controller"",
+                    ""action"": ""Aim"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -334,6 +385,8 @@ namespace Arenar
             m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
             m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
             m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
+            m_Player_MousePosition = m_Player.FindAction("MousePosition", throwIfNotFound: true);
+            m_Player_Aim = m_Player.FindAction("Aim", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -398,6 +451,8 @@ namespace Arenar
         private readonly InputAction m_Player_Jump;
         private readonly InputAction m_Player_Sprint;
         private readonly InputAction m_Player_Interact;
+        private readonly InputAction m_Player_MousePosition;
+        private readonly InputAction m_Player_Aim;
         public struct PlayerActions
         {
             private @PlayerInput m_Wrapper;
@@ -407,6 +462,8 @@ namespace Arenar
             public InputAction @Jump => m_Wrapper.m_Player_Jump;
             public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
             public InputAction @Interact => m_Wrapper.m_Player_Interact;
+            public InputAction @MousePosition => m_Wrapper.m_Player_MousePosition;
+            public InputAction @Aim => m_Wrapper.m_Player_Aim;
             public InputActionMap Get() { return m_Wrapper.m_Player; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -431,6 +488,12 @@ namespace Arenar
                     @Interact.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInteract;
                     @Interact.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInteract;
                     @Interact.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInteract;
+                    @MousePosition.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMousePosition;
+                    @MousePosition.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMousePosition;
+                    @MousePosition.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMousePosition;
+                    @Aim.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAim;
+                    @Aim.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAim;
+                    @Aim.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAim;
                 }
                 m_Wrapper.m_PlayerActionsCallbackInterface = instance;
                 if (instance != null)
@@ -450,6 +513,12 @@ namespace Arenar
                     @Interact.started += instance.OnInteract;
                     @Interact.performed += instance.OnInteract;
                     @Interact.canceled += instance.OnInteract;
+                    @MousePosition.started += instance.OnMousePosition;
+                    @MousePosition.performed += instance.OnMousePosition;
+                    @MousePosition.canceled += instance.OnMousePosition;
+                    @Aim.started += instance.OnAim;
+                    @Aim.performed += instance.OnAim;
+                    @Aim.canceled += instance.OnAim;
                 }
             }
         }
@@ -497,6 +566,8 @@ namespace Arenar
             void OnJump(InputAction.CallbackContext context);
             void OnSprint(InputAction.CallbackContext context);
             void OnInteract(InputAction.CallbackContext context);
+            void OnMousePosition(InputAction.CallbackContext context);
+            void OnAim(InputAction.CallbackContext context);
         }
     }
 }

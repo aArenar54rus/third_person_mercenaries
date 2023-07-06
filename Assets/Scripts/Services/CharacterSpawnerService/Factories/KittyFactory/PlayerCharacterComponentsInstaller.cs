@@ -26,7 +26,7 @@ namespace Arenar.Character
             Container.BindInstance(soundComponent).AsSingle();
             Container.Inject(soundComponent);
 
-            ICharacterMovementComponent movementComponent = new KittyCharacterMovementComponent();
+            ICharacterMovementComponent movementComponent = new CharacterMovementComponent();
             characterComponentsPool.Add(typeof(ICharacterMovementComponent), movementComponent);
             Container.BindInstance(movementComponent).AsSingle();
             Container.Inject(movementComponent);
@@ -50,6 +50,11 @@ namespace Arenar.Character
             characterComponentsPool.Add(typeof(ICharacterRayCastComponent), characterRayCastComponent);
             Container.BindInstance(characterRayCastComponent).AsSingle();
             Container.Inject(characterRayCastComponent);
+            
+            IAimComponent aimComponent = new PlayerCharacterAimComponent();
+            characterComponentsPool.Add(typeof(IAimComponent), aimComponent);
+            Container.BindInstance(aimComponent).AsSingle();
+            Container.Inject(aimComponent);
             
 /*            ICharacterScaleComponent characterScaleComponent = new KittyCharacterScaleComponent();
             characterComponentsPool.Add(typeof(ICharacterScaleComponent), characterScaleComponent);

@@ -6,13 +6,13 @@ using Zenject;
 
 public class TestScript : MonoBehaviour
 {
-    [Inject] private KittySpawnController KittySpawnController;
+    [Inject] private PlayerCharacterSpawnController _playerCharacterSpawnController;
     [Inject] private ICameraService cameraService;
     
     
     void Start()
     {
-        var player = KittySpawnController.CreateKitty();
+        var player = _playerCharacterSpawnController.CreateKitty();
         cameraService.SetCameraState<CameraStateThirdPerson>(player.CameraTransform, player.CharacterTransform);
     }
 }

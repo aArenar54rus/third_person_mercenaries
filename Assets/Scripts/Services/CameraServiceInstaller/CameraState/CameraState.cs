@@ -10,7 +10,7 @@ namespace Arenar.CameraService
         
         
         
-        public virtual void SetStateActive(Camera camera, CinemachineVirtualCamera cinemachineVirtualCamera, Transform followTarget, Transform lookAtTarget)
+        public virtual void SetStateActive(Camera camera, SerializableDictionary<CinemachineCameraType, CinemachineVirtualCamera> cinemachineVirtualCameras, Transform followTarget, Transform lookAtTarget)
         {
             IsActive = true;
         }

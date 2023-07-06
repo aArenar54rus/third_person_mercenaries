@@ -7,9 +7,13 @@ namespace Arenar
     public class ItemCollectionData : ScriptableObject
     {
         [SerializeField] private InteractableElement itemWorldObjectControlPrefab = default;
+        [SerializeField] private ItemRarityColorData itemRarityColorData = default;
 
 
         public InteractableElement ItemWorldObjectControlPrefab =>
             itemWorldObjectControlPrefab;
+
+        public ItemRarityColorData ItemRarityColorData =>
+            itemRarityColorData;
     }
 }

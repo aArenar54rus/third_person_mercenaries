@@ -9,9 +9,9 @@ namespace Arenar.Services
     public class CameraServiceInstaller : MonoInstaller
     {
         [SerializeField] private Camera mainCamera = default;
-        [SerializeField] private CinemachineVirtualCamera cinemachineVirtualCamera;
+        [SerializeField] private SerializableDictionary<CinemachineCameraType, CinemachineVirtualCamera> cinemachineVirtualCameras;
 
-        
+
         public override void InstallBindings()
         {
             Container.Bind<Camera>()
@@ -19,13 +19,12 @@ namespace Arenar.Services
                 .AsSingle()
                 .NonLazy();
             
-            Container.Bind<CinemachineVirtualCamera>()
-                .FromInstance(cinemachineVirtualCamera)
+            Container.BindInstance(cinemachineVirtualCameras)
                 .AsSingle()
                 .NonLazy();
 
             Container.Bind<ICameraService>()
-                .To< Arenar.CameraService.CameraService>()
+                .To<Arenar.CameraService.CameraService>()
                 .AsSingle()
                 .NonLazy();
             

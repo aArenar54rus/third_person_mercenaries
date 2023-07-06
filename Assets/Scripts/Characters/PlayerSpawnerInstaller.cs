@@ -11,7 +11,7 @@ public class PlayerSpawnerInstaller : MonoInstaller<PlayerSpawnerInstaller>
             .To<CharacterFactory>()
             .AsSingle();
 
-        Container.Bind<KittySpawnController>()
+        Container.Bind<PlayerCharacterSpawnController>()
             .AsSingle();
     }
 }

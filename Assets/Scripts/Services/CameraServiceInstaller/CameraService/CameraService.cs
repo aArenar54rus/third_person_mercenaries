@@ -10,18 +10,22 @@ namespace Arenar.CameraService
     public class CameraService : ICameraService, ITickable, ILateTickable
     {
         public Camera GameCamera { get; private set; }
-        public CinemachineVirtualCamera CinemachineVirtualCamera { get; private set; }
+        public SerializableDictionary<CinemachineCameraType, CinemachineVirtualCamera> CinemachineVirtualCameras { get; private set; }
         public Dictionary<Type, ICameraState> CameraStates { get; private set; }
 
         private ICameraState lastActiveState;
         private bool isInitialize = false;
+        private CinemachineCameraType lastActiveType = CinemachineCameraType.DefaultTPS;
 
 
         [Inject]
-        public void Construct(Camera camera, CinemachineVirtualCamera cinemachineVirtualCamera, ICameraState[] states, CameraStatesFactory cameraStatesFactory)
+        public void Construct(Camera camera,
+                              SerializableDictionary<CinemachineCameraType, CinemachineVirtualCamera> cinemachineVirtualCameras,
+                              ICameraState[] states,
+                              CameraStatesFactory cameraStatesFactory)
         {
             GameCamera = camera;
-            CinemachineVirtualCamera = cinemachineVirtualCamera;
+            CinemachineVirtualCameras = cinemachineVirtualCameras;
             
             Type baseType = typeof(ICameraState);
             Type[] implementations = baseType.GetImplementations();
@@ -37,6 +41,7 @@ namespace Arenar.CameraService
         }
         
         
+
         public void SetCameraState<TCameraState>(Transform followTarget, Transform lookAtTarget)
             where TCameraState : ICameraState
         {
@@ -44,8 +49,20 @@ namespace Arenar.CameraService
 
             if (lastActiveState != null)
                 lastActiveState.SetStateDeactive();
-            currentState.SetStateActive(GameCamera, CinemachineVirtualCamera, followTarget, lookAtTarget);
+            
+            currentState.SetStateActive(GameCamera, CinemachineVirtualCameras, followTarget, lookAtTarget);
             lastActiveState = currentState;
+        }
+
+
+        public void SetCinemachineVirtualCamera(CinemachineCameraType cinemachineCameraType)
+        {
+            if (lastActiveType == cinemachineCameraType)
+                return;
+
+            lastActiveType = cinemachineCameraType;
+            foreach (var virtualCamera in CinemachineVirtualCameras)
+                virtualCamera.Value.enabled = virtualCamera.Key == lastActiveType;
         }
 
         public void Tick()

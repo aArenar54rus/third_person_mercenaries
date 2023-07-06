@@ -16,6 +16,10 @@ namespace Arenar
         [SerializeField] private float rotationSmoothTime = 0.12f;
         [Tooltip("Acceleration and deceleration")]
         [SerializeField] private float speedChangeRate = 10.0f;
+
+        [Space(5), Header("Camera")]
+        [SerializeField] private float defaultCameraSensitivity = 0.5f;
+        [SerializeField] private float aimCameraSensitivity = 0.2f;
         
         [Space(5)]
         [Tooltip("The height the player can jump")]
@@ -56,6 +60,10 @@ namespace Arenar
         public float SprintSpeed => sprintSpeed;
         public float RotationSmoothTime => rotationSmoothTime;
         public float SpeedChangeRate => speedChangeRate;
+        
+        
+        public float DefaultCameraSensitivity => defaultCameraSensitivity;
+        public float AimCameraSensitivity => aimCameraSensitivity;
         
         
         public float JumpHeight => jumpHeight;

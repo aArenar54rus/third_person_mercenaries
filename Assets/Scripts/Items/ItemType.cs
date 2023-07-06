@@ -4,4 +4,5 @@ public enum ItemType : byte
     Material = 1,
     Weapon = 2,
     Cloth = 3,
+    Quest = 4,
 }

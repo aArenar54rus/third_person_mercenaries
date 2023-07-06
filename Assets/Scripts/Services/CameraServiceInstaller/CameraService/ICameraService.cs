@@ -10,11 +10,13 @@ namespace Arenar.CameraService
     {
         Camera GameCamera { get; }
         
-        CinemachineVirtualCamera CinemachineVirtualCamera { get; }
+        SerializableDictionary<CinemachineCameraType, CinemachineVirtualCamera> CinemachineVirtualCameras { get; }
 
         Dictionary<Type, ICameraState> CameraStates { get; }
 
 
+        void SetCinemachineVirtualCamera(CinemachineCameraType cinemachineCameraType);
+        
         void SetCameraState<TCameraState>(Transform followTarget, Transform lookAtTarget)
             where TCameraState : ICameraState;
     }

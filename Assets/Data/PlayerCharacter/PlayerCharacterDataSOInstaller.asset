@@ -19,6 +19,8 @@ MonoBehaviour:
     sprintSpeed: 8.0025
     rotationSmoothTime: 0.12
     speedChangeRate: 10
+    defaultCameraSensitivity: 0.01
+    aimCameraSensitivity: 0.005
     jumpHeight: 1.5
     gravity: -15
     jumpTimeout: 0.5

@@ -8,7 +8,7 @@ namespace Arenar
 {
     public class PlayerSpawner : MonoBehaviour
     {
-        [Inject] private KittySpawnController kittySpawnController;
+        [Inject] private PlayerCharacterSpawnController _playerCharacterSpawnController;
         [Inject] private ICameraService cameraService;
 
         private PlayerCharacterController _playerCharacter;
@@ -16,9 +16,10 @@ namespace Arenar
 
         private void Start()
         {
-            _playerCharacter = kittySpawnController.CreateKitty();
+            _playerCharacter = _playerCharacterSpawnController.CreateKitty();
             
-            cameraService.SetCameraState<CameraStateThirdPerson>(_playerCharacter.CameraTransform , _playerCharacter.CharacterTransform);
+            // cameraService.SetCameraState<CameraStateThirdPerson>(_playerCharacter.CameraTransform , _playerCharacter.CharacterTransform);
+            cameraService.SetCinemachineVirtualCamera(CinemachineCameraType.DefaultTPS);
         }
         
         public void OnDrawGizmos()

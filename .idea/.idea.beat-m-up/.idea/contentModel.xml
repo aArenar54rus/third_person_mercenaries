@@ -7,6 +7,11 @@
       <e p="Assembly-CSharp-Editor.csproj" t="IncludeRecursive" />
       <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
       <e p="Assets" t="Include">
+        <e p="Data" t="Include">
+          <e p="InputSystem" t="Include">
+            <e p="StarterAssets.cs" t="Include" />
+          </e>
+        </e>
         <e p="DOTween" t="Include">
           <e p="Modules" t="Include">
             <e p="DOTweenModuleAudio.cs" t="Include" />
@@ -956,6 +961,10 @@
               <e p="AnimationReactionsController.cs" t="Include" />
               <e p="CharacterPhysicsInteraction.cs" t="Include" />
               <e p="Components" t="Include">
+                <e p="AimComponent" t="Include">
+                  <e p="IAimComponent.cs" t="Include" />
+                  <e p="PlayerCharacterAimComponent.cs" t="Include" />
+                </e>
                 <e p="AnimatorComponent" t="Include">
                   <e p="CharacterAnimationComponent.cs" t="Include" />
                   <e p="ICharacterAnimationComponent.cs" t="Include" />
@@ -974,8 +983,8 @@
                   <e p="KittyCharacterLiveComponent.cs" t="Include" />
                 </e>
                 <e p="MovementComponent" t="Include">
+                  <e p="CharacterMovementComponent.cs" t="Include" />
                   <e p="ICharacterMovementComponent.cs" t="Include" />
-                  <e p="KittyCharacterMovementComponent.cs" t="Include" />
                 </e>
                 <e p="PlayerInteractionComponent" t="Include">
                   <e p="CharacterPlayerInteractionComponent.cs" t="Include" />
@@ -1003,8 +1012,9 @@
             <e p="OverlapSphereTest.cs" t="Include" />
             <e p="PlayerSpawnerInstaller.cs" t="Include" />
           </e>
-          <e p="Input" t="Include">
-            <e p="PlayerInput.cs" t="Include" />
+          <e p="InteractableElement" t="Include">
+            <e p="InteractableElement.cs" t="Include" />
+            <e p="ItemInteractableElement.cs" t="Include" />
           </e>
           <e p="Items" t="Include">
             <e p="Collection" t="Include">
@@ -1015,16 +1025,14 @@
             </e>
             <e p="ItemData" t="Include">
               <e p="ItemData.cs" t="Include" />
-              <e p="MaterialItemData.cs" t="Include" />
-              <e p="MoneyItemData.cs" t="Include" />
-              <e p="WeaponItemData.cs" t="Include" />
+              <e p="ItemRarityColorData.cs" t="Include" />
             </e>
             <e p="ItemFactory" t="Include">
               <e p="IItemFactory.cs" t="Include" />
               <e p="WorldItemFactory.cs" t="Include" />
             </e>
+            <e p="ItemRarity.cs" t="Include" />
             <e p="ItemType.cs" t="Include" />
-            <e p="ItemWorldObjectControl.cs" t="Include" />
             <e p="Visuals" t="Include">
               <e p="ItemWorldVisual.cs" t="Include" />
             </e>
@@ -1074,6 +1082,7 @@
               </e>
             </e>
             <e p="CameraServiceInstaller" t="Include">
+              <e p="CameraOptionsScriptableObject.cs" t="Include" />
               <e p="CameraService" t="Include">
                 <e p="CameraService.cs" t="Include" />
                 <e p="ICameraService.cs" t="Include" />
@@ -1084,8 +1093,45 @@
                 <e p="CameraStateThirdPerson.cs" t="Include" />
                 <e p="ICameraState.cs" t="Include" />
               </e>
+              <e p="CinemachineCameraType.cs" t="Include" />
               <e p="Factory" t="Include">
                 <e p="CameraStatesFactory.cs" t="Include" />
+              </e>
+            </e>
+            <e p="CanvasService" t="Include">
+              <e p="AnimationCompleteHandler.cs" t="Include" />
+              <e p="CanvasService.cs" t="Include" />
+              <e p="CanvasWindow.cs" t="Include" />
+              <e p="CanvasWindowController.cs" t="Include" />
+              <e p="CanvasWindowControllerFactory.cs" t="Include" />
+              <e p="CanvasWindowFactory.cs" t="Include" />
+              <e p="CanvasWindowLayer" t="Include">
+                <e p="AnimatedCanvasWindowLayer.cs" t="Include" />
+                <e p="CanvasWindowLayer.cs" t="Include" />
+              </e>
+              <e p="CanvasWindowsSettings.cs" t="Include" />
+              <e p="ICanvasService.cs" t="Include" />
+              <e p="Installers" t="Include">
+                <e p="CanvasServiceInstaller.cs" t="Include" />
+                <e p="CanvasServiceScriptableInstaller.cs" t="Include" />
+                <e p="ReviveCanvasParameters.cs" t="Include" />
+              </e>
+              <e p="ServiceControllers" t="Include">
+                <e p="ITransitionController.cs" t="Include" />
+                <e p="ITransitionWindow.cs" t="Include" />
+                <e p="ITransitionWindowElement.cs" t="Include" />
+                <e p="ITransitionWindowLayerController.cs" t="Include" />
+                <e p="TransitionController.cs" t="Include" />
+              </e>
+              <e p="TransitionWindow" t="Include">
+                <e p="CrossFade" t="Include">
+                  <e p="TransitionCrossFadeCanvasWindowLayerController.cs" t="Include" />
+                </e>
+                <e p="Overlay" t="Include">
+                  <e p="TransitionOverlayCanvasWindowLayer.cs" t="Include" />
+                  <e p="TransitionOverlayWindowLayerController.cs" t="Include" />
+                </e>
+                <e p="TransitionCanvasWindow.cs" t="Include" />
               </e>
             </e>
             <e p="CharacterSpawnerService" t="Include">
@@ -1093,10 +1139,10 @@
                 <e p="KittyFactory" t="Include">
                   <e p="CharacterKittyFactoryService.cs" t="Include" />
                   <e p="ICharacterEntityFactory.cs" t="Include" />
-                  <e p="KittySpawnController.cs" t="Include" />
                   <e p="KittySpawnerElement.cs" t="Include" />
                   <e p="KittySpawnerFactoryProvider.cs" t="Include" />
                   <e p="PlayerCharacterComponentsInstaller.cs" t="Include" />
+                  <e p="PlayerCharacterSpawnController.cs" t="Include" />
                 </e>
               </e>
               <e p="IFactoryProvider.cs" t="Include" />
@@ -1141,11 +1187,32 @@
             <e p="SerializableDictionary.cs" t="Include" />
           </e>
           <e p="UI" t="Include">
+            <e p="Controllers" t="Include">
+              <e p="CrossGameplayController.cs" t="Include" />
+            </e>
+            <e p="Gameplay" t="Include">
+              <e p="CrossCanvasWindowLayer.cs" t="Include" />
+              <e p="GameplayCanvasWindow.cs" t="Include" />
+            </e>
             <e p="Inventory" t="Include">
               <e p="InventoryCanvasWindow.cs" t="Include" />
               <e p="InventoryCellController.cs" t="Include" />
               <e p="InventoryItemData.cs" t="Include" />
               <e p="InventoryPanelController.cs" t="Include" />
+            </e>
+            <e p="Item Information Panel" t="Include">
+              <e p="InventoryInfoPanelPositionType.cs" t="Include" />
+              <e p="ItemInformationPanelControl.cs" t="Include" />
+              <e p="SubPanels" t="Include">
+                <e p="ClothItemDescriptionSubPanel.cs" t="Include" />
+                <e p="EquippedSubPanel.cs" t="Include" />
+                <e p="ItemParametersSubPanel.cs" t="Include" />
+                <e p="MainSubPanel.cs" t="Include" />
+                <e p="MaterialItemDescriptionSubPanel.cs" t="Include" />
+                <e p="QuestItemDescriptionSubPanel.cs" t="Include" />
+                <e p="SubPanel.cs" t="Include" />
+                <e p="WeaponItemDescriptionSubPanel.cs" t="Include" />
+              </e>
             </e>
           </e>
         </e>

@@ -6,14 +6,17 @@ namespace Arenar.CameraService
 {
     public class CameraStateThirdPerson : CameraState
     {
-        public override void SetStateActive(Camera camera, CinemachineVirtualCamera cinemachineVirtualCamera, Transform followTarget, Transform lookAtTarget)
+        public override void SetStateActive(Camera camera, SerializableDictionary<CinemachineCameraType, CinemachineVirtualCamera> cinemachineVirtualCameras, Transform followTarget, Transform lookAtTarget)
         {
-            base.SetStateActive(camera, cinemachineVirtualCamera, followTarget, lookAtTarget);
-            
-            cinemachineVirtualCamera.Follow = followTarget;
-            cinemachineVirtualCamera.LookAt = lookAtTarget;
+            base.SetStateActive(camera, cinemachineVirtualCameras, followTarget, lookAtTarget);
 
-            cinemachineVirtualCamera.ForceCameraPosition(followTarget.position, Quaternion.Euler(lookAtTarget.position));
+            foreach (var cinemachineVirtualCamera in cinemachineVirtualCameras)
+            {
+                cinemachineVirtualCamera.Value.Follow = followTarget;
+                cinemachineVirtualCamera.Value.LookAt = lookAtTarget;
+
+                cinemachineVirtualCamera.Value.ForceCameraPosition(followTarget.position, Quaternion.Euler(lookAtTarget.position));
+            }
         }
         
         public override void OnUpdate() { }
