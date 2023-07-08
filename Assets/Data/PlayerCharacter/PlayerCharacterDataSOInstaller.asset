@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 149b39322b90cc04695386aee09b5629, type: 3}
   m_Name: PlayerCharacterDataSOInstaller
   m_EditorClassIdentifier: 
-  playerCharacterPrefab: {fileID: 1425306378703721784, guid: 64dce48905ffd9b4293e595fa6941544,
+  playerCharacterPrefab: {fileID: 6814827604510946603, guid: 1d321af736df10f4a901a9520948c692,
     type: 3}
   playerCharacterParametersData:
     moveSpeed: 3
