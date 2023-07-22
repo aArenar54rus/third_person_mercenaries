@@ -109,6 +109,15 @@ namespace Arenar
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Reload"",
+                    ""type"": ""Button"",
+                    ""id"": ""88acfc26-a40f-4cdf-97ba-b7ea35883473"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -302,7 +311,7 @@ namespace Arenar
                 {
                     ""name"": """",
                     ""id"": ""508120e0-dd40-4d41-8b6c-f10553027b37"",
-                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""path"": ""<Gamepad>/buttonWest"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Xbox Controller;PS4 Controller;Gamepad"",
@@ -386,6 +395,28 @@ namespace Arenar
                     ""action"": ""AttackProcess"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2d80fccc-f287-4a95-8f77-32322e23c949"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Reload"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5cf0cd4c-a439-4679-a872-b9cc27c2b215"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad;PS4 Controller;Xbox Controller"",
+                    ""action"": ""Reload"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -451,6 +482,7 @@ namespace Arenar
             m_Player_Aim = m_Player.FindAction("Aim", throwIfNotFound: true);
             m_Player_Attack = m_Player.FindAction("Attack", throwIfNotFound: true);
             m_Player_AttackProcess = m_Player.FindAction("AttackProcess", throwIfNotFound: true);
+            m_Player_Reload = m_Player.FindAction("Reload", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -519,6 +551,7 @@ namespace Arenar
         private readonly InputAction m_Player_Aim;
         private readonly InputAction m_Player_Attack;
         private readonly InputAction m_Player_AttackProcess;
+        private readonly InputAction m_Player_Reload;
         public struct PlayerActions
         {
             private @PlayerInput m_Wrapper;
@@ -532,6 +565,7 @@ namespace Arenar
             public InputAction @Aim => m_Wrapper.m_Player_Aim;
             public InputAction @Attack => m_Wrapper.m_Player_Attack;
             public InputAction @AttackProcess => m_Wrapper.m_Player_AttackProcess;
+            public InputAction @Reload => m_Wrapper.m_Player_Reload;
             public InputActionMap Get() { return m_Wrapper.m_Player; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -568,6 +602,9 @@ namespace Arenar
                     @AttackProcess.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAttackProcess;
                     @AttackProcess.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAttackProcess;
                     @AttackProcess.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAttackProcess;
+                    @Reload.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnReload;
+                    @Reload.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnReload;
+                    @Reload.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnReload;
                 }
                 m_Wrapper.m_PlayerActionsCallbackInterface = instance;
                 if (instance != null)
@@ -599,6 +636,9 @@ namespace Arenar
                     @AttackProcess.started += instance.OnAttackProcess;
                     @AttackProcess.performed += instance.OnAttackProcess;
                     @AttackProcess.canceled += instance.OnAttackProcess;
+                    @Reload.started += instance.OnReload;
+                    @Reload.performed += instance.OnReload;
+                    @Reload.canceled += instance.OnReload;
                 }
             }
         }
@@ -650,6 +690,7 @@ namespace Arenar
             void OnAim(InputAction.CallbackContext context);
             void OnAttack(InputAction.CallbackContext context);
             void OnAttackProcess(InputAction.CallbackContext context);
+            void OnReload(InputAction.CallbackContext context);
         }
     }
 }

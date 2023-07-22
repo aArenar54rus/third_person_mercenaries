@@ -85,6 +85,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Reload",
+                    "type": "Button",
+                    "id": "88acfc26-a40f-4cdf-97ba-b7ea35883473",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -278,7 +287,7 @@
                 {
                     "name": "",
                     "id": "508120e0-dd40-4d41-8b6c-f10553027b37",
-                    "path": "<Gamepad>/buttonEast",
+                    "path": "<Gamepad>/buttonWest",
                     "interactions": "",
                     "processors": "",
                     "groups": "Xbox Controller;PS4 Controller;Gamepad",
@@ -360,6 +369,28 @@
                     "processors": "",
                     "groups": "KeyboardMouse",
                     "action": "AttackProcess",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2d80fccc-f287-4a95-8f77-32322e23c949",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "Reload",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5cf0cd4c-a439-4679-a872-b9cc27c2b215",
+                    "path": "<Gamepad>/buttonNorth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad;PS4 Controller;Xbox Controller",
+                    "action": "Reload",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

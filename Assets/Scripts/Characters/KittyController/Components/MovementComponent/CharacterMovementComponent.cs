@@ -1,4 +1,3 @@
-using StarterAssets;
 using UnityEngine;
 using Zenject;
 
@@ -10,7 +9,7 @@ namespace Arenar.Character
         private const float THRESHOLD = 0.01f;
         
         
-        private ICharacterEntity kittyCharacter;
+        private ICharacterEntity character;
         private CharacterPhysicsDataStorage characterPhysicsDataStorage;
         private PlayerCharacterParametersData _playerCharacterParametersData;
         private TickableManager tickableManager;
@@ -24,6 +23,10 @@ namespace Arenar.Character
         private float rotationVelocity;
         private float verticalVelocity;
         private float terminalVelocity = 53.0f;
+        
+        // animation
+        private float animationBlendX = 0.0f;
+        private float animationBlendY = 0.0f;
 
         // timeout deltatime
         private float jumpTimeoutDelta;
@@ -39,7 +42,7 @@ namespace Arenar.Character
         
 
         private Transform characterTransform =>
-            kittyCharacter.CharacterTransform;
+            character.CharacterTransform;
 
         private PlayerInput PlayerInputs
         {
@@ -71,7 +74,7 @@ namespace Arenar.Character
             PlayerCharacterParametersData playerCharacterParametersData)
         {
             mainCamera = camera;
-            this.kittyCharacter = kittyCharacter;
+            this.character = kittyCharacter;
             this._playerCharacterParametersData = playerCharacterParametersData;
             this.tickableManager = tickableManager;
             this.characterPhysicsDataStorage = characterPhysicsDataStorage.Data;
@@ -81,11 +84,11 @@ namespace Arenar.Character
         {
             tickableManager.Add(this);
             
-            CharacterLiveComponent = kittyCharacter.TryGetCharacterComponent<ICharacterLiveComponent>(out bool isSuccessCharacterLiveComponent);
-            CharacterRayCastComponent = kittyCharacter.TryGetCharacterComponent<ICharacterRayCastComponent>(out bool isSuccessCharacterRayCastComponent);
-            CharacterInputComponent = kittyCharacter.TryGetCharacterComponent<ICharacterInputComponent>(out bool isSuccessCharacterInputComponent);
+            CharacterLiveComponent = character.TryGetCharacterComponent<ICharacterLiveComponent>(out bool isSuccessCharacterLiveComponent);
+            CharacterRayCastComponent = character.TryGetCharacterComponent<ICharacterRayCastComponent>(out bool isSuccessCharacterRayCastComponent);
+            CharacterInputComponent = character.TryGetCharacterComponent<ICharacterInputComponent>(out bool isSuccessCharacterInputComponent);
             
-            var iCharacterAnimationComponent = kittyCharacter.TryGetCharacterComponent<ICharacterAnimationComponent>(out bool isSuccessCharacterAnimationComponent);
+            var iCharacterAnimationComponent = character.TryGetCharacterComponent<ICharacterAnimationComponent>(out bool isSuccessCharacterAnimationComponent);
             if (isSuccessCharacterAnimationComponent)
             {
                 if (iCharacterAnimationComponent is CharacterAnimationComponent characterAnimationComponent)
@@ -166,9 +169,20 @@ namespace Arenar.Character
             // move the player
             characterPhysicsDataStorage.CharacterController.Move(targetDirection.normalized * (speed * Time.deltaTime) +
                              new Vector3(0.0f, verticalVelocity, 0.0f) * Time.deltaTime);
+            
+            float runningAnimMultiplier = CharacterInputComponent.SprintAction ? 1.0f : 0.5f;
+            float runningAnimMultiplierX = runningAnimMultiplier * CharacterInputComponent.MoveAction.x;
+            float runningAnimMultiplierY = runningAnimMultiplier * CharacterInputComponent.MoveAction.y;
 
+            animationBlendX = Mathf.Lerp(animationBlendX, runningAnimMultiplierX,
+                Time.deltaTime * _playerCharacterParametersData.SpeedChangeRate);
+            animationBlendY = Mathf.Lerp(animationBlendY, runningAnimMultiplierY,
+                Time.deltaTime * _playerCharacterParametersData.SpeedChangeRate);
+            
+            
             CharacterAnimationComponent.SetAnimationValue(Character.CharacterAnimationComponent.KittyAnimationValue.Speed, animationBlend);
-            CharacterAnimationComponent.SetAnimationValue(Character.CharacterAnimationComponent.KittyAnimationValue.MotionSpeed, inputMagnitude);
+            CharacterAnimationComponent.SetAnimationValue(Character.CharacterAnimationComponent.KittyAnimationValue.MotionSpeedX, animationBlendX);
+            CharacterAnimationComponent.SetAnimationValue(Character.CharacterAnimationComponent.KittyAnimationValue.MotionSpeedY, animationBlendY);
         }
 
         public void Rotation()

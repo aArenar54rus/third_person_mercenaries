@@ -1863,7 +1863,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5820279502280551076}
-  - component: {fileID: 5879462648840060310}
   m_Layer: 0
   m_Name: Character_Alien_Male_01
   m_TagString: Untagged
@@ -1907,26 +1906,6 @@ Transform:
   m_Father: {fileID: 8886542636944289912}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &5879462648840060310
-Animator:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5822650661101437088}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 4cf8e35218228c74e87ae151b5dc4516, type: 3}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 1
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 1
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &5822663408053445874
 GameObject:
   m_ObjectHideFlags: 0
@@ -4464,6 +4443,7 @@ GameObject:
   - component: {fileID: 4525999011491975557}
   - component: {fileID: 1291915636920275464}
   - component: {fileID: 875975741275903469}
+  - component: {fileID: 3177176096981736283}
   m_Layer: 8
   m_Name: PlayerCharacterRobot
   m_TagString: Player
@@ -4543,14 +4523,14 @@ MonoBehaviour:
     animationReactionsController: {fileID: 1291915636920275464}
   characterVisualDataStorage:
     characterBodyLods:
-    - {fileID: 0}
+    - {fileID: 5846747920145155806}
   characterAnimatorDataStorage:
     animator: {fileID: 3293111707598105090}
     speedAnimationName: Speed
     groundedAnimationName: Grounded
     jumpAnimationName: Jump
     freeFallAnimationName: FreeFall
-    motionSpeedAnimationName: MotionSpeed
+    motionSpeedAnimationName: MotionSpeedX
   characterPhysicsDataStorage:
     characterTransform: {fileID: 8886542636944289912}
     cameraTransform: {fileID: 4534734409247019934}
@@ -4797,3 +4777,64 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterTransform: {fileID: 8886542636944289912}
   forceMagnitude: 1
+--- !u!114 &3177176096981736283
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8077355321906768578}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2d8418b0b9634b1892b0268dd9c2743, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boneShape: 1
+  drawBones: 1
+  drawTripods: 0
+  boneSize: 2
+  tripodSize: 0.67
+  boneColor: {r: 1, g: 0, b: 0.85180044, a: 0.5}
+  m_Transforms:
+  - {fileID: 5826139830813557812}
+  - {fileID: 5826528511605572796}
+  - {fileID: 5820206947279946458}
+  - {fileID: 5826251893289145464}
+  - {fileID: 5826190810254706618}
+  - {fileID: 5826002822285574552}
+  - {fileID: 5826390420362233944}
+  - {fileID: 5820226548766139196}
+  - {fileID: 5820336966577004998}
+  - {fileID: 5820291882148330458}
+  - {fileID: 5826091147128644484}
+  - {fileID: 7754305001609726738}
+  - {fileID: 5820112687505210342}
+  - {fileID: 5819839076954818888}
+  - {fileID: 5826466705587955026}
+  - {fileID: 5826188355078225146}
+  - {fileID: 5826464405783038654}
+  - {fileID: 5819807021911138976}
+  - {fileID: 5826187492211290164}
+  - {fileID: 5826528745844979618}
+  - {fileID: 5826067366006342340}
+  - {fileID: 5826388523094271678}
+  - {fileID: 5826083306672129514}
+  - {fileID: 5826201232799615190}
+  - {fileID: 5819863112819339584}
+  - {fileID: 5819938135020607122}
+  - {fileID: 5820333962178091630}
+  - {fileID: 5699646555267172274}
+  - {fileID: 5819782561858342574}
+  - {fileID: 5820043897466477124}
+  - {fileID: 5826077615803802880}
+  - {fileID: 5820024041497647268}
+  - {fileID: 5820077990853913912}
+  - {fileID: 5820180815320182842}
+  - {fileID: 5826111336531349442}
+  - {fileID: 5826452270124456988}
+  - {fileID: 5819796274197762300}
+  - {fileID: 5826531026863003278}
+  - {fileID: 5826202780179281330}
+  - {fileID: 5826250493305366306}
+  - {fileID: 5820008345417230862}
+  - {fileID: 5826019440299026842}

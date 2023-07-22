@@ -12,7 +12,9 @@ namespace Arenar.Character
         [SerializeField] private string groundedAnimationName = "Grounded";
         [SerializeField] private string jumpAnimationName = "Jump";
         [SerializeField] private string freeFallAnimationName = "FreeFall";
-        [SerializeField] private string motionSpeedAnimationName = "MotionSpeed";
+        [SerializeField] private string aimAnimationName = "IsAim";
+        [SerializeField] private string motionSpeedAnimationXName = "MotionSpeedX";
+        [SerializeField] private string motionSpeedAnimationYName = "MotionSpeedY";
 
 
         public Animator Animator => animator;
@@ -20,6 +22,8 @@ namespace Arenar.Character
         public string GroundedAnimationName => groundedAnimationName;
         public string JumpAnimationName => jumpAnimationName;
         public string FreeFallAnimationName => freeFallAnimationName;
-        public string MotionSpeedAnimationName => motionSpeedAnimationName;
+        public string AimAnimationName => aimAnimationName;
+        public string MotionSpeedAnimationXName => motionSpeedAnimationXName;
+        public string MotionSpeedAnimationYName => motionSpeedAnimationYName;
     }
 }

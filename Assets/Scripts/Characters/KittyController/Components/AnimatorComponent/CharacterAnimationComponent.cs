@@ -19,7 +19,9 @@ namespace Arenar.Character
             Grounded = 2,
             Jump = 3,
             FreeFall = 4,
-            MotionSpeed = 5,
+            MotionSpeedX = 5,
+            MotionSpeedY = 6,
+            Aim = 7,
         }
 
         
@@ -31,7 +33,9 @@ namespace Arenar.Character
         private int animIDGrounded;
         private int animIDJump;
         private int animIDFreeFall;
-        private int animIDMotionSpeed;
+        private int animIDMotionSpeedX;
+        private int animIDMotionSpeedY;
+        private int animIDAim;
         
 
         private Animator KittyAnimator =>
@@ -55,13 +59,13 @@ namespace Arenar.Character
             animIDGrounded = Animator.StringToHash(characterAnimatorDataStorage.GroundedAnimationName);
             animIDJump = Animator.StringToHash(characterAnimatorDataStorage.JumpAnimationName);
             animIDFreeFall = Animator.StringToHash(characterAnimatorDataStorage.FreeFallAnimationName);
-            animIDMotionSpeed = Animator.StringToHash(characterAnimatorDataStorage.MotionSpeedAnimationName);
-            //LiveComponent.OnKittyDie += OnKittyDie;
+            animIDMotionSpeedX = Animator.StringToHash(characterAnimatorDataStorage.MotionSpeedAnimationXName);
+            animIDMotionSpeedY = Animator.StringToHash(characterAnimatorDataStorage.MotionSpeedAnimationYName);
+            animIDAim = Animator.StringToHash(characterAnimatorDataStorage.AimAnimationName);
         }
 
         public void DeInitialize()
         {
-            //LiveComponent.OnKittyDie -= OnKittyDie;
         }
 
         public void OnStart() { }
@@ -86,8 +90,12 @@ namespace Arenar.Character
                     SetAnimationFloat(animIDSpeed, value);
                     break;
                 
-                case KittyAnimationValue.MotionSpeed:
-                    SetAnimationFloat(animIDMotionSpeed, value);
+                case KittyAnimationValue.MotionSpeedX:
+                    SetAnimationFloat(animIDMotionSpeedX, value);
+                    break;
+                
+                case KittyAnimationValue.MotionSpeedY:
+                    SetAnimationFloat(animIDMotionSpeedY, value);
                     break;
                 
                 case KittyAnimationValue.Jump:
@@ -100,6 +108,10 @@ namespace Arenar.Character
                 
                 case KittyAnimationValue.Grounded:
                     SetAnimationBool(animIDGrounded, value > 0);
+                    break;
+                
+                case KittyAnimationValue.Aim:
+                    SetAnimationBool(animIDAim, value > 0);
                     break;
                 
                 default:

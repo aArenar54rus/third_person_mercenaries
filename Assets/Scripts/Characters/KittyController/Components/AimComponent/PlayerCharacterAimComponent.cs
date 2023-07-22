@@ -1,5 +1,4 @@
 using Arenar.CameraService;
-using UnityEngine;
 using Zenject;
 
 
@@ -16,6 +15,8 @@ namespace Arenar.Character
 
 
         public bool IsAim { get; private set; } = false;
+        
+        private CharacterAnimationComponent CharacterAnimationComponent { get; set; }
 
 
         [Inject]
@@ -32,6 +33,14 @@ namespace Arenar.Character
         public void Initialize()
         {
             _inputComponent = character.TryGetCharacterComponent<ICharacterInputComponent>(out bool isSuccess);
+            
+            var iCharacterAnimationComponent = character.TryGetCharacterComponent<ICharacterAnimationComponent>(out bool isSuccessCharacterAnimationComponent);
+            if (isSuccessCharacterAnimationComponent)
+            {
+                if (iCharacterAnimationComponent is CharacterAnimationComponent characterAnimationComponent)
+                    CharacterAnimationComponent = characterAnimationComponent;
+            }
+            
             tickableManager.Add(this);
         }
 
@@ -52,14 +61,11 @@ namespace Arenar.Character
 
             IsAim = _inputComponent.AimAction;
 
-            if (IsAim)
-            {
-                cameraService.SetCinemachineVirtualCamera(CinemachineCameraType.AimTPS);
-            }
-            else
-            {
-                cameraService.SetCinemachineVirtualCamera(CinemachineCameraType.DefaultTPS);
-            }
+            cameraService.SetCinemachineVirtualCamera(IsAim
+                ? CinemachineCameraType.AimTPS
+                : CinemachineCameraType.DefaultTPS);
+
+            CharacterAnimationComponent.SetAnimationValue(CharacterAnimationComponent.KittyAnimationValue.Aim, IsAim ? 1 : 0);
         }
     }
 }
