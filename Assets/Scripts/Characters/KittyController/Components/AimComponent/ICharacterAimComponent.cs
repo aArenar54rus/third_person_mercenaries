@@ -1,6 +1,6 @@
 namespace Arenar.Character
 {
-    public interface IAimComponent : ICharacterComponent
+    public interface ICharacterAimComponent : ICharacterComponent
     {
        bool IsAim { get; }
     }

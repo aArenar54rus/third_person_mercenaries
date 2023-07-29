@@ -51,7 +51,8 @@ namespace Arenar
                     typeof(ICharacterDataStorage<CharacterAudioDataStorage>),
                     typeof(ICharacterDataStorage<CharacterVisualDataStorage>),
                     typeof(ICharacterDataStorage<CharacterAnimatorDataStorage>),
-                    typeof(ICharacterDataStorage<CharacterPhysicsDataStorage>))
+                    typeof(ICharacterDataStorage<CharacterPhysicsDataStorage>),
+                    typeof(ICharacterDataStorage<CharacterAimAnimationDataStorage>))
                 .To<PlayerCharacterController>()
                 .FromInstance(playerCharacterController)
                 .AsSingle();

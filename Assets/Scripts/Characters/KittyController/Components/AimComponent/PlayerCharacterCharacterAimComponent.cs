@@ -1,16 +1,17 @@
 using Arenar.CameraService;
+using UnityEngine;
 using Zenject;
 
 
 namespace Arenar.Character
 {
-    public class PlayerCharacterAimComponent : IAimComponent, ITickable
+    public class PlayerCharacterCharacterAimComponent : ICharacterAimComponent, ITickable
     {
         private ICharacterEntity character;
         private TickableManager tickableManager;
         private ICameraService cameraService;
-        
-        
+
+
         private ICharacterInputComponent _inputComponent;
 
 
@@ -21,8 +22,9 @@ namespace Arenar.Character
 
         [Inject]
         public void Construct(ICharacterEntity character,
-            TickableManager tickableManager,
-            ICameraService cameraService)
+                              TickableManager tickableManager,
+                              ICameraService cameraService,
+                              PlayerCharacterParametersData playerCharacterParametersData)
         {
             this.character = character;
             this.tickableManager = tickableManager;

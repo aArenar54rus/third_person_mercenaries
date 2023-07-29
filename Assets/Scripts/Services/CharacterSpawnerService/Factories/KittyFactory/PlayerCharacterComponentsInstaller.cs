@@ -51,10 +51,10 @@ namespace Arenar.Character
             Container.BindInstance(characterRayCastComponent).AsSingle();
             Container.Inject(characterRayCastComponent);
             
-            IAimComponent aimComponent = new PlayerCharacterAimComponent();
-            characterComponentsPool.Add(typeof(IAimComponent), aimComponent);
-            Container.BindInstance(aimComponent).AsSingle();
-            Container.Inject(aimComponent);
+            ICharacterAimComponent characterAimComponent = new PlayerCharacterCharacterAimComponent();
+            characterComponentsPool.Add(typeof(ICharacterAimComponent), characterAimComponent);
+            Container.BindInstance(characterAimComponent).AsSingle();
+            Container.Inject(characterAimComponent);
             
 /*            ICharacterScaleComponent characterScaleComponent = new KittyCharacterScaleComponent();
             characterComponentsPool.Add(typeof(ICharacterScaleComponent), characterScaleComponent);

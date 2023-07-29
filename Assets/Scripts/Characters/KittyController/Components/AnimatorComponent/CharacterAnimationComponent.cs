@@ -5,7 +5,7 @@ using Zenject;
 namespace Arenar.Character
 {
     public class CharacterAnimationComponent
-        : ICharacterAnimationComponent<CharacterAnimationComponent.KittyAnimation, CharacterAnimationComponent.KittyAnimationValue>
+        : ICharacterAnimationComponent<CharacterAnimationComponent.KittyAnimation, CharacterAnimationComponent.KittyAnimationValue>, ITickable
     {
         public enum KittyAnimation : byte
         {
@@ -24,9 +24,15 @@ namespace Arenar.Character
             Aim = 7,
         }
 
-        
+
         private CharacterAnimatorDataStorage characterAnimatorDataStorage;
+        private CharacterAimAnimationDataStorage characterAimAnimationDataStorage;
         private ICharacterEntity characterEntity;
+        private TickableManager tickableManager;
+
+        private ICharacterLiveComponent liveComponent;
+        private ICharacterRayCastComponent rayCastComponent;
+        private ICharacterAimComponent characterAimComponent;
         
         // animation IDs
         private int animIDSpeed;
@@ -40,35 +46,47 @@ namespace Arenar.Character
 
         private Animator KittyAnimator =>
             characterAnimatorDataStorage.Animator;
+        
+        private bool IsFindObject =>
+            (CharacterRayCastComponent.GetInteractableElementsOnCross() != null);
 
-        private ICharacterLiveComponent LiveComponent =>
-            characterEntity.TryGetCharacterComponent<ICharacterLiveComponent>(out bool success);
+        private ICharacterLiveComponent LiveComponent => liveComponent;
+
+        private ICharacterRayCastComponent CharacterRayCastComponent => rayCastComponent;
+
+        private ICharacterAimComponent CharacterAimComponent => characterAimComponent;
 
 
         [Inject]
         public void Construct(ICharacterDataStorage<CharacterAnimatorDataStorage> characterAnimatorDataStorage,
-                              ICharacterEntity characterEntity)
+                              ICharacterDataStorage<CharacterAimAnimationDataStorage> characterAimDataStorage,
+                              ICharacterEntity characterEntity,
+                              TickableManager tickableManager)
         {
             this.characterAnimatorDataStorage = characterAnimatorDataStorage.Data;
+            this.characterAimAnimationDataStorage = characterAimDataStorage.Data;
             this.characterEntity = characterEntity;
+            this.tickableManager = tickableManager;
         }
 
         public void Initialize()
         {
-            animIDSpeed = Animator.StringToHash(characterAnimatorDataStorage.SpeedAnimationName);
-            animIDGrounded = Animator.StringToHash(characterAnimatorDataStorage.GroundedAnimationName);
-            animIDJump = Animator.StringToHash(characterAnimatorDataStorage.JumpAnimationName);
-            animIDFreeFall = Animator.StringToHash(characterAnimatorDataStorage.FreeFallAnimationName);
-            animIDMotionSpeedX = Animator.StringToHash(characterAnimatorDataStorage.MotionSpeedAnimationXName);
-            animIDMotionSpeedY = Animator.StringToHash(characterAnimatorDataStorage.MotionSpeedAnimationYName);
-            animIDAim = Animator.StringToHash(characterAnimatorDataStorage.AimAnimationName);
+            bool success = false;
+            liveComponent = characterEntity.TryGetCharacterComponent<ICharacterLiveComponent>(out success);
+            rayCastComponent = characterEntity.TryGetCharacterComponent<ICharacterRayCastComponent>(out success);
+            characterAimComponent = characterEntity.TryGetCharacterComponent<ICharacterAimComponent>(out success);
+
+            InitIndexIDs();
+            
+            tickableManager.Add(this);
         }
 
         public void DeInitialize()
         {
+            tickableManager.Remove(this);
         }
 
-        public void OnStart() { }
+        public void OnStart() {}
 
         public void PlayAnimation(KittyAnimation animationType)
         {
@@ -119,6 +137,12 @@ namespace Arenar.Character
                     break;
             }
         }
+        
+        public void Tick()
+        {
+            SetHeadAnimationRotation();
+            SetBodyAnimationRotation();
+        }
 
         private void PlayAnimation(string animationKey) =>
             KittyAnimator.Play(animationKey);
@@ -131,5 +155,54 @@ namespace Arenar.Character
         
         private void SetAnimationFloat(int animationIndex, float value) =>
             KittyAnimator.SetFloat(animationIndex, value);
+
+        private void SetHeadAnimationRotation()
+        {
+            if (CharacterAimComponent.IsAim)
+            {
+                characterAimAnimationDataStorage.HeadRig.weight = Mathf.Clamp01(
+                    characterAimAnimationDataStorage.HeadRig.weight - Time.deltaTime);
+                return;
+            }
+
+            if (IsFindObject)
+            {
+                characterAimAnimationDataStorage.HeadAimPointObject.position
+                    = CharacterRayCastComponent.GetInteractableElementsOnCross().transform.position;
+            }
+
+            characterAimAnimationDataStorage.HeadRig.weight = Mathf.Clamp01(
+                characterAimAnimationDataStorage.HeadRig.weight
+                + Time.deltaTime * (IsFindObject ? 1 : -1));
+        }
+        
+        private void SetBodyAnimationRotation()
+        {
+            bool isAim = CharacterAimComponent.IsAim;
+            characterAimAnimationDataStorage.BodyRig.weight = isAim ? 1 : 0;
+
+            if (isAim)
+            {
+                if (CharacterRayCastComponent.TryGetObjectOnCross(
+                        out Transform objectTransform,
+                        out Vector3 raycastPoint))
+                {
+                    //characterAimAnimationDataStorage.BodyAimPointObject.position = raycastPoint;
+                }
+                
+                characterAimAnimationDataStorage.BodyAimPointObject.position = raycastPoint;
+            }
+        }
+
+        private void InitIndexIDs()
+        {
+            animIDSpeed = Animator.StringToHash(characterAnimatorDataStorage.SpeedAnimationName);
+            animIDGrounded = Animator.StringToHash(characterAnimatorDataStorage.GroundedAnimationName);
+            animIDJump = Animator.StringToHash(characterAnimatorDataStorage.JumpAnimationName);
+            animIDFreeFall = Animator.StringToHash(characterAnimatorDataStorage.FreeFallAnimationName);
+            animIDMotionSpeedX = Animator.StringToHash(characterAnimatorDataStorage.MotionSpeedAnimationXName);
+            animIDMotionSpeedY = Animator.StringToHash(characterAnimatorDataStorage.MotionSpeedAnimationYName);
+            animIDAim = Animator.StringToHash(characterAnimatorDataStorage.AimAnimationName);
+        }
     }
 }

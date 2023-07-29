@@ -43,13 +43,39 @@ namespace Arenar.Character
             return _isGrounded;
         }
 
-        public InteractableElement GetInteractableElementsOnCross()
+        public bool TryGetObjectOnCross(out Transform objectTransform)
         {
             Ray ray = _camera.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));
             if (!Physics.Raycast(ray, out RaycastHit hit))
+            {
+                objectTransform = null;
+                return false;
+            }
+            
+            objectTransform = hit.transform;
+            return true;
+        }
+        
+        public bool TryGetObjectOnCross(out Transform objectTransform, out Vector3 raycastPoint)
+        {
+            Ray ray = _camera.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));
+            if (!Physics.Raycast(ray, out RaycastHit hit))
+            {
+                objectTransform = null;
+                raycastPoint = _camera.ScreenToWorldPoint(new Vector2(Screen.width / 2f, Screen.height / 2f)) + Vector3.forward * 1000f;
+                return false;
+            }
+            
+            objectTransform = hit.transform;
+            raycastPoint = hit.point;
+            return true;
+        }
+
+        public InteractableElement GetInteractableElementsOnCross()
+        {
+            if (!TryGetObjectOnCross(out Transform objectHit))
                 return null;
             
-            Transform objectHit = hit.transform;
             if (!objectHit.gameObject.TryGetComponent<InteractableElement>(out InteractableElement element))
                 return null;
             

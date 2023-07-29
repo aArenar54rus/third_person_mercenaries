@@ -20,6 +20,12 @@ namespace Arenar
         [Space(5), Header("Camera")]
         [SerializeField] private float defaultCameraSensitivity = 0.5f;
         [SerializeField] private float aimCameraSensitivity = 0.2f;
+        [Tooltip("For locking the camera position on all axis")]
+        [SerializeField] private bool lockCameraPosition = false;
+        [Tooltip("How far in degrees can you move the camera up")]
+        [SerializeField] private float topClamp = 70.0f;
+        [Tooltip("How far in degrees can you move the camera down")]
+        [SerializeField] private float bottomClamp = -30.0f;
         
         [Space(5)]
         [Tooltip("The height the player can jump")]
@@ -32,14 +38,6 @@ namespace Arenar
         [SerializeField] private float jumpTimeout = 0.50f;
         [Tooltip("Time required to pass before entering the fall state. Useful for walking down stairs")]
         [SerializeField] private float fallTimeout = 0.15f;
-        
-        [Space(10), Header("Camera")]
-        [Tooltip("For locking the camera position on all axis")]
-        [SerializeField] private bool lockCameraPosition = false;
-        [Tooltip("How far in degrees can you move the camera up")]
-        [SerializeField] private float topClamp = 70.0f;
-        [Tooltip("How far in degrees can you move the camera down")]
-        [SerializeField] private float bottomClamp = -30.0f;
         
         [Space(10), Header("Ground parameters")]
         [Tooltip("Useful for rough ground")]
@@ -54,6 +52,10 @@ namespace Arenar
         [Space(10), Header("InteractionParameters")]
         [Tooltip("Distance for interact with InteractElement components")]
         [SerializeField] private float interactElementDistance = default;
+        
+        [Space(10), Header("Aim")]
+        [Tooltip("Distance for head rotation")]
+        [SerializeField] private int headRotationDistance = default;
         
         
         public float MoveSpeed => moveSpeed;
@@ -84,5 +86,8 @@ namespace Arenar
 
 
         public float InteractElementDistance => interactElementDistance;
+
+
+        public int HeadRotationDistance => headRotationDistance;
     }
 }

@@ -16,7 +16,7 @@ namespace Arenar.UI
         private RectTransform crossRT;
 
         private PlayerCharacterController player;
-        private IAimComponent aimComponent;
+        private ICharacterAimComponent characterAimComponent;
 
         private CrossCanvasWindowLayer crossGameplayCanvasLayer;
 
@@ -36,22 +36,22 @@ namespace Arenar.UI
             }
         }
 
-        private IAimComponent AimComponent
+        private ICharacterAimComponent CharacterAimComponent
         {
             get
             {
-                if (aimComponent == null)
+                if (characterAimComponent == null)
                 {
                     if (Player == null)
                         return null;
 
-                    aimComponent = Player.TryGetCharacterComponent<IAimComponent>(out bool success);
+                    characterAimComponent = Player.TryGetCharacterComponent<ICharacterAimComponent>(out bool success);
 
                     if (!success)
                         return null;
                 }
 
-                return aimComponent;
+                return characterAimComponent;
             }
         }
 
@@ -86,8 +86,8 @@ namespace Arenar.UI
 
         public void Tick()
         {
-            if (AimComponent != null)
-                SetCrossVisibleStatus(AimComponent.IsAim);
+            if (CharacterAimComponent != null)
+                SetCrossVisibleStatus(CharacterAimComponent.IsAim);
         }
     }
 }
