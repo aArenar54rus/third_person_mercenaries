@@ -1,11 +1,15 @@
+using System;
 using Arenar.Character;
 using UnityEngine;
 
 
 namespace Arenar
 {
-    public class PlayerCharacterSpawnController 
+    public class PlayerCharacterSpawnController
     {
+        public event Action<PlayerCharacterController> OnCreatePlayerCharacter;
+        
+        
         private Transform playerContainer;
         private PlayerCharacterController _playerCharacterPrefabs;
         
@@ -43,11 +47,12 @@ namespace Arenar
         }
         
         
-        public PlayerCharacterController CreateKitty()
+        public PlayerCharacterController CreateCharacter()
         {
             PlayerCharacterController playerCharacter = playerFactory.Create(_playerCharacterPrefabs, playerContainer);
             playerCharacter.gameObject.transform.SetParent(PlayerContainer);
             player = playerCharacter;
+            OnCreatePlayerCharacter?.Invoke(player);
             return playerCharacter;
         }
     }

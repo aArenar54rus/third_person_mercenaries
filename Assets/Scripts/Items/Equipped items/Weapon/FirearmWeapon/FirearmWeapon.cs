@@ -8,12 +8,15 @@ namespace Arenar
         [SerializeField] protected Transform gunMuzzleTransform;
         [SerializeField] protected Transform clipTransform;
         [SerializeField] protected FirearmWeaponData firearmWeaponData;
+        [SerializeField] protected Transform secondHandPoint;
+        [SerializeField] protected Vector3 localRotation = new Vector3(-15, 90, -90);
 
         protected ItemProjectileSpawner projectileSpawner;
         protected int currentClipSize;
 
 
         public int ItemLevel { get; protected set; }
+        
         public float Damage { get; protected set; }
         
         public int ClipSizeMax { get; private set; }
@@ -26,7 +29,10 @@ namespace Arenar
         public bool IsAutomaticAction => firearmWeaponData.IsAutomaticShoot;
         
         public float ProjectileSpeed { get; protected set; }
-        
+
+        public Transform SecondHandPoint => secondHandPoint;
+
+        public Vector3 LocalRotation => localRotation;
 
 
         public void ReloadClip(bool isFull)

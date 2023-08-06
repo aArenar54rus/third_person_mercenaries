@@ -118,6 +118,15 @@ namespace Arenar
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""CharacterInformationMenu"",
+                    ""type"": ""Button"",
+                    ""id"": ""97b5cd7f-a46a-493a-bd32-1b65310d0789"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -417,6 +426,28 @@ namespace Arenar
                     ""action"": ""Reload"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""14b0b4b9-21c6-4481-a7ef-c756b11dd55c"",
+                    ""path"": ""<Keyboard>/i"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""CharacterInformationMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d89cf809-37b6-4a1c-b3e7-f371ab32e9d6"",
+                    ""path"": ""<Gamepad>/select"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""PS4 Controller;Xbox Controller;Gamepad"",
+                    ""action"": ""CharacterInformationMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -483,6 +514,7 @@ namespace Arenar
             m_Player_Attack = m_Player.FindAction("Attack", throwIfNotFound: true);
             m_Player_AttackProcess = m_Player.FindAction("AttackProcess", throwIfNotFound: true);
             m_Player_Reload = m_Player.FindAction("Reload", throwIfNotFound: true);
+            m_Player_CharacterInformationMenu = m_Player.FindAction("CharacterInformationMenu", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -552,6 +584,7 @@ namespace Arenar
         private readonly InputAction m_Player_Attack;
         private readonly InputAction m_Player_AttackProcess;
         private readonly InputAction m_Player_Reload;
+        private readonly InputAction m_Player_CharacterInformationMenu;
         public struct PlayerActions
         {
             private @PlayerInput m_Wrapper;
@@ -566,6 +599,7 @@ namespace Arenar
             public InputAction @Attack => m_Wrapper.m_Player_Attack;
             public InputAction @AttackProcess => m_Wrapper.m_Player_AttackProcess;
             public InputAction @Reload => m_Wrapper.m_Player_Reload;
+            public InputAction @CharacterInformationMenu => m_Wrapper.m_Player_CharacterInformationMenu;
             public InputActionMap Get() { return m_Wrapper.m_Player; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -605,6 +639,9 @@ namespace Arenar
                     @Reload.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnReload;
                     @Reload.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnReload;
                     @Reload.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnReload;
+                    @CharacterInformationMenu.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCharacterInformationMenu;
+                    @CharacterInformationMenu.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCharacterInformationMenu;
+                    @CharacterInformationMenu.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCharacterInformationMenu;
                 }
                 m_Wrapper.m_PlayerActionsCallbackInterface = instance;
                 if (instance != null)
@@ -639,6 +676,9 @@ namespace Arenar
                     @Reload.started += instance.OnReload;
                     @Reload.performed += instance.OnReload;
                     @Reload.canceled += instance.OnReload;
+                    @CharacterInformationMenu.started += instance.OnCharacterInformationMenu;
+                    @CharacterInformationMenu.performed += instance.OnCharacterInformationMenu;
+                    @CharacterInformationMenu.canceled += instance.OnCharacterInformationMenu;
                 }
             }
         }
@@ -691,6 +731,7 @@ namespace Arenar
             void OnAttack(InputAction.CallbackContext context);
             void OnAttackProcess(InputAction.CallbackContext context);
             void OnReload(InputAction.CallbackContext context);
+            void OnCharacterInformationMenu(InputAction.CallbackContext context);
         }
     }
 }

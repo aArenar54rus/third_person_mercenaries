@@ -12,7 +12,7 @@ public class TestScript : MonoBehaviour
     
     void Start()
     {
-        var player = _playerCharacterSpawnController.CreateKitty();
+        var player = _playerCharacterSpawnController.CreateCharacter();
         cameraService.SetCameraState<CameraStateThirdPerson>(player.CameraTransform, player.CharacterTransform);
     }
 }

@@ -7,6 +7,8 @@ namespace Arenar.Services.InventoryService
     public interface IInventoryService
     {
         event Action<List<int>> OnUpdateInventoryCells;
+        event Action<ItemClothType> OnUpdateEquippedClothItemCell;
+        event Action OnUpdateEquippedWeaponItem;
         
         
         bool IsMassOverbalance { get; }
@@ -17,7 +19,7 @@ namespace Arenar.Services.InventoryService
         
         int InventoryMassMax { get; }
 
-        
+
         InventoryItemData GetInventoryItemData(int cellIndex);
 
         bool TryAddItems(ItemData itemData,
@@ -44,5 +46,9 @@ namespace Arenar.Services.InventoryService
         bool TryRemoveItems(int itemIndex,
             int neededCount,
             out InventoryItemData restOfItems);
+
+        InventoryItemData GetEquippedWeapon();
+
+        InventoryItemData GetEquippedCloth(ItemClothType itemClothType);
     }
 }

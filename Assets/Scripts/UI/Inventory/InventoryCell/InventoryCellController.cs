@@ -1,4 +1,3 @@
-using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -7,23 +6,19 @@ using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Users;
 
 
-namespace Arenar
+namespace Arenar.UI
 {
     public class InventoryCellController : MonoBehaviour
     {
-        [SerializeField] private RectTransform rectTransform;
+        [SerializeField] protected RectTransform rectTransform;
 
         [Header("Cell")] [FormerlySerializedAs("containerImage")] [SerializeField]
-        private Image _containerImage = default;
+        protected Image _containerImage = default;
 
         [FormerlySerializedAs("iconImage")] [SerializeField]
-        private Image _iconImage = default;
-
-        [FormerlySerializedAs("countText")] [SerializeField]
-        private TMP_Text _countText = default;
+        protected Image _iconImage = default;
         
-        private IInventoryService inventoryService;
-        private PlayerInput playerInput;
+        protected PlayerInput playerInput;
 
         
         public int CellIndex { get; private set; }
@@ -59,22 +54,18 @@ namespace Arenar
             }
         }
 
-        public void SetItem(InventoryItemData inventoryItemData)
+        public virtual void SetItem(InventoryItemData inventoryItemData)
         {
             _containerImage.raycastTarget = true;
 
             _iconImage.enabled = true;
             _iconImage.sprite = inventoryItemData.itemData.Icon;
-
-            _countText.enabled = inventoryItemData.itemData.CanStack;
-            _countText.text = $"{inventoryItemData.elementsCount}/{inventoryItemData.itemData.StackCountMax}";
         }
 
-        public void SetEmpty()
+        public virtual void SetEmpty()
         {
             _containerImage.raycastTarget = false;
             _iconImage.enabled = false;
-            _countText.enabled = false;
         }
         
         private void Update()

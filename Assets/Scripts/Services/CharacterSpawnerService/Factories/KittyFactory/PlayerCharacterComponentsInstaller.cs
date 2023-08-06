@@ -31,12 +31,12 @@ namespace Arenar.Character
             Container.BindInstance(movementComponent).AsSingle();
             Container.Inject(movementComponent);
             
-/*            ICharacterSkinComponent skinComponent = new KittyCharacterSkinColorComponent();
-            characterComponentsPool.Add(typeof(ICharacterSkinColorComponent), skinComponent);
+            ICharacterSkinComponent skinComponent = new CharacterSkinComponent();
+            characterComponentsPool.Add(typeof(ICharacterSkinComponent), skinComponent);
             Container.BindInstance(skinComponent).AsSingle();
-            Container.Inject(skinComponent);*/
+            Container.Inject(skinComponent);
             
-            ICharacterLiveComponent characterLiveComponent = new KittyCharacterLiveComponent();
+            ICharacterLiveComponent characterLiveComponent = new CharacterLiveComponent();
             characterComponentsPool.Add(typeof(ICharacterLiveComponent), characterLiveComponent);
             Container.BindInstance(characterLiveComponent).AsSingle();
             Container.Inject(characterLiveComponent);

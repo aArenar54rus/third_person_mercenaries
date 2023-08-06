@@ -7,6 +7,9 @@ namespace Arenar
     [Serializable]
     public class PlayerCharacterParametersData
     {
+        [Space(10), Header("Base Health")]
+        [SerializeField] private int defaultHealthMax = 100;
+        
         [Space(10), Header("Movement")]
         [Tooltip("Move speed of the character in m/s")]
         [SerializeField] private float moveSpeed = 2.0f;
@@ -56,7 +59,10 @@ namespace Arenar
         [Space(10), Header("Aim")]
         [Tooltip("Distance for head rotation")]
         [SerializeField] private int headRotationDistance = default;
-        
+
+
+
+        public int DefaultHealthMax => defaultHealthMax;
         
         public float MoveSpeed => moveSpeed;
         public float SprintSpeed => sprintSpeed;

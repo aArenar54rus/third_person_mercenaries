@@ -37,5 +37,7 @@ namespace Arenar
             Resources.Load<Sprite>("Sprites/Items/" + _id);
 
         public ItemWorldVisual WorldVisual => _worldVisual;
+        
+        
     }
 }

@@ -6,18 +6,20 @@ using Zenject;
 
 namespace Arenar.Character
 {
-    public class KittyCharacterLiveComponent : ICharacterLiveComponent
+    public class CharacterLiveComponent : ICharacterLiveComponent
     {
-        public event Action OnKittyDie;
-        
-        
+        public event Action OnCharacterDie;
+        public event Action<int, int> OnCharacterChangeHealthValue;
+
+
+        private PlayerCharacterParametersData playerCharacterParametersData;
         private Transform kittyObject;
         private int healthMax;
         private int health;
 
         
         public bool IsAlive =>
-            health <= 0;
+            health > 0;
 
         public int Health =>
             health;
@@ -27,11 +29,13 @@ namespace Arenar.Character
 
 
         [Inject]
-        public void Construct(ICharacterDataStorage<CharacterPhysicsDataStorage> characterPhysicsDataStorage)
+        public void Construct(ICharacterDataStorage<CharacterPhysicsDataStorage> characterPhysicsDataStorage,
+            PlayerCharacterParametersData playerCharacterParametersData)
         {
             kittyObject = characterPhysicsDataStorage.Data.CharacterTransform;
+            this.playerCharacterParametersData = playerCharacterParametersData;
         }
-        
+
         public void SetDamage(int damageCount)
         {
             if (!IsAlive)
@@ -52,10 +56,14 @@ namespace Arenar.Character
             DOVirtual.DelayedCall(1.0f, () => kittyObject.gameObject.SetActive(false));
             health = 0;
 
-            OnKittyDie?.Invoke();
+            OnCharacterDie?.Invoke();
         }
-        
-        public void Initialize() { }
+
+        public void Initialize()
+        {
+            healthMax = playerCharacterParametersData.DefaultHealthMax;
+            health = healthMax;
+        }
 
         public void DeInitialize() { }
 
