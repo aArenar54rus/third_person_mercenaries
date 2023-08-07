@@ -36,6 +36,9 @@ namespace Arenar.Character
         public bool AimAction =>
             PlayerInputs.Player.Aim.IsPressed();
 
+        public bool AttackAction =>
+            PlayerInputs.Player.Attack.WasPressedThisFrame();
+
 
         public void SetControlStatus(bool status)
         {

@@ -55,16 +55,16 @@ namespace Arenar.Character
             characterComponentsPool.Add(typeof(ICharacterAimComponent), characterAimComponent);
             Container.BindInstance(characterAimComponent).AsSingle();
             Container.Inject(characterAimComponent);
-            
-/*            ICharacterScaleComponent characterScaleComponent = new KittyCharacterScaleComponent();
-            characterComponentsPool.Add(typeof(ICharacterScaleComponent), characterScaleComponent);
-            Container.BindInstance(characterScaleComponent).AsSingle();
-            Container.Inject(characterScaleComponent);*/
-            
+
             ICharacterPlayerInteractionComponent characterPlayerInteractionComponent = new CharacterPlayerInteractionComponent();
             characterComponentsPool.Add(typeof(ICharacterPlayerInteractionComponent), characterPlayerInteractionComponent);
             Container.BindInstance(characterPlayerInteractionComponent).AsSingle();
             Container.Inject(characterPlayerInteractionComponent);
+            
+            ICharacterAttackComponent characterAttackComponent = new CharacterAttackComponent();
+            characterComponentsPool.Add(typeof(CharacterAttackComponent), characterAttackComponent);
+            Container.BindInstance(characterAttackComponent).AsSingle();
+            Container.Inject(characterAttackComponent);
 
             Container.BindInstance(characterComponentsPool).AsSingle();
         }

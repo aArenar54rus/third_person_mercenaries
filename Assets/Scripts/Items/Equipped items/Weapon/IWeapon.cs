@@ -9,7 +9,5 @@ namespace Arenar
 
 
         void InitializeWeapon(ItemData itemData);
-        
-        void WeaponAction();
     }
 }

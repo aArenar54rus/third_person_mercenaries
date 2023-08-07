@@ -1,4 +1,5 @@
 using UnityEngine;
+using Zenject;
 
 
 namespace Arenar
@@ -10,10 +11,14 @@ namespace Arenar
         [SerializeField] protected FirearmWeaponData firearmWeaponData;
         [SerializeField] protected Transform secondHandPoint;
         [SerializeField] protected Vector3 localRotation = new Vector3(-15, 90, -90);
+        [SerializeField] protected LineRenderer lineRendererEffect;
 
-        protected ItemProjectileSpawner projectileSpawner;
+        [Inject] protected ItemProjectileSpawner projectileSpawner;
         protected int currentClipSize;
 
+
+        public Transform GunMuzzleTransform =>
+            gunMuzzleTransform;
 
         public int ItemLevel { get; protected set; }
         
@@ -33,6 +38,8 @@ namespace Arenar
         public Transform SecondHandPoint => secondHandPoint;
 
         public Vector3 LocalRotation => localRotation;
+
+        public LineRenderer LineRendererEffect => lineRendererEffect;
 
 
         public void ReloadClip(bool isFull)
@@ -63,22 +70,34 @@ namespace Arenar
             ClipSizeMax = GetClipSizeMax();
             ClipSize = ClipSizeMax;
             ProjectileSpeed = GetProjectileSpeed();
-        }
-
-        public void WeaponAction()
-        {
-            if (ClipSize > 0)
-                MakeShot();
+            
+            lineRendererEffect.gameObject.SetActive(true);
         }
 
         public void SetItemLevel(int itemLevel) =>
             ItemLevel = itemLevel;
 
-        protected virtual void MakeShot()
+        public virtual void MakeShot(Vector3 directional, bool isInfinityClip = false)
         {
-            var projectile = projectileSpawner.GetItemProjectile(firearmWeaponData.ProjectileType);
-            projectile.Initialize(gunMuzzleTransform.position, gunMuzzleTransform.localRotation.eulerAngles, ProjectileSpeed, Damage);
-            currentClipSize--;
+            switch (firearmWeaponData.FirearmAttackType)
+            {
+                case ItemFirearmAttackType.Projectile:
+                    var projectile = projectileSpawner.GetItemProjectile(firearmWeaponData.FirearmAttackType);
+                    projectile.Initialize(gunMuzzleTransform.position, directional, ProjectileSpeed, Damage);
+                    break;
+
+                case ItemFirearmAttackType.Raycast:
+                    
+                    Ray ray = new Ray(gunMuzzleTransform.position, directional);
+                    if (Physics.Raycast(ray, out RaycastHit hit))
+                    {
+                        Debug.LogError($"YOU hit in {hit.transform.name}");
+                    }
+                    break;
+            }
+            
+            if (!isInfinityClip)
+                currentClipSize--;
         }
 
         protected virtual float CalculateWeaponDamage()
@@ -97,6 +116,11 @@ namespace Arenar
         protected virtual float GetProjectileSpeed()
         {
             return firearmWeaponData.ProjectileSpeed;
+        }
+
+        private void Update()
+        {
+            lineRendererEffect.SetPosition(0, gunMuzzleTransform.position);
         }
     }
 }

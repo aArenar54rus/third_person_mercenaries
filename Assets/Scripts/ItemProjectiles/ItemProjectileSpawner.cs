@@ -9,7 +9,7 @@ namespace Arenar
     {
         private Transform spawnParent;
         private ItemProjectileDataSO itemProjectileData;
-        private Dictionary<ItemProjectileType, List<ProjectileControl>> projectiles = default;
+        private Dictionary<ItemFirearmAttackType, List<ProjectileControl>> projectiles = default;
 
 
         [Inject]
@@ -19,7 +19,7 @@ namespace Arenar
             Initialize();
         }
 
-        public ProjectileControl GetItemProjectile(ItemProjectileType type)
+        public ProjectileControl GetItemProjectile(ItemFirearmAttackType type)
         {
             foreach (var projectile in projectiles[type])
             {
@@ -34,7 +34,7 @@ namespace Arenar
 
         private void Initialize()
         {
-            projectiles = new Dictionary<ItemProjectileType, List<ProjectileControl>>();
+            projectiles = new Dictionary<ItemFirearmAttackType, List<ProjectileControl>>();
             spawnParent = GameObject.Instantiate(new GameObject("Projectiles"), null).transform;
 
             foreach (var prefab in itemProjectileData.ItemProjectilePrefabs)
@@ -45,7 +45,7 @@ namespace Arenar
             }
         }
         
-        private ProjectileControl SpawnProjectile(ProjectileControl bulletPrefab, ItemProjectileType type)
+        private ProjectileControl SpawnProjectile(ProjectileControl bulletPrefab, ItemFirearmAttackType type)
         {
             ProjectileControl projectile = GameObject.Instantiate(bulletPrefab, spawnParent);
             projectile.DeInitialize();

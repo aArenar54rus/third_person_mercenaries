@@ -43,7 +43,7 @@ namespace Arenar.Character
 
         public void SetWeapon(ItemData itemData)
         {
-            if (itemData.ItemType != ItemType.Weapon)
+            /*if (itemData.ItemType != ItemType.Weapon)
                 return;
             
             weaponObject = GameObject.Instantiate(
@@ -52,12 +52,12 @@ namespace Arenar.Character
             weaponObject.transform.localPosition = Vector3.zero;
             weaponObject.transform.localRotation =
                 Quaternion.Euler(weaponObject.GetComponent<FirearmWeapon>().LocalRotation);
-            isWeaponEquipped = true;
+            isWeaponEquipped = true;*/
         }
 
         private void OnUpdateEquippedWeaponItem()
         {
-            InventoryItemData weaponInventoryItemData = inventoryService.GetEquippedWeapon();
+            /*InventoryItemData weaponInventoryItemData = inventoryService.GetEquippedWeapon();
 
             if (isWeaponEquipped)
             {
@@ -76,7 +76,7 @@ namespace Arenar.Character
                 return;
             }
 
-            SetWeapon(weaponInventoryItemData.itemData);
+            SetWeapon(weaponInventoryItemData.itemData);*/
         }
     }
 }

@@ -58,7 +58,7 @@ namespace Arenar
          rigidbody.mass = itemData.WorldVisual.Mass;
          meshRenderer.materials = itemData.WorldVisual.Materials;
          meshFilter.mesh = itemData.WorldVisual.Mesh;
-         boxCollider.size = meshFilter.mesh.bounds.size;
+         // boxCollider.size = meshFilter.mesh.bounds.size;
       }
    }
 }
