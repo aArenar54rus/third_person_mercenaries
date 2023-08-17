@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using Arenar;
 using Arenar.CameraService;
 using UnityEngine;
 using Zenject;

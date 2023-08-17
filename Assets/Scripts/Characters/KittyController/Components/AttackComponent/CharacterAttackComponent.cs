@@ -14,7 +14,7 @@ namespace Arenar.Character
         
         private ICharacterInputComponent characterInputComponent;
         private ICharacterRayCastComponent characterRayCastComponent;
-        private ICharacterAnimationComponent<> characterRayCastComponent;
+        private ICharacterAnimationComponent<CharacterAnimationComponent.KittyAnimation, CharacterAnimationComponent.KittyAnimationValue> characterAnimationComponent;
         
         private CharacterPhysicsDataStorage characterPhysicsData;
         private CharacterAimAnimationDataStorage characterAimAnimationData;
@@ -58,6 +58,19 @@ namespace Arenar.Character
         
         public void Initialize()
         {
+            bool success = false;
+            characterInputComponent = character.TryGetCharacterComponent<ICharacterInputComponent>(out success);
+            characterRayCastComponent = character.TryGetCharacterComponent<ICharacterRayCastComponent>(out success);
+
+            var iCharacterAnimationComponent = character.TryGetCharacterComponent<ICharacterAnimationComponent>(out bool isSuccessCharacterAnimationComponent);
+            if (isSuccessCharacterAnimationComponent)
+            {
+                if (iCharacterAnimationComponent is CharacterAnimationComponent animationComponent)
+                    characterAnimationComponent = animationComponent;
+            }
+
+            OnUpdateEquippedWeaponItem();
+            
             inventoryService.OnUpdateEquippedWeaponItem += OnUpdateEquippedWeaponItem;
             tickableManager.Add(this);
         }
@@ -70,11 +83,7 @@ namespace Arenar.Character
 
         public void OnStart()
         {
-            bool success = false;
-            characterInputComponent = character.TryGetCharacterComponent<ICharacterInputComponent>(out success);
-            characterRayCastComponent = character.TryGetCharacterComponent<ICharacterRayCastComponent>(out success);
 
-            OnUpdateEquippedWeaponItem();
         }
 
         public void Tick()
@@ -149,6 +158,8 @@ namespace Arenar.Character
                     GameObject.Destroy(firearmWeapon);
                     firearmWeapon = null;
                 }
+                
+                characterAnimationComponent.SetAnimationValue(CharacterAnimationComponent.KittyAnimationValue.HandPistol, 0);
             }
             else
             {
@@ -161,6 +172,8 @@ namespace Arenar.Character
                 
                 weaponObject.transform.localPosition = Vector3.zero;
                 weaponObject.transform.localRotation = Quaternion.Euler(firearmWeapon.LocalRotation);
+                
+                characterAnimationComponent.SetAnimationValue(CharacterAnimationComponent.KittyAnimationValue.HandPistol, 1);
             }
         }
     }

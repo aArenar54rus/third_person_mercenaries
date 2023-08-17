@@ -2127,6 +2127,7 @@ GameObject:
   - component: {fileID: 5332189266660668527}
   - component: {fileID: 7019862007603458859}
   - component: {fileID: 2581218460279458394}
+  - component: {fileID: 7995650676505055708}
   m_Layer: 0
   m_Name: Character_Alien_Male_01
   m_TagString: Untagged
@@ -2272,6 +2273,18 @@ MonoBehaviour:
   - {fileID: 5826250493305366306}
   - {fileID: 5820008345417230862}
   - {fileID: 5826019440299026842}
+--- !u!114 &7995650676505055708
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5822650661101437088}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ef2398c606b51c4d86ab36c91d95237, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5822663408053445874
 GameObject:
   m_ObjectHideFlags: 0
@@ -4892,7 +4905,6 @@ GameObject:
   - component: {fileID: 2087674089868542002}
   - component: {fileID: 8077355321906768590}
   - component: {fileID: 4525999011491975557}
-  - component: {fileID: 1291915636920275464}
   - component: {fileID: 875975741275903469}
   m_Layer: 8
   m_Name: PlayerCharacterRobot
@@ -4950,7 +4962,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterAudioDataStorage:
     audioSource: {fileID: 4525999011491975557}
-    animationReactionsController: {fileID: 1291915636920275464}
+    animationReactionsController: {fileID: 7995650676505055708}
   characterVisualDataStorage:
     characterBodyLods:
     - {fileID: 5846747920145155806}
@@ -5188,18 +5200,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &1291915636920275464
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8077355321906768578}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ef2398c606b51c4d86ab36c91d95237, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &875975741275903469
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -5,7 +5,7 @@ using Zenject;
 
 namespace Arenar.Character
 {
-    public class PlayerCharacterCharacterAimComponent : ICharacterAimComponent, ITickable
+    public class PlayerCharacterAimComponent : ICharacterAimComponent, ITickable
     {
         private ICharacterEntity character;
         private TickableManager tickableManager;

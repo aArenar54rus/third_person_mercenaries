@@ -15,8 +15,9 @@ MonoBehaviour:
   playerCharacterPrefab: {fileID: 6814827604510946603, guid: 1d321af736df10f4a901a9520948c692,
     type: 3}
   playerCharacterParametersData:
-    moveSpeed: 3
-    sprintSpeed: 8.0025
+    defaultHealthMax: 100
+    moveSpeed: 2.3
+    sprintSpeed: 4
     rotationSmoothTime: 0.12
     speedChangeRate: 10
     defaultCameraSensitivity: 0.01

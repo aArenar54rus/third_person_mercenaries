@@ -178,9 +178,12 @@ namespace Arenar.Character
                 Time.deltaTime * _playerCharacterParametersData.SpeedChangeRate);
             animationBlendY = Mathf.Lerp(animationBlendY, runningAnimMultiplierY,
                 Time.deltaTime * _playerCharacterParametersData.SpeedChangeRate);
-            
-            
-            CharacterAnimationComponent.SetAnimationValue(Character.CharacterAnimationComponent.KittyAnimationValue.Speed, animationBlend);
+
+            float animationSpeedBlend = 0;
+            if (animationBlend > 0.05f)
+                animationSpeedBlend = currentHorizontalSpeed / _playerCharacterParametersData.MoveSpeed * runningAnimMultiplier;
+
+            CharacterAnimationComponent.SetAnimationValue(Character.CharacterAnimationComponent.KittyAnimationValue.Speed, animationSpeedBlend);
             CharacterAnimationComponent.SetAnimationValue(Character.CharacterAnimationComponent.KittyAnimationValue.MotionSpeedX, animationBlendX);
             CharacterAnimationComponent.SetAnimationValue(Character.CharacterAnimationComponent.KittyAnimationValue.MotionSpeedY, animationBlendY);
         }

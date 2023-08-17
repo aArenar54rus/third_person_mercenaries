@@ -15,6 +15,7 @@ namespace Arenar.Character
         [SerializeField] private string aimAnimationName = "IsAim";
         [SerializeField] private string motionSpeedAnimationXName = "MotionSpeedX";
         [SerializeField] private string motionSpeedAnimationYName = "MotionSpeedY";
+        [SerializeField] private string handPistolAnimationName = "HandPistol";
 
 
         public Animator Animator => animator;
@@ -25,5 +26,6 @@ namespace Arenar.Character
         public string AimAnimationName => aimAnimationName;
         public string MotionSpeedAnimationXName => motionSpeedAnimationXName;
         public string MotionSpeedAnimationYName => motionSpeedAnimationYName;
+        public string HandPistolAnimationNam => handPistolAnimationName;
     }
 }

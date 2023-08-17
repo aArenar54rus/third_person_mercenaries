@@ -22,6 +22,7 @@ namespace Arenar.Character
             MotionSpeedX = 5,
             MotionSpeedY = 6,
             Aim = 7,
+            HandPistol = 8,
         }
 
 
@@ -42,6 +43,7 @@ namespace Arenar.Character
         private int animIDMotionSpeedX;
         private int animIDMotionSpeedY;
         private int animIDAim;
+        private int animIDHandPistol;
         
 
         private Animator KittyAnimator =>
@@ -132,6 +134,10 @@ namespace Arenar.Character
                     SetAnimationBool(animIDAim, value > 0);
                     break;
                 
+                case KittyAnimationValue.HandPistol:
+                    SetAnimationBool(animIDHandPistol, value > 0);
+                    break;
+                
                 default:
                     Debug.LogError($"Unknown type {animationValue} for character animation.");
                     break;
@@ -187,10 +193,10 @@ namespace Arenar.Character
                         out Transform objectTransform,
                         out Vector3 raycastPoint))
                 {
-                    //characterAimAnimationDataStorage.BodyAimPointObject.position = raycastPoint;
+                    characterAimAnimationDataStorage.BodyAimPointObject.position = raycastPoint;
                 }
                 
-                characterAimAnimationDataStorage.BodyAimPointObject.position = raycastPoint;
+                // characterAimAnimationDataStorage.BodyAimPointObject.position = raycastPoint;
             }
         }
 
@@ -203,6 +209,7 @@ namespace Arenar.Character
             animIDMotionSpeedX = Animator.StringToHash(characterAnimatorDataStorage.MotionSpeedAnimationXName);
             animIDMotionSpeedY = Animator.StringToHash(characterAnimatorDataStorage.MotionSpeedAnimationYName);
             animIDAim = Animator.StringToHash(characterAnimatorDataStorage.AimAnimationName);
+            animIDHandPistol = Animator.StringToHash(characterAnimatorDataStorage.HandPistolAnimationNam);
         }
     }
 }
