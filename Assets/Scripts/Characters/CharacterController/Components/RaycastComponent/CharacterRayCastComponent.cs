@@ -62,7 +62,7 @@ namespace Arenar.Character
         
         public void Tick()
         {
-            if (characterLiveComponent.IsAlive)
+            if (!characterLiveComponent.IsAlive)
             {
                 IsGrounded = false;
                 RaycastPoint = Vector3.zero;

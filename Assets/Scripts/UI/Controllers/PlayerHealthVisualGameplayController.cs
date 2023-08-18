@@ -10,22 +10,24 @@ namespace Arenar.Services.UI
     {
         private PlayerCharacterSpawnController playerCharacterSpawnController;
         private ICharacterLiveComponent playerCharacterLiveComponent;
-        private ComponentCharacterController component;
+        private ICharacterProgressionComponent playerCharacterProgressionComponent;
+        
+        private ComponentCharacterController playerCharacterController;
         private GameplayPlayerParametersWindowLayer gameplayPlayerParametersWindowLayer;
 
 
-        private ComponentCharacterController Component
+        private ComponentCharacterController Character
         {
             get
             {
-                if (component == null)
+                if (playerCharacterController == null)
                 {
-                    component = playerCharacterSpawnController.Component;
-                    if (component == null)
+                    playerCharacterController = playerCharacterSpawnController.Component;
+                    if (playerCharacterController == null)
                         return null;
                 }
 
-                return component;
+                return playerCharacterController;
             }
         }
 
@@ -35,12 +37,27 @@ namespace Arenar.Services.UI
             {
                 if (playerCharacterLiveComponent == null)
                 {
-                    if (Component == null)
+                    if (Character == null)
                         return null;
-                    Component.TryGetCharacterComponent<ICharacterLiveComponent>(out playerCharacterLiveComponent);
+                    Character.TryGetCharacterComponent<ICharacterLiveComponent>(out playerCharacterLiveComponent);
                 }
 
                 return playerCharacterLiveComponent;
+            }
+        }
+
+        private ICharacterProgressionComponent PlayerCharacterProgressionComponent
+        {
+            get
+            {
+                if (playerCharacterProgressionComponent == null)
+                {
+                    if (Character == null)
+                        return null;
+                    Character.TryGetCharacterComponent<ICharacterProgressionComponent>(out playerCharacterProgressionComponent);
+                }
+
+                return playerCharacterProgressionComponent;
             }
         }
         
@@ -50,8 +67,7 @@ namespace Arenar.Services.UI
         {
             this.playerCharacterSpawnController = playerCharacterSpawnController;
         }
-
-
+        
         public override void Initialize(ICanvasService canvasService)
         {
             base.Initialize(canvasService);
@@ -65,13 +81,26 @@ namespace Arenar.Services.UI
             playerCharacterSpawnController.OnCreatePlayerCharacter += OnInstallNewPlayerCharacter;
         }
 
-        private void OnInstallNewPlayerCharacter(ComponentCharacterController componentCharacter)
+        private void OnInstallNewPlayerCharacter(ComponentCharacterController characterController)
         {
+            playerCharacterController = characterController;
+            
             PlayerCharacterLiveComponent.OnCharacterChangeHealthValue += OnCharacterChangeHealthValue;
+            PlayerCharacterProgressionComponent.OnUpdateExperience += OnUpdateExperience;
+            PlayerCharacterProgressionComponent.OnUpdateLevel += OnUpdateLevel;
+            
             OnCharacterChangeHealthValue(PlayerCharacterLiveComponent.Health, PlayerCharacterLiveComponent.HealthMax);
+            OnUpdateExperience(PlayerCharacterProgressionComponent.Experience, PlayerCharacterProgressionComponent.ExperienceMax);
+            OnUpdateLevel(PlayerCharacterProgressionComponent.Level);
         }
 
         private void OnCharacterChangeHealthValue(int health, int healthMax) =>
             gameplayPlayerParametersWindowLayer.UpdatePlayerHealth(health, healthMax);
+
+        private void OnUpdateExperience(int currentExp, int maxExp) =>
+            gameplayPlayerParametersWindowLayer.UpdatePlayerExperience(currentExp, maxExp);
+
+        private void OnUpdateLevel(int level) =>
+            gameplayPlayerParametersWindowLayer.UpdatePlayerLevel(level);
     }
 }

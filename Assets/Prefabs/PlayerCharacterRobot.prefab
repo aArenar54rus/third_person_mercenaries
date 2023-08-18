@@ -4901,7 +4901,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8886542636944289912}
   - component: {fileID: 8077355321906768584}
-  - component: {fileID: 6814827604510946603}
+  - component: {fileID: 3594676180851512963}
   - component: {fileID: 2087674089868542002}
   - component: {fileID: 8077355321906768590}
   - component: {fileID: 4525999011491975557}
@@ -4948,7 +4948,7 @@ CharacterController:
   m_SkinWidth: 0.02
   m_MinMoveDistance: 0
   m_Center: {x: 0, y: 0.93, z: 0}
---- !u!114 &6814827604510946603
+--- !u!114 &3594676180851512963
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4957,7 +4957,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8077355321906768578}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c19d5a0e8c2c32343a615a0588ee9e16, type: 3}
+  m_Script: {fileID: 11500000, guid: 7ffa786abdf0c42409da20f80e4bf1ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   characterAudioDataStorage:
@@ -4975,6 +4975,7 @@ MonoBehaviour:
     aimAnimationName: IsAim
     motionSpeedAnimationXName: MotionSpeedX
     motionSpeedAnimationYName: MotionSpeedY
+    handPistolAnimationName: HandPistol
   characterPhysicsDataStorage:
     characterTransform: {fileID: 8886542636944289912}
     cameraTransform: {fileID: 4534734409247019934}

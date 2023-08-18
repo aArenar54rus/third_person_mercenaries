@@ -5,14 +5,14 @@ using Zenject;
 
 namespace Arenar.Character
 {
-    public class PlayerCharacterComponentsInstaller : Zenject.Installer
+    public class PlayerCharacterComponentsInstaller : Installer
     {
         public override void InstallBindings()
         {
-            InstallKittyCharactersComponents();
+            InstallCharactersComponents();
         }
 
-        private void InstallKittyCharactersComponents()
+        private void InstallCharactersComponents()
         {
             Dictionary<Type, ICharacterComponent> characterComponentsPool = new Dictionary<Type, ICharacterComponent>();
             
@@ -62,9 +62,14 @@ namespace Arenar.Character
             Container.Inject(characterPlayerInteractionComponent);
             
             ICharacterAttackComponent characterAttackComponent = new CharacterAttackComponent();
-            characterComponentsPool.Add(typeof(CharacterAttackComponent), characterAttackComponent);
+            characterComponentsPool.Add(typeof(ICharacterAttackComponent), characterAttackComponent);
             Container.BindInstance(characterAttackComponent).AsSingle();
             Container.Inject(characterAttackComponent);
+            
+            ICharacterProgressionComponent characterProgressionComponent = new PlayerCharacterProgressionComponent();
+            characterComponentsPool.Add(typeof(ICharacterProgressionComponent), characterProgressionComponent);
+            Container.BindInstance(characterProgressionComponent).AsSingle();
+            Container.Inject(characterProgressionComponent);
 
             Container.BindInstance(characterComponentsPool).AsSingle();
         }

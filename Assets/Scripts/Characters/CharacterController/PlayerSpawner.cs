@@ -17,8 +17,6 @@ namespace Arenar
         private void Start()
         {
             componentCharacter = _playerCharacterSpawnController.CreateCharacter();
-            
-            // cameraService.SetCameraState<CameraStateThirdPerson>(_playerCharacter.CameraTransform , _playerCharacter.CharacterTransform);
             cameraService.SetCinemachineVirtualCamera(CinemachineCameraType.DefaultTPS);
         }
         

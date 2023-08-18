@@ -62,6 +62,7 @@ namespace Arenar.Services.UI
                 .GetWindowLayer<GameplayInformationLayer>();
 
             gameplayInformationLayer.GetComponent<Canvas>().enabled = true;
+            gameplayInformationLayer.EnemyTargetInformationPanel.UnsetEnemy();
         }
         
         public void Tick()
@@ -82,6 +83,8 @@ namespace Arenar.Services.UI
                 if (isEnemyOnCross && characterLiveComponent.IsAlive)
                 {
                     gameplayInformationLayer.EnemyTargetInformationPanel.SetEnemy(descriptionComponent.CharacterName, descriptionComponent.CharacterDescription);
+                    OnEnemyCharacterChangeHealthValue(characterLiveComponent.Health, characterLiveComponent.HealthMax);
+                    
                     characterLiveComponent.OnCharacterChangeHealthValue += OnEnemyCharacterChangeHealthValue;
                     characterLiveComponent.OnCharacterDie += OnEnemyCharacterDie;
                 }
