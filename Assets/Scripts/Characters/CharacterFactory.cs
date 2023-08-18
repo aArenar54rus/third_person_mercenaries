@@ -6,7 +6,7 @@ using Object = UnityEngine.Object;
 
 namespace Arenar
 {
-    public class CharacterFactory : ICharacterEntityFactory<PlayerCharacterController>
+    public class CharacterFactory : ICharacterEntityFactory<ComponentCharacterController>
     {
         private readonly DiContainer container;
         private TickableManager tickableManager;
@@ -21,21 +21,21 @@ namespace Arenar
         }
 
         
-        public PlayerCharacterController Create(PlayerCharacterController prototypePrefab, Transform parent)
+        public ComponentCharacterController Create(ComponentCharacterController prototypePrefab, Transform parent)
         {
             var subContainer = container.CreateSubContainer();
-            PlayerCharacterController playerCharacterControl = Object
+            ComponentCharacterController componentCharacterControl = Object
                 .Instantiate(prototypePrefab, parent)
-                .GetComponent<PlayerCharacterController>();
+                .GetComponent<ComponentCharacterController>();
             
-            InstallPostBindings(subContainer, playerCharacterControl);
-            subContainer.Inject(playerCharacterControl);
+            InstallPostBindings(subContainer, componentCharacterControl);
+            subContainer.Inject(componentCharacterControl);
 
-            return playerCharacterControl;
+            return componentCharacterControl;
         }
 
         private void InstallPostBindings(DiContainer subContainer,
-            PlayerCharacterController playerCharacterController)
+            ComponentCharacterController componentCharacterController)
         {
             subContainer.ResolveRoots();
             
@@ -53,8 +53,8 @@ namespace Arenar
                     typeof(ICharacterDataStorage<CharacterAnimatorDataStorage>),
                     typeof(ICharacterDataStorage<CharacterPhysicsDataStorage>),
                     typeof(ICharacterDataStorage<CharacterAimAnimationDataStorage>))
-                .To<PlayerCharacterController>()
-                .FromInstance(playerCharacterController)
+                .To<ComponentCharacterController>()
+                .FromInstance(componentCharacterController)
                 .AsSingle();
 
             subContainer.Install<PlayerCharacterComponentsInstaller>();

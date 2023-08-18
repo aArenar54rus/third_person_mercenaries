@@ -1,31 +1,31 @@
 using Arenar.Character;
-using Arenar.Services.UI;
+using Arenar.UI;
 using UnityEngine;
 using Zenject;
 
 
-namespace Arenar.UI
+namespace Arenar.Services.UI
 {
     public class PlayerHealthVisualGameplayController : CanvasWindowController
     {
         private PlayerCharacterSpawnController playerCharacterSpawnController;
         private ICharacterLiveComponent playerCharacterLiveComponent;
-        private PlayerCharacterController player;
-        private HealthGameplayWindowLayer healthGameplayWindowLayer;
+        private ComponentCharacterController component;
+        private GameplayPlayerParametersWindowLayer gameplayPlayerParametersWindowLayer;
 
 
-        private PlayerCharacterController Player
+        private ComponentCharacterController Component
         {
             get
             {
-                if (player == null)
+                if (component == null)
                 {
-                    player = playerCharacterSpawnController.Player;
-                    if (player == null)
+                    component = playerCharacterSpawnController.Component;
+                    if (component == null)
                         return null;
                 }
 
-                return player;
+                return component;
             }
         }
 
@@ -35,13 +35,9 @@ namespace Arenar.UI
             {
                 if (playerCharacterLiveComponent == null)
                 {
-                    if (Player == null)
+                    if (Component == null)
                         return null;
-
-                    playerCharacterLiveComponent = Player.TryGetCharacterComponent<ICharacterLiveComponent>(out bool success);
-
-                    if (!success)
-                        return null;
+                    Component.TryGetCharacterComponent<ICharacterLiveComponent>(out playerCharacterLiveComponent);
                 }
 
                 return playerCharacterLiveComponent;
@@ -60,27 +56,22 @@ namespace Arenar.UI
         {
             base.Initialize(canvasService);
 
-            healthGameplayWindowLayer = base.canvasService
+            gameplayPlayerParametersWindowLayer = base.canvasService
                 .GetWindow<GameplayCanvasWindow>()
-                .GetWindowLayer<HealthGameplayWindowLayer>();
+                .GetWindowLayer<GameplayPlayerParametersWindowLayer>();
 
-            healthGameplayWindowLayer.GetComponent<Canvas>().enabled = true;
+            gameplayPlayerParametersWindowLayer.GetComponent<Canvas>().enabled = true;
 
             playerCharacterSpawnController.OnCreatePlayerCharacter += OnInstallNewPlayerCharacter;
         }
 
-        private void OnInstallNewPlayerCharacter(PlayerCharacterController playerCharacter)
+        private void OnInstallNewPlayerCharacter(ComponentCharacterController componentCharacter)
         {
             PlayerCharacterLiveComponent.OnCharacterChangeHealthValue += OnCharacterChangeHealthValue;
             OnCharacterChangeHealthValue(PlayerCharacterLiveComponent.Health, PlayerCharacterLiveComponent.HealthMax);
         }
 
-        private void OnCharacterChangeHealthValue(int health, int healthMax)
-        {
-            healthGameplayWindowLayer.HealthText.text = health + "/" + healthMax;
-
-            healthGameplayWindowLayer.HealthSlider.maxValue = healthMax;
-            healthGameplayWindowLayer.HealthSlider.value = health;
-        }
+        private void OnCharacterChangeHealthValue(int health, int healthMax) =>
+            gameplayPlayerParametersWindowLayer.UpdatePlayerHealth(health, healthMax);
     }
 }

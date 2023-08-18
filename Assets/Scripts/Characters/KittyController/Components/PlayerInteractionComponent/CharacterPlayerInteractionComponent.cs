@@ -53,17 +53,16 @@ namespace Arenar.Character
             tickableManager.Add(this);
             
             bool isSuccess = false;
-            _liveComponent = character.TryGetCharacterComponent<ICharacterLiveComponent>(out isSuccess);
-            _rayCastComponent = character.TryGetCharacterComponent<ICharacterRayCastComponent>(out isSuccess);
-            _inputComponent = character.TryGetCharacterComponent<ICharacterInputComponent>(out isSuccess);
+            character.TryGetCharacterComponent<ICharacterLiveComponent>(out _liveComponent);
+            character.TryGetCharacterComponent<ICharacterRayCastComponent>(out _rayCastComponent);
+            character.TryGetCharacterComponent<ICharacterInputComponent>(out _inputComponent);
             
-            var component = character.TryGetCharacterComponent<ICharacterAnimationComponent>(out isSuccess);
-            if (isSuccess)
+            if (character.TryGetCharacterComponent<ICharacterAnimationComponent>(out ICharacterAnimationComponent animationComponent))
             {
-                if (component is ICharacterAnimationComponent<CharacterAnimationComponent.KittyAnimation,
-                    CharacterAnimationComponent.KittyAnimationValue> animationComponent)
+                if (animationComponent is ICharacterAnimationComponent<CharacterAnimationComponent.KittyAnimation,
+                    CharacterAnimationComponent.KittyAnimationValue> neededComponent)
                 {
-                    _characterAnimationComponent = animationComponent;
+                    _characterAnimationComponent = neededComponent;
                 }
             }
 
@@ -86,7 +85,7 @@ namespace Arenar.Character
             if (!_liveComponent.IsAlive)
                 return;
 
-            InteractableElement element = _rayCastComponent.GetInteractableElementsOnCross();
+            InteractableElement element = _rayCastComponent.InteractableElementsOnCross;
 
             if (element != null && _inputComponent.InteractAction)
                 InteractWithInteractObject(element);

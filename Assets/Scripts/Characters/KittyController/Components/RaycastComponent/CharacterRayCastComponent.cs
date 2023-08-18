@@ -5,22 +5,38 @@ using Zenject;
 
 namespace Arenar.Character
 {
-    public class CharacterRayCastComponent : ICharacterRayCastComponent
+    public class CharacterRayCastComponent : ICharacterRayCastComponent, ITickable
     {
         private ICharacterEntity _characterEntity;
+        private ICharacterLiveComponent characterLiveComponent;
+        
         private Camera _camera;
         private bool _isGrounded = true;
         private PlayerCharacterParametersData _playerCharacterParametersData;
         private Transform _characterCenterPoint;
+        private TickableManager _tickableManager;
         private float _maxSqrDistance;
    
+        
+        public bool IsGrounded { get; private set; }
+        
+        public Vector3 RaycastPoint { get; private set; }
 
-        private Transform characterTransform =>
-            _characterEntity.CharacterTransform;
+        public Transform ObjectOnCross { get; private set; }
+        
+        public InteractableElement InteractableElementsOnCross { get; private set; }
+        
+        public ComponentCharacterController CharacterControllerOnCross { get; private set; }
+
+        private Transform characterTransform => _characterEntity.CharacterTransform;
 
 
         [Inject]
-        public void Construct(ICharacterEntity characterEntity, ICharacterDataStorage<CharacterPhysicsDataStorage> characterPhysicsDataStorage, PlayerCharacterParametersData playerCharacterParametersData, ICameraService cameraService)
+        public void Construct(ICharacterEntity characterEntity,
+            ICharacterDataStorage<CharacterPhysicsDataStorage> characterPhysicsDataStorage,
+            PlayerCharacterParametersData playerCharacterParametersData,
+            ICameraService cameraService,
+            TickableManager tickableManager)
         {
             _characterEntity = characterEntity;
             _playerCharacterParametersData = playerCharacterParametersData;
@@ -28,9 +44,50 @@ namespace Arenar.Character
             _maxSqrDistance = playerCharacterParametersData.InteractElementDistance
                               * playerCharacterParametersData.InteractElementDistance;
             _camera = cameraService.GameCamera;
+            _tickableManager = tickableManager;
+        }
+        
+        public void Initialize()
+        {
+            _characterEntity.TryGetCharacterComponent<ICharacterLiveComponent>(out characterLiveComponent);
+            _tickableManager.Add(this);
         }
 
-        public bool IsGroundedCheck()
+        public void DeInitialize()
+        {
+            _tickableManager.Remove(this);
+        }
+
+        public void OnStart() { }
+        
+        public void Tick()
+        {
+            if (characterLiveComponent.IsAlive)
+            {
+                IsGrounded = false;
+                RaycastPoint = Vector3.zero;
+                ObjectOnCross = null;
+                InteractableElementsOnCross = null;
+                CharacterControllerOnCross = null;
+                return;
+            }
+
+            IsGrounded = IsGroundedCheck();
+            InteractableElementsOnCross = GetInteractableElementsOnCross();
+
+            if (TryGetObjectOnCross(out Transform objectOnCross, out Vector3 raycastPoint))
+            {
+                ObjectOnCross = objectOnCross;
+                RaycastPoint = raycastPoint;
+            }
+            else
+            {
+                ObjectOnCross = null;
+                RaycastPoint = Vector3.zero;
+            }
+        }
+
+        private bool IsGroundedCheck()
         {
             Vector3 spherePosition = new Vector3(characterTransform.position.x, 
                 characterTransform.position.y + _playerCharacterParametersData.GroundedOffset,
@@ -40,8 +97,8 @@ namespace Arenar.Character
 
             return _isGrounded;
         }
-
-        public bool TryGetObjectOnCross(out Transform objectTransform)
+        
+        private bool TryGetObjectOnCross(out Transform objectTransform)
         {
             Ray ray = _camera.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));
             if (!Physics.Raycast(ray, out RaycastHit hit))
@@ -54,7 +111,7 @@ namespace Arenar.Character
             return true;
         }
         
-        public bool TryGetObjectOnCross(out Transform objectTransform, out Vector3 raycastPoint)
+        private bool TryGetObjectOnCross(out Transform objectTransform, out Vector3 raycastPoint)
         {
             Ray ray = _camera.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));
             if (!Physics.Raycast(ray, out RaycastHit hit))
@@ -69,7 +126,7 @@ namespace Arenar.Character
             return true;
         }
 
-        public InteractableElement GetInteractableElementsOnCross()
+        private InteractableElement GetInteractableElementsOnCross()
         {
             if (!TryGetObjectOnCross(out Transform objectHit))
                 return null;
@@ -83,11 +140,5 @@ namespace Arenar.Character
             
             return element;
         }
-
-        public void Initialize() { }
-
-        public void DeInitialize() { }
-
-        public void OnStart() { }
     }
 }

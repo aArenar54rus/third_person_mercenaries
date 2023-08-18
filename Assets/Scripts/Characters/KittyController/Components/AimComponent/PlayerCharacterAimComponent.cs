@@ -34,12 +34,10 @@ namespace Arenar.Character
         
         public void Initialize()
         {
-            _inputComponent = character.TryGetCharacterComponent<ICharacterInputComponent>(out bool isSuccess);
-            
-            var iCharacterAnimationComponent = character.TryGetCharacterComponent<ICharacterAnimationComponent>(out bool isSuccessCharacterAnimationComponent);
-            if (isSuccessCharacterAnimationComponent)
+            character.TryGetCharacterComponent<ICharacterInputComponent>(out _inputComponent);
+            if (character.TryGetCharacterComponent<ICharacterAnimationComponent>(out ICharacterAnimationComponent animationComponent))
             {
-                if (iCharacterAnimationComponent is CharacterAnimationComponent characterAnimationComponent)
+                if (animationComponent is CharacterAnimationComponent characterAnimationComponent)
                     CharacterAnimationComponent = characterAnimationComponent;
             }
             

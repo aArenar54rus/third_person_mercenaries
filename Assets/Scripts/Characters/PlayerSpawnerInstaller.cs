@@ -7,7 +7,7 @@ public class PlayerSpawnerInstaller : MonoInstaller<PlayerSpawnerInstaller>
 {
     public override void InstallBindings()
     {
-        Container.Bind<ICharacterEntityFactory<PlayerCharacterController>>()
+        Container.Bind<ICharacterEntityFactory<ComponentCharacterController>>()
             .To<CharacterFactory>()
             .AsSingle();
 

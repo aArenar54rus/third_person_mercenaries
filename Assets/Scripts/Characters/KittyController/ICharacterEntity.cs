@@ -8,7 +8,7 @@ namespace Arenar.Character
         Transform CharacterTransform { get; }
 
 
-        TCharacterComponent TryGetCharacterComponent<TCharacterComponent>(out bool isSuccess)
+        bool TryGetCharacterComponent<TCharacterComponent>(out TCharacterComponent resultComponent)
             where TCharacterComponent : ICharacterComponent;
 
         void ReInitialize();

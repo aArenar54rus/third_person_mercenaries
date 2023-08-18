@@ -6,7 +6,7 @@ using Zenject;
 
 namespace Arenar.Character
 {
-    public class PlayerCharacterController : MonoBehaviour,
+    public class ComponentCharacterController : MonoBehaviour,
                                    ICharacterEntity,
                                    ICharacterDataStorage<CharacterAudioDataStorage>,
                                    ICharacterDataStorage<CharacterVisualDataStorage>,
@@ -51,18 +51,18 @@ namespace Arenar.Character
                 characterComponent.Value.OnStart();
         }
         
-        public TCharacterComponent TryGetCharacterComponent<TCharacterComponent>(out bool isSuccess)
+        public bool TryGetCharacterComponent<TCharacterComponent>(out TCharacterComponent resultComponent)
             where TCharacterComponent : ICharacterComponent
         {
             if (!characterComponentsPool.ContainsKey(typeof(TCharacterComponent)))
             {
                 Debug.LogError($"Not found component {typeof(TCharacterComponent)}");
-                isSuccess = false;
-                return default;
+                resultComponent = default;
+                return false;
             }
             
-            isSuccess = true;
-            return (TCharacterComponent) characterComponentsPool[typeof(TCharacterComponent)];
+            resultComponent = (TCharacterComponent) characterComponentsPool[typeof(TCharacterComponent)];
+            return true;
         }
         
         private void Initialize()

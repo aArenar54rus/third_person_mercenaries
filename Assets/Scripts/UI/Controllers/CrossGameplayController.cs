@@ -15,24 +15,24 @@ namespace Arenar.UI
         private Image crossImage;
         private RectTransform crossRT;
 
-        private PlayerCharacterController player;
+        private ComponentCharacterController component;
         private ICharacterAimComponent characterAimComponent;
 
         private CrossCanvasWindowLayer crossGameplayCanvasLayer;
 
 
-        private PlayerCharacterController Player
+        private ComponentCharacterController Character
         {
             get
             {
-                if (player == null)
+                if (component == null)
                 {
-                    player = playerCharacterSpawnController.Player;
-                    if (player == null)
+                    component = playerCharacterSpawnController.Component;
+                    if (component == null)
                         return null;
                 }
 
-                return player;
+                return component;
             }
         }
 
@@ -42,13 +42,9 @@ namespace Arenar.UI
             {
                 if (characterAimComponent == null)
                 {
-                    if (Player == null)
+                    if (Character == null)
                         return null;
-
-                    characterAimComponent = Player.TryGetCharacterComponent<ICharacterAimComponent>(out bool success);
-
-                    if (!success)
-                        return null;
+                    Character.TryGetCharacterComponent<ICharacterAimComponent>(out characterAimComponent);
                 }
 
                 return characterAimComponent;

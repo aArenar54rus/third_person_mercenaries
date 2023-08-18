@@ -1,13 +1,18 @@
+using UnityEngine;
+
+
 namespace Arenar.Character
 {
     public interface ICharacterRayCastComponent : ICharacterComponent
     {
-        bool IsGroundedCheck();
+        bool IsGrounded { get; }
 
-        bool TryGetObjectOnCross(out UnityEngine.Transform objectTransform);
+        Vector3 RaycastPoint { get; }
 
-        bool TryGetObjectOnCross(out UnityEngine.Transform objectTransform, out UnityEngine.Vector3 raycastPoint);
-
-        InteractableElement GetInteractableElementsOnCross();
+        Transform ObjectOnCross { get; }
+        
+        InteractableElement InteractableElementsOnCross { get; }
+        
+        ComponentCharacterController CharacterControllerOnCross { get; }
     }
 }

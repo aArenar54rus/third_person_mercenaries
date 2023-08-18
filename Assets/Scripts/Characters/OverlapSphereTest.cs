@@ -9,7 +9,7 @@ using Zenject;
 
 public class OverlapSphereTest : MonoBehaviour
 {
-    [SerializeField] private PlayerCharacterController characterController;
+    [SerializeField] private ComponentCharacterController characterController;
     [SerializeField] private float radius = .28f;
     [SerializeField] private float offset = -0.14f;
 

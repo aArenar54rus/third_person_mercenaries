@@ -11,12 +11,12 @@ namespace Arenar
         [Inject] private PlayerCharacterSpawnController _playerCharacterSpawnController;
         [Inject] private ICameraService cameraService;
 
-        private PlayerCharacterController _playerCharacter;
+        private ComponentCharacterController componentCharacter;
 
 
         private void Start()
         {
-            _playerCharacter = _playerCharacterSpawnController.CreateCharacter();
+            componentCharacter = _playerCharacterSpawnController.CreateCharacter();
             
             // cameraService.SetCameraState<CameraStateThirdPerson>(_playerCharacter.CameraTransform , _playerCharacter.CharacterTransform);
             cameraService.SetCinemachineVirtualCamera(CinemachineCameraType.DefaultTPS);
@@ -24,10 +24,10 @@ namespace Arenar
         
         public void OnDrawGizmos()
         {
-            if (_playerCharacter == null)
+            if (componentCharacter == null)
                 return;
             
-            Transform characterTransform = _playerCharacter.CharacterTransform;
+            Transform characterTransform = componentCharacter.CharacterTransform;
             Vector3 spherePosition = new Vector3(characterTransform.position.x, 
                 characterTransform.position.y - 0.05f,
                 characterTransform.position.z);

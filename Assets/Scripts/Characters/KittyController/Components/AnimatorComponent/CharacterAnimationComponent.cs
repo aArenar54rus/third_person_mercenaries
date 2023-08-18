@@ -50,7 +50,7 @@ namespace Arenar.Character
             characterAnimatorDataStorage.Animator;
         
         private bool IsFindObject =>
-            (CharacterRayCastComponent.GetInteractableElementsOnCross() != null);
+            (CharacterRayCastComponent.InteractableElementsOnCross != null);
 
         private ICharacterLiveComponent LiveComponent => liveComponent;
 
@@ -73,10 +73,9 @@ namespace Arenar.Character
 
         public void Initialize()
         {
-            bool success = false;
-            liveComponent = characterEntity.TryGetCharacterComponent<ICharacterLiveComponent>(out success);
-            rayCastComponent = characterEntity.TryGetCharacterComponent<ICharacterRayCastComponent>(out success);
-            characterAimComponent = characterEntity.TryGetCharacterComponent<ICharacterAimComponent>(out success);
+            characterEntity.TryGetCharacterComponent<ICharacterLiveComponent>(out liveComponent);
+            characterEntity.TryGetCharacterComponent<ICharacterRayCastComponent>(out rayCastComponent);
+            characterEntity.TryGetCharacterComponent<ICharacterAimComponent>(out characterAimComponent);
 
             InitIndexIDs();
             
@@ -174,7 +173,7 @@ namespace Arenar.Character
             if (IsFindObject)
             {
                 characterAimAnimationDataStorage.HeadAimPointObject.position
-                    = CharacterRayCastComponent.GetInteractableElementsOnCross().transform.position;
+                    = CharacterRayCastComponent.InteractableElementsOnCross.transform.position;
             }
 
             characterAimAnimationDataStorage.HeadRig.weight = Mathf.Clamp01(
@@ -189,11 +188,10 @@ namespace Arenar.Character
 
             if (isAim)
             {
-                if (CharacterRayCastComponent.TryGetObjectOnCross(
-                        out Transform objectTransform,
-                        out Vector3 raycastPoint))
+                if (CharacterRayCastComponent.RaycastPoint != null)
                 {
-                    characterAimAnimationDataStorage.BodyAimPointObject.position = raycastPoint;
+                    characterAimAnimationDataStorage.BodyAimPointObject.position
+                        = CharacterRayCastComponent.RaycastPoint;
                 }
                 
                 // characterAimAnimationDataStorage.BodyAimPointObject.position = raycastPoint;

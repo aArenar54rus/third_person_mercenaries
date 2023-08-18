@@ -30,12 +30,7 @@ namespace Arenar.Character
             get
             {
                 if (characterInputComponent == null)
-                {
-                    characterInputComponent = character.TryGetCharacterComponent<ICharacterInputComponent>(out bool success);
-                    if (!success)
-                        return null;
-                }
-
+                    character.TryGetCharacterComponent<ICharacterInputComponent>(out characterInputComponent);
                 return characterInputComponent;
             }
         }
@@ -59,14 +54,13 @@ namespace Arenar.Character
         public void Initialize()
         {
             bool success = false;
-            characterInputComponent = character.TryGetCharacterComponent<ICharacterInputComponent>(out success);
-            characterRayCastComponent = character.TryGetCharacterComponent<ICharacterRayCastComponent>(out success);
-
-            var iCharacterAnimationComponent = character.TryGetCharacterComponent<ICharacterAnimationComponent>(out bool isSuccessCharacterAnimationComponent);
-            if (isSuccessCharacterAnimationComponent)
+            character.TryGetCharacterComponent<ICharacterInputComponent>(out characterInputComponent);
+            character.TryGetCharacterComponent<ICharacterRayCastComponent>(out characterRayCastComponent);
+            
+            if (character.TryGetCharacterComponent<ICharacterAnimationComponent>(out ICharacterAnimationComponent animationComponent))
             {
-                if (iCharacterAnimationComponent is CharacterAnimationComponent animationComponent)
-                    characterAnimationComponent = animationComponent;
+                if (animationComponent is CharacterAnimationComponent neededAnimationComponent)
+                    characterAnimationComponent = neededAnimationComponent;
             }
 
             OnUpdateEquippedWeaponItem();

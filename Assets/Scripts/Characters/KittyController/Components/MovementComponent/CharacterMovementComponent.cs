@@ -15,6 +15,11 @@ namespace Arenar.Character
         private TickableManager tickableManager;
         private PlayerInput playerInput;
         private Camera mainCamera;
+        
+        private ICharacterLiveComponent characterLiveComponent;
+        private ICharacterRayCastComponent characterRayCastComponent;
+        private ICharacterInputComponent characterInputComponent;
+        private CharacterAnimationComponent characterAnimationComponent;
 
         // player
         private float speed;
@@ -38,7 +43,7 @@ namespace Arenar.Character
         
         // rotate
         private bool IsRotateOnMove =>
-            !CharacterInputComponent.AimAction;
+            !characterInputComponent.AimAction;
         
 
         private Transform characterTransform =>
@@ -54,15 +59,8 @@ namespace Arenar.Character
             }
         }
 
-        private ICharacterLiveComponent CharacterLiveComponent { get; set; }
-            
-        private ICharacterRayCastComponent CharacterRayCastComponent { get; set; }
-
-        private ICharacterInputComponent CharacterInputComponent { get; set; }
-        private CharacterAnimationComponent CharacterAnimationComponent { get; set; }
-        
         private Vector3 InputDirection =>
-            new Vector3(CharacterInputComponent.MoveAction.x, 0.0f, CharacterInputComponent.MoveAction.y).normalized;
+            new Vector3(characterInputComponent.MoveAction.x, 0.0f, characterInputComponent.MoveAction.y).normalized;
 
 
 
@@ -84,15 +82,14 @@ namespace Arenar.Character
         {
             tickableManager.Add(this);
             
-            CharacterLiveComponent = character.TryGetCharacterComponent<ICharacterLiveComponent>(out bool isSuccessCharacterLiveComponent);
-            CharacterRayCastComponent = character.TryGetCharacterComponent<ICharacterRayCastComponent>(out bool isSuccessCharacterRayCastComponent);
-            CharacterInputComponent = character.TryGetCharacterComponent<ICharacterInputComponent>(out bool isSuccessCharacterInputComponent);
+            character.TryGetCharacterComponent<ICharacterLiveComponent>(out characterLiveComponent);
+            character.TryGetCharacterComponent<ICharacterRayCastComponent>(out characterRayCastComponent);
+            character.TryGetCharacterComponent<ICharacterInputComponent>(out characterInputComponent);
             
-            var iCharacterAnimationComponent = character.TryGetCharacterComponent<ICharacterAnimationComponent>(out bool isSuccessCharacterAnimationComponent);
-            if (isSuccessCharacterAnimationComponent)
+            if (character.TryGetCharacterComponent<ICharacterAnimationComponent>(out ICharacterAnimationComponent animComponent))
             {
-                if (iCharacterAnimationComponent is CharacterAnimationComponent characterAnimationComponent)
-                    CharacterAnimationComponent = characterAnimationComponent;
+                if (animComponent is CharacterAnimationComponent characterAnimationComponent)
+                    this.characterAnimationComponent = characterAnimationComponent;
             }
         }
 
@@ -103,7 +100,7 @@ namespace Arenar.Character
 
         public void Tick()
         {
-            if (!CharacterLiveComponent.IsAlive)
+            if (!characterLiveComponent.IsAlive)
                 return;
             
             JumpAndGravity();
@@ -115,7 +112,7 @@ namespace Arenar.Character
         public void Move()
         {
             // set target speed based on move speed, sprint speed and if sprint is pressed
-            float targetSpeed = CharacterInputComponent.SprintAction
+            float targetSpeed = characterInputComponent.SprintAction
                 ? _playerCharacterParametersData.SprintSpeed
                 : _playerCharacterParametersData.MoveSpeed;
 
@@ -123,7 +120,7 @@ namespace Arenar.Character
 
             // note: Vector2's == operator uses approximation so is not floating point error prone, and is cheaper than magnitude
             // if there is no input, set the target speed to 0
-            if (CharacterInputComponent.MoveAction == Vector2.zero)
+            if (characterInputComponent.MoveAction == Vector2.zero)
                 targetSpeed = 0.0f;
 
             // a reference to the players current horizontal velocity
@@ -131,7 +128,7 @@ namespace Arenar.Character
                 characterPhysicsDataStorage.CharacterController.velocity.z).magnitude;
 
             float speedOffset = 0.1f;
-            float inputMagnitude = CharacterInputComponent.MoveAction.magnitude;
+            float inputMagnitude = characterInputComponent.MoveAction.magnitude;
 
             // accelerate or decelerate to target speed
             if (currentHorizontalSpeed < targetSpeed - speedOffset
@@ -170,9 +167,9 @@ namespace Arenar.Character
             characterPhysicsDataStorage.CharacterController.Move(targetDirection.normalized * (speed * Time.deltaTime) +
                              new Vector3(0.0f, verticalVelocity, 0.0f) * Time.deltaTime);
             
-            float runningAnimMultiplier = CharacterInputComponent.SprintAction ? 1.0f : 0.5f;
-            float runningAnimMultiplierX = runningAnimMultiplier * CharacterInputComponent.MoveAction.x;
-            float runningAnimMultiplierY = runningAnimMultiplier * CharacterInputComponent.MoveAction.y;
+            float runningAnimMultiplier = characterInputComponent.SprintAction ? 1.0f : 0.5f;
+            float runningAnimMultiplierX = runningAnimMultiplier * characterInputComponent.MoveAction.x;
+            float runningAnimMultiplierY = runningAnimMultiplier * characterInputComponent.MoveAction.y;
 
             animationBlendX = Mathf.Lerp(animationBlendX, runningAnimMultiplierX,
                 Time.deltaTime * _playerCharacterParametersData.SpeedChangeRate);
@@ -183,9 +180,9 @@ namespace Arenar.Character
             if (animationBlend > 0.05f)
                 animationSpeedBlend = currentHorizontalSpeed / _playerCharacterParametersData.MoveSpeed * runningAnimMultiplier;
 
-            CharacterAnimationComponent.SetAnimationValue(Character.CharacterAnimationComponent.KittyAnimationValue.Speed, animationSpeedBlend);
-            CharacterAnimationComponent.SetAnimationValue(Character.CharacterAnimationComponent.KittyAnimationValue.MotionSpeedX, animationBlendX);
-            CharacterAnimationComponent.SetAnimationValue(Character.CharacterAnimationComponent.KittyAnimationValue.MotionSpeedY, animationBlendY);
+            characterAnimationComponent.SetAnimationValue(Character.CharacterAnimationComponent.KittyAnimationValue.Speed, animationSpeedBlend);
+            characterAnimationComponent.SetAnimationValue(Character.CharacterAnimationComponent.KittyAnimationValue.MotionSpeedX, animationBlendX);
+            characterAnimationComponent.SetAnimationValue(Character.CharacterAnimationComponent.KittyAnimationValue.MotionSpeedY, animationBlendY);
         }
 
         public void Rotation()
@@ -195,7 +192,7 @@ namespace Arenar.Character
 
             if (IsRotateOnMove)
             {
-                if (CharacterInputComponent.MoveAction == Vector2.zero)
+                if (characterInputComponent.MoveAction == Vector2.zero)
                     return;
                 
                 targetRotation = Mathf.Atan2(InputDirection.x, InputDirection.z) * Mathf.Rad2Deg +
@@ -221,28 +218,26 @@ namespace Arenar.Character
 
         private void JumpAndGravity()
         {
-            if (CharacterRayCastComponent.IsGroundedCheck())
+            if (characterRayCastComponent.IsGrounded)
             {
                 // reset the fall timeout timer
                 fallTimeoutDelta = _playerCharacterParametersData.FallTimeout;
 
                 // update animator if using character
-                CharacterAnimationComponent.SetAnimationValue(CharacterAnimationComponent.KittyAnimationValue.Grounded, 1); 
-                CharacterAnimationComponent.SetAnimationValue(Character.CharacterAnimationComponent.KittyAnimationValue.Jump, 0);
-                CharacterAnimationComponent.SetAnimationValue(Character.CharacterAnimationComponent.KittyAnimationValue.FreeFall, 0);
+                characterAnimationComponent.SetAnimationValue(CharacterAnimationComponent.KittyAnimationValue.Grounded, 1); 
+                characterAnimationComponent.SetAnimationValue(CharacterAnimationComponent.KittyAnimationValue.Jump, 0);
+                characterAnimationComponent.SetAnimationValue(CharacterAnimationComponent.KittyAnimationValue.FreeFall, 0);
 
                 // stop our velocity dropping infinitely when grounded
                 if (verticalVelocity < 0.0f)
-                {
                     verticalVelocity = -2f;
-                }
-
+                
                 // Jump
-                if (CharacterInputComponent.JumpAction && jumpTimeoutDelta <= 0.0f)
+                if (characterInputComponent.JumpAction && jumpTimeoutDelta <= 0.0f)
                 {
                     // the square root of H * -2 * G = how much velocity needed to reach desired height
                     verticalVelocity = Mathf.Sqrt(_playerCharacterParametersData.JumpHeight * -2f * _playerCharacterParametersData.Gravity);
-                    CharacterAnimationComponent.SetAnimationValue(Character.CharacterAnimationComponent.KittyAnimationValue.Jump, 1);
+                    characterAnimationComponent.SetAnimationValue(Character.CharacterAnimationComponent.KittyAnimationValue.Jump, 1);
                 }
 
                 // jump timeout
@@ -251,7 +246,7 @@ namespace Arenar.Character
             }
             else
             {
-                CharacterAnimationComponent.SetAnimationValue(CharacterAnimationComponent.KittyAnimationValue.Grounded, 0); 
+                characterAnimationComponent.SetAnimationValue(CharacterAnimationComponent.KittyAnimationValue.Grounded, 0); 
                 // reset the jump timeout timer
                 jumpTimeoutDelta = _playerCharacterParametersData.JumpTimeout;
 
@@ -262,7 +257,7 @@ namespace Arenar.Character
                 }
                 else
                 {
-                    CharacterAnimationComponent.SetAnimationValue(Character.CharacterAnimationComponent.KittyAnimationValue.FreeFall, 1);
+                    characterAnimationComponent.SetAnimationValue(Character.CharacterAnimationComponent.KittyAnimationValue.FreeFall, 1);
                 }
             }
 
@@ -276,15 +271,15 @@ namespace Arenar.Character
         private void CameraRotation()
         {
             // if there is an input and camera position is not fixed
-            if (CharacterInputComponent.LookAction.sqrMagnitude >= THRESHOLD && !_playerCharacterParametersData.LockCameraPosition)
+            if (characterInputComponent.LookAction.sqrMagnitude >= THRESHOLD && !_playerCharacterParametersData.LockCameraPosition)
             {
                 //Don't multiply mouse input by Time.deltaTime;
                 //float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
 
                 float sensitivity = GetSensitivity();
 
-                cinemachineTargetYaw += CharacterInputComponent.LookAction.x * sensitivity;// * deltaTimeMultiplier;
-                cinemachineTargetPitch += CharacterInputComponent.LookAction.y * sensitivity;// * deltaTimeMultiplier;
+                cinemachineTargetYaw += characterInputComponent.LookAction.x * sensitivity;// * deltaTimeMultiplier;
+                cinemachineTargetPitch += characterInputComponent.LookAction.y * sensitivity;// * deltaTimeMultiplier;
             }
 
             // clamp our rotations so our values are limited 360 degrees
@@ -305,7 +300,7 @@ namespace Arenar.Character
 
         private float GetSensitivity()
         {
-            if (CharacterInputComponent.AimAction)
+            if (characterInputComponent.AimAction)
                 return _playerCharacterParametersData.AimCameraSensitivity;
             else return _playerCharacterParametersData.DefaultCameraSensitivity;
         }

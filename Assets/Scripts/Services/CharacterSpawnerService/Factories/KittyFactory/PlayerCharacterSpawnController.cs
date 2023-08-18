@@ -7,21 +7,21 @@ namespace Arenar
 {
     public class PlayerCharacterSpawnController
     {
-        public event Action<PlayerCharacterController> OnCreatePlayerCharacter;
+        public event Action<ComponentCharacterController> OnCreatePlayerCharacter;
         
         
         private Transform playerContainer;
-        private PlayerCharacterController _playerCharacterPrefabs;
+        private ComponentCharacterController componentCharacterPrefabs;
         
-        private ICharacterEntityFactory<PlayerCharacterController> playerFactory;
+        private ICharacterEntityFactory<ComponentCharacterController> playerFactory;
 
         private bool canSpawn = false;
         private float spawnTimer = default;
 
-        private PlayerCharacterController player;
+        private ComponentCharacterController component;
 
 
-        public PlayerCharacterController Player => player;
+        public ComponentCharacterController Component => component;
 
 
         private Transform PlayerContainer
@@ -39,21 +39,21 @@ namespace Arenar
         }
 
 
-        public PlayerCharacterSpawnController(ICharacterEntityFactory<PlayerCharacterController> playerFactory,
-                                    PlayerCharacterController playerCharacterPrefabs)
+        public PlayerCharacterSpawnController(ICharacterEntityFactory<ComponentCharacterController> playerFactory,
+                                    ComponentCharacterController componentCharacterPrefabs)
         {
             this.playerFactory = playerFactory;
-            this._playerCharacterPrefabs = playerCharacterPrefabs;
+            this.componentCharacterPrefabs = componentCharacterPrefabs;
         }
         
         
-        public PlayerCharacterController CreateCharacter()
+        public ComponentCharacterController CreateCharacter()
         {
-            PlayerCharacterController playerCharacter = playerFactory.Create(_playerCharacterPrefabs, playerContainer);
-            playerCharacter.gameObject.transform.SetParent(PlayerContainer);
-            player = playerCharacter;
-            OnCreatePlayerCharacter?.Invoke(player);
-            return playerCharacter;
+            ComponentCharacterController componentCharacter = playerFactory.Create(componentCharacterPrefabs, playerContainer);
+            componentCharacter.gameObject.transform.SetParent(PlayerContainer);
+            component = componentCharacter;
+            OnCreatePlayerCharacter?.Invoke(component);
+            return componentCharacter;
         }
     }
 }
