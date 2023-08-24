@@ -24,8 +24,8 @@ namespace Arenar.Character
         private TickableManager tickableManager;
         private bool isInteractible;
         
-        private ICharacterAnimationComponent<CharacterAnimationComponent.KittyAnimation,
-            CharacterAnimationComponent.KittyAnimationValue> _characterAnimationComponent;
+        private ICharacterAnimationComponent<CharacterAnimationComponent.Animation,
+            CharacterAnimationComponent.AnimationValue> _characterAnimationComponent;
         private ICharacterLiveComponent _liveComponent;
         private ICharacterRayCastComponent _rayCastComponent;
         private ICharacterInputComponent _inputComponent;
@@ -59,8 +59,8 @@ namespace Arenar.Character
             
             if (character.TryGetCharacterComponent<ICharacterAnimationComponent>(out ICharacterAnimationComponent animationComponent))
             {
-                if (animationComponent is ICharacterAnimationComponent<CharacterAnimationComponent.KittyAnimation,
-                    CharacterAnimationComponent.KittyAnimationValue> neededComponent)
+                if (animationComponent is ICharacterAnimationComponent<CharacterAnimationComponent.Animation,
+                    CharacterAnimationComponent.AnimationValue> neededComponent)
                 {
                     _characterAnimationComponent = neededComponent;
                 }

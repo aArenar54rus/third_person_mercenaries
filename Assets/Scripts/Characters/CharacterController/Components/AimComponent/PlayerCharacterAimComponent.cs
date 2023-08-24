@@ -65,7 +65,7 @@ namespace Arenar.Character
                 ? CinemachineCameraType.AimTPS
                 : CinemachineCameraType.DefaultTPS);
 
-            CharacterAnimationComponent.SetAnimationValue(CharacterAnimationComponent.KittyAnimationValue.Aim, IsAim ? 1 : 0);
+            CharacterAnimationComponent.SetAnimationValue(CharacterAnimationComponent.AnimationValue.Aim, IsAim ? 1 : 0);
         }
     }
 }

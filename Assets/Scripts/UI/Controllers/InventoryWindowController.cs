@@ -9,7 +9,7 @@ namespace Arenar.UI
     public class InventoryWindowController : CanvasWindowController
     {
         private IInventoryService inventoryService;
-        private PlayerCharacterSpawnController playerCharacterSpawnController;
+        private TestCharacterSpawnController testCharacterSpawnController;
 
 
         private InventoryEquipCanvasLayer inventoryEquipCanvasLayer;
@@ -18,10 +18,10 @@ namespace Arenar.UI
         
         
         [Inject]
-        public void Construct(PlayerCharacterSpawnController playerCharacterSpawnController,
+        public void Construct(TestCharacterSpawnController testCharacterSpawnController,
                               IInventoryService inventoryService)
         {
-            this.playerCharacterSpawnController = playerCharacterSpawnController;
+            this.testCharacterSpawnController = testCharacterSpawnController;
             this.inventoryService = inventoryService;
         }
         

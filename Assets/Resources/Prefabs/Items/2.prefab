@@ -151,7 +151,7 @@ MonoBehaviour:
       - Key: 4
         Value: 1.5
     attackSpeed: 0.5
-    firearmAttackType: 1
+    firearmAttackType: 2
     isAutomaticShoot: 0
     clipSizeMax: 10
     defaultReloadSpeed: 3

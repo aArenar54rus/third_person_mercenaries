@@ -10,7 +10,7 @@ namespace Arenar.UI
     public class CrossGameplayController : CanvasWindowController, ITickable
     {
         private TickableManager tickableManager;
-        private PlayerCharacterSpawnController playerCharacterSpawnController;
+        private TestCharacterSpawnController testCharacterSpawnController;
         
         private Image crossImage;
         private RectTransform crossRT;
@@ -27,7 +27,7 @@ namespace Arenar.UI
             {
                 if (component == null)
                 {
-                    component = playerCharacterSpawnController.Component;
+                    component = testCharacterSpawnController.PlayerCharacter;
                     if (component == null)
                         return null;
                 }
@@ -53,10 +53,10 @@ namespace Arenar.UI
 
 
         [Inject]
-        public void Construct(PlayerCharacterSpawnController playerCharacterSpawnController,
+        public void Construct(TestCharacterSpawnController testCharacterSpawnController,
                               TickableManager tickableManager)
         {
-            this.playerCharacterSpawnController = playerCharacterSpawnController;
+            this.testCharacterSpawnController = testCharacterSpawnController;
             this.tickableManager = tickableManager;
         }
 

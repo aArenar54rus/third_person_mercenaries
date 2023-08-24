@@ -10,6 +10,7 @@ namespace Arenar
     public class PlayerCharacterDataSOInstaller : ScriptableObjectInstaller<PlayerCharacterDataSOInstaller>
     {
         [FormerlySerializedAs("playerCharacterPrefab")] [SerializeField] private ComponentCharacterController componentCharacterPrefab = default;
+        [SerializeField] private PuppetComponentCharacterController puppetComponentCharacterPrefab = default;
         [SerializeField] private PlayerCharacterParametersData playerCharacterParametersData = default;
         [SerializeField] private KittyColorRangeData kittyColorRangeData = default;
 
@@ -17,6 +18,7 @@ namespace Arenar
         public override void InstallBindings()
         {
             Container.BindInstance(componentCharacterPrefab).AsSingle();
+            Container.BindInstance(puppetComponentCharacterPrefab).AsSingle();
             Container.BindInstance(playerCharacterParametersData).AsSingle();
             Container.BindInstance(kittyColorRangeData).AsSingle();
         }

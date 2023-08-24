@@ -85,6 +85,8 @@ namespace Arenar.Character
                 ObjectOnCross = null;
                 RaycastPoint = Vector3.zero;
             }
+
+            CharacterControllerOnCross = GetComponentCharacterController();
         }
 
         private bool IsGroundedCheck()
@@ -138,6 +140,17 @@ namespace Arenar.Character
             if (heading > _maxSqrDistance)
                 return null;
             
+            return element;
+        }
+
+        private ComponentCharacterController GetComponentCharacterController()
+        {
+            if (!TryGetObjectOnCross(out Transform objectHit))
+                return null;
+            
+            if (!objectHit.gameObject.TryGetComponent<ComponentCharacterController>(out ComponentCharacterController element))
+                return null;
+
             return element;
         }
     }

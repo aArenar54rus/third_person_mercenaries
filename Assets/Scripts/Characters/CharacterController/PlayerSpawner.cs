@@ -8,7 +8,7 @@ namespace Arenar
 {
     public class PlayerSpawner : MonoBehaviour
     {
-        [Inject] private PlayerCharacterSpawnController _playerCharacterSpawnController;
+        [Inject] private TestCharacterSpawnController testCharacterSpawnController;
         [Inject] private ICameraService cameraService;
 
         private ComponentCharacterController componentCharacter;
@@ -16,7 +16,7 @@ namespace Arenar
 
         private void Start()
         {
-            componentCharacter = _playerCharacterSpawnController.CreateCharacter();
+            componentCharacter = testCharacterSpawnController.CreateCharacter();
             cameraService.SetCinemachineVirtualCamera(CinemachineCameraType.DefaultTPS);
         }
         

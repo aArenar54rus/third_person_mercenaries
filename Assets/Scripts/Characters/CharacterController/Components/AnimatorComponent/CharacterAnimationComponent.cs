@@ -5,14 +5,15 @@ using Zenject;
 namespace Arenar.Character
 {
     public class CharacterAnimationComponent
-        : ICharacterAnimationComponent<CharacterAnimationComponent.KittyAnimation, CharacterAnimationComponent.KittyAnimationValue>, ITickable
+        : ICharacterAnimationComponent<CharacterAnimationComponent.Animation, CharacterAnimationComponent.AnimationValue>, ITickable
     {
-        public enum KittyAnimation : byte
+        public enum Animation : byte
         {
             None = 0,
+            Shoot = 1,
         }
 
-        public enum KittyAnimationValue : byte
+        public enum AnimationValue : byte
         {
             None = 0,
             Speed = 1,
@@ -44,7 +45,7 @@ namespace Arenar.Character
         private int animIDMotionSpeedY;
         private int animIDAim;
         private int animIDHandPistol;
-        
+
 
         private Animator KittyAnimator =>
             characterAnimatorDataStorage.Animator;
@@ -89,54 +90,56 @@ namespace Arenar.Character
 
         public void OnStart() {}
 
-        public void PlayAnimation(KittyAnimation animationType)
+        public void PlayAnimation(Animation animationType)
         {
-            return;
-            
             switch (animationType)
             {
+                case Animation.Shoot:
+                    SetAnimationTrigger(characterAnimatorDataStorage.ShootAnimationName);
+                    break;
+                
                 default:
                     Debug.LogError($"Not found animation {animationType} for kitty!");
                     break;
             }
         }
 
-        public void SetAnimationValue(KittyAnimationValue animationValue, float value)
+        public void SetAnimationValue(AnimationValue animationValue, float value)
         {
             switch (animationValue)
             {
-                case KittyAnimationValue.Speed:
+                case AnimationValue.Speed:
                     SetAnimationFloat(animIDSpeed, value);
                     break;
                 
-                case KittyAnimationValue.MotionSpeedX:
+                case AnimationValue.MotionSpeedX:
                     SetAnimationFloat(animIDMotionSpeedX, value);
                     break;
                 
-                case KittyAnimationValue.MotionSpeedY:
+                case AnimationValue.MotionSpeedY:
                     SetAnimationFloat(animIDMotionSpeedY, value);
                     break;
                 
-                case KittyAnimationValue.Jump:
+                case AnimationValue.Jump:
                     SetAnimationBool(animIDJump, value > 0);
                     break;
                 
-                case KittyAnimationValue.FreeFall:
+                case AnimationValue.FreeFall:
                     SetAnimationBool(animIDFreeFall, value > 0);
                     break;
                 
-                case KittyAnimationValue.Grounded:
+                case AnimationValue.Grounded:
                     SetAnimationBool(animIDGrounded, value > 0);
                     break;
                 
-                case KittyAnimationValue.Aim:
+                case AnimationValue.Aim:
                     SetAnimationBool(animIDAim, value > 0);
                     break;
                 
-                case KittyAnimationValue.HandPistol:
+                case AnimationValue.HandPistol:
                     SetAnimationBool(animIDHandPistol, value > 0);
                     break;
-                
+
                 default:
                     Debug.LogError($"Unknown type {animationValue} for character animation.");
                     break;

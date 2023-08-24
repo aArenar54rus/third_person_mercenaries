@@ -5,23 +5,23 @@ using UnityEngine;
 
 namespace Arenar
 {
-    public class PlayerCharacterSpawnController
+    public class TestCharacterSpawnController
     {
         public event Action<ComponentCharacterController> OnCreatePlayerCharacter;
         
         
         private Transform playerContainer;
         private ComponentCharacterController componentCharacterPrefabs;
-        
+        private PuppetComponentCharacterController puppetComponentCharacterPrefab;
         private ICharacterEntityFactory<ComponentCharacterController> playerFactory;
 
         private bool canSpawn = false;
         private float spawnTimer = default;
 
-        private ComponentCharacterController component;
+        private ComponentCharacterController playerCharacter;
 
 
-        public ComponentCharacterController Component => component;
+        public ComponentCharacterController PlayerCharacter => playerCharacter;
 
 
         private Transform PlayerContainer
@@ -39,11 +39,13 @@ namespace Arenar
         }
 
 
-        public PlayerCharacterSpawnController(ICharacterEntityFactory<ComponentCharacterController> playerFactory,
-                                    ComponentCharacterController componentCharacterPrefabs)
+        public TestCharacterSpawnController(ICharacterEntityFactory<ComponentCharacterController> playerFactory,
+                                    ComponentCharacterController componentCharacterPrefabs,
+                                    PuppetComponentCharacterController puppetComponentCharacterPrefab)
         {
             this.playerFactory = playerFactory;
             this.componentCharacterPrefabs = componentCharacterPrefabs;
+            this.puppetComponentCharacterPrefab = puppetComponentCharacterPrefab;
         }
         
         
@@ -51,8 +53,18 @@ namespace Arenar
         {
             ComponentCharacterController componentCharacter = playerFactory.Create(componentCharacterPrefabs, playerContainer);
             componentCharacter.gameObject.transform.SetParent(PlayerContainer);
-            component = componentCharacter;
-            OnCreatePlayerCharacter?.Invoke(component);
+            playerCharacter = componentCharacter;
+            OnCreatePlayerCharacter?.Invoke(playerCharacter);
+            return componentCharacter;
+        }
+
+        public PuppetComponentCharacterController CreatePuppet()
+        {
+            PuppetComponentCharacterController componentCharacter =
+                (PuppetComponentCharacterController)playerFactory.Create(puppetComponentCharacterPrefab, playerContainer);
+            
+            componentCharacter.gameObject.transform.SetParent(PlayerContainer);
+            componentCharacter.gameObject.transform.position = new Vector3(2, 0, 0);
             return componentCharacter;
         }
     }

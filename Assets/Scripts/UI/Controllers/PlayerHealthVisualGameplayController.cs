@@ -8,7 +8,7 @@ namespace Arenar.Services.UI
 {
     public class PlayerHealthVisualGameplayController : CanvasWindowController
     {
-        private PlayerCharacterSpawnController playerCharacterSpawnController;
+        private TestCharacterSpawnController testCharacterSpawnController;
         private ICharacterLiveComponent playerCharacterLiveComponent;
         private ICharacterProgressionComponent playerCharacterProgressionComponent;
         
@@ -22,7 +22,7 @@ namespace Arenar.Services.UI
             {
                 if (playerCharacterController == null)
                 {
-                    playerCharacterController = playerCharacterSpawnController.Component;
+                    playerCharacterController = testCharacterSpawnController.PlayerCharacter;
                     if (playerCharacterController == null)
                         return null;
                 }
@@ -63,9 +63,9 @@ namespace Arenar.Services.UI
         
         
         [Inject]
-        public void Construct(PlayerCharacterSpawnController playerCharacterSpawnController)
+        public void Construct(TestCharacterSpawnController testCharacterSpawnController)
         {
-            this.playerCharacterSpawnController = playerCharacterSpawnController;
+            this.testCharacterSpawnController = testCharacterSpawnController;
         }
         
         public override void Initialize(ICanvasService canvasService)
@@ -78,10 +78,10 @@ namespace Arenar.Services.UI
 
             gameplayPlayerParametersWindowLayer.GetComponent<Canvas>().enabled = true;
 
-            playerCharacterSpawnController.OnCreatePlayerCharacter += OnInstallNewPlayerCharacter;
+            testCharacterSpawnController.OnCreatePlayerCharacter += OnInstallNewTestCharacter;
         }
 
-        private void OnInstallNewPlayerCharacter(ComponentCharacterController characterController)
+        private void OnInstallNewTestCharacter(ComponentCharacterController characterController)
         {
             playerCharacterController = characterController;
             

@@ -15,7 +15,7 @@ MonoBehaviour:
   itemProjectilePrefabs:
     IsSingleLineView: 1
     list:
-    - Key: 0
+    - Key: 2
       Value: {fileID: 741621373576656467, guid: 4ff9cc91634687141aa9b2c733a4dd2b,
         type: 3}
   defaultSpawnCount: 20

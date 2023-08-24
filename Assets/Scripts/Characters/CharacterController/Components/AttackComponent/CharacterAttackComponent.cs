@@ -14,7 +14,8 @@ namespace Arenar.Character
         
         private ICharacterInputComponent characterInputComponent;
         private ICharacterRayCastComponent characterRayCastComponent;
-        private ICharacterAnimationComponent<CharacterAnimationComponent.KittyAnimation, CharacterAnimationComponent.KittyAnimationValue> characterAnimationComponent;
+        private FirearmWeaponFactory firearmWeaponFactory;
+        private ICharacterAnimationComponent<CharacterAnimationComponent.Animation, CharacterAnimationComponent.AnimationValue> characterAnimationComponent;
         
         private CharacterPhysicsDataStorage characterPhysicsData;
         private CharacterAimAnimationDataStorage characterAimAnimationData;
@@ -40,12 +41,14 @@ namespace Arenar.Character
         public void Construct(ICharacterEntity character,
                               TickableManager tickableManager,
                               IInventoryService inventoryService,
+                              FirearmWeaponFactory firearmWeaponFactory,
                               ICharacterDataStorage<CharacterPhysicsDataStorage> characterPhysicsDataStorage,
                               ICharacterDataStorage<CharacterAimAnimationDataStorage> characterAimAnimationDataStorage)
         {
             this.character = character;
             this.tickableManager = tickableManager;
             this.inventoryService = inventoryService;
+            this.firearmWeaponFactory = firearmWeaponFactory;
             
             characterPhysicsData = characterPhysicsDataStorage.Data;
             characterAimAnimationData = characterAimAnimationDataStorage.Data;
@@ -119,6 +122,7 @@ namespace Arenar.Character
                 Vector3 direction = characterAimAnimationData.BodyAimPointObject.position - firearmWeapon.GunMuzzleTransform.position;
                 direction = direction.normalized;
                 firearmWeapon.MakeShot(direction, false);
+                characterAnimationComponent.PlayAnimation(CharacterAnimationComponent.Animation.Shoot);
             }
         }
 
@@ -153,21 +157,12 @@ namespace Arenar.Character
                     firearmWeapon = null;
                 }
                 
-                characterAnimationComponent.SetAnimationValue(CharacterAnimationComponent.KittyAnimationValue.HandPistol, 0);
+                characterAnimationComponent.SetAnimationValue(CharacterAnimationComponent.AnimationValue.HandPistol, 0);
             }
             else
             {
-                var weaponObject = GameObject.Instantiate(
-                    Resources.Load<GameObject>("Prefabs/Items/" + equippedWeapon.itemData.Id),
-                    characterPhysicsData.RightHandPoint);
-
-                firearmWeapon = weaponObject.GetComponent<FirearmWeapon>();
-                firearmWeapon.InitializeWeapon(equippedWeapon.itemData);
-                
-                weaponObject.transform.localPosition = Vector3.zero;
-                weaponObject.transform.localRotation = Quaternion.Euler(firearmWeapon.LocalRotation);
-                
-                characterAnimationComponent.SetAnimationValue(CharacterAnimationComponent.KittyAnimationValue.HandPistol, 1);
+                firearmWeapon = firearmWeaponFactory.Create(equippedWeapon, characterPhysicsData.RightHandPoint);
+                characterAnimationComponent.SetAnimationValue(CharacterAnimationComponent.AnimationValue.HandPistol, 1);
             }
         }
     }

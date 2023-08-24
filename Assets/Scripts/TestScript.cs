@@ -6,13 +6,15 @@ using Zenject;
 
 public class TestScript : MonoBehaviour
 {
-    [Inject] private PlayerCharacterSpawnController _playerCharacterSpawnController;
+    [Inject] private TestCharacterSpawnController testCharacterSpawnController;
     [Inject] private ICameraService cameraService;
     
     
     void Start()
     {
-        var player = _playerCharacterSpawnController.CreateCharacter();
+        var player = testCharacterSpawnController.CreateCharacter();
         cameraService.SetCameraState<CameraStateThirdPerson>(player.CameraTransform, player.CharacterTransform);
+
+        testCharacterSpawnController.CreatePuppet();
     }
 }

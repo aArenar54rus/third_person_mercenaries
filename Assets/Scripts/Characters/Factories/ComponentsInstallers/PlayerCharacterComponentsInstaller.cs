@@ -16,7 +16,7 @@ namespace Arenar.Character
         {
             Dictionary<Type, ICharacterComponent> characterComponentsPool = new Dictionary<Type, ICharacterComponent>();
             
-            ICharacterAnimationComponent<CharacterAnimationComponent.KittyAnimation, CharacterAnimationComponent.KittyAnimationValue> animationComponent = new CharacterAnimationComponent();
+            ICharacterAnimationComponent<CharacterAnimationComponent.Animation, CharacterAnimationComponent.AnimationValue> animationComponent = new CharacterAnimationComponent();
             characterComponentsPool.Add(typeof(ICharacterAnimationComponent), animationComponent);
             Container.BindInstance(animationComponent).AsSingle();
             Container.Inject(animationComponent);

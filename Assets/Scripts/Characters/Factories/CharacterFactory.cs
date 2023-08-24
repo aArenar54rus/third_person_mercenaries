@@ -11,10 +11,11 @@ namespace Arenar.Character
         private readonly InitializableManager initializableManager;
 
 
-        public CharacterFactory(DiContainer container, TickableManager tickableManager)
+        public CharacterFactory(DiContainer container, TickableManager tickableManager, InitializableManager initializableManager)
         {
             this.container = container;
             this.tickableManager = tickableManager;
+            this.initializableManager = initializableManager;
         }
         
         

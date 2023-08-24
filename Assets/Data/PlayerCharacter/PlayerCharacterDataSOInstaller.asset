@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   componentCharacterPrefab: {fileID: 3594676180851512963, guid: 1d321af736df10f4a901a9520948c692,
     type: 3}
+  puppetComponentCharacterPrefab: {fileID: 2352429939940656434, guid: 9efe808d6941e8f41a1872ba7e99cf58,
+    type: 3}
   playerCharacterParametersData:
     defaultHealthMax: 100
     moveSpeed: 2.3

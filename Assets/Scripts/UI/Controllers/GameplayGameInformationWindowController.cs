@@ -8,7 +8,7 @@ namespace Arenar.Services.UI
 {
     public class GameplayGameInformationWindowController : CanvasWindowController, ITickable
     {
-        private PlayerCharacterSpawnController playerCharacterSpawnController;
+        private TestCharacterSpawnController testCharacterSpawnController;
         private GameplayInformationLayer gameplayInformationLayer;
         private ICharacterRayCastComponent playerCharacterRaycastComponent;
         private ComponentCharacterController component;
@@ -24,7 +24,7 @@ namespace Arenar.Services.UI
             {
                 if (component == null)
                 {
-                    component = playerCharacterSpawnController.Component;
+                    component = testCharacterSpawnController.PlayerCharacter;
                     if (component == null)
                         return null;
                 }
@@ -47,9 +47,9 @@ namespace Arenar.Services.UI
         
         [Inject]
         public void Construct(TickableManager tickableManager,
-            PlayerCharacterSpawnController playerCharacterSpawnController)
+            TestCharacterSpawnController testCharacterSpawnController)
         {
-            this.playerCharacterSpawnController = playerCharacterSpawnController;
+            this.testCharacterSpawnController = testCharacterSpawnController;
             tickableManager.Add(this);
         }
 
