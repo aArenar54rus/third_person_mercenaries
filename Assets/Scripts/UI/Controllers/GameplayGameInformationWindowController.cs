@@ -16,6 +16,7 @@ namespace Arenar.Services.UI
         private ComponentCharacterController characterOnCross;
         private ICharacterDescriptionComponent descriptionComponent = null;
         private ICharacterLiveComponent characterLiveComponent = null;
+        private ICharacterAimComponent characterAimComponent = null;
         
         
         private ComponentCharacterController PlayerCharacter
@@ -43,6 +44,17 @@ namespace Arenar.Services.UI
                 return playerCharacterRaycastComponent;
             }
         }
+
+        private ICharacterAimComponent PlayerCharacterAimComponent
+        {
+            get
+            {
+                if (characterAimComponent == null)
+                    PlayerCharacter.TryGetCharacterComponent(out characterAimComponent);
+
+                return characterAimComponent;
+            }
+        }
         
         
         [Inject]
@@ -67,8 +79,23 @@ namespace Arenar.Services.UI
         
         public void Tick()
         {
+            UpdateTextMessage();
+            UpdateEnemyTargetInfoPanel();
+        }
+
+        private void UpdateTextMessage()
+        {
             InteractableElement interactableElement = PlayerCharacterRaycastComponent.InteractableElementsOnCross;
             gameplayInformationLayer.InformationText.enabled = interactableElement != null;
+        }
+
+        private void UpdateEnemyTargetInfoPanel()
+        {
+            if (!PlayerCharacterAimComponent.IsAim)
+            {
+                OnEnemyCharacterDie();
+                return;
+            }
 
             ComponentCharacterController enemyCharacterController = PlayerCharacterRaycastComponent.CharacterControllerOnCross;
             if (characterOnCross == enemyCharacterController)
@@ -97,6 +124,8 @@ namespace Arenar.Services.UI
             {
                 OnEnemyCharacterDie();
             }
+            
+            characterOnCross = enemyCharacterController;
         }
 
         private void OnEnemyCharacterChangeHealthValue(int health, int healthMax) =>

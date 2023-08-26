@@ -155,7 +155,7 @@ MonoBehaviour:
     isAutomaticShoot: 0
     clipSizeMax: 10
     defaultReloadSpeed: 3
-    projectileSpeed: 10
+    projectileSpeed: 40
   secondHandPoint: {fileID: 0}
   localRotation: {x: -15, y: 90, z: -90}
   lineRendererEffect: {fileID: 8246335184379622501}

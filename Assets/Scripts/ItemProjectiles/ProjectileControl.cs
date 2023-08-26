@@ -6,9 +6,10 @@ namespace Arenar
     public abstract class ProjectileControl : MonoBehaviour
     {
         [SerializeField] protected Transform bulletTransform;
-        [SerializeField] protected Rigidbody bulletRb;
 
-        private float bulletDamage;
+        protected Vector3 _movementVector;
+        protected float _bulletDamage;
+        protected float _speed;
 
         public bool IsActive { get; private set; } = false;
 
@@ -17,24 +18,30 @@ namespace Arenar
         {
             bulletTransform.position = startPoint;
             bulletTransform.localRotation = Quaternion.Euler(movementVector);
-            this.bulletDamage = bulletDamage;
+            
+            _bulletDamage = bulletDamage;
+            _speed = speed;
+            _movementVector = movementVector;
             
             gameObject.SetActive(true);
-            bulletRb.velocity = movementVector * speed;
 
             IsActive = true;
         }
 
         public void DeInitialize()
         {
-            bulletRb.velocity = Vector3.zero;
             gameObject.SetActive(false);
-
             IsActive = false;
+        }
+
+        private void Update()
+        {
+            bulletTransform.position += _movementVector * (_speed * Time.deltaTime);
         }
 
         private void OnTriggerEnter(Collider other)
         {
+            Debug.LogError("fly end");
             DeInitialize();
         }
     }
