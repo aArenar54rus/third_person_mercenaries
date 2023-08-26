@@ -11,35 +11,20 @@ namespace Arenar.Services.UI
         private TestCharacterSpawnController testCharacterSpawnController;
         private GameplayInformationLayer gameplayInformationLayer;
         private ICharacterRayCastComponent playerCharacterRaycastComponent;
-        private ComponentCharacterController component;
 
         private ComponentCharacterController characterOnCross;
         private ICharacterDescriptionComponent descriptionComponent = null;
         private ICharacterLiveComponent characterLiveComponent = null;
         private ICharacterAimComponent characterAimComponent = null;
+        private ComponentCharacterController playerCharacter;
         
-        
-        private ComponentCharacterController PlayerCharacter
-        {
-            get
-            {
-                if (component == null)
-                {
-                    component = testCharacterSpawnController.PlayerCharacter;
-                    if (component == null)
-                        return null;
-                }
-
-                return component;
-            }
-        }
 
         private ICharacterRayCastComponent PlayerCharacterRaycastComponent
         {
             get
             {
                 if (playerCharacterRaycastComponent == null)
-                    PlayerCharacter.TryGetCharacterComponent(out playerCharacterRaycastComponent);
+                    playerCharacter.TryGetCharacterComponent(out playerCharacterRaycastComponent);
 
                 return playerCharacterRaycastComponent;
             }
@@ -50,7 +35,7 @@ namespace Arenar.Services.UI
             get
             {
                 if (characterAimComponent == null)
-                    PlayerCharacter.TryGetCharacterComponent(out characterAimComponent);
+                    playerCharacter.TryGetCharacterComponent(out characterAimComponent);
 
                 return characterAimComponent;
             }
@@ -75,25 +60,30 @@ namespace Arenar.Services.UI
 
             gameplayInformationLayer.GetComponent<Canvas>().enabled = true;
             gameplayInformationLayer.EnemyTargetInformationPanel.UnsetEnemy();
+
+            testCharacterSpawnController.OnCreatePlayerCharacter += OnCreatePlayerCharacter;
         }
         
         public void Tick()
         {
-            UpdateTextMessage();
-            UpdateEnemyTargetInfoPanel();
+            if (playerCharacter == null)
+                return;
+            
+            TickUpdateTextMessage();
+            TickUpdateEnemyTargetInfoPanel();
         }
 
-        private void UpdateTextMessage()
+        private void TickUpdateTextMessage()
         {
             InteractableElement interactableElement = PlayerCharacterRaycastComponent.InteractableElementsOnCross;
             gameplayInformationLayer.InformationText.enabled = interactableElement != null;
         }
 
-        private void UpdateEnemyTargetInfoPanel()
+        private void TickUpdateEnemyTargetInfoPanel()
         {
             if (!PlayerCharacterAimComponent.IsAim)
             {
-                OnEnemyCharacterDie();
+                OnEnemyCharacterInfoDisable();
                 return;
             }
 
@@ -113,16 +103,16 @@ namespace Arenar.Services.UI
                     OnEnemyCharacterChangeHealthValue(characterLiveComponent.Health, characterLiveComponent.HealthMax);
                     
                     characterLiveComponent.OnCharacterChangeHealthValue += OnEnemyCharacterChangeHealthValue;
-                    characterLiveComponent.OnCharacterDie += OnEnemyCharacterDie;
+                    characterLiveComponent.OnCharacterDie += OnEnemyCharacterInfoDisable;
                 }
                 else
                 {
-                    OnEnemyCharacterDie();
+                    OnEnemyCharacterInfoDisable();
                 }
             }
             else
             {
-                OnEnemyCharacterDie();
+                OnEnemyCharacterInfoDisable();
             }
             
             characterOnCross = enemyCharacterController;
@@ -131,7 +121,7 @@ namespace Arenar.Services.UI
         private void OnEnemyCharacterChangeHealthValue(int health, int healthMax) =>
             gameplayInformationLayer.EnemyTargetInformationPanel.UpdateEnemyHealth(health, healthMax);
 
-        private void OnEnemyCharacterDie()
+        private void OnEnemyCharacterInfoDisable()
         {
             gameplayInformationLayer.EnemyTargetInformationPanel.UnsetEnemy();
             
@@ -139,8 +129,13 @@ namespace Arenar.Services.UI
                 return;
             
             characterLiveComponent.OnCharacterChangeHealthValue -= OnEnemyCharacterChangeHealthValue;
-            characterLiveComponent.OnCharacterDie -= OnEnemyCharacterDie;
+            characterLiveComponent.OnCharacterDie -= OnEnemyCharacterInfoDisable;
             characterOnCross = null;
+        }
+
+        private void OnCreatePlayerCharacter(ComponentCharacterController playerCharacterController)
+        {
+            playerCharacter = playerCharacterController;
         }
     }
 }

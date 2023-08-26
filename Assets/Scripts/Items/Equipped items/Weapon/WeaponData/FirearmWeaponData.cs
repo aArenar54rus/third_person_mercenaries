@@ -15,6 +15,7 @@ namespace Arenar
         [SerializeField] private int clipSizeMax;
         [SerializeField] private float defaultReloadSpeed;
         [SerializeField] private float projectileSpeed;
+        [SerializeField] private float recoilShakeDefaultValue;
 
 
         public ItemFirearmAttackType FirearmAttackType =>
@@ -28,5 +29,7 @@ namespace Arenar
         public float DefaultReloadSpeed => defaultReloadSpeed;
         
         public float ProjectileSpeed => projectileSpeed;
+
+        public float RecoilShakeDefaultValue => recoilShakeDefaultValue;
     }
 }

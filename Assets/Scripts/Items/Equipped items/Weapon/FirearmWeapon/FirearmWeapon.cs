@@ -12,8 +12,9 @@ namespace Arenar
         [SerializeField] protected Transform secondHandPoint;
         [SerializeField] protected Vector3 localRotation = new Vector3(-15, 90, -90);
         [SerializeField] protected LineRenderer lineRendererEffect;
-
+        [SerializeField] protected FirearmWeaponCameraRecoilComponent firearmWeaponCameraRecoilComponent;
         [Inject] protected ItemProjectileSpawner projectileSpawner;
+        
         protected int currentClipSize;
 
 
@@ -40,6 +41,9 @@ namespace Arenar
         public Vector3 LocalRotation => localRotation;
 
         public LineRenderer LineRendererEffect => lineRendererEffect;
+
+        private Vector3 RecoilShakeDirection =>
+            new Vector3(Random.Range(-1.0f, 1.0f), 1.0f, 0.0f) / 100.0f * firearmWeaponData.RecoilShakeDefaultValue;
 
 
         public void ReloadClip(bool isFull)
@@ -95,6 +99,8 @@ namespace Arenar
                     }
                     break;
             }
+            
+            firearmWeaponCameraRecoilComponent.ApplyShootRecoil(RecoilShakeDirection);
             
             if (!isInfinityClip)
                 currentClipSize--;

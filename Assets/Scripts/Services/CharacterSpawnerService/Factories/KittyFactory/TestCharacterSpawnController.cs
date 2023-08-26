@@ -14,11 +14,11 @@ namespace Arenar
         private ComponentCharacterController componentCharacterPrefabs;
         private PuppetComponentCharacterController puppetComponentCharacterPrefab;
         private ICharacterEntityFactory<ComponentCharacterController> playerFactory;
-
+        
+        private ComponentCharacterController playerCharacter;
+        
         private bool canSpawn = false;
         private float spawnTimer = default;
-
-        private ComponentCharacterController playerCharacter;
 
 
         public ComponentCharacterController PlayerCharacter => playerCharacter;
@@ -51,7 +51,7 @@ namespace Arenar
         
         public ComponentCharacterController CreateCharacter()
         {
-            ComponentCharacterController componentCharacter = playerFactory.Create(componentCharacterPrefabs, playerContainer);
+            ComponentCharacterController componentCharacter = playerFactory.Create(componentCharacterPrefabs, PlayerContainer);
             componentCharacter.gameObject.transform.SetParent(PlayerContainer);
             playerCharacter = componentCharacter;
             OnCreatePlayerCharacter?.Invoke(playerCharacter);
@@ -61,7 +61,7 @@ namespace Arenar
         public PuppetComponentCharacterController CreatePuppet()
         {
             PuppetComponentCharacterController componentCharacter =
-                (PuppetComponentCharacterController)playerFactory.Create(puppetComponentCharacterPrefab, playerContainer);
+                (PuppetComponentCharacterController)playerFactory.Create(puppetComponentCharacterPrefab, PlayerContainer);
             
             componentCharacter.gameObject.transform.SetParent(PlayerContainer);
             componentCharacter.gameObject.transform.position = new Vector3(2, 0, 0);

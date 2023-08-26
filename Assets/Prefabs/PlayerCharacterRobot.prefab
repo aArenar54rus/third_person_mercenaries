@@ -4976,6 +4976,7 @@ MonoBehaviour:
     motionSpeedAnimationXName: MotionSpeedX
     motionSpeedAnimationYName: MotionSpeedY
     handPistolAnimationName: HandPistol
+    shootAnimationName: Shoot
   characterPhysicsDataStorage:
     characterTransform: {fileID: 8886542636944289912}
     cameraTransform: {fileID: 4534734409247019934}

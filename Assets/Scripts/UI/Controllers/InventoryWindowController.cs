@@ -9,8 +9,6 @@ namespace Arenar.UI
     public class InventoryWindowController : CanvasWindowController
     {
         private IInventoryService inventoryService;
-        private TestCharacterSpawnController testCharacterSpawnController;
-
 
         private InventoryEquipCanvasLayer inventoryEquipCanvasLayer;
         private InventoryBagCanvasLayer inventoryBagCanvasLayer;
@@ -18,10 +16,8 @@ namespace Arenar.UI
         
         
         [Inject]
-        public void Construct(TestCharacterSpawnController testCharacterSpawnController,
-                              IInventoryService inventoryService)
+        public void Construct(IInventoryService inventoryService)
         {
-            this.testCharacterSpawnController = testCharacterSpawnController;
             this.inventoryService = inventoryService;
         }
         

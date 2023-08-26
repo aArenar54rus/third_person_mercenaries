@@ -9,9 +9,9 @@ public class PlayerSpawnerInstaller : MonoInstaller<PlayerSpawnerInstaller>
     {
         Container.Bind<ICharacterEntityFactory<ComponentCharacterController>>()
             .To<CharacterFactory>()
-            .AsSingle();
+            .AsSingle().NonLazy();
 
         Container.Bind<TestCharacterSpawnController>()
-            .AsSingle();
+            .AsSingle().NonLazy();
     }
 }

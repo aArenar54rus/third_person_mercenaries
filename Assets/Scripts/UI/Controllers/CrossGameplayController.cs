@@ -15,26 +15,11 @@ namespace Arenar.UI
         private Image crossImage;
         private RectTransform crossRT;
 
-        private ComponentCharacterController component;
-        private ICharacterAimComponent characterAimComponent;
-
         private CrossCanvasWindowLayer crossGameplayCanvasLayer;
 
+        private ComponentCharacterController playerCharacter;
+        private ICharacterAimComponent characterAimComponent;
 
-        private ComponentCharacterController Character
-        {
-            get
-            {
-                if (component == null)
-                {
-                    component = testCharacterSpawnController.PlayerCharacter;
-                    if (component == null)
-                        return null;
-                }
-
-                return component;
-            }
-        }
 
         private ICharacterAimComponent CharacterAimComponent
         {
@@ -42,9 +27,9 @@ namespace Arenar.UI
             {
                 if (characterAimComponent == null)
                 {
-                    if (Character == null)
+                    if (playerCharacter == null)
                         return null;
-                    Character.TryGetCharacterComponent<ICharacterAimComponent>(out characterAimComponent);
+                    playerCharacter.TryGetCharacterComponent<ICharacterAimComponent>(out characterAimComponent);
                 }
 
                 return characterAimComponent;
@@ -70,20 +55,26 @@ namespace Arenar.UI
 
             crossImage = crossGameplayCanvasLayer.CrossImage;
             crossRT = crossGameplayCanvasLayer.CrossRT;
-            
+
+            testCharacterSpawnController.OnCreatePlayerCharacter += OnCreatePlayerCharacter;
             tickableManager.Add(this);
         }
-
-        private void SetCrossScale(float scale) =>
-            crossRT.localScale = new Vector3(scale, scale, 1);
 
         private void SetCrossVisibleStatus(bool status) =>
             crossImage.gameObject.SetActive(status);
 
         public void Tick()
         {
+            if (playerCharacter == null)
+                return;
+            
             if (CharacterAimComponent != null)
                 SetCrossVisibleStatus(CharacterAimComponent.IsAim);
+        }
+
+        private void OnCreatePlayerCharacter(ComponentCharacterController playerCharacter)
+        {
+            this.playerCharacter = playerCharacter;
         }
     }
 }
