@@ -1,9 +1,8 @@
-using Arenar.Services.UI;
 using TMPro;
 using UnityEngine;
 
 
-namespace Arenar.UI
+namespace Arenar.Services.UI
 {
     public class GameplayInformationLayer : CanvasWindowLayer
     {

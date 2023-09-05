@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using Arenar.Services.UI;
 using UnityEngine;
 
-namespace Arenar.UI
+
+namespace Arenar.Services.UI
 {
     public class TransitionController : ITransitionController
 	{

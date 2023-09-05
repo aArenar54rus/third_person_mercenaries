@@ -1,5 +1,4 @@
 using Arenar.Character;
-using Arenar.UI;
 using UnityEngine;
 using Zenject;
 
@@ -72,7 +71,7 @@ namespace Arenar.Services.UI
         {
             base.Initialize(canvasService);
 
-            gameplayPlayerParametersWindowLayer = base.canvasService
+            gameplayPlayerParametersWindowLayer = base._canvasService
                 .GetWindow<GameplayCanvasWindow>()
                 .GetWindowLayer<GameplayPlayerParametersWindowLayer>();
 

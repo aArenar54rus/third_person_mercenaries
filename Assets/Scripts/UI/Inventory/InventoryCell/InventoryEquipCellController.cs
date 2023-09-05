@@ -1,4 +1,4 @@
-namespace Arenar.UI
+namespace Arenar.Services.UI
 {
     public class InventoryEquipCellController : InventoryCellController { }
 }

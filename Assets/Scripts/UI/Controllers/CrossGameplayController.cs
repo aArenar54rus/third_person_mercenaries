@@ -1,11 +1,10 @@
 using Arenar.Character;
-using Arenar.Services.UI;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
 
-namespace Arenar.UI
+namespace Arenar.Services.UI
 {
     public class CrossGameplayController : CanvasWindowController, ITickable
     {
@@ -49,7 +48,7 @@ namespace Arenar.UI
         {
             base.Initialize(canvasService);
             
-            crossGameplayCanvasLayer = base.canvasService
+            crossGameplayCanvasLayer = base._canvasService
                 .GetWindow<GameplayCanvasWindow>()
                 .GetWindowLayer<CrossCanvasWindowLayer>();
 

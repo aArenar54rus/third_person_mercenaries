@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-namespace Arenar.UI
+namespace Arenar.Services.UI
 {
     public class EnemyTargetInformationPanel : MonoBehaviour
     {

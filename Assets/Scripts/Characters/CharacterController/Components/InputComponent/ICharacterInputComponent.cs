@@ -5,8 +5,6 @@ namespace Arenar.Character
 {
     public interface ICharacterInputComponent : ICharacterComponent
     {
-        PlayerInput PlayerInputs { get; }
-
         Vector2 MoveAction { get; }
         Vector2 LookAction { get; }
 

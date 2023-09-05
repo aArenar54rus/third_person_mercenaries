@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Users;
 
 
-namespace Arenar.UI
+namespace Arenar.Services.UI
 {
     public class InventoryCellController : MonoBehaviour
     {

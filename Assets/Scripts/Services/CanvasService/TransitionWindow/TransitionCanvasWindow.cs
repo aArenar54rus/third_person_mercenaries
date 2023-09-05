@@ -1,7 +1,4 @@
-using Arenar.Services.UI;
-
-
-namespace Arenar.UI
+namespace Arenar.Services.UI
 {
     public class TransitionCanvasWindow : CanvasWindow, ITransitionWindow
     {

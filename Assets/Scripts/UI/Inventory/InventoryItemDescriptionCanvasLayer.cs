@@ -1,8 +1,7 @@
-using Arenar.Services.UI;
 using UnityEngine;
 
 
-namespace Arenar.UI
+namespace Arenar.Services.UI
 {
     public class InventoryItemDescriptionCanvasLayer : CanvasWindowLayer
     {

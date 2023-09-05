@@ -1,6 +1,5 @@
 using UnityEngine;
 using Zenject;
-using Arenar.UI;
 
 
 namespace Arenar.Services.UI

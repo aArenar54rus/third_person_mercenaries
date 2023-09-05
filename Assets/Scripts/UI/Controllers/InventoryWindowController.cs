@@ -1,10 +1,9 @@
 using System.Collections.Generic;
 using Arenar.Services.InventoryService;
-using Arenar.Services.UI;
 using Zenject;
 
 
-namespace Arenar.UI
+namespace Arenar.Services.UI
 {
     public class InventoryWindowController : CanvasWindowController
     {
@@ -25,7 +24,7 @@ namespace Arenar.UI
         {
             base.Initialize(canvasService);
 
-            var inventoryWindow = base.canvasService
+            var inventoryWindow = base._canvasService
                 .GetWindow<InventoryCanvasWindow>();
             
             inventoryEquipCanvasLayer = inventoryWindow

@@ -1,51 +1,50 @@
+using Arenar.Services.PlayerInputService;
 using UnityEngine;
+using Zenject;
 
 
 namespace Arenar.Character
 {
     public class PlayerCharacterInputComponent : ICharacterInputComponent
     {
-        private PlayerInput playerInput;
-        
-        
-        public PlayerInput PlayerInputs
-        {
-            get
-            {
-                playerInput ??= new PlayerInput();
-                
-                return playerInput;
-            }
-        }
+        private IPlayerInputService _playerInputService;
+
+
+        private PlayerInput PlayerInput =>
+            (PlayerInput)_playerInputService.InputActionCollection;
+
         
         public Vector2 MoveAction =>
-            PlayerInputs.Player.Move.ReadValue<Vector2>();
+            PlayerInput.Player.Move.ReadValue<Vector2>();
         
         public Vector2 LookAction =>
-            PlayerInputs.Player.Look.ReadValue<Vector2>();
+            PlayerInput.Player.Look.ReadValue<Vector2>();
 
         public bool JumpAction =>
-            PlayerInputs.Player.Jump.IsPressed();
+            PlayerInput.Player.Jump.IsPressed();
 
         public bool SprintAction =>
-            PlayerInputs.Player.Sprint.IsPressed();
+            PlayerInput.Player.Sprint.IsPressed();
 
         public bool InteractAction =>
-            PlayerInputs.Player.Interact.WasPressedThisFrame();
+            PlayerInput.Player.Interact.WasPressedThisFrame();
 
         public bool AimAction =>
-            PlayerInputs.Player.Aim.IsPressed();
+            PlayerInput.Player.Aim.IsPressed();
 
         public bool AttackAction =>
-            PlayerInputs.Player.Attack.WasPressedThisFrame();
+            PlayerInput.Player.Attack.WasPressedThisFrame();
 
+
+        [Inject]
+        public void Construct(IPlayerInputService playerInputService)
+        {
+            _playerInputService = playerInputService;
+        }
 
         public void SetControlStatus(bool status)
         {
-            if (status)
-                PlayerInputs.Player.Enable();
-            else
-                PlayerInputs.Player.Disable();
+            _playerInputService.SetNewInputControlType(InputActionMapType.Gameplay, status);
         }
 
         public void Initialize()

@@ -1,5 +1,4 @@
 using Arenar.Services.UI;
-using Arenar.UI;
 using Zenject;
 using UnityEngine;
 using Object = UnityEngine.Object;

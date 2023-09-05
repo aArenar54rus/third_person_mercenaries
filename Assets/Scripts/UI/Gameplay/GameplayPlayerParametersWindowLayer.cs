@@ -1,10 +1,9 @@
-using Arenar.Services.UI;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 
-namespace Arenar.UI
+namespace Arenar.Services.UI
 {
     public class GameplayPlayerParametersWindowLayer : CanvasWindowLayer
     {

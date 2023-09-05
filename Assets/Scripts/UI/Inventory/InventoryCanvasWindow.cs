@@ -1,9 +1,8 @@
 using System;
-using Arenar.Services.UI;
 using UnityEngine.InputSystem;
 
 
-namespace Arenar.UI
+namespace Arenar.Services.UI
 {
     public class InventoryCanvasWindow : CanvasWindow
     {
