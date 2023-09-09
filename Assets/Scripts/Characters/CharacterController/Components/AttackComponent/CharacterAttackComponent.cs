@@ -21,6 +21,8 @@ namespace Arenar.Character
         private CharacterAimAnimationDataStorage characterAimAnimationData;
         
         private FirearmWeapon firearmWeapon;
+
+        private int _equippedWeaponIndex = 0;
         
         
         public bool IsFirearmWeaponEquipped => firearmWeapon != null;
@@ -148,7 +150,7 @@ namespace Arenar.Character
         
         private void OnUpdateEquippedWeaponItem()
         {
-            var equippedWeapon = inventoryService.GetEquippedWeapon();
+            var equippedWeapon = inventoryService.GetEquippedWeapons()[_equippedWeaponIndex];
             if (equippedWeapon == null || equippedWeapon.itemData == null)
             {
                 if (firearmWeapon != null)

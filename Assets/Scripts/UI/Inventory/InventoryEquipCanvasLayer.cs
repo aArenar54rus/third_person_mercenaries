@@ -6,10 +6,10 @@ namespace Arenar.Services.UI
     public class InventoryEquipCanvasLayer : CanvasWindowLayer
     {
         [SerializeField] private SerializableDictionary<ItemClothType, InventoryEquipCellController> clothItemCells;
-        [SerializeField] private InventoryEquipCellController weaponCell;
+        [SerializeField] private InventoryEquipCellController[] weaponCells;
         
 
         public SerializableDictionary<ItemClothType, InventoryEquipCellController> ClothItemCells => clothItemCells;
-        public InventoryEquipCellController WeaponCell => weaponCell;
+        public InventoryEquipCellController[] WeaponCells => weaponCells;
     }
 }

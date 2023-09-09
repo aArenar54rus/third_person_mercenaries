@@ -7,34 +7,43 @@ namespace Arenar.Services.UI
 {
     public class InventoryWindowController : CanvasWindowController
     {
-        private IInventoryService inventoryService;
+        private IInventoryService _inventoryService;
 
-        private InventoryEquipCanvasLayer inventoryEquipCanvasLayer;
-        private InventoryBagCanvasLayer inventoryBagCanvasLayer;
-        private InventoryItemDescriptionCanvasLayer inventoryItemDescriptionCanvasLayer;        
+        private InventoryCanvasWindow _inventoryWindow;
+        private MainMenuWindow _mainMenuWindow;
+
+        private InventoryEquipCanvasLayer _inventoryEquipCanvasLayer;
+        private InventoryBagCanvasLayer _inventoryBagCanvasLayer;
+        private InventoryItemDescriptionCanvasLayer _inventoryItemDescriptionCanvasLayer;
+        private InventoryControlButtonsCanvasLayer _inventoryControlButtonsCanvasLayer;
         
         
         [Inject]
         public void Construct(IInventoryService inventoryService)
         {
-            this.inventoryService = inventoryService;
+            _inventoryService = inventoryService;
         }
         
         public override void Initialize(ICanvasService canvasService)
         {
             base.Initialize(canvasService);
-
-            var inventoryWindow = base._canvasService
-                .GetWindow<InventoryCanvasWindow>();
             
-            inventoryEquipCanvasLayer = inventoryWindow
+            _mainMenuWindow = _canvasService.GetWindow<MainMenuWindow>();
+            _inventoryWindow = _canvasService.GetWindow<InventoryCanvasWindow>();
+            
+            _inventoryEquipCanvasLayer = _inventoryWindow
                 .GetWindowLayer<InventoryEquipCanvasLayer>();
             
-            inventoryBagCanvasLayer = inventoryWindow
+            _inventoryBagCanvasLayer = _inventoryWindow
                 .GetWindowLayer<InventoryBagCanvasLayer>();
             
-            inventoryItemDescriptionCanvasLayer = inventoryWindow
+            _inventoryItemDescriptionCanvasLayer = _inventoryWindow
                 .GetWindowLayer<InventoryItemDescriptionCanvasLayer>();
+            
+            _inventoryControlButtonsCanvasLayer = _inventoryWindow
+                .GetWindowLayer<InventoryControlButtonsCanvasLayer>();
+            
+            _inventoryControlButtonsCanvasLayer.BackButton.onClick.AddListener(OnReturnToMenuBtnClick);
 
             InitializeInventoryBag();
             InitializeInventoryEquip();
@@ -44,40 +53,43 @@ namespace Arenar.Services.UI
 
         private void InitializeInventoryBag()
         {
-            for (int i = 0; i < inventoryBagCanvasLayer.InventoryCells.Length; i++)
+            for (int i = 0; i < _inventoryBagCanvasLayer.InventoryCells.Length; i++)
             {
-                inventoryBagCanvasLayer.InventoryCells[i].Initialize(i);
+                _inventoryBagCanvasLayer.InventoryCells[i].Initialize(i);
                 UpdateInventoryCellData(i);
             }
 
-            inventoryService.OnUpdateInventoryCells += OnUpdateInventoryCells;
+            _inventoryService.OnUpdateInventoryCells += OnUpdateInventoryCells;
         }
 
         private void InitializeInventoryEquip()
         {
-            foreach (var clothItemCell in inventoryEquipCanvasLayer.ClothItemCells)
+            foreach (var clothItemCell in _inventoryEquipCanvasLayer.ClothItemCells)
             {
                 clothItemCell.Value.Initialize(0);
-                InventoryItemData invItemData = inventoryService.GetEquippedCloth(clothItemCell.Key);
+                InventoryItemData invItemData = _inventoryService.GetEquippedCloth(clothItemCell.Key);
                 if (invItemData == null || invItemData.itemData == null)
                     clothItemCell.Value.SetEmpty();
                 else
                     clothItemCell.Value.SetItem(invItemData);
             }
             
-            inventoryEquipCanvasLayer.WeaponCell.Initialize(0);
-            InventoryItemData weaponInvItemData = inventoryService.GetEquippedWeapon();
-            if (weaponInvItemData == null || weaponInvItemData.itemData == null)
-                inventoryEquipCanvasLayer.WeaponCell.SetEmpty();
-            else
-                inventoryEquipCanvasLayer.WeaponCell.SetItem(weaponInvItemData);
+            InventoryItemData[] weaponInvItemData = _inventoryService.GetEquippedWeapons();
+            for (int i = 0; i < _inventoryEquipCanvasLayer.WeaponCells.Length; i++)
+            {
+                _inventoryEquipCanvasLayer.WeaponCells[i].Initialize(0);
+                if (weaponInvItemData[i] == null || weaponInvItemData[i].itemData == null)
+                    _inventoryEquipCanvasLayer.WeaponCells[i].SetEmpty();
+                else
+                    _inventoryEquipCanvasLayer.WeaponCells[i].SetItem(weaponInvItemData[i]);
+            }
         }
 
         private void UpdateInventoryMassVisual()
         {
-            var massSlider = inventoryBagCanvasLayer.MassSlider;
-            massSlider.maxValue = inventoryService.InventoryMassMax;
-            massSlider.value = inventoryService.InventoryMass;
+            var massSlider = _inventoryBagCanvasLayer.MassSlider;
+            massSlider.maxValue = _inventoryService.InventoryMassMax;
+            massSlider.value = _inventoryService.InventoryMass;
         }
 
         private void OnUpdateInventoryCells(List<int> cellsIndexes)
@@ -90,15 +102,21 @@ namespace Arenar.Services.UI
 
         private void UpdateInventoryCellData(int cellIndex)
         {
-            var itemData = inventoryService.GetInventoryItemData(cellIndex);
+            var itemData = _inventoryService.GetInventoryItemData(cellIndex);
             if (itemData.itemData == null)
             {
-                inventoryBagCanvasLayer.InventoryCells[cellIndex].SetEmpty();
+                _inventoryBagCanvasLayer.InventoryCells[cellIndex].SetEmpty();
             }
             else
             {
-                inventoryBagCanvasLayer.InventoryCells[cellIndex].SetItem(itemData);
+                _inventoryBagCanvasLayer.InventoryCells[cellIndex].SetItem(itemData);
             }
+        }
+
+        private void OnReturnToMenuBtnClick()
+        {
+            _inventoryWindow.Hide(false);
+            _mainMenuWindow.Show(false);
         }
     }
 }

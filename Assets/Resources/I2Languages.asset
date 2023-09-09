@@ -153,6 +153,15 @@ MonoBehaviour:
       - 
       Flags: 000000
       Languages_Touch: []
+    - Term: loc_key_back
+      TermType: 0
+      Description: 
+      Languages:
+      - Back
+      - "\u041D\u0430\u0437\u0430\u0434"
+      - 
+      Flags: 000000
+      Languages_Touch: []
     CaseInsensitiveTerms: 0
     OnMissingTranslation: 1
     mTerm_AppName: 

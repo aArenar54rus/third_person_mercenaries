@@ -22,10 +22,12 @@ namespace Arenar.Services.InventoryService
         {
             [SerializeField] private int defaultMassMax = default;
             [SerializeField] private int defaultInventoryCellsCount = default;
+            [SerializeField] private int equippedWeaponsCount = 4;
 
 
             public int DefaultMassMax => defaultMassMax;
             public int DefaultInventoryCellsCount => defaultInventoryCellsCount;
+            public int EquippedWeaponsCount => equippedWeaponsCount;
         }
     }
 }

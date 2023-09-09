@@ -47,7 +47,7 @@ namespace Arenar.Services.InventoryService
             int neededCount,
             out InventoryItemData restOfItems);
 
-        InventoryItemData GetEquippedWeapon();
+        InventoryItemData[] GetEquippedWeapons();
 
         InventoryItemData GetEquippedCloth(ItemClothType itemClothType);
     }

@@ -14,7 +14,7 @@ namespace Arenar.Services.InventoryService
         
         private Dictionary<int, InventoryItemData> _inventoryItemDataCells;
         private Dictionary<ItemClothType, InventoryItemData> _equippedClothItems;
-        private InventoryItemData _equippedWeapon;
+        private InventoryItemData[] _equippedWeapons;
         
         private float _currentInventoryMass = 0.0f;
         private InventoryOptionsSOData.Parameters _parameters;
@@ -47,9 +47,9 @@ namespace Arenar.Services.InventoryService
             return _inventoryItemDataCells[cellIndex];
         }
 
-        public InventoryItemData GetEquippedWeapon()
+        public InventoryItemData[] GetEquippedWeapons()
         {
-            return _equippedWeapon;
+            return _equippedWeapons;
         }
 
         public InventoryItemData GetEquippedCloth(ItemClothType itemClothType)
@@ -72,17 +72,23 @@ namespace Arenar.Services.InventoryService
                 return false;
             }
 
-            if (itemData.ItemType == ItemType.Weapon
-                && _equippedWeapon.itemData == null)
+            if (itemData.ItemType == ItemType.Weapon)
             {
-                _equippedWeapon.itemData = itemData;
-                _equippedWeapon.elementsCount = 1;
-                restOfItems = null;
-                CalculateMass();
-                OnUpdateEquippedWeaponItem?.Invoke();
-                return true;
+                for (int i = 0; i < _equippedWeapons.Length; i++)
+                {
+                    _equippedWeapons[i] ??= new InventoryItemData();
+                    if (_equippedWeapons[i].itemData != null)
+                        continue;
+                    
+                    _equippedWeapons[i].itemData = itemData;
+                    _equippedWeapons[i].elementsCount = 1;
+                    restOfItems = null;
+                    CalculateMass();
+                    OnUpdateEquippedWeaponItem?.Invoke();
+                    return true;
+                }
             }
-            
+
             if (!itemData.CanStack)
                 return TryAddInFreeCell(itemData, count, out restOfItems);
 
@@ -296,10 +302,11 @@ namespace Arenar.Services.InventoryService
             _equippedClothItems.Add(ItemClothType.Hands, new InventoryItemData(null, 0));
             _equippedClothItems.Add(ItemClothType.Foots, new InventoryItemData(null, 0));
 
-            _equippedWeapon = new InventoryItemData(null, 0);
+            _equippedWeapons = new InventoryItemData[_parameters.EquippedWeaponsCount];
+            for (int i = 0; i < _parameters.EquippedWeaponsCount; i++)
+                _equippedWeapons[i] = new InventoryItemData(null, 0);
 
             DownloadInventory();
-            
             CalculateMass();
         }
 
@@ -351,10 +358,13 @@ namespace Arenar.Services.InventoryService
                 _currentInventoryMass += equippedClothItem.Value.itemData.ItemMass;
             }
 
-            if (_equippedWeapon == null
-                || _equippedWeapon.itemData == null)
-                return;
-            _currentInventoryMass += _equippedWeapon.itemData.ItemMass;
+            foreach (var equippedWeapon in _equippedWeapons)
+            {
+                if (equippedWeapon == null
+                    || equippedWeapon.itemData == null)
+                    continue;
+                _currentInventoryMass += equippedWeapon.itemData.ItemMass;
+            }
         }
     }
 }
