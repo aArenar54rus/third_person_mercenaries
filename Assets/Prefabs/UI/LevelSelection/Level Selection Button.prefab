@@ -648,12 +648,21 @@ MonoBehaviour:
   _levelNameText: {fileID: 7278020899323241579}
   _enemiesLevelsText: {fileID: 1755641217120225617}
   _lockedLevelTextKey: loc_key_locked
-  _interactableButtonParameters:
-    buttonColor: {r: 1, g: 1, b: 1, a: 1}
-    frameColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
-  _blockButtonParameters:
-    buttonColor: {r: 0.5377358, g: 0.04819329, b: 0.04819329, a: 1}
-    frameColor: {r: 0.254717, g: 0, b: 0, a: 1}
+  _buttonParameters:
+    IsSingleLineView: 1
+    list:
+    - Key: 1
+      Value:
+        buttonColor: {r: 0.08388218, g: 0.6132076, b: 0.15357733, a: 1}
+        frameColor: {r: 0, g: 0.5849056, b: 0.059848353, a: 1}
+    - Key: 2
+      Value:
+        buttonColor: {r: 1, g: 1, b: 1, a: 1}
+        frameColor: {r: 1, g: 1, b: 1, a: 1}
+    - Key: 3
+      Value:
+        buttonColor: {r: 0.5660378, g: 0.018689938, b: 0.018689938, a: 1}
+        frameColor: {r: 0.49056602, g: 0.0023139962, b: 0.0023139962, a: 1}
 --- !u!1 &3667512661532533464
 GameObject:
   m_ObjectHideFlags: 0

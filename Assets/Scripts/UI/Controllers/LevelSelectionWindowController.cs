@@ -23,11 +23,23 @@ namespace Arenar.Services.UI
             _levelSelectionWindow.GetWindowLayer<LevelDifficultLayer>();
         
 
+        [Inject]
+        public void Construct(ILevelsService levelsService)
+        {
+            _levelsService = levelsService;
+        }
+
+        public void OpenWindow()
+        {
+            OnLevelDifficult(LevelDifficult.Easy);
+        }
+        
         public override void Initialize(ICanvasService canvasService)
         {
             base.Initialize(canvasService);
 
             _levelSelectionWindow = canvasService.GetWindow<LevelSelectionWindow>();
+            _levelSelectionWindow.OnShowBegin.AddListener(OpenWindow);
 
             InitLevelSelectionLayer();
             InitLevelDifficultLayer();
@@ -35,15 +47,10 @@ namespace Arenar.Services.UI
             LevelSelectionLayer.onCanvasLayerShowBegin += OnOpenWindow;
         }
 
-        [Inject]
-        public void Construct(ILevelsService levelsService)
-        {
-            _levelsService = levelsService;
-        }
-
         private void InitLevelSelectionLayer()
         {
             LevelSelectionButtonVisual buttonPrefab = LevelSelectionLayer.LevelSelectionButtonVisualPrefab;
+            LevelSelectionLayer.ShowWindowLayer(true);
 
             _levelSelectionButtonVisuals = new LevelSelectionButtonVisual[_levelsService.LevelDatas.Length];
             for (int i = 0; i < _levelsService.LevelDatas.Length; i++)
@@ -73,7 +80,7 @@ namespace Arenar.Services.UI
             foreach (LevelSelectionButtonVisual levelSelectionButton in _levelSelectionButtonVisuals)
                 levelSelectionButton.SetDifficultLevel(_levelDifficult);
 
-            if (_levelsService.LastCompleteDifficult > levelDifficult)
+            if (_levelsService.LastCompleteDifficult > levelDifficult - 1)
             {
                 foreach (LevelSelectionButtonVisual levelSelectionButton in _levelSelectionButtonVisuals)
                 {
@@ -82,14 +89,14 @@ namespace Arenar.Services.UI
                         : LevelSelectionButtonVisual.ButtonStatus.Active);
                 }
             }
-            else if (_levelsService.LastCompleteDifficult < levelDifficult)
+            else if (_levelsService.LastCompleteDifficult < levelDifficult - 1)
             {
                 foreach (LevelSelectionButtonVisual levelSelectionButton in _levelSelectionButtonVisuals)
                     levelSelectionButton.SetButtonStatus(LevelSelectionButtonVisual.ButtonStatus.Locked);
             }
             else
             {
-                int lastAvailableLevel = _levelsService.LastCompleteLevel + 1;
+                int lastAvailableLevel = _levelsService.LastCompleteLevel;
                 foreach (LevelSelectionButtonVisual levelSelectionButton in _levelSelectionButtonVisuals)
                 {
                     if (levelSelectionButton.LevelData.LevelIndex >= lastAvailableLevel)

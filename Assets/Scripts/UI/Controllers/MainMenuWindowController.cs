@@ -10,8 +10,9 @@ namespace Arenar.Services.UI
         private IPlayerInputService _playerInputService;
         
         private MainMenuWindow _mainMenuWindow;
+        private OptionsWindow _optionsWindow;
+        
         private MainMenuButtonsLayer _mainMenuButtonsLayer;
-        private MainMenuOptionsLayer _mainMenuOptionsLayer;
         private MainMenuPlayerInformationLayer _mainMenuPlayerInfoLayer;
 
         private LevelSelectionWindow _levelSelectionWindow;
@@ -30,11 +31,12 @@ namespace Arenar.Services.UI
             base.Initialize(canvasService);
 
             _mainMenuWindow = _canvasService.GetWindow<MainMenuWindow>();
+            _optionsWindow = _canvasService.GetWindow<OptionsWindow>();
+            
             _levelSelectionWindow = _canvasService.GetWindow<LevelSelectionWindow>();
             _inventoryCanvasWindow = _canvasService.GetWindow<InventoryCanvasWindow>();
 
             InitMainMenuButtonsLayer();
-            InitMainMenuOptionsLayer();
             InitMainMenuPlayerInformationLayer();
             
             _playerInputService.SetNewInputControlType(InputActionMapType.UI, true);
@@ -48,17 +50,6 @@ namespace Arenar.Services.UI
             _mainMenuButtonsLayer.OutfitButton.onClick.AddListener(OnOutfitButtonClick);
             _mainMenuButtonsLayer.OptionsButton.onClick.AddListener(OnOptionsButtonClick);
             _mainMenuButtonsLayer.RateUsButton.onClick.AddListener(OnRateUsButtonClick);
-        }
-
-        private void InitMainMenuOptionsLayer()
-        {
-            _mainMenuOptionsLayer = _mainMenuWindow.GetWindowLayer<MainMenuOptionsLayer>();
-            
-            _mainMenuOptionsLayer.MusicButton.onClick.AddListener(OnMusicButtonClick);
-            _mainMenuOptionsLayer.SoundButton.onClick.AddListener(OnSoundButtonClick);
-            
-            _mainMenuOptionsLayer.LanguageLastButton.onClick.AddListener(OnSoundButtonClick);
-            _mainMenuOptionsLayer.LanguageNextButton.onClick.AddListener(OnSoundButtonClick);
         }
 
         private void InitMainMenuPlayerInformationLayer()
@@ -83,23 +74,13 @@ namespace Arenar.Services.UI
 
         private void OnOptionsButtonClick()
         { 
-            _mainMenuButtonsLayer.HideWindowLayer(false);
-            _mainMenuOptionsLayer.ShowWindowLayer(false);
+            _mainMenuWindow.Hide(false);
+            _optionsWindow.Show(false);
         }
 
         private void OnRateUsButtonClick()
         {
             // web rate us
-        }
-
-        private void OnMusicButtonClick()
-        {
-            
-        }
-
-        private void OnSoundButtonClick()
-        {
-            
         }
     }
 }

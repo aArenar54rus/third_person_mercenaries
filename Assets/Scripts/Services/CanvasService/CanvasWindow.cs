@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Events;
 using Zenject;
@@ -10,11 +11,11 @@ namespace Arenar.Services.UI
 {
     public abstract class CanvasWindow : MonoBehaviour
     {
-        [SerializeField] protected CanvasWindowLayer[] canvasWindowLayers = default;
-		[SerializeField] protected CanvasWindowLayer defaultWindowLayer = default;
+	    [SerializeField] protected CanvasWindowLayer[] canvasWindowLayers = default;
 
-		private Canvas canvas;
+	    private Canvas canvas;
 		private List<CanvasWindowLayer> activeWindowLayers;
+		private Tween animationTween;
 
 
 		public UnityEvent OnShowBegin { get; } = new();
@@ -44,22 +45,23 @@ namespace Arenar.Services.UI
         }
 
 
-        public virtual void Show(bool immediately = false, Action callback = null)
+        public virtual void Show(bool immediately = false, Action OnShowEndCallback = null)
         {
-			if (callback != null)
-				OnShowEnd.AddListener(callback.Invoke);
+			if (OnShowEndCallback != null)
+				OnShowEnd.AddListener(OnShowEndCallback.Invoke);
 
             gameObject.SetActive(true);
             OnShowBegin?.Invoke();
             OnShowBegin?.RemoveAllListeners();
 
-			defaultWindowLayer.ShowWindowLayer(immediately);
+            foreach (CanvasWindowLayer canvasWindowElement in canvasWindowLayers)
+	            canvasWindowElement.ShowWindowLayer(immediately);
 		}
 
-        public virtual void Hide(bool immediately = false, Action callback = null)
+        public virtual void Hide(bool immediately = false, Action onHideEndCallback = null)
         {
-			if (callback != null)
-				OnHideEnd.AddListener(callback.Invoke);
+			if (onHideEndCallback != null)
+				OnHideEnd.AddListener(onHideEndCallback.Invoke);
 
             OnHideBegin?.Invoke();
             OnHideBegin?.RemoveAllListeners();
@@ -83,11 +85,7 @@ namespace Arenar.Services.UI
 		public virtual void Initialize()
 		{
 			activeWindowLayers = new List<CanvasWindowLayer>();
-
-			if (defaultWindowLayer == null)
-				defaultWindowLayer = canvasWindowLayers[0];
-
-			defaultWindowLayer.onCanvasLayerShowEnd += OnWindowShowEnd;
+			canvasWindowLayers[0].onCanvasLayerShowEnd += OnWindowShowEnd;
 
 			foreach (CanvasWindowLayer canvasWindowLayer in canvasWindowLayers)
 			{
@@ -99,7 +97,7 @@ namespace Arenar.Services.UI
 
 		protected virtual void DeInitialize()
 		{
-			defaultWindowLayer.onCanvasLayerShowEnd -= OnWindowShowEnd;
+			canvasWindowLayers[0].onCanvasLayerShowEnd -= OnWindowShowEnd;
 			foreach (CanvasWindowLayer canvasWindowLayer in canvasWindowLayers)
 			{
 				canvasWindowLayer.DeInitialize();

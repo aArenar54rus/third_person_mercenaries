@@ -4,8 +4,11 @@ using UnityEngine.UI;
 
 namespace Arenar.Services.UI
 {
-    public class MainMenuOptionsLayer : CanvasWindowLayer
+    public class OptionsButtonsLayer : CanvasWindowLayer
     {
+        [SerializeField] private Button _backButton;
+        
+        [Space(5)]
         [SerializeField] private Button _soundButton;
         [SerializeField] private Image _soundIcon;
         [SerializeField] private Image _soundLockIcon;
@@ -21,6 +24,7 @@ namespace Arenar.Services.UI
         [SerializeField] private Button _languageLastButton;
         
         
+        public Button BackButton => _backButton;
         public Button SoundButton => _soundButton;
         public Image SoundIcon => _soundIcon;
         public Image SoundLockIcon => _soundLockIcon;

@@ -11,16 +11,16 @@ namespace TakeTop.Helpers
 
         public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            if (animator.gameObject.TryGetComponent(out AnimatedCanvasWindowLayer animatedCanvasWindowLayer))
+            if (animator.gameObject.TryGetComponent(out CanvasWindowLayer canvasWindowLayer))
             {
                 switch (animationType)
                 {
                     case AnimationType.Show:
-                        animatedCanvasWindowLayer.OnCanvasWindowShowEndAnimation();
+                        canvasWindowLayer.OnCanvasWindowShowEnd();
                         break;
 
                     case AnimationType.Hide:
-                        animatedCanvasWindowLayer.OnCanvasWindowHideEndAnimation();
+                        canvasWindowLayer.OnCanvasWindowHideBegin();
                         break;
 
                     default:

@@ -4,6 +4,7 @@ using Zenject;
 
 namespace Arenar.Services.LevelsService
 {
+    [CreateAssetMenu(menuName = "LevelsData")]
     public class LevelDataSOInstaller : ScriptableObjectInstaller<LevelDataSOInstaller>
     {
         [SerializeField] private LevelData[] _levelDatas;

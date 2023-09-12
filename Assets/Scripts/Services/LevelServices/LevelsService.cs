@@ -60,7 +60,7 @@ namespace Arenar.Services.LevelsService
                 LevelDifficult = levelDifficult
             };
             
-            _sceneLoader.LoadScene(CurrentLevelContext.LevelData.LevelNameKey, LoadSceneMode.Additive);
+            _sceneLoader.LoadScene(CurrentLevelContext.LevelData.SceneKey, LoadSceneMode.Additive);
         }
 
         public void SetLevelCompleted()
