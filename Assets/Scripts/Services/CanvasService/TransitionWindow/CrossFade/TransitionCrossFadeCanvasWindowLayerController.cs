@@ -33,8 +33,9 @@ namespace Arenar.Services.UI
             where TTo : CanvasWindow
         {
             callback?.Invoke();
-            CanvasService.HideWindow<TFrom>(fromImmediately);
-            CanvasService.ShowWindow<TTo>(toImmediately);
+
+            CanvasService.HideWindow<TFrom>(fromImmediately, 
+                () => CanvasService.ShowWindow<TTo>(toImmediately));
         }
     }
 }

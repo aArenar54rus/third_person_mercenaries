@@ -61,7 +61,7 @@ namespace Arenar.Services.UI
             IsCanvasInitialized = true;
         }
 
-		public virtual void ShowWindow(CanvasWindow window, bool immediately = false)
+		public virtual void ShowWindow(CanvasWindow window, bool immediately = false, Action onComplete = null)
 		{
 			windowsStack.Clear();
 			windowsStack.Push(window);
@@ -70,26 +70,26 @@ namespace Arenar.Services.UI
 				? window.Canvas.sortingOrder
 				: windowsStack.Count * canvasWindowsSettings.SortingOffset;
 
-			window.Show(immediately);
+			window.Show(immediately, onComplete);
 			OnShowWindow?.Invoke(window);
 		}
 
-		public virtual T ShowWindow<T>(bool immediately = false) where T : CanvasWindow
+		public virtual T ShowWindow<T>(bool immediately = false, Action onComplete = null) where T : CanvasWindow
 		{
 			T window = (T)allWindowsPool[typeof(T)];
-			ShowWindow(window, immediately);
+			ShowWindow(window, immediately, onComplete);
 			return window;
 		}
 
-		public virtual void HideWindow(CanvasWindow window, bool immediately = false)
+		public virtual void HideWindow(CanvasWindow window, bool immediately = false, Action onComplete = null)
 		{
-			window.Hide(immediately);
+			window.Hide(immediately, onComplete);
 		}
 
-		public virtual T HideWindow<T>(bool immediately = false) where T : CanvasWindow
+		public virtual T HideWindow<T>(bool immediately = false, Action onComplete = null) where T : CanvasWindow
 		{
 			T window = (T)allWindowsPool[typeof(T)];
-			HideWindow(window, immediately);
+			HideWindow(window, immediately, onComplete);
 			return window;
 		}
 

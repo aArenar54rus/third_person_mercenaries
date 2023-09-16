@@ -50,7 +50,8 @@ namespace Arenar.Services.UI
         private void InitLevelSelectionLayer()
         {
             LevelSelectionButtonVisual buttonPrefab = LevelSelectionLayer.LevelSelectionButtonVisualPrefab;
-            LevelSelectionLayer.ShowWindowLayer(true);
+            LevelSelectionLayer.ShowWindowLayerStart();
+            LevelSelectionLayer.ShowWindowLayerComplete();
 
             _levelSelectionButtonVisuals = new LevelSelectionButtonVisual[_levelsService.LevelDatas.Length];
             for (int i = 0; i < _levelsService.LevelDatas.Length; i++)

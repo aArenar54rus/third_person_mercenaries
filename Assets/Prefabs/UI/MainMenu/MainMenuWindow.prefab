@@ -1525,6 +1525,7 @@ GameObject:
   - component: {fileID: 4765142800376440303}
   - component: {fileID: 4765142800376440302}
   - component: {fileID: 6002018314034250697}
+  - component: {fileID: 8140616919193706143}
   m_Layer: 5
   m_Name: MainMenuWindow
   m_TagString: Untagged
@@ -1590,7 +1591,32 @@ MonoBehaviour:
   canvasWindowLayers:
   - {fileID: 2334259839392837285}
   - {fileID: 961375611468878718}
-  defaultWindowLayer: {fileID: 2334259839392837285}
+  _animationType: 1
+  _windowAnimator: {fileID: 8140616919193706143}
+  _showAnimationName: Show
+  _idleAnimationName: Idle
+  _hideAnimationName: Hide
+  _hiddenAnimationName: Hidden
+--- !u!95 &8140616919193706143
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4765142800376440288}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 974711d1281673b40b5612813cbd42c0, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &5155139259559156871
 GameObject:
   m_ObjectHideFlags: 0

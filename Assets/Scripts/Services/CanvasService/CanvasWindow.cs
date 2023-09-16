@@ -12,10 +12,19 @@ namespace Arenar.Services.UI
     public abstract class CanvasWindow : MonoBehaviour
     {
 	    [SerializeField] protected CanvasWindowLayer[] canvasWindowLayers = default;
+	    
+	    [Space(10)]
+	    [SerializeField] private CanvasWindowsLayerAnimationType _animationType;
+	    [SerializeField] private Animator _windowAnimator;
+	    [SerializeField] private string _showAnimationName = default;
+	    [SerializeField] private string _idleAnimationName = default;
+	    [SerializeField] private string _hideAnimationName = default;
+	    [SerializeField] private string _hiddenAnimationName = default;
+	    
+	    protected Tween _windowAnimationTween;
 
 	    private Canvas canvas;
-		private List<CanvasWindowLayer> activeWindowLayers;
-		private Tween animationTween;
+	    private Tween animationTween;
 
 
 		public UnityEvent OnShowBegin { get; } = new();
@@ -33,41 +42,91 @@ namespace Arenar.Services.UI
                 if (canvas != null)
                     return canvas;
 
-                if (gameObject.TryGetComponent(out Canvas objectCanvas))
-                {
-                    canvas = objectCanvas;
-                    return canvas;
-                }
-
+                if (gameObject.TryGetComponent<Canvas>(out canvas))
+	                return canvas;
+                
                 canvas = gameObject.AddComponent<Canvas>();
                 return canvas;
             }
         }
-
-
+        
+        
+        
+        public virtual void Initialize()
+        {
+	        foreach (CanvasWindowLayer canvasWindowLayer in canvasWindowLayers)
+		        canvasWindowLayer.Initialize();
+        }
+        
         public virtual void Show(bool immediately = false, Action OnShowEndCallback = null)
         {
 			if (OnShowEndCallback != null)
 				OnShowEnd.AddListener(OnShowEndCallback.Invoke);
 
             gameObject.SetActive(true);
+            Canvas.enabled = true;
+            Debug.LogError(gameObject.name + " open " + gameObject.activeSelf);
+            
+            foreach (CanvasWindowLayer canvasWindowLayer in canvasWindowLayers)
+	            canvasWindowLayer.ShowWindowLayerStart();
+
+            switch (_animationType)
+            {
+	            case CanvasWindowsLayerAnimationType.None:
+		            OnShowComplete();
+		            break;
+				
+	            case CanvasWindowsLayerAnimationType.Tween:
+		            OnTweenAnimationShowPlay(immediately);
+		            break;
+				
+	            case CanvasWindowsLayerAnimationType.ClassicUnity:
+		            OnUnityAnimatorShowPlay(immediately);
+		            break;
+				
+	            default:
+		            Debug.LogError("Unknown window animation type: " + _animationType);
+		            OnShowComplete();
+		            break;
+            }
+            
             OnShowBegin?.Invoke();
             OnShowBegin?.RemoveAllListeners();
 
-            foreach (CanvasWindowLayer canvasWindowElement in canvasWindowLayers)
-	            canvasWindowElement.ShowWindowLayer(immediately);
-		}
+            Debug.LogError(gameObject.name + " open " + gameObject.activeSelf);
+        }
 
         public virtual void Hide(bool immediately = false, Action onHideEndCallback = null)
         {
 			if (onHideEndCallback != null)
 				OnHideEnd.AddListener(onHideEndCallback.Invoke);
+			
+			foreach (CanvasWindowLayer canvasWindowElement in canvasWindowLayers)
+				canvasWindowElement.HideWindowLayerStart();
 
+			switch (_animationType)
+            {
+	            case CanvasWindowsLayerAnimationType.None:
+		            OnHideComplete();
+		            break;
+				
+	            case CanvasWindowsLayerAnimationType.Tween:
+		            OnTweenAnimationHidePlay(immediately);
+		            break;
+				
+	            case CanvasWindowsLayerAnimationType.ClassicUnity:
+		            OnUnityAnimatorHidePlay(immediately);
+		            break;
+				
+	            default:
+		            Debug.LogError("Unknown window animation type: " + _animationType);
+		            OnHideComplete();
+		            break;
+            }
+			
             OnHideBegin?.Invoke();
             OnHideBegin?.RemoveAllListeners();
-
-            foreach (CanvasWindowLayer canvasWindowElement in canvasWindowLayers)
-                canvasWindowElement.HideWindowLayer(immediately);
+            Debug.LogError(gameObject.name + " hide " + gameObject.activeSelf);
 		}
 
 		public T GetWindowLayer<T>() where T : CanvasWindowLayer
@@ -82,81 +141,61 @@ namespace Arenar.Services.UI
             return null;
         }
 
-		public virtual void Initialize()
+		protected virtual void OnTweenAnimationShowPlay(bool isImmediately)
 		{
-			activeWindowLayers = new List<CanvasWindowLayer>();
-			canvasWindowLayers[0].onCanvasLayerShowEnd += OnWindowShowEnd;
-
-			foreach (CanvasWindowLayer canvasWindowLayer in canvasWindowLayers)
-			{
-				canvasWindowLayer.Initialize();
-				canvasWindowLayer.onCanvasLayerShowBegin += OnWindowShowBegin;
-				canvasWindowLayer.onCanvasLayerHideEnd += OnWindowHideEnd;
-			}
+			_windowAnimationTween = DOVirtual.DelayedCall(isImmediately ? 0.0f : 0.5f, OnShowComplete);
+		}
+		
+		protected virtual void OnTweenAnimationHidePlay(bool isImmediately)
+		{
+			_windowAnimationTween = DOVirtual.DelayedCall(isImmediately ? 0.0f : 0.5f, OnHideComplete);
 		}
 
+		protected virtual void OnUnityAnimatorShowPlay(bool isImmediately)
+		{
+			_windowAnimator.Play(isImmediately ? _idleAnimationName : _showAnimationName);
+			if (isImmediately)
+				OnShowComplete();
+		}
+
+		protected virtual void OnUnityAnimatorHidePlay(bool isImmediately)
+		{
+			_windowAnimator.Play(isImmediately ? _hiddenAnimationName : _hideAnimationName);
+			if (isImmediately)
+				OnHideComplete();
+		}
+
+		protected virtual void OnShowComplete()
+		{
+			foreach (CanvasWindowLayer canvasWindowElement in canvasWindowLayers)
+				canvasWindowElement.ShowWindowLayerComplete();
+			
+			OnShowEnd?.Invoke();
+			OnShowEnd?.RemoveAllListeners();
+		}
+
+		protected virtual void OnHideComplete()
+		{
+			foreach (CanvasWindowLayer canvasWindowElement in canvasWindowLayers)
+				canvasWindowElement.HideWindowLayerComplete();
+			
+			OnHideEnd?.Invoke();
+			OnHideEnd?.RemoveAllListeners();
+			
+			gameObject.SetActive(false);
+			
+			Debug.LogError(gameObject.name + " hide complete " + gameObject.activeSelf);
+		}
+		
 		protected virtual void DeInitialize()
 		{
-			canvasWindowLayers[0].onCanvasLayerShowEnd -= OnWindowShowEnd;
+			if (_animationType == CanvasWindowsLayerAnimationType.Tween)
+				_windowAnimationTween?.Kill(false);
+			
 			foreach (CanvasWindowLayer canvasWindowLayer in canvasWindowLayers)
 			{
 				canvasWindowLayer.DeInitialize();
-				canvasWindowLayer.onCanvasLayerShowBegin -= OnWindowShowBegin;
-				canvasWindowLayer.onCanvasLayerHideEnd -= OnWindowHideEnd;
 			}
-		}
-
-		private void OnShowComplete()
-		{
-			OnShowEnd?.Invoke();
-		}
-
-		private void OnHideComplete()
-		{
-			OnHideEnd?.Invoke();
-			gameObject.SetActive(false);
-		}
-
-		private void OnWindowShowBegin(CanvasWindowLayer canvasWindowLayer)
-		{
-			if (!canvasWindowLayers.Contains(canvasWindowLayer))
-			{
-				Debug.LogError($"Can't find {canvasWindowLayer.name} on canvas window. Check actions.");
-				return;
-			}
-
-			if (activeWindowLayers.Contains(canvasWindowLayer))
-				return;
-
-			activeWindowLayers.Add(canvasWindowLayer);
-		}
-
-		private void OnWindowShowEnd(CanvasWindowLayer canvasWindowLayer)
-		{
-			if (!canvasWindowLayer != default)
-			{
-				Debug.LogError($"Can't find {canvasWindowLayer.name} on default canvas window. Check actions.");
-				return;
-			}
-
-			OnShowComplete();
-		}
-
-		private void OnWindowHideEnd(CanvasWindowLayer canvasWindowLayer)
-		{
-			if (!canvasWindowLayers.Contains(canvasWindowLayer))
-			{
-				Debug.LogError($"Can't find {canvasWindowLayer.name} on canvas window. Check actions.");
-				return;
-			}
-
-			if (!activeWindowLayers.Contains(canvasWindowLayer))
-				return;
-
-			activeWindowLayers.Remove(canvasWindowLayer);
-
-			if (activeWindowLayers.Count == 0)
-				OnHideComplete();
 		}
 
 		private void OnDestroy() =>

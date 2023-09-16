@@ -19,11 +19,11 @@ namespace Arenar.Services.UI
         public bool IsCanvasInitialized { get; }
 
 
-        void ShowWindow(CanvasWindow window, bool immediately = false);
-		T ShowWindow<T>(bool immediately = false) where T : CanvasWindow;
+        void ShowWindow(CanvasWindow window, bool immediately = false, Action action = null);
+		T ShowWindow<T>(bool immediately = false, Action action = null) where T : CanvasWindow;
 
-		void HideWindow(CanvasWindow window, bool immediately = false);
-		T HideWindow<T>(bool immediately = false) where T : CanvasWindow;
+		void HideWindow(CanvasWindow window, bool immediately = false, Action action = null);
+		T HideWindow<T>(bool immediately = false, Action action = null) where T : CanvasWindow;
 
 		void ShowPopup(CanvasWindow window, bool immediately = false);
 		void HidePopup();

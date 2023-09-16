@@ -23,14 +23,6 @@ namespace Arenar.Services.UI
         }
         
 
-        public override void Show(bool immediately = false, Action OnShowEndCallback = null)
-        {
-            base.Show(immediately, OnShowEndCallback);
-
-            foreach (var canvasWindowLayer in canvasWindowLayers)
-                canvasWindowLayer.ShowWindowLayer(immediately);
-        }
-
         public override void Initialize()
         {
             base.Initialize();

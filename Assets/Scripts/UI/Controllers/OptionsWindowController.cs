@@ -33,8 +33,11 @@ namespace Arenar.Services.UI
 
         private void OnBackButtonClick()
         {
-            _optionsWindow.Hide(false);
-            _mainMenuWindow.Show(false);
+            _canvasService.TransitionController
+                .PlayTransition<TransitionCrossFadeCanvasWindowLayerController,
+                        OptionsWindow,
+                        MainMenuWindow>
+                            (false, false, null);
         }
         
         private void OnMusicButtonClick()

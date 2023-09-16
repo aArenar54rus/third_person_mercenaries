@@ -61,21 +61,29 @@ namespace Arenar.Services.UI
 
         private void OnNewChallengeButtonClick()
         {
-            // _mainMenuButtonsLayer.HideWindowLayer(false);
-            _mainMenuWindow.Hide(false);
-            _levelSelectionWindow.Show(false);
+            _canvasService.TransitionController
+                .PlayTransition<TransitionCrossFadeCanvasWindowLayerController,
+                                MainMenuWindow,
+                                LevelSelectionWindow>
+                                    (false, false, null);
         }
 
         private void OnOutfitButtonClick()
         {
-            _mainMenuWindow.Hide(false);
-            _inventoryCanvasWindow.Show(false);
+            _canvasService.TransitionController
+                .PlayTransition<TransitionCrossFadeCanvasWindowLayerController,
+                        MainMenuWindow,
+                        InventoryCanvasWindow>
+                    (false, false, null);
         }
 
         private void OnOptionsButtonClick()
-        { 
-            _mainMenuWindow.Hide(false);
-            _optionsWindow.Show(false);
+        {
+            _canvasService.TransitionController
+                .PlayTransition<TransitionCrossFadeCanvasWindowLayerController,
+                        MainMenuWindow,
+                        OptionsWindow>
+                    (false, false, null);
         }
 
         private void OnRateUsButtonClick()

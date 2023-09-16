@@ -349,7 +349,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -358, y: 0}
+  m_AnchoredPosition: {x: -355, y: 0}
   m_SizeDelta: {x: 666, y: -50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8923760413694748977
@@ -1354,6 +1354,7 @@ GameObject:
   - component: {fileID: 4765142800376440303}
   - component: {fileID: 4765142800376440302}
   - component: {fileID: 8676169919128619965}
+  - component: {fileID: 4608554873221700222}
   m_Layer: 5
   m_Name: InventoryWindow
   m_TagString: Untagged
@@ -1423,7 +1424,32 @@ MonoBehaviour:
   - {fileID: 6294816125073439888}
   - {fileID: 1955658048342734811}
   - {fileID: 6659731472966731612}
-  defaultWindowLayer: {fileID: 2415673752521849296}
+  _animationType: 1
+  _windowAnimator: {fileID: 4608554873221700222}
+  _showAnimationName: Show
+  _idleAnimationName: Idle
+  _hideAnimationName: Hide
+  _hiddenAnimationName: Hidden
+--- !u!95 &4608554873221700222
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4765142800376440288}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: f0b96bf6b81978a4694018eecc5c2ed5, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &4813801025452954655
 GameObject:
   m_ObjectHideFlags: 0

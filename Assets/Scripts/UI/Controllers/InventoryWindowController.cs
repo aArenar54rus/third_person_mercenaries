@@ -10,7 +10,6 @@ namespace Arenar.Services.UI
         private IInventoryService _inventoryService;
 
         private InventoryCanvasWindow _inventoryWindow;
-        private MainMenuWindow _mainMenuWindow;
 
         private InventoryEquipCanvasLayer _inventoryEquipCanvasLayer;
         private InventoryBagCanvasLayer _inventoryBagCanvasLayer;
@@ -28,7 +27,6 @@ namespace Arenar.Services.UI
         {
             base.Initialize(canvasService);
             
-            _mainMenuWindow = _canvasService.GetWindow<MainMenuWindow>();
             _inventoryWindow = _canvasService.GetWindow<InventoryCanvasWindow>();
             
             _inventoryEquipCanvasLayer = _inventoryWindow
@@ -115,8 +113,11 @@ namespace Arenar.Services.UI
 
         private void OnReturnToMenuBtnClick()
         {
-            _inventoryWindow.Hide(false);
-            _mainMenuWindow.Show(false);
+            _canvasService.TransitionController
+                .PlayTransition<TransitionCrossFadeCanvasWindowLayerController,
+                        InventoryCanvasWindow,
+                        MainMenuWindow>
+                            (false, false, null);
         }
     }
 }

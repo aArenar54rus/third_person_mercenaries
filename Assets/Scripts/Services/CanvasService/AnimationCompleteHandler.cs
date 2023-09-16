@@ -16,11 +16,11 @@ namespace TakeTop.Helpers
                 switch (animationType)
                 {
                     case AnimationType.Show:
-                        canvasWindowLayer.OnCanvasWindowShowEnd();
+                        canvasWindowLayer.ShowWindowLayerComplete();
                         break;
 
                     case AnimationType.Hide:
-                        canvasWindowLayer.OnCanvasWindowHideBegin();
+                        canvasWindowLayer.HideWindowLayerStart();
                         break;
 
                     default:
