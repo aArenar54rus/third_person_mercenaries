@@ -4,10 +4,10 @@ namespace Arenar
     {
         float Damage { get; }
         
-        ItemData ItemData { get; }
+        ItemInventoryData ItemInventoryData { get; }
         WeaponType WeaponType { get; }
 
 
-        void InitializeWeapon(ItemData itemData);
+        void InitializeWeapon(ItemInventoryData itemInventoryData);
     }
 }

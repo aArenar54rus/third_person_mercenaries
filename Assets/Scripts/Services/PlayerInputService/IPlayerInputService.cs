@@ -7,6 +7,6 @@ namespace Arenar.Services.PlayerInputService
         public IInputActionCollection InputActionCollection { get; }
         
         
-        void SetNewInputControlType(InputActionMapType type, bool status);
+        void SetInputControlType(InputActionMapType type, bool status);
     }
 }

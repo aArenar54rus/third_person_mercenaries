@@ -1,10 +1,10 @@
 using Arenar.AudioSystem;
-using TakeTop.Options;
+using Arenar.Options;
 using UnityEngine;
 using UnityEngine.UI;
 
 
-namespace TakeTop.UI
+namespace Arenar.UI
 {
     public abstract class SettingsButton : MonoBehaviour
     {

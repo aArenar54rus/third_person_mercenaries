@@ -75,16 +75,12 @@ namespace Arenar.Character
             IsGrounded = IsGroundedCheck();
             InteractableElementsOnCross = GetInteractableElementsOnCross();
 
-            if (TryGetObjectOnCross(out Transform objectOnCross, out Vector3 raycastPoint))
-            {
-                ObjectOnCross = objectOnCross;
-                RaycastPoint = raycastPoint;
-            }
-            else
-            {
-                ObjectOnCross = null;
-                RaycastPoint = Vector3.zero;
-            }
+            ObjectOnCross = TryGetObjectOnCross(out Transform objectOnCross, out Vector3 raycastPoint)
+                ? objectOnCross
+                : null;
+            
+            // RaycastPoint = Vector3.zero;
+            RaycastPoint = Vector3.Lerp(RaycastPoint, raycastPoint, 100);
 
             CharacterControllerOnCross = GetComponentCharacterController();
         }
@@ -112,6 +108,17 @@ namespace Arenar.Character
             objectTransform = hit.transform;
             return true;
         }
+
+        /*private Vector3 GetAimRaycastPoint()
+        {
+            Vector2 screenCenter = new (Screen.width / 2, Screen.height / 2);
+            Ray ray = _camera.ScreenPointToRay(screenCenter);
+            //Ray ray = _camera.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));
+            if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity))
+                return hit.point;
+            
+            
+        }*/
         
         private bool TryGetObjectOnCross(out Transform objectTransform, out Vector3 raycastPoint)
         {
@@ -119,7 +126,7 @@ namespace Arenar.Character
             if (!Physics.Raycast(ray, out RaycastHit hit))
             {
                 objectTransform = null;
-                raycastPoint = _camera.ScreenToWorldPoint(new Vector2(Screen.width / 2f, Screen.height / 2f)) + Vector3.forward * 1000f;
+                raycastPoint =  _camera.ScreenToWorldPoint(new Vector2(Screen.width / 2f, Screen.height / 2f)) + Vector3.forward * 1000f;
                 return false;
             }
             

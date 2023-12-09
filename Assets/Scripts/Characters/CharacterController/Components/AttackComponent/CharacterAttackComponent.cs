@@ -151,7 +151,7 @@ namespace Arenar.Character
         private void OnUpdateEquippedWeaponItem()
         {
             var equippedWeapon = inventoryService.GetEquippedWeapons()[_equippedWeaponIndex];
-            if (equippedWeapon == null || equippedWeapon.itemData == null)
+            if (equippedWeapon == null || equippedWeapon.itemInventoryData == null)
             {
                 if (firearmWeapon != null)
                 {

@@ -8,6 +8,6 @@ namespace Arenar.Services.SaveAndLoad
 {
     public class InventorySaveDelegate : SaveDelegate
     {
-        public Dictionary<int, InventoryItemData> equippedWeapons;
+        public Dictionary<int, InventoryItemCellData> equippedWeapons;
     }
 }

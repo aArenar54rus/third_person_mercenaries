@@ -1,4 +1,5 @@
 using Arenar.Character;
+using Arenar.Services.PlayerInputService;
 using UnityEngine;
 using Zenject;
 
@@ -7,7 +8,7 @@ namespace Arenar.Services.UI
 {
     public class GameplayGameInformationWindowController : CanvasWindowController, ITickable
     {
-        private TestCharacterSpawnController testCharacterSpawnController;
+        private TestCharacterSpawnController _testCharacterSpawnController;
         private GameplayInformationLayer gameplayInformationLayer;
         private ICharacterRayCastComponent playerCharacterRaycastComponent;
 
@@ -41,11 +42,14 @@ namespace Arenar.Services.UI
         }
         
         
-        [Inject]
-        public void Construct(TickableManager tickableManager,
-            TestCharacterSpawnController testCharacterSpawnController)
+        public GameplayGameInformationWindowController(TickableManager tickableManager,
+            TestCharacterSpawnController testCharacterSpawnController,
+            IPlayerInputService playerInputService)
+            : base(playerInputService)
         {
-            this.testCharacterSpawnController = testCharacterSpawnController;
+            _testCharacterSpawnController = testCharacterSpawnController;
+            _playerInputService = playerInputService;
+            
             tickableManager.Add(this);
         }
 
@@ -53,16 +57,26 @@ namespace Arenar.Services.UI
         {
             base.Initialize(canvasService);
 
-            gameplayInformationLayer = base._canvasService
+            gameplayInformationLayer = _canvasService
                 .GetWindow<GameplayCanvasWindow>()
                 .GetWindowLayer<GameplayInformationLayer>();
 
             gameplayInformationLayer.GetComponent<Canvas>().enabled = true;
             gameplayInformationLayer.EnemyTargetInformationPanel.UnsetEnemy();
 
-            testCharacterSpawnController.OnCreatePlayerCharacter += OnCreatePlayerCharacter;
+            _testCharacterSpawnController.OnCreatePlayerCharacter += OnCreatePlayerCharacter;
         }
-        
+
+        protected override void OnWindowShowEnd_SelectElements()
+        {
+            return;
+        }
+
+        protected override void OnWindowHideBegin_DeselectElements()
+        {
+            return;
+        }
+
         public void Tick()
         {
             if (playerCharacter == null)

@@ -20,35 +20,35 @@ namespace Arenar.Services.InventoryService
         int InventoryMassMax { get; }
 
 
-        InventoryItemData GetInventoryItemData(int cellIndex);
+        InventoryItemCellData GetInventoryItemData(int cellIndex);
 
-        bool TryAddItems(ItemData itemData,
+        bool TryAddItems(ItemInventoryData itemInventoryData,
             int count,
-            out InventoryItemData restOfItems);
+            out InventoryItemCellData restOfItemsCell);
         
         bool TryAddItemInCurrentCell(int cellIndex,
-            ItemData itemData,
+            ItemInventoryData itemInventoryData,
             int count,
-            out InventoryItemData restOfItems);
+            out InventoryItemCellData restOfItemsCell);
 
         void RemoveItemFromCell(int cellIndex,
             int count,
-            out InventoryItemData restOfItems);
+            out InventoryItemCellData restOfItemsCell);
 
-        bool IsEnoughItems(ItemData itemData, int neededCount);
+        bool IsEnoughItems(ItemInventoryData itemInventoryData, int neededCount);
         
         bool IsEnoughItems(int itemIndex, int neededCount);
 
-        bool TryRemoveItems(ItemData itemData,
+        bool TryRemoveItems(ItemInventoryData itemInventoryData,
             int neededCount,
-            out InventoryItemData restOfItems);
+            out InventoryItemCellData restOfItemsCell);
         
         bool TryRemoveItems(int itemIndex,
             int neededCount,
-            out InventoryItemData restOfItems);
+            out InventoryItemCellData restOfItemsCell);
 
-        InventoryItemData[] GetEquippedWeapons();
+        InventoryItemCellData[] GetEquippedWeapons();
 
-        InventoryItemData GetEquippedCloth(ItemClothType itemClothType);
+        InventoryItemCellData GetEquippedCloth(ItemClothType itemClothType);
     }
 }

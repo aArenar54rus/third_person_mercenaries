@@ -28,7 +28,7 @@ namespace Arenar
         public int ClipSizeMax { get; private set; }
         
         public int ClipSize { get; private set; }
-        public ItemData ItemData { get; private set; }
+        public ItemInventoryData ItemInventoryData { get; private set; }
 
         public WeaponType WeaponType => WeaponType.Firearm;
         
@@ -60,15 +60,15 @@ namespace Arenar
             }
         }
 
-        public void InitializeWeapon(ItemData itemData)
+        public void InitializeWeapon(ItemInventoryData itemInventoryData)
         {
-            if (itemData.ItemType != ItemType.Weapon)
+            if (itemInventoryData.ItemType != ItemType.Weapon)
             {
-                Debug.LogError($"You try initialize weapon as {itemData.ItemType}. Check your code, asshole!");
+                Debug.LogError($"You try initialize weapon as {itemInventoryData.ItemType}. Check your code, asshole!");
                 return;
             }
 
-            ItemData = itemData;
+            ItemInventoryData = itemInventoryData;
             
             Damage = CalculateWeaponDamage();
             ClipSizeMax = GetClipSizeMax();
@@ -111,7 +111,7 @@ namespace Arenar
             float multiplierByLevel = Mathf.Clamp(firearmWeaponData.DamageMultiplierByItemLevel * ItemLevel, 1, float.MaxValue);
             return firearmWeaponData.BaseDamage
                    * multiplierByLevel
-                   * firearmWeaponData.ItemDamageMultiplierByRarity[ItemData.ItemRarity];
+                   * firearmWeaponData.ItemDamageMultiplierByRarity[ItemInventoryData.ItemRarity];
         }
 
         protected virtual int GetClipSizeMax()

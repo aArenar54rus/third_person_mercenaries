@@ -21,9 +21,9 @@ MonoBehaviour:
       TermType: 0
       Description: 
       Languages:
-      - Options
-      - "\u041D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0438"
-      - Ayarlar
+      - Continue
+      - "\u041F\u0440\u043E\u0434\u043E\u043B\u0436\u0438\u0442\u044C"
+      - 
       Flags: 000000
       Languages_Touch: []
     - Term: loc_key_rate_us
@@ -168,6 +168,69 @@ MonoBehaviour:
       Languages:
       - Local conflict
       - "\u041B\u043E\u043A\u0430\u043B\u044C\u043D\u044B\u0439 \u043A\u043E\u043D\u0444\u043B\u0438\u043A\u0442"
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: loc_key_language
+      TermType: 0
+      Description: 
+      Languages:
+      - English
+      - "\u0420\u0443\u0441\u0441\u043A\u0438\u0439"
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: loc_key_inventory
+      TermType: 0
+      Description: 
+      Languages:
+      - Inventory
+      - "\u0418\u043D\u0432\u0435\u043D\u0442\u0430\u0440\u044C"
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: loc_key_level_complete
+      TermType: 0
+      Description: 
+      Languages:
+      - Level complete
+      - "\u0423\u0440\u043E\u0432\u0435\u043D\u044C \u043F\u0440\u043E\u0439\u0434\u0435\u043D"
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: loc_key_your_rewards
+      TermType: 0
+      Description: 
+      Languages:
+      - Your rewards
+      - "\u0412\u0430\u0448\u0438 \u043D\u0430\u0433\u0440\u0430\u0434\u044B"
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: loc_key_continue
+      TermType: 0
+      Description: 
+      Languages:
+      - "\u041D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0438"
+      - 
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: loc_key_no_rewards
+      TermType: 0
+      Description: 
+      Languages:
+      - No rewards
+      - "\u041D\u0435\u0442 \u043D\u0430\u0433\u0440\u0430\u0434"
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: loc_key_your_progress
+      TermType: 0
+      Description: 
+      Languages:
+      - Your progress
+      - "\u0412\u0430\u0448\u0438 \u0443\u0441\u043F\u0435\u0445\u0438"
       - 
       Flags: 000000
       Languages_Touch: []

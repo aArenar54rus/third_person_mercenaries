@@ -15,7 +15,7 @@ MonoBehaviour:
   _levelDatas:
   - _levelIndex: 0
     _levelNameKey: loc_key_level1
-    _sceneKey: LevelOne
+    _sceneKey: Level_1
     _levelPortrait: {fileID: 0}
     _difficultData:
       IsSingleLineView: 0

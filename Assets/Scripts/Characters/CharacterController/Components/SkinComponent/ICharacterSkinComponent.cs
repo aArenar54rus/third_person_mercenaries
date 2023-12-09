@@ -4,6 +4,6 @@ namespace Arenar.Character
     {
         void SetSkin();
 
-        void SetWeapon(ItemData itemData);
+        void SetWeapon(ItemInventoryData itemInventoryData);
     }
 }

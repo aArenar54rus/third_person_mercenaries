@@ -3,7 +3,7 @@ using System;
 using UnityEngine;
 
 
-namespace TakeTop.Options
+namespace Arenar.Options
 {
     public class OptionsController : IOptionsController
     {

@@ -14,8 +14,17 @@ public class OverlapSphereTest : MonoBehaviour
     [SerializeField] private float offset = -0.14f;
 
 
-    private Transform characterTransform =>
-        characterController.CameraTransform;
+    private Transform characterTransform
+    {
+        get
+        {
+            if (characterController is PlayerComponentCharacterController player)
+                return player.CameraTransform;
+
+            return null;
+        }
+    }
+        
 
     private ICharacterRayCastComponent characterRaycastComponent;
     

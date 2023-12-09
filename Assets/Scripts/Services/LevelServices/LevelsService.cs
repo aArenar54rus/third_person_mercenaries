@@ -1,3 +1,4 @@
+using System;
 using Arenar.Services.SaveAndLoad;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -8,14 +9,18 @@ namespace Arenar.Services.LevelsService
 {
     public class LevelsService : ILevelsService
     {
+        public event Action<LevelContext> onCompleteLevel;
+        
+        
         private int _lastCompleteLevel;
         private LevelDifficult _lastCompleteDifficult;
 
         private ZenjectSceneLoader _sceneLoader;
         private ISaveAndLoadService<SaveDelegate> _saveAndLoadService;
         private LevelData[] _levelDatas;
-        
 
+
+        
         public LevelData[] LevelDatas => _levelDatas;
         public int LastCompleteLevel => _lastCompleteLevel;
         public LevelDifficult LastCompleteDifficult => _lastCompleteDifficult;
@@ -53,13 +58,9 @@ namespace Arenar.Services.LevelsService
                 Debug.LogError("Unknown level for load!");
                 return;
             }
-            
-            CurrentLevelContext = new LevelContext
-            {
-                LevelData = levelData,
-                LevelDifficult = levelDifficult
-            };
-            
+
+            CurrentLevelContext = new LevelContext(levelData, levelDifficult);
+
             _sceneLoader.LoadScene(CurrentLevelContext.LevelData.SceneKey, LoadSceneMode.Additive);
         }
 
@@ -81,6 +82,8 @@ namespace Arenar.Services.LevelsService
             saveDelegate.completeDifficult = LevelDifficult.Infinity;
             saveDelegate.completedLevel = _lastCompleteLevel;
             _saveAndLoadService.MakeSave(saveDelegate);
+            
+            onCompleteLevel?.Invoke(CurrentLevelContext);
         }
 
         public void UnloadCurrentLevelScene()

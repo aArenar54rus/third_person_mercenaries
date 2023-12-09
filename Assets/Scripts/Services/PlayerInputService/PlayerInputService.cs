@@ -20,7 +20,7 @@ namespace Arenar.Services.PlayerInputService
         }
         
 
-        public void SetNewInputControlType(InputActionMapType type, bool status)
+        public void SetInputControlType(InputActionMapType type, bool status)
         {
             switch (type)
             {

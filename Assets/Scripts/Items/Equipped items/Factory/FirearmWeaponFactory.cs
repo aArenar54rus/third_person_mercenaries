@@ -20,11 +20,11 @@ namespace Arenar.Character
         }
         
         
-        public FirearmWeapon Create(InventoryItemData equippedWeapon, Transform handOwner)
+        public FirearmWeapon Create(InventoryItemCellData equippedWeapon, Transform handOwner)
         {
             DiContainer subContainer = container.CreateSubContainer();
             FirearmWeapon weapon = GameObject.Instantiate(
-                Resources.Load<GameObject>("Prefabs/Items/" + equippedWeapon.itemData.Id), handOwner)
+                Resources.Load<GameObject>("Prefabs/Items/" + equippedWeapon.itemInventoryData.Id), handOwner)
                 .GetComponent<FirearmWeapon>();
             
             /*switch (weapon)
@@ -37,7 +37,7 @@ namespace Arenar.Character
             weapon.transform.localPosition = Vector3.zero;
             weapon.transform.localRotation = Quaternion.Euler(weapon.LocalRotation);
             
-            weapon.InitializeWeapon(equippedWeapon.itemData);
+            weapon.InitializeWeapon(equippedWeapon.itemInventoryData);
             
             subContainer.ResolveRoots();
             subContainer.Rebind<InitializableManager>()

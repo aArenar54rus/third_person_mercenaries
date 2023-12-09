@@ -1,5 +1,7 @@
 using Arenar.Services.LevelsService;
+using Arenar.Services.PlayerInputService;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using Zenject;
 
 
@@ -23,12 +25,13 @@ namespace Arenar.Services.UI
             _levelSelectionWindow.GetWindowLayer<LevelDifficultLayer>();
         
 
-        [Inject]
-        public void Construct(ILevelsService levelsService)
+        public LevelSelectionWindowController(ILevelsService levelsService, IPlayerInputService playerInputService) : base(playerInputService)
         {
+            _playerInputService = playerInputService;
             _levelsService = levelsService;
         }
 
+        
         public void OpenWindow()
         {
             OnLevelDifficult(LevelDifficult.Easy);
@@ -44,8 +47,28 @@ namespace Arenar.Services.UI
             InitLevelSelectionLayer();
             InitLevelDifficultLayer();
 
-            LevelSelectionLayer.onCanvasLayerShowBegin += OnOpenWindow;
+            LevelSelectionLayer.onCanvasLayerShowBegin += OnShowBegin_LoadSelectedLevelData;
+            _levelSelectionWindow.OnShowEnd.AddListener(OnWindowShowEnd_SelectElements);
+            _levelSelectionWindow.OnHideBegin.AddListener(OnWindowHideBegin_DeselectElements);
         }
+
+        protected override void OnWindowShowEnd_SelectElements()
+        {
+            if (_levelSelectionButtonVisuals.Length > 0)
+                _levelSelectionButtonVisuals[0].Select();
+            
+            if (_playerInputService.InputActionCollection is PlayerInput playerInput)
+                playerInput.UI.Decline.performed += OnInputAction_Decline;
+        }
+
+        protected override void OnWindowHideBegin_DeselectElements()
+        {
+            if (_playerInputService.InputActionCollection is PlayerInput playerInput)
+                playerInput.UI.Decline.performed -= OnInputAction_Decline;
+        }
+
+        private void OnInputAction_Decline(InputAction.CallbackContext context) =>
+            OnReturnToMainMenuButtonClick();
 
         private void InitLevelSelectionLayer()
         {
@@ -69,6 +92,7 @@ namespace Arenar.Services.UI
                 levelDifficultButton.Initialize(OnLevelDifficult);
 
             LevelDifficultLayer.LevelStartButton.onClick.AddListener(OnStartMatchButtonClick);
+            LevelDifficultLayer.BackToMenuButton.onClick.AddListener(OnReturnToMainMenuButtonClick);
         }
 
         void OnLevelDifficult(LevelDifficult levelDifficult)
@@ -114,7 +138,7 @@ namespace Arenar.Services.UI
             }
         }
 
-        void OnSelectLevel(int levelIndex)
+        private void OnSelectLevel(int levelIndex)
         {
             foreach (LevelSelectionButtonVisual levelSelectionButton in _levelSelectionButtonVisuals)
             {
@@ -130,8 +154,7 @@ namespace Arenar.Services.UI
         private void OnStartMatchButtonClick()
         {
             _canvasService.TransitionController
-                .PlayTransition<
-                    TransitionOverlayCanvasWindowController, 
+                .PlayTransition<TransitionOverlayCanvasWindowController, 
                     LevelSelectionWindow, 
                     GameplayCanvasWindow>(
                         true, 
@@ -142,7 +165,18 @@ namespace Arenar.Services.UI
                         });
         }
 
-        private void OnOpenWindow(CanvasWindowLayer layer)
+        private void OnReturnToMainMenuButtonClick()
+        {
+            _canvasService.TransitionController
+                .PlayTransition<TransitionCrossFadeCanvasWindowLayerController, 
+                    LevelSelectionWindow, 
+                    MainMenuWindow>(
+                    false, 
+                    false,
+                    null);
+        }
+
+        private void OnShowBegin_LoadSelectedLevelData(CanvasWindowLayer layer)
         {
             OnSelectLevel(_currentLevelIndex);
             OnLevelDifficult(LevelDifficult.Easy);

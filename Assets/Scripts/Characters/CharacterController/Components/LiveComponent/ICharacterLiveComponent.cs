@@ -6,6 +6,7 @@ namespace Arenar.Character
     public interface ICharacterLiveComponent : ICharacterComponent
     {
         event Action OnCharacterDie; 
+        event Action<ICharacterEntity> OnCharacterGetDamageBy; 
         event Action<int, int> OnCharacterChangeHealthValue; 
         
         

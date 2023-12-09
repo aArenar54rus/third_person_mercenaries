@@ -1,6 +1,7 @@
 using Zenject;
 
-namespace TakeTop.Options
+
+namespace Arenar.Options
 {
     public class OptionsSystemServiceInstaller : MonoInstaller
     {

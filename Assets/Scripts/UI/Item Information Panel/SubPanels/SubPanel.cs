@@ -4,5 +4,12 @@ using UnityEngine;
 
 public abstract class SubPanel : MonoBehaviour
 {
-    public abstract void Initialize(ItemData itemData);
+    private RectTransform _rectTransform;
+
+
+    public RectTransform RectTransform => 
+        _rectTransform ??= GetComponent<RectTransform>();
+    
+    
+    public abstract void Initialize(ItemInventoryData itemInventoryData);
 }

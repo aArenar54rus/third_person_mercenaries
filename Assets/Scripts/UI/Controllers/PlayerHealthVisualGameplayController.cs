@@ -1,6 +1,6 @@
 using Arenar.Character;
+using Arenar.Services.PlayerInputService;
 using UnityEngine;
-using Zenject;
 
 
 namespace Arenar.Services.UI
@@ -61,11 +61,13 @@ namespace Arenar.Services.UI
         }
         
         
-        [Inject]
-        public void Construct(TestCharacterSpawnController testCharacterSpawnController)
+        public PlayerHealthVisualGameplayController(TestCharacterSpawnController testCharacterSpawnController,
+            IPlayerInputService playerInputService)
+            : base(playerInputService)
         {
             this.testCharacterSpawnController = testCharacterSpawnController;
         }
+
         
         public override void Initialize(ICanvasService canvasService)
         {
@@ -78,6 +80,16 @@ namespace Arenar.Services.UI
             gameplayPlayerParametersWindowLayer.GetComponent<Canvas>().enabled = true;
 
             testCharacterSpawnController.OnCreatePlayerCharacter += OnInstallNewTestCharacter;
+        }
+
+        protected override void OnWindowShowEnd_SelectElements()
+        {
+            //throw new System.NotImplementedException();
+        }
+
+        protected override void OnWindowHideBegin_DeselectElements()
+        {
+            //throw new System.NotImplementedException();
         }
 
         private void OnInstallNewTestCharacter(ComponentCharacterController characterController)

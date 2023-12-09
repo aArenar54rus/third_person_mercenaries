@@ -6,36 +6,14 @@ using Zenject;
 
 namespace Arenar.Character
 {
-    public class ComponentCharacterController : MonoBehaviour,
-                                   ICharacterEntity,
-                                   ICharacterDataStorage<CharacterAudioDataStorage>,
-                                   ICharacterDataStorage<CharacterVisualDataStorage>,
-                                   ICharacterDataStorage<CharacterAnimatorDataStorage>,
-                                   ICharacterDataStorage<CharacterPhysicsDataStorage>,
-                                   ICharacterDataStorage<CharacterAimAnimationDataStorage>
+    public abstract class ComponentCharacterController : MonoBehaviour,
+                                   ICharacterEntity
     {
         private Dictionary<Type, ICharacterComponent> characterComponentsPool;
-        
-        [SerializeField] private CharacterAudioDataStorage characterAudioDataStorage;
-        [SerializeField] private CharacterVisualDataStorage characterVisualDataStorage;
-        [SerializeField] private CharacterAnimatorDataStorage characterAnimatorDataStorage;
-        [SerializeField] private CharacterPhysicsDataStorage characterPhysicsDataStorage;
-        [SerializeField] private CharacterAimAnimationDataStorage characterAimAnimationDataStorage;
 
 
-        public Transform CharacterTransform => characterPhysicsDataStorage.CharacterTransform;
-        
-        public Transform CameraTransform => characterPhysicsDataStorage.CameraTransform;
-        
-        CharacterAudioDataStorage ICharacterDataStorage<CharacterAudioDataStorage>.Data => characterAudioDataStorage;
+        public abstract Transform CharacterTransform { get; }
 
-        CharacterVisualDataStorage ICharacterDataStorage<CharacterVisualDataStorage>.Data => characterVisualDataStorage;
-
-        CharacterAnimatorDataStorage ICharacterDataStorage<CharacterAnimatorDataStorage>.Data => characterAnimatorDataStorage;
-        
-        CharacterPhysicsDataStorage ICharacterDataStorage<CharacterPhysicsDataStorage>.Data => characterPhysicsDataStorage;
-        
-        CharacterAimAnimationDataStorage ICharacterDataStorage<CharacterAimAnimationDataStorage>.Data => characterAimAnimationDataStorage;
 
 
         [Inject]
@@ -77,9 +55,7 @@ namespace Arenar.Character
                 characterComponent.Value.DeInitialize();
         }
 
-        private void OnDestroy()
-        {
+        private void OnDestroy() =>
             DeInitialize();
-        }
     }
 }

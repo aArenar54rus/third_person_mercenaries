@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Events;
@@ -9,8 +7,12 @@ using Zenject;
 
 namespace Arenar.Services.UI
 {
-    public abstract class CanvasWindow : MonoBehaviour
+	public abstract class CanvasWindow : MonoBehaviour
     {
+	    private Action onCanvasShowEnd;
+	    private Action onCanvasHideEnd;
+	    
+	    
 	    [SerializeField] protected CanvasWindowLayer[] canvasWindowLayers = default;
 	    
 	    [Space(10)]
@@ -28,7 +30,7 @@ namespace Arenar.Services.UI
 
 
 		public UnityEvent OnShowBegin { get; } = new();
-        public UnityEvent OnShowEnd { get; } = new();
+        public UnityEvent OnShowEnd { get; set; } = new();
         public UnityEvent OnHideBegin { get; } = new();
         public UnityEvent OnHideEnd { get; } = new();
 
@@ -60,13 +62,12 @@ namespace Arenar.Services.UI
         
         public virtual void Show(bool immediately = false, Action OnShowEndCallback = null)
         {
-			if (OnShowEndCallback != null)
-				OnShowEnd.AddListener(OnShowEndCallback.Invoke);
+	        if (OnShowEndCallback != null)
+		        onCanvasShowEnd = OnShowEndCallback;
 
             gameObject.SetActive(true);
             Canvas.enabled = true;
-            Debug.LogError(gameObject.name + " open " + gameObject.activeSelf);
-            
+
             foreach (CanvasWindowLayer canvasWindowLayer in canvasWindowLayers)
 	            canvasWindowLayer.ShowWindowLayerStart();
 
@@ -91,15 +92,12 @@ namespace Arenar.Services.UI
             }
             
             OnShowBegin?.Invoke();
-            OnShowBegin?.RemoveAllListeners();
-
-            Debug.LogError(gameObject.name + " open " + gameObject.activeSelf);
         }
 
         public virtual void Hide(bool immediately = false, Action onHideEndCallback = null)
         {
-			if (onHideEndCallback != null)
-				OnHideEnd.AddListener(onHideEndCallback.Invoke);
+	        if (onHideEndCallback != null)
+		        onCanvasHideEnd = onHideEndCallback;
 			
 			foreach (CanvasWindowLayer canvasWindowElement in canvasWindowLayers)
 				canvasWindowElement.HideWindowLayerStart();
@@ -125,9 +123,7 @@ namespace Arenar.Services.UI
             }
 			
             OnHideBegin?.Invoke();
-            OnHideBegin?.RemoveAllListeners();
-            Debug.LogError(gameObject.name + " hide " + gameObject.activeSelf);
-		}
+        }
 
 		public T GetWindowLayer<T>() where T : CanvasWindowLayer
         {
@@ -171,7 +167,9 @@ namespace Arenar.Services.UI
 				canvasWindowElement.ShowWindowLayerComplete();
 			
 			OnShowEnd?.Invoke();
-			OnShowEnd?.RemoveAllListeners();
+			
+			onCanvasShowEnd?.Invoke();
+			onCanvasShowEnd = null;
 		}
 
 		protected virtual void OnHideComplete()
@@ -180,11 +178,11 @@ namespace Arenar.Services.UI
 				canvasWindowElement.HideWindowLayerComplete();
 			
 			OnHideEnd?.Invoke();
-			OnHideEnd?.RemoveAllListeners();
+			
+			onCanvasHideEnd?.Invoke();
+			onCanvasHideEnd = null;
 			
 			gameObject.SetActive(false);
-			
-			Debug.LogError(gameObject.name + " hide complete " + gameObject.activeSelf);
 		}
 		
 		protected virtual void DeInitialize()

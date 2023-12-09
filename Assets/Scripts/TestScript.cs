@@ -1,5 +1,6 @@
 using Arenar;
 using Arenar.CameraService;
+using Arenar.Character;
 using UnityEngine;
 using Zenject;
 
@@ -19,8 +20,9 @@ public class TestScript : MonoBehaviour
     
     public void Start()
     {
-        var player = testCharacterSpawnController.CreateCharacter();
-        cameraService.SetCameraState<CameraStateThirdPerson>(player.CameraTransform, player.CharacterTransform);
+        ComponentCharacterController characterController = testCharacterSpawnController.CreateCharacter();
+        if (characterController is PlayerComponentCharacterController player)
+            cameraService.SetCameraState<CameraStateThirdPerson>(player.CameraTransform, characterController.CharacterTransform);
 
         testCharacterSpawnController.CreatePuppet();
     }

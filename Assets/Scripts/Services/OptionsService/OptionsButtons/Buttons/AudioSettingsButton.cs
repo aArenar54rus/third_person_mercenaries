@@ -1,10 +1,10 @@
 using Arenar.AudioSystem;
-using TakeTop.Options;
+using Arenar.Options;
 using UnityEngine;
 using Zenject;
 
 
-namespace TakeTop.UI
+namespace Arenar.UI
 {
     public class AudioSettingsButton : SettingsButton
     {

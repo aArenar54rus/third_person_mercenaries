@@ -12,7 +12,7 @@ namespace Arenar
         private List<TMP_Text> parameterTexts = default;
         
         
-        public override void Initialize(ItemData itemData)
+        public override void Initialize(ItemInventoryData itemInventoryData)
         {
             ClearOldTexts();
         }

@@ -20,6 +20,7 @@ MonoBehaviour:
     - {fileID: 984454890722762566, guid: b87c8d2df6fd6c940afe15512152d8e5, type: 3}
     - {fileID: 4765142800376440301, guid: 9c4a57b67b32ef4409bf3e9a31ff6414, type: 3}
     - {fileID: 6471173768082957446, guid: 0690f042a655b3b4eba974951c2578aa, type: 3}
+    - {fileID: 5366460774621929024, guid: b5f34b2e090bd95439948907a00a2e7d, type: 3}
     defaultWindow: {fileID: 6002018314034250697, guid: 9489106a594c0e04d910ac237ddd9034,
       type: 3}
     transitionWindow: {fileID: 6074149996065963569, guid: d3ab062d3e80aae4d9e6f475f8084d7c,

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using TakeTop.PreferenceSystem;
 using UnityEngine;
 
 
@@ -12,12 +13,13 @@ namespace Arenar.Services.InventoryService
         public event Action OnUpdateEquippedWeaponItem;
         
         
-        private Dictionary<int, InventoryItemData> _inventoryItemDataCells;
-        private Dictionary<ItemClothType, InventoryItemData> _equippedClothItems;
-        private InventoryItemData[] _equippedWeapons;
-        
+        private Dictionary<ItemClothType, InventoryItemCellData> _equippedClothItems;
+
         private float _currentInventoryMass = 0.0f;
         private InventoryOptionsSOData.Parameters _parameters;
+
+        private IPreferenceManager _preferenceManager;
+        private InventorySaveData _inventorySaveData;
 
 
         public bool IsMassOverbalance =>
@@ -32,27 +34,24 @@ namespace Arenar.Services.InventoryService
         public int InventoryMassMax =>
             _parameters.DefaultMassMax;
 
-        public Dictionary<ItemClothType, InventoryItemData> EquippedClothItems =>
+        public Dictionary<ItemClothType, InventoryItemCellData> EquippedClothItems =>
             _equippedClothItems;
 
 
-        public InventoryService(InventoryOptionsSOData.Parameters parameters)
+        public InventoryService(InventoryOptionsSOData.Parameters parameters, IPreferenceManager preferenceManager)
         {
             _parameters = parameters;
+            _preferenceManager = preferenceManager;
             Initialize();
         }
-        
-        public InventoryItemData GetInventoryItemData(int cellIndex)
-        {
-            return _inventoryItemDataCells[cellIndex];
-        }
 
-        public InventoryItemData[] GetEquippedWeapons()
-        {
-            return _equippedWeapons;
-        }
+        public InventoryItemCellData GetInventoryItemData(int cellIndex) =>
+            _inventorySaveData.InventoryCells[cellIndex];
 
-        public InventoryItemData GetEquippedCloth(ItemClothType itemClothType)
+        public InventoryItemCellData[] GetEquippedWeapons() =>
+            _inventorySaveData.EquippedWeaponCells;
+
+        public InventoryItemCellData GetEquippedCloth(ItemClothType itemClothType)
         {
             if (_equippedClothItems.ContainsKey(itemClothType))
             {
@@ -63,49 +62,49 @@ namespace Arenar.Services.InventoryService
             return _equippedClothItems[itemClothType];
         }
 
-        public bool TryAddItems(ItemData itemData, int count, out InventoryItemData restOfItems)
+        public bool TryAddItems(ItemInventoryData itemInventoryData, int count, out InventoryItemCellData restOfItemsCell)
         {
             // first, check mass
-            if (itemData.ItemMass * count > InventoryMassMax - InventoryMass)
+            if (itemInventoryData.ItemMass * count > InventoryMassMax - InventoryMass)
             {
-                restOfItems = new InventoryItemData(itemData, count);
+                restOfItemsCell = new InventoryItemCellData(itemInventoryData, count);
                 return false;
             }
 
-            if (itemData.ItemType == ItemType.Weapon)
+            if (itemInventoryData.ItemType == ItemType.Weapon)
             {
-                for (int i = 0; i < _equippedWeapons.Length; i++)
+                for (int i = 0; i < _inventorySaveData.EquippedWeaponCells.Length; i++)
                 {
-                    _equippedWeapons[i] ??= new InventoryItemData();
-                    if (_equippedWeapons[i].itemData != null)
+                    _inventorySaveData.EquippedWeaponCells[i] ??= new InventoryItemCellData();
+                    if (_inventorySaveData.EquippedWeaponCells[i].itemInventoryData != null)
                         continue;
                     
-                    _equippedWeapons[i].itemData = itemData;
-                    _equippedWeapons[i].elementsCount = 1;
-                    restOfItems = null;
+                    _inventorySaveData.EquippedWeaponCells[i].itemInventoryData = itemInventoryData;
+                    _inventorySaveData.EquippedWeaponCells[i].elementsCount = 1;
+                    restOfItemsCell = null;
                     CalculateMass();
                     OnUpdateEquippedWeaponItem?.Invoke();
                     return true;
                 }
             }
 
-            if (!itemData.CanStack)
-                return TryAddInFreeCell(itemData, count, out restOfItems);
+            if (!itemInventoryData.CanStack)
+                return TryAddInFreeCell(itemInventoryData, count, out restOfItemsCell);
 
             //check cells with same item
             List<int> updatedCellIndexes = new List<int>();
-            foreach (var inventoryItemData in _inventoryItemDataCells)
+            for (int i = 0; i < _inventorySaveData.InventoryCells.Length; i++)
             {
-                if (inventoryItemData.Value.itemData == null)
+                if (_inventorySaveData.InventoryCells[i].itemInventoryData == null)
                     continue;
                 
-                if (inventoryItemData.Value.itemData.Id != itemData.Id
-                    || inventoryItemData.Value.StackIsFull)
+                if (_inventorySaveData.InventoryCells[i].itemInventoryData.Id != itemInventoryData.Id
+                    || _inventorySaveData.InventoryCells[i].StackIsFull)
                     continue;
 
-                inventoryItemData.Value.elementsCount += count;
-                count = inventoryItemData.Value.elementsCount - inventoryItemData.Value.itemData.StackCountMax;
-                updatedCellIndexes.Add(inventoryItemData.Key);
+                _inventorySaveData.InventoryCells[i].elementsCount += count;
+                count = _inventorySaveData.InventoryCells[i].elementsCount - _inventorySaveData.InventoryCells[i].itemInventoryData.StackCountMax;
+                updatedCellIndexes.Add(i);
                 
                 if (count > 0)
                     continue;
@@ -113,92 +112,98 @@ namespace Arenar.Services.InventoryService
                 CalculateMass();
                 OnUpdateInventoryCells?.Invoke(new List<int>(updatedCellIndexes));
                 
-                restOfItems = null;
+                restOfItemsCell = null;
                 return true;
             }
             
-            return TryAddInFreeCell(itemData, count, out restOfItems);
+            SaveData();
+            
+            return TryAddInFreeCell(itemInventoryData, count, out restOfItemsCell);
         }
 
         public bool TryAddItemInCurrentCell(int cellIndex,
-                                            ItemData itemData,
+                                            ItemInventoryData itemInventoryData,
                                             int count,
-                                            out InventoryItemData restOfItems)
+                                            out InventoryItemCellData restOfItemsCell)
         {
-            InventoryItemData dataCell = _inventoryItemDataCells[cellIndex];
+            InventoryItemCellData cellDataCell = GetInventoryItemData(cellIndex); 
 
-            if (!itemData.CanStack)
+            if (!itemInventoryData.CanStack)
             {
-                if (dataCell.itemData == null)
+                if (cellDataCell.itemInventoryData == null)
                 {
-                    dataCell.itemData = itemData;
-                    dataCell.elementsCount = count;
+                    cellDataCell.itemInventoryData = itemInventoryData;
+                    cellDataCell.elementsCount = count;
                     CalculateMass();
-                    restOfItems = null;
+                    restOfItemsCell = null;
+                    SaveData();
                     
                     OnUpdateInventoryCells?.Invoke(new List<int>(cellIndex));
                     return true;
                 }
 
-                restOfItems = new InventoryItemData(itemData, count);
+                restOfItemsCell = new InventoryItemCellData(itemInventoryData, count);
                 return false;
             }
 
-            if (dataCell.itemData.Id != itemData.Id
-                || dataCell.StackIsFull)
+            if (cellDataCell.itemInventoryData.Id != itemInventoryData.Id
+                || cellDataCell.StackIsFull)
             {
-                restOfItems = new InventoryItemData(itemData, count);
+                restOfItemsCell = new InventoryItemCellData(itemInventoryData, count);
                 return false;
             }
 
-            dataCell.elementsCount += count;
-            count = dataCell.elementsCount - dataCell.itemData.StackCountMax;
+            cellDataCell.elementsCount += count;
+            count = cellDataCell.elementsCount - cellDataCell.itemInventoryData.StackCountMax;
             
             CalculateMass();
+            SaveData();
             OnUpdateInventoryCells?.Invoke(new List<int>(1){ cellIndex });
 
             if (count > 0)
             {
-                restOfItems = new InventoryItemData(itemData, count);
+                restOfItemsCell = new InventoryItemCellData(itemInventoryData, count);
                 return false;
             }
             
-            restOfItems = null;
+            restOfItemsCell = null;
             return true;
         }
 
-        public void RemoveItemFromCell(int cellIndex, int count, out InventoryItemData restOfItems)
+        public void RemoveItemFromCell(int cellIndex, int count, out InventoryItemCellData restOfItemsCell)
         {
-            var dataCell =  _inventoryItemDataCells[cellIndex];
+            var dataCell = GetInventoryItemData(cellIndex);
             if (dataCell.elementsCount < count)
             {
-                restOfItems = null;
+                restOfItemsCell = null;
                 return;
             }
             
-            restOfItems = new InventoryItemData(dataCell.itemData, count);
+            restOfItemsCell = new InventoryItemCellData(dataCell.itemInventoryData, count);
             dataCell.elementsCount -= count;
             if (dataCell.elementsCount == 0)
-                dataCell.itemData = null;
+                dataCell.itemInventoryData = null;
             
             CalculateMass();
+            SaveData();
             OnUpdateInventoryCells?.Invoke(new List<int>(cellIndex));
         }
 
-        public bool IsEnoughItems(ItemData itemData, int neededCount)
+        public bool IsEnoughItems(ItemInventoryData itemInventoryData, int neededCount)
         {
-            return IsEnoughItems(itemData.Id, neededCount);
+            return IsEnoughItems(itemInventoryData.Id, neededCount);
         }
 
         public bool IsEnoughItems(int itemIndex, int neededCount)
         {
             int counter = 0;
-            foreach (var dataCell in _inventoryItemDataCells)
+            
+            foreach (var inventoryCell in _inventorySaveData.InventoryCells)
             {
-                if (dataCell.Value.itemData.Id != itemIndex)
+                if (inventoryCell.itemInventoryData.Id != itemIndex)
                     continue;
 
-                counter += dataCell.Value.elementsCount;
+                counter += inventoryCell.elementsCount;
                 if (counter >= neededCount)
                     return true;
             }
@@ -206,29 +211,29 @@ namespace Arenar.Services.InventoryService
             return false;
         }
 
-        public bool TryRemoveItems(ItemData itemData, int neededCount, out InventoryItemData restOfItems)
+        public bool TryRemoveItems(ItemInventoryData itemInventoryData, int neededCount, out InventoryItemCellData restOfItemsCell)
         {
-            if (!IsEnoughItems(itemData.Id, neededCount))
+            if (!IsEnoughItems(itemInventoryData.Id, neededCount))
             {
-                restOfItems = null;
+                restOfItemsCell = null;
                 return false;
             }
 
             int counter = 0;
             List<int> changedCellsIndexes = new List<int>();
             
-            foreach (var dataCell in _inventoryItemDataCells)
+            for (int i = 0; i < _inventorySaveData.InventoryCells.Length; i++)
             {
-                if (dataCell.Value.itemData.Id != itemData.Id)
+                if (_inventorySaveData.InventoryCells[i].itemInventoryData.Id != itemInventoryData.Id)
                     continue;
 
-                changedCellsIndexes.Add(dataCell.Key);
-                if (dataCell.Value.elementsCount <= neededCount)
+                changedCellsIndexes.Add(i);
+                if (_inventorySaveData.InventoryCells[i].elementsCount <= neededCount)
                 {
-                    counter += dataCell.Value.elementsCount;
-                    neededCount -= dataCell.Value.elementsCount;
-                    dataCell.Value.itemData = null;
-                    dataCell.Value.elementsCount = 0;
+                    counter += _inventorySaveData.InventoryCells[i].elementsCount;
+                    neededCount -= _inventorySaveData.InventoryCells[i].elementsCount;
+                    _inventorySaveData.InventoryCells[i].itemInventoryData = null;
+                    _inventorySaveData.InventoryCells[i].elementsCount = 0;
 
                     if (neededCount == 0)
                         break;
@@ -236,42 +241,43 @@ namespace Arenar.Services.InventoryService
                 else
                 {
                     counter += neededCount;
-                    dataCell.Value.elementsCount -= neededCount;
+                    _inventorySaveData.InventoryCells[i].elementsCount -= neededCount;
                     break;
                 }
             }
 
             CalculateMass();
+            SaveData();
             OnUpdateInventoryCells?.Invoke(changedCellsIndexes);
-            restOfItems = new InventoryItemData(itemData, counter);
+            restOfItemsCell = new InventoryItemCellData(itemInventoryData, counter);
             return true;
         }
 
-        public bool TryRemoveItems(int itemIndex, int neededCount, out InventoryItemData restOfItems)
+        public bool TryRemoveItems(int itemIndex, int neededCount, out InventoryItemCellData restOfItemsCell)
         {
             if (!IsEnoughItems(itemIndex, neededCount))
             {
-                restOfItems = null;
+                restOfItemsCell = null;
                 return false;
             }
 
             int counter = 0;
 
-            ItemData neededItemData = null;
+            ItemInventoryData neededItemInventoryData = null;
             List<int> changedCellsIndexes = new List<int>();
-            foreach (var dataCell in _inventoryItemDataCells)
+            for (int i = 0; i < _inventorySaveData.InventoryCells.Length; i++)
             {
-                if (dataCell.Value.itemData.Id != itemIndex)
+                if (_inventorySaveData.InventoryCells[i].itemInventoryData.Id != itemIndex)
                     continue;
-
-                neededItemData ??= dataCell.Value.itemData;
-                changedCellsIndexes.Add(dataCell.Key);
-                if (dataCell.Value.elementsCount <= neededCount)
+                
+                changedCellsIndexes.Add(i);
+                neededItemInventoryData = _inventorySaveData.InventoryCells[i].itemInventoryData;
+                if (_inventorySaveData.InventoryCells[i].elementsCount <= neededCount)
                 {
-                    counter += dataCell.Value.elementsCount;
-                    neededCount -= dataCell.Value.elementsCount;
-                    dataCell.Value.itemData = null;
-                    dataCell.Value.elementsCount = 0;
+                    counter += _inventorySaveData.InventoryCells[i].elementsCount;
+                    neededCount -= _inventorySaveData.InventoryCells[i].elementsCount;
+                    _inventorySaveData.InventoryCells[i].itemInventoryData = null;
+                    _inventorySaveData.InventoryCells[i].elementsCount = 0;
 
                     if (neededCount == 0)
                         break;
@@ -279,92 +285,125 @@ namespace Arenar.Services.InventoryService
                 else
                 {
                     counter += neededCount;
-                    dataCell.Value.elementsCount -= neededCount;
+                    _inventorySaveData.InventoryCells[i].elementsCount -= neededCount;
                     break;
                 }
             }
 
             CalculateMass();
+            SaveData();
             OnUpdateInventoryCells?.Invoke(changedCellsIndexes);
-            restOfItems = new InventoryItemData(neededItemData, counter);
+            restOfItemsCell = new InventoryItemCellData(neededItemInventoryData, counter);
             return true;
         }
 
         private void Initialize()
         {
-            _inventoryItemDataCells = new Dictionary<int, InventoryItemData>(InventoryCellsCount);
+            LoadData();
+            
+            /*_inventoryItemDataCells = new Dictionary<int, InventoryItemCellData>(InventoryCellsCount);
             for (int i = 0; i < InventoryCellsCount; i++)
-                _inventoryItemDataCells.Add(i, new InventoryItemData(null, 0));
+                _inventoryItemDataCells.Add(i, new InventoryItemCellData(null, 0));
 
-            _equippedClothItems = new Dictionary<ItemClothType, InventoryItemData>();
-            _equippedClothItems.Add(ItemClothType.Head, new InventoryItemData(null, 0));
-            _equippedClothItems.Add(ItemClothType.Body, new InventoryItemData(null, 0));
-            _equippedClothItems.Add(ItemClothType.Hands, new InventoryItemData(null, 0));
-            _equippedClothItems.Add(ItemClothType.Foots, new InventoryItemData(null, 0));
-
-            _equippedWeapons = new InventoryItemData[_parameters.EquippedWeaponsCount];
-            for (int i = 0; i < _parameters.EquippedWeaponsCount; i++)
-                _equippedWeapons[i] = new InventoryItemData(null, 0);
-
-            DownloadInventory();
+            _equippedClothItems = new Dictionary<ItemClothType, InventoryItemCellData>();
+            _equippedClothItems.Add(ItemClothType.Head, new InventoryItemCellData(null, 0));
+            _equippedClothItems.Add(ItemClothType.Body, new InventoryItemCellData(null, 0));
+            _equippedClothItems.Add(ItemClothType.Hands, new InventoryItemCellData(null, 0));
+            _equippedClothItems.Add(ItemClothType.Foots, new InventoryItemCellData(null, 0));*/
+            
             CalculateMass();
         }
 
-        private void DownloadInventory()
+        private bool TryAddInFreeCell(ItemInventoryData itemInventoryData, int count, out InventoryItemCellData restOfItemsCell)
         {
-            
-        }
-
-        private bool TryAddInFreeCell(ItemData itemData, int count, out InventoryItemData restOfItems)
-        {
-            foreach (var inventoryItemData in _inventoryItemDataCells)
+            for(int i = 0; i < _inventorySaveData.InventoryCells.Length; i++)
             {
-                if (inventoryItemData.Value.itemData != null)
+                if (_inventorySaveData.InventoryCells[i].itemInventoryData != null)
                     continue;
                     
-                inventoryItemData.Value.itemData = itemData;
-                inventoryItemData.Value.elementsCount = count;
+                _inventorySaveData.InventoryCells[i].itemInventoryData = itemInventoryData;
+                _inventorySaveData.InventoryCells[i].elementsCount = count;
                 CalculateMass();
-                restOfItems = null;
+                SaveData();
+                restOfItemsCell = null;
                     
-                OnUpdateInventoryCells?.Invoke(new List<int>(1){ inventoryItemData.Key });
+                OnUpdateInventoryCells?.Invoke(new List<int>(1){ i });
 
                 return true;
             }
 
-            restOfItems = new InventoryItemData(itemData, count);
+            restOfItemsCell = new InventoryItemCellData(itemInventoryData, count);
             return false;
         }
 
         private void CalculateMass()
         {
             _currentInventoryMass = 0.0f;
-            foreach (var inventoryItemData in _inventoryItemDataCells)
+            foreach (var inventoryItemData in _inventorySaveData.InventoryCells)
             {
-                if (inventoryItemData.Value == null
-                    || inventoryItemData.Value.itemData == null)
+                if (inventoryItemData == null
+                    || inventoryItemData.itemInventoryData == null)
                     continue;
 
                 _currentInventoryMass +=
-                    inventoryItemData.Value.elementsCount * inventoryItemData.Value.itemData.ItemMass;
+                    inventoryItemData.elementsCount * inventoryItemData.itemInventoryData.ItemMass;
             }
 
-            foreach (var equippedClothItem in _equippedClothItems)
+            /*
+             foreach (var equippedClothItem in _equippedClothItems)
             {
                 if (equippedClothItem.Value == null
-                    || equippedClothItem.Value.itemData == null)
+                    || equippedClothItem.Value.itemInventoryData == null)
                     continue;
 
-                _currentInventoryMass += equippedClothItem.Value.itemData.ItemMass;
+                _currentInventoryMass += equippedClothItem.Value.itemInventoryData.ItemMass;
             }
+            */
 
-            foreach (var equippedWeapon in _equippedWeapons)
+            foreach (var equippedWeapon in _inventorySaveData.EquippedWeaponCells)
             {
                 if (equippedWeapon == null
-                    || equippedWeapon.itemData == null)
+                    || equippedWeapon.itemInventoryData == null)
                     continue;
-                _currentInventoryMass += equippedWeapon.itemData.ItemMass;
+                _currentInventoryMass += equippedWeapon.itemInventoryData.ItemMass;
             }
+        }
+
+        private void LoadData()
+        {
+            _inventorySaveData = _preferenceManager.LoadValue<InventorySaveData>();
+            _inventorySaveData.DataReInitialize(_parameters.DefaultInventoryCellsCount,
+                _parameters.EquippedWeaponsCount);
+
+            if (!_inventorySaveData.IsAddedContentEarly)
+            {
+                foreach (var constantWeapon in _parameters.ConstantWeaponCellParametersArray)
+                {
+                    if (_inventorySaveData.EquippedWeaponCells.Length > constantWeapon.WeaponCellIndex
+                        || constantWeapon.ConstantWeaponInventoryData.ItemType != ItemType.Weapon
+                        || _inventorySaveData.EquippedWeaponCells[constantWeapon.WeaponCellIndex].itemInventoryData != null)
+                        continue;
+
+                    _inventorySaveData.EquippedWeaponCells[constantWeapon.WeaponCellIndex] =
+                        new InventoryItemCellData(constantWeapon.ConstantWeaponInventoryData, 1);
+                    
+                    if (constantWeapon.IsLockWeaponCell)
+                        _inventorySaveData.EquippedWeaponCells[constantWeapon.WeaponCellIndex].SetLock();
+                }
+
+                foreach (var bagCellData in _parameters.BagCellParametersArray)
+                {
+                    TryAddItemInCurrentCell(bagCellData.BagCellIndex, bagCellData.BagInventoryData, 1,
+                        out InventoryItemCellData restOfItemsCell);
+                }
+
+                SaveData();
+            }
+        }
+
+        private void SaveData()
+        {
+            _preferenceManager.SaveValue(_inventorySaveData);
         }
     }
 }

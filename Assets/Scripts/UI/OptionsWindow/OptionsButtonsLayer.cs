@@ -22,6 +22,7 @@ namespace Arenar.Services.UI
         [SerializeField] private Image _countryIcon;
         [SerializeField] private Button _languageNextButton;
         [SerializeField] private Button _languageLastButton;
+        [SerializeField] private Button _languageButton;
         
         
         public Button BackButton => _backButton;
@@ -34,5 +35,6 @@ namespace Arenar.Services.UI
         public Image CountryIcon => _countryIcon;
         public Button LanguageNextButton => _languageNextButton;
         public Button LanguageLastButton => _languageLastButton;
+        public Button LanguageButton => _languageButton;
     }
 }

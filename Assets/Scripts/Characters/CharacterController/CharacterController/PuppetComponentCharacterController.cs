@@ -1,4 +1,9 @@
+using UnityEngine;
+
 namespace Arenar.Character
 {
-    public class PuppetComponentCharacterController : ComponentCharacterController { }
+    public class PuppetComponentCharacterController : ComponentCharacterController
+    {
+        public override Transform CharacterTransform { get; }
+    }
 }

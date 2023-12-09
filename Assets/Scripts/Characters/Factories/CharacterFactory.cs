@@ -44,16 +44,6 @@ namespace Arenar.Character
             subContainer.Rebind<InitializableManager>()
                 .FromInstance(initializableManager)
                 .NonLazy();
-            
-            subContainer.Bind(typeof(ICharacterEntity),
-                    typeof(ICharacterDataStorage<CharacterAudioDataStorage>),
-                    typeof(ICharacterDataStorage<CharacterVisualDataStorage>),
-                    typeof(ICharacterDataStorage<CharacterAnimatorDataStorage>),
-                    typeof(ICharacterDataStorage<CharacterPhysicsDataStorage>),
-                    typeof(ICharacterDataStorage<CharacterAimAnimationDataStorage>))
-                .To<ComponentCharacterController>()
-                .FromInstance(characterControl)
-                .AsSingle();
 
             switch (characterControl)
             {
@@ -62,6 +52,15 @@ namespace Arenar.Character
                     break;
                     
                 case PlayerComponentCharacterController:
+                    subContainer.Bind(typeof(ICharacterEntity),
+                            typeof(ICharacterDataStorage<CharacterAudioDataStorage>),
+                            typeof(ICharacterDataStorage<CharacterVisualDataStorage>),
+                            typeof(ICharacterDataStorage<CharacterAnimatorDataStorage>),
+                            typeof(ICharacterDataStorage<CharacterPhysicsDataStorage>),
+                            typeof(ICharacterDataStorage<CharacterAimAnimationDataStorage>))
+                        .To<PlayerComponentCharacterController>()
+                        .FromInstance(characterControl)
+                        .AsSingle();
                     subContainer.Install<PlayerCharacterComponentsInstaller>();
                     break;
             }

@@ -1,7 +1,12 @@
+using System;
+
 namespace Arenar.Services.LevelsService
 {
     public interface ILevelsService
     {
+        event Action<LevelContext> onCompleteLevel;
+
+
         LevelData[] LevelDatas { get; }
 
         int LastCompleteLevel { get; }

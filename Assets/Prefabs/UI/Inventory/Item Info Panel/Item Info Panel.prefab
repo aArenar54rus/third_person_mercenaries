@@ -582,6 +582,7 @@ MonoBehaviour:
   informationPanel: {fileID: 5088074459943016439}
   content: {fileID: 5088074458843975225}
   maxHeightPanel: 400
+  addedHeight: 55
   equippedSubPanel: {fileID: 4989896514385343154, guid: 58609f0c54c8dce41a8a762bad50504c,
     type: 3}
   mainSubPanels:
@@ -599,6 +600,8 @@ MonoBehaviour:
     - Key: 1
       Value: {fileID: 3540671546990144113, guid: ab170a5dcc3152c458d02fdf3a1a8e85,
         type: 3}
+  _itemParametersSubPanel: {fileID: 3157566901400501624, guid: f3c9477ef3b12de408095145888d4736,
+    type: 3}
   parametersPanel: {fileID: 4989896514385343154, guid: f3c9477ef3b12de408095145888d4736,
     type: 3}
 --- !u!114 &5088074459943016438

@@ -10,12 +10,12 @@ namespace Arenar.Services.UI
         [SerializeField] private TMP_Text _countText = default;
         
         
-        public override void SetItem(InventoryItemData inventoryItemData)
+        public override void SetItem(InventoryItemCellData inventoryItemCellData)
         {
-            base.SetItem(inventoryItemData);
+            base.SetItem(inventoryItemCellData);
 
-            _countText.enabled = inventoryItemData.itemData.CanStack;
-            _countText.text = $"{inventoryItemData.elementsCount}/{inventoryItemData.itemData.StackCountMax}";
+            _countText.enabled = inventoryItemCellData.itemInventoryData.CanStack;
+            _countText.text = $"{inventoryItemCellData.elementsCount}/{inventoryItemCellData.itemInventoryData.StackCountMax}";
         }
         
         public virtual void SetEmpty()

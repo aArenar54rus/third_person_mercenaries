@@ -13,7 +13,6 @@ namespace Arenar.Character
         private PlayerInput PlayerInput =>
             (PlayerInput)_playerInputService.InputActionCollection;
 
-        
         public Vector2 MoveAction =>
             PlayerInput.Player.Move.ReadValue<Vector2>();
         
@@ -44,7 +43,7 @@ namespace Arenar.Character
 
         public void SetControlStatus(bool status)
         {
-            _playerInputService.SetNewInputControlType(InputActionMapType.Gameplay, status);
+            _playerInputService.SetInputControlType(InputActionMapType.Gameplay, status);
         }
 
         public void Initialize()

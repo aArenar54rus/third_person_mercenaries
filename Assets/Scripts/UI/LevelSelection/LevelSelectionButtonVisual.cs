@@ -75,6 +75,9 @@ namespace Arenar.Services.UI
             
             OnLocalize();
         }
+        
+        public void Select() =>
+            _levelSelectionButton.Select();
 
         private void OnLocalize()
         {

@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35422bf705ab6b74e823fb97ab99504b, type: 3}
+  m_Name: 1Pistol
+  m_EditorClassIdentifier: 
+  _id: 2
+  _nameKey: RTT-09
+  _desckey: This is a pistol!
+  _itemType: 2
+  _itemRarity: 2
+  _stackCountMax: 1
+  _itemMass: 5
+  _worldVisual:
+    mesh: {fileID: 4300000, guid: 5d9f2288b713c9a419505face764a134, type: 3}
+    mass: 5
+    materials:
+    - {fileID: 2100000, guid: 06d40dc2e1401784eb420a0d2d5d7235, type: 2}
+  _weaponType: 2

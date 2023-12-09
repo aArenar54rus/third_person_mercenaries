@@ -10,90 +10,116 @@ namespace Arenar
         [SerializeField] private RectTransform informationPanel;
         [SerializeField] private RectTransform content;
         [SerializeField] private float maxHeightPanel;
+        [SerializeField] private float addedHeight;
 
         [Space(10), Header("Sub Panels")]
         [SerializeField] private EquippedSubPanel equippedSubPanel;
         [SerializeField] private SerializableDictionary<ItemType, SubPanel> mainSubPanels;
-        [SerializeField] private SubPanel parametersPanel = default;
-        
-        private List<SubPanel> spawnedSubPanels;
+        [SerializeField] private ItemParametersSubPanel _itemParametersSubPanel;
+
+        private List<SubPanel> _spawnedSubPanels;
 
 
-        public void SetVisible(InventoryItemData invItemData, bool isEquipped = false)
+        public void ShowInfoPanel(Vector3 itemCellPosition, InventoryItemCellData invItemCellData, bool isEquipped = false)
         {
             List<SubPanel> newSpawnedSubPanels = new List<SubPanel>();
             if (isEquipped)
             {
-                newSpawnedSubPanels.Add(GetSubPanel(invItemData.itemData, (EquippedSubPanel)equippedSubPanel));
+                newSpawnedSubPanels.Add(GetSubPanel(invItemCellData.itemInventoryData, (EquippedSubPanel)equippedSubPanel));
             }
 
-            ItemType itemType = invItemData.itemData.ItemType;
+            ItemType itemType = invItemCellData.itemInventoryData.ItemType;
             SubPanel mainSubPanel = mainSubPanels[itemType];
-            switch (invItemData.itemData.ItemType)
+
+            switch (invItemCellData.itemInventoryData.ItemType)
             {
                 case ItemType.Material:
-                    newSpawnedSubPanels.Add(GetSubPanel(invItemData.itemData, (MaterialItemDescriptionSubPanel)mainSubPanel));
+                    newSpawnedSubPanels.Add(GetSubPanel<MaterialItemDescriptionSubPanel>(invItemCellData.itemInventoryData,
+                        (MaterialItemDescriptionSubPanel)mainSubPanel));
                     break;
                 
                 case ItemType.Weapon:
-                    newSpawnedSubPanels.Add(GetSubPanel(invItemData.itemData, (WeaponItemDescriptionSubPanel)mainSubPanel));
+                    newSpawnedSubPanels.Add(GetSubPanel<WeaponItemDescriptionSubPanel>(invItemCellData.itemInventoryData,
+                        (WeaponItemDescriptionSubPanel)mainSubPanel));
                     break;
                 
                 case ItemType.Cloth:
-                    newSpawnedSubPanels.Add(GetSubPanel(invItemData.itemData, (ClothItemDescriptionSubPanel)mainSubPanel));
+                    newSpawnedSubPanels.Add(GetSubPanel<ClothItemDescriptionSubPanel>(invItemCellData.itemInventoryData,
+                        (ClothItemDescriptionSubPanel)mainSubPanel));
                     break;
                 
                 case ItemType.Quest:
-                    newSpawnedSubPanels.Add(GetSubPanel(invItemData.itemData, (QuestItemDescriptionSubPanel)mainSubPanel));
+                    newSpawnedSubPanels.Add(GetSubPanel<QuestItemDescriptionSubPanel>(invItemCellData.itemInventoryData,
+                        (QuestItemDescriptionSubPanel)mainSubPanel));
                     break;
                 
                 default:
-                    Debug.LogError($"Unknown type {invItemData.itemData.ItemType} for info panel.");
+                    Debug.LogError($"Unknown type {invItemCellData.itemInventoryData.ItemType} for info panel.");
                     break;
             }
 
-            if (itemType == ItemType.Weapon
-                || itemType == ItemType.Cloth)
+            if (itemType == ItemType.Weapon || itemType == ItemType.Cloth)
             {
-                newSpawnedSubPanels.Add(GetSubPanel(invItemData.itemData, (ItemParametersSubPanel)mainSubPanel));
+                newSpawnedSubPanels.Add(GetSubPanel<ItemParametersSubPanel>(invItemCellData.itemInventoryData,
+                    (ItemParametersSubPanel)_itemParametersSubPanel));
             }
             
-            if (spawnedSubPanels.Count != 0)
+            if (_spawnedSubPanels != null && _spawnedSubPanels.Count != 0)
             {
-                foreach (var subPanel in spawnedSubPanels)
+                foreach (var subPanel in _spawnedSubPanels)
                 {
                     subPanel.gameObject.SetActive(false);
                     Destroy(subPanel.gameObject);
                 }
             }
-            spawnedSubPanels = newSpawnedSubPanels;
+            _spawnedSubPanels = newSpawnedSubPanels;
             
             gameObject.SetActive(true);
+            
             SetPanelHeight();
+            SetPanelPosition(itemCellPosition);
         }
 
-        private SubPanel GetSubPanel<T>(ItemData itemData, T subPanel)
+        public void HideInfoPanel()
+        {
+            gameObject.SetActive(false);
+        }
+
+        private void SetPanelPosition(Vector3 elementPosition)
+        {
+            Vector3 pivot = Vector3.zero;
+            
+            int halfScreenWidth = Screen.width / 2;
+            int halfScreenHeight = Screen.height / 2;
+            pivot.x = (elementPosition.x > halfScreenWidth) ? 1 : 0;
+            pivot.y = (elementPosition.y > halfScreenHeight) ?  0 : 1;
+
+            informationPanel.pivot = pivot;
+            informationPanel.position = elementPosition;
+        }
+
+        private SubPanel GetSubPanel<T>(ItemInventoryData itemInventoryData, T subPanel)
             where T : SubPanel
         {
             SubPanel instance = GetSubPanelInstance<T>();
             if (instance == null)
                 instance = GameObject.Instantiate(subPanel, content);
-            instance.Initialize(itemData);
+            instance.Initialize(itemInventoryData);
             return instance;
         }
 
         private SubPanel GetSubPanelInstance<T>()
             where T : SubPanel
         {
-            if (spawnedSubPanels == null
-                || spawnedSubPanels.Count == 0)
+            if (_spawnedSubPanels == null
+                || _spawnedSubPanels.Count == 0)
                 return null;
 
-            foreach (var subPanel in spawnedSubPanels)
+            foreach (var subPanel in _spawnedSubPanels)
             {
                 if (subPanel is T)
                 {
-                    spawnedSubPanels.Remove(subPanel);
+                    _spawnedSubPanels.Remove(subPanel);
                     return subPanel;
                 }
             }
@@ -103,8 +129,11 @@ namespace Arenar
 
         private void SetPanelHeight()
         {
-            float contentHeight = content.rect.height;
-            informationPanel.sizeDelta = new Vector2 (informationPanel.sizeDelta.x, (contentHeight > maxHeightPanel) ? maxHeightPanel : contentHeight);
+            float contentMathf = addedHeight;
+            foreach (var panel in _spawnedSubPanels)
+                contentMathf += panel.RectTransform.rect.height;
+            
+            informationPanel.sizeDelta = new Vector2 (informationPanel.sizeDelta.x, (contentMathf > maxHeightPanel) ? maxHeightPanel : contentMathf);
         }
     }
 }

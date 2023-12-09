@@ -8,9 +8,11 @@ namespace Arenar.Services.UI
     {
         [SerializeField] private LevelDifficultButton[] _levelDifficultButtons;
         [SerializeField] private Button _levelStartButton;
+        [SerializeField] private Button _backToMenuButton;
 
 
         public LevelDifficultButton[] LevelDifficultButtons => _levelDifficultButtons;
         public Button LevelStartButton => _levelStartButton;
+        public Button BackToMenuButton => _backToMenuButton;
     }
 }

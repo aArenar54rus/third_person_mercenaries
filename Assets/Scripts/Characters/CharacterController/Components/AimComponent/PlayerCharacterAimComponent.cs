@@ -40,7 +40,8 @@ namespace Arenar.Character
                 if (animationComponent is CharacterAnimationComponent characterAnimationComponent)
                     CharacterAnimationComponent = characterAnimationComponent;
             }
-            
+
+            Cursor.lockState = CursorLockMode.Locked;
             tickableManager.Add(this);
         }
 

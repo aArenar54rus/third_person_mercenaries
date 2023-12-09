@@ -7,19 +7,16 @@ namespace Arenar.Services.UI
     public class MainMenuWindowController : CanvasWindowController
     {
         private ISaveAndLoadService<SaveDelegate> _saveAndLoadService;
-        private IPlayerInputService _playerInputService;
-        
+
         private MainMenuWindow _mainMenuWindow;
         private OptionsWindow _optionsWindow;
         
         private MainMenuButtonsLayer _mainMenuButtonsLayer;
         private MainMenuPlayerInformationLayer _mainMenuPlayerInfoLayer;
 
-        private LevelSelectionWindow _levelSelectionWindow;
-        private InventoryCanvasWindow _inventoryCanvasWindow;
-
 
         public MainMenuWindowController(ISaveAndLoadService<SaveDelegate> saveAndLoadService, IPlayerInputService playerInputService)
+            : base(playerInputService)
         {
             _saveAndLoadService = saveAndLoadService;
             _playerInputService = playerInputService;
@@ -32,14 +29,13 @@ namespace Arenar.Services.UI
 
             _mainMenuWindow = _canvasService.GetWindow<MainMenuWindow>();
             _optionsWindow = _canvasService.GetWindow<OptionsWindow>();
-            
-            _levelSelectionWindow = _canvasService.GetWindow<LevelSelectionWindow>();
-            _inventoryCanvasWindow = _canvasService.GetWindow<InventoryCanvasWindow>();
 
             InitMainMenuButtonsLayer();
             InitMainMenuPlayerInformationLayer();
             
-            _playerInputService.SetNewInputControlType(InputActionMapType.UI, true);
+            _playerInputService.SetInputControlType(InputActionMapType.UI, true);
+
+            _mainMenuWindow.OnShowEnd.AddListener(OnWindowShowEnd_SelectElements);
         }
 
         private void InitMainMenuButtonsLayer()
@@ -90,5 +86,12 @@ namespace Arenar.Services.UI
         {
             // web rate us
         }
+
+        protected override void OnWindowShowEnd_SelectElements()
+        {
+            _mainMenuButtonsLayer.NewChallengeButton.Select();
+        }
+
+        protected override void OnWindowHideBegin_DeselectElements() { }
     }
 }
