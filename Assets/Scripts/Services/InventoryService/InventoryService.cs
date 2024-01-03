@@ -348,9 +348,9 @@ namespace Arenar.Services.InventoryService
                 _currentInventoryMass +=
                     inventoryItemData.elementsCount * inventoryItemData.itemInventoryData.ItemMass;
             }
-
+            
             /*
-             foreach (var equippedClothItem in _equippedClothItems)
+            foreach (var equippedClothItem in _equippedClothItems)
             {
                 if (equippedClothItem.Value == null
                     || equippedClothItem.Value.itemInventoryData == null)
@@ -359,7 +359,7 @@ namespace Arenar.Services.InventoryService
                 _currentInventoryMass += equippedClothItem.Value.itemInventoryData.ItemMass;
             }
             */
-
+            
             foreach (var equippedWeapon in _inventorySaveData.EquippedWeaponCells)
             {
                 if (equippedWeapon == null
@@ -379,8 +379,7 @@ namespace Arenar.Services.InventoryService
             {
                 foreach (var constantWeapon in _parameters.ConstantWeaponCellParametersArray)
                 {
-                    if (_inventorySaveData.EquippedWeaponCells.Length > constantWeapon.WeaponCellIndex
-                        || constantWeapon.ConstantWeaponInventoryData.ItemType != ItemType.Weapon
+                    if (constantWeapon.ConstantWeaponInventoryData.ItemType != ItemType.Weapon
                         || _inventorySaveData.EquippedWeaponCells[constantWeapon.WeaponCellIndex].itemInventoryData != null)
                         continue;
 

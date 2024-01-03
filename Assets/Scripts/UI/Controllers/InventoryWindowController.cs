@@ -12,7 +12,6 @@ namespace Arenar.Services.UI
         private IInventoryService _inventoryService;
 
         private InventoryCanvasWindow _inventoryWindow;
-
         private InventoryEquipCanvasLayer _inventoryEquipCanvasLayer;
         private InventoryBagCanvasLayer _inventoryBagCanvasLayer;
         private InventoryItemDescriptionCanvasLayer _inventoryItemDescriptionCanvasLayer;

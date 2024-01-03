@@ -60,6 +60,8 @@ namespace Arenar
         [Tooltip("Distance for head rotation")]
         [SerializeField] private int headRotationDistance = default;
 
+        [Tooltip("Aim status change process speed")]
+        [SerializeField] private float _aimProcessSpeed;
 
 
         public int DefaultHealthMax => defaultHealthMax;
@@ -95,5 +97,6 @@ namespace Arenar
 
 
         public int HeadRotationDistance => headRotationDistance;
+        public float AimProcessSpeed => _aimProcessSpeed;
     }
 }

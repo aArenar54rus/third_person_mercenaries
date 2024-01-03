@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 
 namespace Arenar.Character
@@ -8,10 +9,10 @@ namespace Arenar.Character
     public class CharacterAudioDataStorage
     {
         [SerializeField] private AudioSource audioSource = default;
-        [SerializeField] private AnimationReactionsController animationReactionsController = default;
+        [FormerlySerializedAs("animationReactionsController")] [SerializeField] private AnimationReactionsTriggerController animationReactionsTriggerController = default;
 
 
         public AudioSource AudioSource => audioSource;
-        public AnimationReactionsController AnimationReactionsController => animationReactionsController;
+        public AnimationReactionsTriggerController AnimationReactionsTriggerController => animationReactionsTriggerController;
     }
 }

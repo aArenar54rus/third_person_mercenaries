@@ -14,6 +14,8 @@ namespace Arenar.Character
 
         private ICharacterInputComponent _inputComponent;
 
+        private float _aimAnimationProcess = 0.0f;
+
 
         public bool IsAim { get; private set; } = false;
         
@@ -57,6 +59,8 @@ namespace Arenar.Character
 
         public void Tick()
         {
+            AnimationAimProcess();
+            
             if (_inputComponent.AimAction == IsAim)
                 return;
 
@@ -65,8 +69,12 @@ namespace Arenar.Character
             cameraService.SetCinemachineVirtualCamera(IsAim
                 ? CinemachineCameraType.AimTPS
                 : CinemachineCameraType.DefaultTPS);
+        }
 
-            CharacterAnimationComponent.SetAnimationValue(CharacterAnimationComponent.AnimationValue.Aim, IsAim ? 1 : 0);
+        private void AnimationAimProcess()
+        {
+            _aimAnimationProcess = Mathf.Clamp01(_aimAnimationProcess + (IsAim ? (Time.deltaTime) : (-Time.deltaTime)));
+            CharacterAnimationComponent.SetAnimationValue(CharacterAnimationComponent.AnimationValue.Aim, _aimAnimationProcess);
         }
     }
 }

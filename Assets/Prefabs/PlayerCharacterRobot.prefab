@@ -4962,12 +4962,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterAudioDataStorage:
     audioSource: {fileID: 4525999011491975557}
-    animationReactionsController: {fileID: 7995650676505055708}
+    animationReactionsTriggerController: {fileID: 7995650676505055708}
   characterVisualDataStorage:
     characterBodyLods:
     - {fileID: 5846747920145155806}
   characterAnimatorDataStorage:
     animator: {fileID: 5332189266660668527}
+    _animationReactionsTriggerController: {fileID: 7995650676505055708}
     speedAnimationName: Speed
     groundedAnimationName: Grounded
     jumpAnimationName: Jump

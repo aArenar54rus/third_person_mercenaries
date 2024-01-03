@@ -38,7 +38,8 @@ MonoBehaviour:
       m_Bits: 512
     cameraAngleOverride: 10
     interactElementDistance: 2.5
-    headRotationDistance: 0
+    headRotationDistance: 5
+    _aimProcessSpeed: 3
   kittyColorRangeData:
     defaultColorsByLevel:
       IsSingleLineView: 1

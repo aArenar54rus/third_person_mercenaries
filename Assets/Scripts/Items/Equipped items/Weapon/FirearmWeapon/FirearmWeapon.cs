@@ -14,8 +14,6 @@ namespace Arenar
         [SerializeField] protected LineRenderer lineRendererEffect;
         [SerializeField] protected FirearmWeaponCameraRecoilComponent firearmWeaponCameraRecoilComponent;
         [Inject] protected ItemProjectileSpawner projectileSpawner;
-        
-        protected int currentClipSize;
 
 
         public Transform GunMuzzleTransform =>
@@ -83,6 +81,12 @@ namespace Arenar
 
         public virtual void MakeShot(Vector3 directional, bool isInfinityClip = false)
         {
+            if (ClipSize <= 0)
+            {
+                Debug.LogError("EmptyClip");
+                return;
+            }
+            
             switch (firearmWeaponData.FirearmAttackType)
             {
                 case ItemFirearmAttackType.Projectile:
@@ -103,7 +107,7 @@ namespace Arenar
             firearmWeaponCameraRecoilComponent.ApplyShootRecoil(RecoilShakeDirection);
             
             if (!isInfinityClip)
-                currentClipSize--;
+                ClipSize--;
         }
 
         protected virtual float CalculateWeaponDamage()

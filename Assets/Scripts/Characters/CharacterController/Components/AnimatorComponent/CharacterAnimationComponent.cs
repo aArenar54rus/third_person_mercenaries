@@ -35,6 +35,8 @@ namespace Arenar.Character
         private ICharacterLiveComponent liveComponent;
         private ICharacterRayCastComponent rayCastComponent;
         private ICharacterAimComponent characterAimComponent;
+
+        private PlayerCharacterParametersData playerCharacterParametersData;
         
         // animation IDs
         private int animIDSpeed;
@@ -45,6 +47,8 @@ namespace Arenar.Character
         private int animIDMotionSpeedY;
         private int animIDAim;
         private int animIDHandPistol;
+        
+        private float _aimAnimationProcess = 0.0f;
 
 
         private Animator KittyAnimator =>
@@ -64,12 +68,14 @@ namespace Arenar.Character
         public void Construct(ICharacterDataStorage<CharacterAnimatorDataStorage> characterAnimatorDataStorage,
                               ICharacterDataStorage<CharacterAimAnimationDataStorage> characterAimDataStorage,
                               ICharacterEntity characterEntity,
-                              TickableManager tickableManager)
+                              TickableManager tickableManager,
+                              PlayerCharacterParametersData playerCharacterParametersData)
         {
             this.characterAnimatorDataStorage = characterAnimatorDataStorage.Data;
             this.characterAimAnimationDataStorage = characterAimDataStorage.Data;
             this.characterEntity = characterEntity;
             this.tickableManager = tickableManager;
+            this.playerCharacterParametersData = playerCharacterParametersData;
         }
 
         public void Initialize()
@@ -187,7 +193,8 @@ namespace Arenar.Character
         private void SetBodyAnimationRotation()
         {
             bool isAim = CharacterAimComponent.IsAim;
-            characterAimAnimationDataStorage.BodyRig.weight = isAim ? 1 : 0;
+            _aimAnimationProcess = Mathf.Clamp01(_aimAnimationProcess + (isAim ? (Time.deltaTime) : (-Time.deltaTime)) * playerCharacterParametersData.AimProcessSpeed);
+            characterAimAnimationDataStorage.BodyRig.weight = _aimAnimationProcess;
 
             if (isAim)
             {

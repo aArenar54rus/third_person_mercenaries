@@ -8,25 +8,28 @@ namespace Arenar.Services.UI
 {
     public class GameplayGameInformationWindowController : CanvasWindowController, ITickable
     {
+        private GameplayCanvasWindow _gameplayCanvasWindow;
+        
         private TestCharacterSpawnController _testCharacterSpawnController;
-        private GameplayInformationLayer gameplayInformationLayer;
-        private ICharacterRayCastComponent playerCharacterRaycastComponent;
+        private GameplayInformationLayer _gameplayInformationLayer;
+        private ICharacterRayCastComponent _playerCharacterRaycastComponent;
 
-        private ComponentCharacterController characterOnCross;
-        private ICharacterDescriptionComponent descriptionComponent = null;
-        private ICharacterLiveComponent characterLiveComponent = null;
-        private ICharacterAimComponent characterAimComponent = null;
-        private ComponentCharacterController playerCharacter;
+        private ComponentCharacterController _characterOnCross;
+        private ICharacterDescriptionComponent _descriptionComponent = null;
+        private ICharacterLiveComponent _characterLiveComponent = null;
+        private ICharacterAimComponent _characterAimComponent = null;
+        private ICharacterAttackComponent _characterAttackComponent;
+        private ComponentCharacterController _playerCharacter;
         
 
         private ICharacterRayCastComponent PlayerCharacterRaycastComponent
         {
             get
             {
-                if (playerCharacterRaycastComponent == null)
-                    playerCharacter.TryGetCharacterComponent(out playerCharacterRaycastComponent);
+                if (_playerCharacterRaycastComponent == null)
+                    _playerCharacter.TryGetCharacterComponent(out _playerCharacterRaycastComponent);
 
-                return playerCharacterRaycastComponent;
+                return _playerCharacterRaycastComponent;
             }
         }
 
@@ -34,10 +37,21 @@ namespace Arenar.Services.UI
         {
             get
             {
-                if (characterAimComponent == null)
-                    playerCharacter.TryGetCharacterComponent(out characterAimComponent);
+                if (_characterAimComponent == null)
+                    _playerCharacter.TryGetCharacterComponent(out _characterAimComponent);
 
-                return characterAimComponent;
+                return _characterAimComponent;
+            }
+        }
+
+        private ICharacterAttackComponent PlayerCharacterAttackComponent
+        {
+            get
+            {
+                if (_characterAttackComponent == null)
+                    _playerCharacter.TryGetCharacterComponent(out _characterAttackComponent);
+
+                return _characterAttackComponent;
             }
         }
         
@@ -57,39 +71,75 @@ namespace Arenar.Services.UI
         {
             base.Initialize(canvasService);
 
-            gameplayInformationLayer = _canvasService
-                .GetWindow<GameplayCanvasWindow>()
-                .GetWindowLayer<GameplayInformationLayer>();
+            _gameplayCanvasWindow = _canvasService
+                .GetWindow<GameplayCanvasWindow>();
+            
+            _gameplayInformationLayer = 
+                _gameplayCanvasWindow.GetWindowLayer<GameplayInformationLayer>();
 
-            gameplayInformationLayer.GetComponent<Canvas>().enabled = true;
-            gameplayInformationLayer.EnemyTargetInformationPanel.UnsetEnemy();
+            _gameplayInformationLayer.GetComponent<Canvas>().enabled = true;
+            _gameplayInformationLayer.EnemyTargetInformationPanel.UnsetEnemy();
+
+            _gameplayCanvasWindow.OnShowEnd.AddListener(OnWindowShowEnd_SelectElements);
+            _gameplayCanvasWindow.OnHideBegin.AddListener(OnWindowHideBegin_DeselectElements);
 
             _testCharacterSpawnController.OnCreatePlayerCharacter += OnCreatePlayerCharacter;
+
+            DisableProgressSlider();
         }
 
         protected override void OnWindowShowEnd_SelectElements()
         {
-            return;
+            DisableProgressSlider();
         }
 
         protected override void OnWindowHideBegin_DeselectElements()
         {
+            /*PlayerCharacterAttackComponent.onReloadStart -= EnableProgressSlider;
+            PlayerCharacterAttackComponent.onReloadEnd -= DisableProgressSlider;
+            PlayerCharacterAttackComponent.onReloadProgress -= UpdateProgressSlider;
+            
+            PlayerCharacterAttackComponent.onUpdateWeaponClipSize -= OnUpdateWeaponClipSize;*/
+            
             return;
         }
 
         public void Tick()
         {
-            if (playerCharacter == null)
+            if (_playerCharacter == null)
                 return;
             
             TickUpdateTextMessage();
             TickUpdateEnemyTargetInfoPanel();
         }
 
+        private void EnableProgressSlider()
+        {
+            _gameplayInformationLayer.ProgressBarController.SetProgressBarActive(true);
+        }
+
+        private void DisableProgressSlider()
+        {
+            _gameplayInformationLayer.ProgressBarController.SetProgressBarActive(false);
+        }
+
+        private void UpdateProgressSlider(float value, float valueMax)
+        {
+            _gameplayInformationLayer.ProgressBarController.SetBarValuePercent(value, valueMax);
+        }
+
+        private void OnUpdateWeaponClipSize(int clipSize, int clipSizeMax, bool isPercent)
+        {
+            if (isPercent)
+                _gameplayInformationLayer.WeaponInfoPanel.UpdateWeaponClipSizeInfoPercent(clipSize, clipSizeMax);
+            else
+                _gameplayInformationLayer.WeaponInfoPanel.UpdateWeaponClipSizeInfo(clipSize, clipSizeMax);
+        }
+
         private void TickUpdateTextMessage()
         {
             InteractableElement interactableElement = PlayerCharacterRaycastComponent.InteractableElementsOnCross;
-            gameplayInformationLayer.InformationText.enabled = interactableElement != null;
+            _gameplayInformationLayer.InformationText.enabled = interactableElement != null;
         }
 
         private void TickUpdateEnemyTargetInfoPanel()
@@ -101,22 +151,22 @@ namespace Arenar.Services.UI
             }
 
             ComponentCharacterController enemyCharacterController = PlayerCharacterRaycastComponent.CharacterControllerOnCross;
-            if (characterOnCross == enemyCharacterController)
+            if (_characterOnCross == enemyCharacterController)
                 return;
 
-            if (characterOnCross == null)
+            if (_characterOnCross == null)
             {
                 bool isEnemyOnCross = (enemyCharacterController != null
-                                       && enemyCharacterController.TryGetCharacterComponent(out descriptionComponent)
-                                       && enemyCharacterController.TryGetCharacterComponent(out characterLiveComponent));
+                                       && enemyCharacterController.TryGetCharacterComponent(out _descriptionComponent)
+                                       && enemyCharacterController.TryGetCharacterComponent(out _characterLiveComponent));
 
-                if (isEnemyOnCross && characterLiveComponent.IsAlive)
+                if (isEnemyOnCross && _characterLiveComponent.IsAlive)
                 {
-                    gameplayInformationLayer.EnemyTargetInformationPanel.SetEnemy(descriptionComponent.CharacterName, descriptionComponent.CharacterDescription);
-                    OnEnemyCharacterChangeHealthValue(characterLiveComponent.Health, characterLiveComponent.HealthMax);
+                    _gameplayInformationLayer.EnemyTargetInformationPanel.SetEnemy(_descriptionComponent.CharacterName, _descriptionComponent.CharacterDescription);
+                    OnEnemyCharacterChangeHealthValue(_characterLiveComponent.Health, _characterLiveComponent.HealthMax);
                     
-                    characterLiveComponent.OnCharacterChangeHealthValue += OnEnemyCharacterChangeHealthValue;
-                    characterLiveComponent.OnCharacterDie += OnEnemyCharacterInfoDisable;
+                    _characterLiveComponent.OnCharacterChangeHealthValue += OnEnemyCharacterChangeHealthValue;
+                    _characterLiveComponent.OnCharacterDie += OnEnemyCharacterInfoDisable;
                 }
                 else
                 {
@@ -128,27 +178,33 @@ namespace Arenar.Services.UI
                 OnEnemyCharacterInfoDisable();
             }
             
-            characterOnCross = enemyCharacterController;
+            _characterOnCross = enemyCharacterController;
         }
 
         private void OnEnemyCharacterChangeHealthValue(int health, int healthMax) =>
-            gameplayInformationLayer.EnemyTargetInformationPanel.UpdateEnemyHealth(health, healthMax);
+            _gameplayInformationLayer.EnemyTargetInformationPanel.UpdateEnemyHealth(health, healthMax);
 
         private void OnEnemyCharacterInfoDisable()
         {
-            gameplayInformationLayer.EnemyTargetInformationPanel.UnsetEnemy();
+            _gameplayInformationLayer.EnemyTargetInformationPanel.UnsetEnemy();
             
-            if (characterOnCross == null)
+            if (_characterOnCross == null)
                 return;
             
-            characterLiveComponent.OnCharacterChangeHealthValue -= OnEnemyCharacterChangeHealthValue;
-            characterLiveComponent.OnCharacterDie -= OnEnemyCharacterInfoDisable;
-            characterOnCross = null;
+            _characterLiveComponent.OnCharacterChangeHealthValue -= OnEnemyCharacterChangeHealthValue;
+            _characterLiveComponent.OnCharacterDie -= OnEnemyCharacterInfoDisable;
+            _characterOnCross = null;
         }
 
         private void OnCreatePlayerCharacter(ComponentCharacterController playerCharacterController)
         {
-            playerCharacter = playerCharacterController;
+            _playerCharacter = playerCharacterController;
+            
+            PlayerCharacterAttackComponent.onReloadStart += EnableProgressSlider;
+            PlayerCharacterAttackComponent.onReloadEnd += DisableProgressSlider;
+            PlayerCharacterAttackComponent.onReloadProgress += UpdateProgressSlider;
+
+            PlayerCharacterAttackComponent.onUpdateWeaponClipSize += OnUpdateWeaponClipSize;
         }
     }
 }
