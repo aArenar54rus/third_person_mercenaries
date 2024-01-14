@@ -16,6 +16,8 @@ namespace Arenar.Character
         
         bool AimAction { get; }
         
+        bool ReloadAction { get; }
+        
         bool AttackAction { get; }
         
 

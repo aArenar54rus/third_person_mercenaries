@@ -14,6 +14,7 @@ namespace Arenar
         [SerializeField] private bool isAutomaticShoot;
         [SerializeField] private int clipSizeMax;
         [SerializeField] private float defaultReloadSpeed;
+        [SerializeField] private bool isFullClipReload;
         [SerializeField] private float projectileSpeed;
         [SerializeField] private float recoilShakeDefaultValue;
 
@@ -27,6 +28,8 @@ namespace Arenar
         public int ClipSizeMax => clipSizeMax;
         
         public float DefaultReloadSpeed => defaultReloadSpeed;
+
+        public bool IsFullClipReload => isFullClipReload;
         
         public float ProjectileSpeed => projectileSpeed;
 

@@ -20,25 +20,27 @@ namespace Arenar
             gunMuzzleTransform;
 
         public int ItemLevel { get; protected set; }
-        
+
         public float Damage { get; protected set; }
-        
+
+        public float ReloadSpeed { get; protected set; }
+
         public int ClipSizeMax { get; private set; }
-        
+
         public int ClipSize { get; private set; }
         public ItemInventoryData ItemInventoryData { get; private set; }
 
         public WeaponType WeaponType => WeaponType.Firearm;
-        
+
         public bool IsAutomaticAction => firearmWeaponData.IsAutomaticShoot;
-        
+
+        public bool IsFullClipReload => firearmWeaponData.IsFullClipReload;
+
         public float ProjectileSpeed { get; protected set; }
 
         public Transform SecondHandPoint => secondHandPoint;
 
         public Vector3 LocalRotation => localRotation;
-
-        public LineRenderer LineRendererEffect => lineRendererEffect;
 
         private Vector3 RecoilShakeDirection =>
             new Vector3(Random.Range(-1.0f, 1.0f), 1.0f, 0.0f) / 100.0f * firearmWeaponData.RecoilShakeDefaultValue;
@@ -67,13 +69,12 @@ namespace Arenar
             }
 
             ItemInventoryData = itemInventoryData;
-            
+
             Damage = CalculateWeaponDamage();
             ClipSizeMax = GetClipSizeMax();
             ClipSize = ClipSizeMax;
             ProjectileSpeed = GetProjectileSpeed();
-            
-            lineRendererEffect.gameObject.SetActive(true);
+            ReloadSpeed = firearmWeaponData.DefaultReloadSpeed;
         }
 
         public void SetItemLevel(int itemLevel) =>
@@ -86,7 +87,8 @@ namespace Arenar
                 Debug.LogError("EmptyClip");
                 return;
             }
-            
+
+            SetLaserStatus(false);
             switch (firearmWeaponData.FirearmAttackType)
             {
                 case ItemFirearmAttackType.Projectile:
@@ -95,20 +97,29 @@ namespace Arenar
                     break;
 
                 case ItemFirearmAttackType.Raycast:
-                    
+
                     Ray ray = new Ray(gunMuzzleTransform.position, directional);
                     if (Physics.Raycast(ray, out RaycastHit hit))
                     {
                         Debug.LogError($"YOU hit in {hit.transform.name}");
                     }
+
                     break;
             }
-            
+
             firearmWeaponCameraRecoilComponent.ApplyShootRecoil(RecoilShakeDirection);
-            
+
             if (!isInfinityClip)
                 ClipSize--;
         }
+
+        public void SetLaserStatus(bool status)
+        {
+            lineRendererEffect.gameObject.SetActive(status);
+        }
+
+        public void SetLaserPosition(Vector3 position) =>
+            lineRendererEffect.SetPosition(1, position);
 
         protected virtual float CalculateWeaponDamage()
         {

@@ -156,7 +156,8 @@ MonoBehaviour:
     firearmAttackType: 2
     isAutomaticShoot: 0
     clipSizeMax: 10
-    defaultReloadSpeed: 3
+    defaultReloadSpeed: 1.5
+    isFullClipReload: 1
     projectileSpeed: 40
     recoilShakeDefaultValue: 3
   secondHandPoint: {fileID: 0}
