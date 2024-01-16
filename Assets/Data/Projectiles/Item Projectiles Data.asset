@@ -12,10 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0d7d129337155842b8ba1b821c2275c, type: 3}
   m_Name: Item Projectiles Data
   m_EditorClassIdentifier: 
-  itemProjectilePrefabs:
+  weaponProjectilePrefabs:
+    IsSingleLineView: 1
+    list:
+    - Key: 1
+      Value: {fileID: -2186943879038141547, guid: 0f8a6cc3912eb794fb4fb72818c78d1e,
+        type: 3}
+  effectPrefabs:
     IsSingleLineView: 1
     list:
     - Key: 2
-      Value: {fileID: 741621373576656467, guid: 4ff9cc91634687141aa9b2c733a4dd2b,
-        type: 3}
-  defaultSpawnCount: 20
+      Value: {fileID: 19812720, guid: 5e8e4f6ac60e72d4c849003deef732c6, type: 3}
+  defaultSpawnCount: 10

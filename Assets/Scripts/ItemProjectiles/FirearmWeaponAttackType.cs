@@ -1,6 +1,6 @@
 namespace Arenar
 {
-    public enum ItemFirearmAttackType : byte
+    public enum FirearmWeaponAttackType : byte
     {
         Null = 0,
         Raycast = 1,

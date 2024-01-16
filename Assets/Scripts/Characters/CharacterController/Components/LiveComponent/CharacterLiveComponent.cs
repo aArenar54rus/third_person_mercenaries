@@ -37,12 +37,12 @@ namespace Arenar.Character
             this.playerCharacterParametersData = playerCharacterParametersData;
         }
 
-        public void SetDamage(int damageCount)
+        public void SetDamage(DamageData damageData)
         {
             if (!IsAlive)
                 return;
             
-            health -= damageCount;
+            health -= damageData.Damage;
             if (health <= 0)
                 SetDeath();
         }

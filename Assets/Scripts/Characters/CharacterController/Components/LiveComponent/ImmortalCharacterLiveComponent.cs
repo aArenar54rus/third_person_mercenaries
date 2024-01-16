@@ -25,9 +25,8 @@ namespace Arenar.Character
 
         public void OnStart() { }
 
-        public void SetDamage(int damageCount)
+        public void SetDamage(DamageData damageData)
         {
-            damageCount = 0;
             OnCharacterChangeHealthValue?.Invoke(Health, HealthMax);
         }
 

@@ -17,7 +17,7 @@ namespace Arenar.Character
         int HealthMax { get; }
 
 
-        void SetDamage(int damageCount);
+        void SetDamage(DamageData damageData);
         
         void SetAlive();
         

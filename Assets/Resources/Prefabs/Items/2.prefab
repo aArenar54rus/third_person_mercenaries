@@ -153,12 +153,13 @@ MonoBehaviour:
       - Key: 4
         Value: 1.5
     attackSpeed: 0.5
-    firearmAttackType: 2
+    firearmWeaponAttackType: 2
+    effectType: 1
     isAutomaticShoot: 0
     clipSizeMax: 10
     defaultReloadSpeed: 1.5
     isFullClipReload: 1
-    projectileSpeed: 40
+    projectileSpeed: 60
     recoilShakeDefaultValue: 3
   secondHandPoint: {fileID: 0}
   localRotation: {x: -15, y: 90, z: -90}
