@@ -200,7 +200,7 @@ namespace Arenar.Character
             {
                 if (CharacterRayCastComponent.RaycastPoint != null)
                 {
-                    characterAimAnimationDataStorage.BodyAimPointObject.position
+                    characterAimAnimationDataStorage.BodyPistolAimPointObject.position
                         = CharacterRayCastComponent.RaycastPoint;
                 }
                 

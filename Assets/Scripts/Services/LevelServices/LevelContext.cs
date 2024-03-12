@@ -8,7 +8,7 @@ namespace Arenar.Services.LevelsService
         
         public LevelDifficult LevelDifficult { get; }
 
-        public LevelType LevelType { get; }
+        public GameMode GameMode { get; }
 
         public Dictionary<LevelMarkType, bool> LevelMarkTypeSuccess { get; set; } = new Dictionary<LevelMarkType, bool>()
         {
@@ -21,12 +21,12 @@ namespace Arenar.Services.LevelsService
         public int LevelScore { get; set; } = 0;
         
         
-        public LevelContext(LevelData levelData, LevelDifficult levelDifficult, LevelType levelType = LevelType.Campaing)
+        public LevelContext(LevelData levelData, LevelDifficult levelDifficult, GameMode gameMode)
         {
             LevelData = levelData;
             LevelDifficult = levelDifficult;
 
-            LevelType = levelType;
+            GameMode = gameMode;
             LevelScore = 0;
         }
     }

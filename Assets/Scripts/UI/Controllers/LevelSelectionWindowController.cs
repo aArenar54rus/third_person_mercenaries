@@ -161,7 +161,7 @@ namespace Arenar.Services.UI
                         true,
                         () =>
                         {
-                            _levelsService.LoadLevelScene(_currentLevelIndex, _levelDifficult);
+                            _levelsService.StartLevel(_currentLevelIndex, _levelDifficult);
                         });
         }
 

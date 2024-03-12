@@ -136,7 +136,7 @@ namespace Arenar.Character
                     return;
                 }
                     
-                Vector3 direction = characterAimAnimationData.BodyAimPointObject.position - firearmWeapon.GunMuzzleTransform.position;
+                Vector3 direction = characterAimAnimationData.BodyPistolAimPointObject.position - firearmWeapon.GunMuzzleTransform.position;
                 direction = direction.normalized;
                 
                 firearmWeapon.MakeShot(direction, false);
@@ -206,7 +206,7 @@ namespace Arenar.Character
             if (CharacterInputComponent.AimAction && !_lockAction)
             {
                 firearmWeapon.SetLaserStatus(true);
-                firearmWeapon.SetLaserPosition(characterAimAnimationData.BodyAimPointObject.position);
+                firearmWeapon.SetLaserPosition(characterAimAnimationData.BodyPistolAimPointObject.position);
             }
             else
             {

@@ -7,7 +7,7 @@ using Zenject;
 
 namespace Arenar.Services.LevelsService
 {
-    public class LevelsService : ILevelsService
+    public class LevelsService : ILevelsService, ITickable
     {
         public event Action<LevelContext> onCompleteLevel;
         
@@ -18,6 +18,9 @@ namespace Arenar.Services.LevelsService
         private ZenjectSceneLoader _sceneLoader;
         private ISaveAndLoadService<SaveDelegate> _saveAndLoadService;
         private LevelData[] _levelDatas;
+        private SerializableDictionary<int, ShootingGalleryTargetNode[]> _shootingGalleriesInfos;
+
+        private GameModeController _gameModeController;
 
 
         
@@ -30,11 +33,13 @@ namespace Arenar.Services.LevelsService
         [Inject]
         public void Construct(ZenjectSceneLoader sceneLoader,
                               ISaveAndLoadService<SaveDelegate> saveAndLoadService,
-                              LevelData[] levelDatas)
+                              LevelData[] levelDatas,
+                              SerializableDictionary<int, ShootingGalleryTargetNode[]> shootingGalleriesInfos)
         {
             _sceneLoader = sceneLoader;
             _saveAndLoadService = saveAndLoadService;
             _levelDatas = levelDatas;
+            _shootingGalleriesInfos = shootingGalleriesInfos;
         }
         
         public bool TryGetLevelDataByIndex(int levelIndex, out LevelData levelData)
@@ -51,7 +56,7 @@ namespace Arenar.Services.LevelsService
             return false;
         }
 
-        public void LoadLevelScene(int levelIndex, LevelDifficult levelDifficult)
+        public void StartLevel(int levelIndex, LevelDifficult levelDifficult, GameMode gameMode)
         {
             if (!TryGetLevelDataByIndex(levelIndex, out LevelData levelData))
             {
@@ -59,12 +64,48 @@ namespace Arenar.Services.LevelsService
                 return;
             }
 
-            CurrentLevelContext = new LevelContext(levelData, levelDifficult);
-
+            CurrentLevelContext = new LevelContext(levelData, levelDifficult, gameMode);
+            
             _sceneLoader.LoadScene(CurrentLevelContext.LevelData.SceneKey, LoadSceneMode.Additive);
+            
+            _gameModeController = CreateGameModeController();
+            _gameModeController.StartGame(CurrentLevelContext);
+
+
+            GameModeController CreateGameModeController()
+            {
+                switch (gameMode)
+                {
+                    case GameMode.Campaing:
+                        return null;
+                    
+                    case GameMode.Survival:
+                        return null;
+                    
+                    case GameMode.ShootingGallery:
+                        ShootingGalleryTargetNode[] nodes = null;
+                        if (_shootingGalleriesInfos.ContainsKey(levelData.LevelIndex))
+                        {
+                            nodes = _shootingGalleriesInfos[levelData.LevelIndex];
+                        }
+                        else
+                        {
+                            Debug.LogError($"Not found info about targets on level {levelData.LevelIndex}. Get first!");
+                            nodes = _shootingGalleriesInfos[0];
+                        }
+
+                        ShootingGalleryGameModeController shootingGalleryGameMode = new(nodes);
+                        shootingGalleryGameMode.StartGame(CurrentLevelContext);
+                        return 
+                    
+                    default:
+                        Debug.LogError($"Unknown gameMode {gameMode}");
+                        return null;
+                }
+            }
         }
 
-        public void SetLevelCompleted()
+        public void CompleteLevel()
         {
             if (CurrentLevelContext == null
                 || CurrentLevelContext.LevelData.LevelIndex <= _lastCompleteLevel)
@@ -79,9 +120,11 @@ namespace Arenar.Services.LevelsService
             }
 
             var saveDelegate = new LevelProgressionSaveDelegate();
-            saveDelegate.completeDifficult = LevelDifficult.Infinity;
+            saveDelegate.completeDifficult = CurrentLevelContext.LevelDifficult;
             saveDelegate.completedLevel = _lastCompleteLevel;
             _saveAndLoadService.MakeSave(saveDelegate);
+            
+            _gameModeController.EndGame();
             
             onCompleteLevel?.Invoke(CurrentLevelContext);
         }
@@ -90,6 +133,14 @@ namespace Arenar.Services.LevelsService
         {
             if (CurrentLevelContext != null)
                 SceneManager.UnloadSceneAsync(CurrentLevelContext.LevelData.LevelNameKey);
+        }
+
+        public void Tick()
+        {
+            if (_gameModeController == null)
+                return;
+            
+            _gameModeController.OnUpdate();
         }
     }
 }

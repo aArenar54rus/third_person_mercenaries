@@ -99,7 +99,7 @@ namespace Arenar
 
             SetLaserStatus(false);
             PlayMuzzleFlashEffect();
-            CreateBullet(direction);
+            InitializeBullets(direction);
 
             firearmWeaponCameraRecoilComponent.ApplyShootRecoil(RecoilShakeDirection);
 
@@ -123,7 +123,7 @@ namespace Arenar
                    * firearmWeaponData.ItemDamageMultiplierByRarity[ItemInventoryData.ItemRarity];
         }
 
-        protected virtual void LoadBullets(Vector3 direction)
+        protected virtual void InitializeBullets(Vector3 direction)
         {
             CreateBullet(direction);
         }
@@ -137,13 +137,8 @@ namespace Arenar
         {
             return firearmWeaponData.ProjectileSpeed;
         }
-
-        private void Update()
-        {
-            lineRendererEffect.SetPosition(0, gunMuzzleTransform.position);
-        }
         
-        private void CreateBullet(Vector3 direction)
+        protected void CreateBullet(Vector3 direction)
         {
             DamageData damageData = new DamageData(WeaponOwner, (int)Damage);
             
@@ -174,13 +169,18 @@ namespace Arenar
             }
         }
 
+        private void Update()
+        {
+            lineRendererEffect.SetPosition(0, gunMuzzleTransform.position);
+        }
+
         private void PlayMuzzleFlashEffect()
         {
             var effect = projectileSpawner.GetEffect(EffectType.MuzzleFlashYellow);
             effect.gameObject.SetActive(true);
             effect.transform.SetParent(gunMuzzleTransform);
             effect.transform.localPosition = Vector3.zero;
-            effect.transform.localRotation = Quaternion.identity;  //gunMuzzleTransform.rotation;
+            effect.transform.rotation = Quaternion.Inverse(gunMuzzleTransform.rotation);  //gunMuzzleTransform.rotation;
             effect.Play();
 
             DOVirtual.DelayedCall(1.0f, () =>

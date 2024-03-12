@@ -160,7 +160,7 @@ GameObject:
   - component: {fileID: 4796290380007176693}
   - component: {fileID: 572764038516835132}
   m_Layer: 0
-  m_Name: BodyAimRig
+  m_Name: BodyPistolAimRig
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2209,6 +2209,8 @@ MonoBehaviour:
   - m_Rig: {fileID: 8268836342639634701}
     m_Active: 1
   - m_Rig: {fileID: 572764038516835132}
+    m_Active: 1
+  - m_Rig: {fileID: 0}
     m_Active: 1
   m_Effectors: []
 --- !u!114 &2581218460279458394
@@ -4978,6 +4980,8 @@ MonoBehaviour:
     motionSpeedAnimationYName: MotionSpeedY
     handPistolAnimationName: HandPistol
     shootAnimationName: Shoot
+    reloadAnimationTriggerName: Reload
+    isReloadByAnimation: 0
   characterPhysicsDataStorage:
     characterTransform: {fileID: 8886542636944289912}
     cameraTransform: {fileID: 4534734409247019934}
@@ -4989,7 +4993,8 @@ MonoBehaviour:
     headRig: {fileID: 8268836342639634701}
     bodyRig: {fileID: 572764038516835132}
     headAimPointObject: {fileID: 1080850282888023799}
-    bodyAimPointObject: {fileID: 4555072813800420171}
+    bodyPistolAimPointObject: {fileID: 4555072813800420171}
+    bodyTwoHandedAimPointObject: {fileID: 0}
 --- !u!114 &2087674089868542002
 MonoBehaviour:
   m_ObjectHideFlags: 0

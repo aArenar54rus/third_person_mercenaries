@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 35422bf705ab6b74e823fb97ab99504b, type: 3}
-  m_Name: 1Pistol
+  m_Name: 2Pistol
   m_EditorClassIdentifier: 
   _id: 2
   _nameKey: RTT-09
@@ -18,7 +18,7 @@ MonoBehaviour:
   _itemType: 2
   _itemRarity: 2
   _stackCountMax: 1
-  _itemMass: 5
+  _itemMass: 3
   _worldVisual:
     mesh: {fileID: 4300000, guid: 5d9f2288b713c9a419505face764a134, type: 3}
     mass: 5

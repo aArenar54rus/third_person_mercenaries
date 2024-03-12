@@ -18,9 +18,9 @@ namespace Arenar.Services.LevelsService
 
         bool TryGetLevelDataByIndex(int levelIndex, out LevelData levelData);
 
-        public void LoadLevelScene(int levelIndex, LevelDifficult levelDifficult);
+        public void StartLevel(int levelIndex, LevelDifficult levelDifficult, GameMode gameMode);
 
-        void SetLevelCompleted();
+        void CompleteLevel();
 
         void UnloadCurrentLevelScene();
     }
