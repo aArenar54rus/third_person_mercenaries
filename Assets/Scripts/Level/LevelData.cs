@@ -1,4 +1,5 @@
 using System;
+using Arenar.Services.LevelsService;
 using UnityEngine;
 
 
@@ -12,6 +13,7 @@ namespace Arenar
         [SerializeField] private string _sceneKey;
         [SerializeField] private Sprite _levelPortrait;
         [SerializeField] private SerializableDictionary<LevelDifficult, LevelDifficultData> _difficultData;
+        [SerializeField] private GameMode _gameMode;
 
 
         public int LevelIndex => _levelIndex;
@@ -19,6 +21,7 @@ namespace Arenar
         public string SceneKey => _sceneKey;
         public Sprite LevelPortrait => _levelPortrait;
         public SerializableDictionary<LevelDifficult, LevelDifficultData> DifficultData => _difficultData;
+        public GameMode GameMode => _gameMode;
         
         
 

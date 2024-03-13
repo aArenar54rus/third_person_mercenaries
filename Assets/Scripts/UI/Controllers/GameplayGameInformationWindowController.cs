@@ -10,7 +10,7 @@ namespace Arenar.Services.UI
     {
         private GameplayCanvasWindow _gameplayCanvasWindow;
         
-        private TestCharacterSpawnController _testCharacterSpawnController;
+        private CharacterSpawnController _characterSpawnController;
         private GameplayInformationLayer _gameplayInformationLayer;
         private ICharacterRayCastComponent _playerCharacterRaycastComponent;
 
@@ -57,11 +57,11 @@ namespace Arenar.Services.UI
         
         
         public GameplayGameInformationWindowController(TickableManager tickableManager,
-            TestCharacterSpawnController testCharacterSpawnController,
+            CharacterSpawnController characterSpawnController,
             IPlayerInputService playerInputService)
             : base(playerInputService)
         {
-            _testCharacterSpawnController = testCharacterSpawnController;
+            _characterSpawnController = characterSpawnController;
             _playerInputService = playerInputService;
             
             tickableManager.Add(this);
@@ -83,7 +83,7 @@ namespace Arenar.Services.UI
             _gameplayCanvasWindow.OnShowEnd.AddListener(OnWindowShowEnd_SelectElements);
             _gameplayCanvasWindow.OnHideBegin.AddListener(OnWindowHideBegin_DeselectElements);
 
-            _testCharacterSpawnController.OnCreatePlayerCharacter += OnCreatePlayerCharacter;
+            _characterSpawnController.OnCreatePlayerCharacter += OnCreatePlayerCharacter;
 
             DisableProgressSlider();
         }

@@ -393,6 +393,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83e7a4b4f03379a47a8a770646a9b305, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _addressablesCharacters:
+    _addressablesPlayerPath: 
+    _npcCharacterDatas:
+      IsSingleLineView: 1
+      list:
+      - Key: 1
+        Value:
+          _addressablesCharacterPath: 
 --- !u!1 &6614943140198684415
 GameObject:
   m_ObjectHideFlags: 0

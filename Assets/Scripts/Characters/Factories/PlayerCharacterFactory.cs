@@ -1,36 +1,42 @@
 ﻿using UnityEngine;
+using UnityEngine.AddressableAssets;
 using Zenject;
 
 
 namespace Arenar.Character
 {
-    public class CharacterFactory : ICharacterEntityFactory<ComponentCharacterController>
+    public class PlayerCharacterFactory : ICharacterEntityFactory<ComponentCharacterController>
     {
+        private string _playerCharacterAddrPath;
         private readonly DiContainer container;
         private readonly TickableManager tickableManager;
         private readonly InitializableManager initializableManager;
 
 
-        public CharacterFactory(DiContainer container, TickableManager tickableManager, InitializableManager initializableManager)
+        public PlayerCharacterFactory(DiContainer container,
+            TickableManager tickableManager,
+            InitializableManager initializableManager,
+            AddressablesCharacters addressablesCharacters)
         {
             this.container = container;
             this.tickableManager = tickableManager;
             this.initializableManager = initializableManager;
+            _playerCharacterAddrPath = addressablesCharacters.AddressablesPlayerPath;
         }
         
         
-        public ComponentCharacterController Create(
-            ComponentCharacterController prototypePrefab,
-            Transform parent)
+        public ComponentCharacterController Create(Transform parent)
         {
+            ComponentCharacterController playerCharacterController = null;
             DiContainer subContainer = container.CreateSubContainer();
-            
-            ComponentCharacterController characterController = Object.Instantiate(prototypePrefab.gameObject, parent)
-                .GetComponent<ComponentCharacterController>();
 
-            InstallPostBindings(subContainer, characterController);
-            subContainer.Inject(characterController);
-            return characterController;
+            var handle = Addressables.LoadAssetAsync<ComponentCharacterController>(_playerCharacterAddrPath);
+            handle.WaitForCompletion();
+            playerCharacterController = handle.Result;
+
+            InstallPostBindings(subContainer, playerCharacterController);
+            subContainer.Inject(playerCharacterController);
+            return playerCharacterController;
         }
 
         private void InstallPostBindings(DiContainer subContainer, ComponentCharacterController characterControl)

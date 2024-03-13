@@ -11,23 +11,26 @@ namespace Arenar.Services.LevelsService
         private int _progressIndex = 0;
         private float _gameTime = 0.0f;
         private bool _isGameWork = false;
+
+        private CharacterSpawnController _сharacterSpawnController;
         private ShootingGalleryTargetNode[] _shootingGalleryTargets;
 
         private Tween _tween;
 
         
-        public ShootingGalleryGameModeController(ShootingGalleryTargetNode[] shootingGalleryTargets)
+        public ShootingGalleryGameModeController(ShootingGalleryTargetNode[] shootingGalleryTargets,
+            CharacterSpawnController сharacterSpawnController)
         {
             _progressIndex = 0;
             _gameTime = 0.0f;
             _isGameWork = false;
             
             _shootingGalleryTargets = shootingGalleryTargets;
-
-            
+            _сharacterSpawnController = сharacterSpawnController;
         }
         
-        public override void StartGame(LevelContext levelContext)
+        
+        public override void StartGame()
         {
             _tween = DOVirtual.DelayedCall(GAME_WAIT_TIME, () => _isGameWork = true)
                 .OnComplete(KillTween);
@@ -68,7 +71,26 @@ namespace Arenar.Services.LevelsService
 
         private void ActivateShootTarget(ShootingGalleryTargetNode targetNode)
         {
+            foreach (var entity in CharacterEntities)
+            {
+                ShootingGalleryTargetCharacterController
+                    targetEntity = (ShootingGalleryTargetCharacterController)entity;
+                if (targetEntity.gameObject.activeSelf)
+                    continue;
+
+                Spawn(targetEntity);
+                return;
+            }
             
+            ShootingGalleryTargetCharacterController target =
+                _сharacterSpawnController.CreateShootingGalleryTarget();
+
+            CharacterEntities.Add(target);
+        }
+
+        public void Spawn(ShootingGalleryTargetCharacterController target)
+        {
+            target.ReInitialize();
         }
 
         private void KillTween()

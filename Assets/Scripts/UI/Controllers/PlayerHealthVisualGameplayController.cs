@@ -7,7 +7,7 @@ namespace Arenar.Services.UI
 {
     public class PlayerHealthVisualGameplayController : CanvasWindowController
     {
-        private TestCharacterSpawnController testCharacterSpawnController;
+        private CharacterSpawnController _characterSpawnController;
         private ICharacterLiveComponent playerCharacterLiveComponent;
         private ICharacterProgressionComponent playerCharacterProgressionComponent;
         
@@ -21,7 +21,7 @@ namespace Arenar.Services.UI
             {
                 if (playerCharacterController == null)
                 {
-                    playerCharacterController = testCharacterSpawnController.PlayerCharacter;
+                    playerCharacterController = _characterSpawnController.PlayerCharacter;
                     if (playerCharacterController == null)
                         return null;
                 }
@@ -61,11 +61,11 @@ namespace Arenar.Services.UI
         }
         
         
-        public PlayerHealthVisualGameplayController(TestCharacterSpawnController testCharacterSpawnController,
+        public PlayerHealthVisualGameplayController(CharacterSpawnController characterSpawnController,
             IPlayerInputService playerInputService)
             : base(playerInputService)
         {
-            this.testCharacterSpawnController = testCharacterSpawnController;
+            this._characterSpawnController = characterSpawnController;
         }
 
         
@@ -79,7 +79,7 @@ namespace Arenar.Services.UI
 
             gameplayPlayerParametersWindowLayer.GetComponent<Canvas>().enabled = true;
 
-            testCharacterSpawnController.OnCreatePlayerCharacter += OnInstallNewTestCharacter;
+            _characterSpawnController.OnCreatePlayerCharacter += OnInstallNewCharacter;
         }
 
         protected override void OnWindowShowEnd_SelectElements()
@@ -92,7 +92,7 @@ namespace Arenar.Services.UI
             //throw new System.NotImplementedException();
         }
 
-        private void OnInstallNewTestCharacter(ComponentCharacterController characterController)
+        private void OnInstallNewCharacter(ComponentCharacterController characterController)
         {
             playerCharacterController = characterController;
             

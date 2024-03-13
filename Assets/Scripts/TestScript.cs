@@ -7,23 +7,23 @@ using Zenject;
 
 public class TestScript : MonoBehaviour
 {
-    private TestCharacterSpawnController testCharacterSpawnController;
+    private CharacterSpawnController _characterSpawnController;
     private ICameraService cameraService;
 
     
     [Inject]
-    public void Construct(TestCharacterSpawnController testCharacterSpawnController, ICameraService cameraService)
+    public void Construct(CharacterSpawnController characterSpawnController, ICameraService cameraService)
     {
-        this.testCharacterSpawnController = testCharacterSpawnController;
+        this._characterSpawnController = characterSpawnController;
         this.cameraService = cameraService;
     }
     
     public void Start()
     {
-        ComponentCharacterController characterController = testCharacterSpawnController.CreateCharacter();
+        ComponentCharacterController characterController = _characterSpawnController.CreateCharacter();
         if (characterController is PlayerComponentCharacterController player)
             cameraService.SetCameraState<CameraStateThirdPerson>(player.CameraTransform, characterController.CharacterTransform);
 
-        testCharacterSpawnController.CreatePuppet();
+        _characterSpawnController.CreatePuppet();
     }
 }

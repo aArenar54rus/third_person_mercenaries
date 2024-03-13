@@ -13,6 +13,7 @@ namespace Arenar.Services.UI
         private LevelSelectionWindow _levelSelectionWindow;
 
         private int _currentLevelIndex;
+        private GameMode _currentGameMode;
         private LevelDifficult _levelDifficult;
 
         private LevelSelectionButtonVisual[] _levelSelectionButtonVisuals;
@@ -140,15 +141,22 @@ namespace Arenar.Services.UI
 
         private void OnSelectLevel(int levelIndex)
         {
+            LevelData selectedLevelData = null;
             foreach (LevelSelectionButtonVisual levelSelectionButton in _levelSelectionButtonVisuals)
             {
                 if (levelSelectionButton.LevelData.LevelIndex == _currentLevelIndex)
+                {
                     levelSelectionButton.SetButtonStatus(LevelSelectionButtonVisual.ButtonStatus.Active);
+                }
                 else if (levelSelectionButton.LevelData.LevelIndex == levelIndex)
+                {
                     levelSelectionButton.SetButtonStatus(LevelSelectionButtonVisual.ButtonStatus.Selected);
+                    selectedLevelData = levelSelectionButton.LevelData;
+                }
             }
-                
-            _currentLevelIndex = levelIndex;
+            
+            _currentLevelIndex = selectedLevelData.LevelIndex;
+            _currentGameMode = selectedLevelData.GameMode;
         }
 
         private void OnStartMatchButtonClick()
@@ -161,7 +169,7 @@ namespace Arenar.Services.UI
                         true,
                         () =>
                         {
-                            _levelsService.StartLevel(_currentLevelIndex, _levelDifficult);
+                            _levelsService.StartLevel(_currentLevelIndex, _levelDifficult, _currentGameMode);
                         });
         }
 

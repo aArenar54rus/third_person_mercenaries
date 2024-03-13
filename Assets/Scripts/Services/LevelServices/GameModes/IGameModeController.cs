@@ -1,11 +1,17 @@
+using System.Collections.Generic;
+using Arenar.Character;
+
 namespace Arenar.Services.LevelsService
 {
     public interface IGameModeController
     {
-        public void StartGame(LevelContext levelContext);
+        List<ICharacterEntity> CharacterEntities { get; }
+        
+        
+        void StartGame();
 
-        public void EndGame();
+        void EndGame();
 
-        public void OnUpdate();
+        void OnUpdate();
     }
 }

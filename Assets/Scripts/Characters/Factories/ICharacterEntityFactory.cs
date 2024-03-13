@@ -4,6 +4,6 @@ namespace Arenar.Character
 {
     public interface ICharacterEntityFactory<TProduct>
     {
-        TProduct Create(TProduct prototypePrefab, Transform parent);
+        TProduct Create(Transform parent);
     }
 }

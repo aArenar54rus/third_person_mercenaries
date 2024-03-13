@@ -22,6 +22,8 @@ namespace Arenar.Services.LevelsService
 
         private GameModeController _gameModeController;
 
+        private CharacterSpawnController _сharacterSpawnController;
+
 
         
         public LevelData[] LevelDatas => _levelDatas;
@@ -34,12 +36,14 @@ namespace Arenar.Services.LevelsService
         public void Construct(ZenjectSceneLoader sceneLoader,
                               ISaveAndLoadService<SaveDelegate> saveAndLoadService,
                               LevelData[] levelDatas,
+                              CharacterSpawnController сharacterSpawnController,
                               SerializableDictionary<int, ShootingGalleryTargetNode[]> shootingGalleriesInfos)
         {
             _sceneLoader = sceneLoader;
             _saveAndLoadService = saveAndLoadService;
             _levelDatas = levelDatas;
             _shootingGalleriesInfos = shootingGalleriesInfos;
+            _сharacterSpawnController = сharacterSpawnController;
         }
         
         public bool TryGetLevelDataByIndex(int levelIndex, out LevelData levelData)
@@ -69,7 +73,7 @@ namespace Arenar.Services.LevelsService
             _sceneLoader.LoadScene(CurrentLevelContext.LevelData.SceneKey, LoadSceneMode.Additive);
             
             _gameModeController = CreateGameModeController();
-            _gameModeController.StartGame(CurrentLevelContext);
+            _gameModeController.StartGame();
 
 
             GameModeController CreateGameModeController()
@@ -94,9 +98,8 @@ namespace Arenar.Services.LevelsService
                             nodes = _shootingGalleriesInfos[0];
                         }
 
-                        ShootingGalleryGameModeController shootingGalleryGameMode = new(nodes);
-                        shootingGalleryGameMode.StartGame(CurrentLevelContext);
-                        return 
+                        ShootingGalleryGameModeController shootingGalleryGameMode = new(nodes, _сharacterSpawnController);
+                        return shootingGalleryGameMode;
                     
                     default:
                         Debug.LogError($"Unknown gameMode {gameMode}");
