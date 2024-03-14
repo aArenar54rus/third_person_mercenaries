@@ -18,7 +18,6 @@ namespace Arenar.Services.LevelsService
         private ZenjectSceneLoader _sceneLoader;
         private ISaveAndLoadService<SaveDelegate> _saveAndLoadService;
         private LevelData[] _levelDatas;
-        private SerializableDictionary<int, ShootingGalleryTargetNode[]> _shootingGalleriesInfos;
 
         private GameModeController _gameModeController;
 
@@ -36,13 +35,11 @@ namespace Arenar.Services.LevelsService
         public void Construct(ZenjectSceneLoader sceneLoader,
                               ISaveAndLoadService<SaveDelegate> saveAndLoadService,
                               LevelData[] levelDatas,
-                              CharacterSpawnController сharacterSpawnController,
-                              SerializableDictionary<int, ShootingGalleryTargetNode[]> shootingGalleriesInfos)
+                              CharacterSpawnController сharacterSpawnController)
         {
             _sceneLoader = sceneLoader;
             _saveAndLoadService = saveAndLoadService;
             _levelDatas = levelDatas;
-            _shootingGalleriesInfos = shootingGalleriesInfos;
             _сharacterSpawnController = сharacterSpawnController;
         }
         
@@ -87,18 +84,7 @@ namespace Arenar.Services.LevelsService
                         return null;
                     
                     case GameMode.ShootingGallery:
-                        ShootingGalleryTargetNode[] nodes = null;
-                        if (_shootingGalleriesInfos.ContainsKey(levelData.LevelIndex))
-                        {
-                            nodes = _shootingGalleriesInfos[levelData.LevelIndex];
-                        }
-                        else
-                        {
-                            Debug.LogError($"Not found info about targets on level {levelData.LevelIndex}. Get first!");
-                            nodes = _shootingGalleriesInfos[0];
-                        }
-
-                        ShootingGalleryGameModeController shootingGalleryGameMode = new(nodes, _сharacterSpawnController);
+                        ShootingGalleryGameModeController shootingGalleryGameMode = new(_сharacterSpawnController);
                         return shootingGalleryGameMode;
                     
                     default:

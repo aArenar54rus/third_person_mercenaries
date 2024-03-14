@@ -11,8 +11,7 @@ namespace Arenar.Character
     {
         private readonly AddressablesCharacters.CharacterData _characterData;
         private readonly DiContainer _container;
-
-        private LevelsService _levelsService;
+        
         private TickableManager _tickableManager;
         private InitializableManager _initializableManager;
 
@@ -20,14 +19,12 @@ namespace Arenar.Character
         public ShootingGalleryTargetFactory(DiContainer container,
                                             TickableManager tickableManager,
                                             InitializableManager initializableManager,
-                                            AddressablesCharacters addressablesCharacters,
-                                            LevelsService levelsService)
+                                            AddressablesCharacters addressablesCharacters)
         {
             _container = container;
             _tickableManager = tickableManager;
             _initializableManager = initializableManager;
             _characterData = addressablesCharacters.NpcCharacterDatas[NpcType.ShootingGalleryTarget];
-            _levelsService = levelsService;
         }
         
 
@@ -40,7 +37,7 @@ namespace Arenar.Character
 
             var handle = Addressables.LoadAssetAsync<ShootingGalleryTargetCharacterController>(_characterData.AddressablesCharacterPath);
             handle.WaitForCompletion();
-            characterController = handle.Result;
+            characterController = GameObject.Instantiate(handle.Result);
 
             InstallPostBindings(subContainer, characterController);
             subContainer.Inject(characterController);

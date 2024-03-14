@@ -10,7 +10,7 @@ namespace Arenar
     {
         [SerializeField] private CharacterAudioDataStorage _characterAudioDataStorage;
         [SerializeField] private CharacterPhysicsDataStorage _characterPhysicsDataStorage;
-        
+
         
         public override Transform CharacterTransform =>
             _characterPhysicsDataStorage.CharacterTransform;

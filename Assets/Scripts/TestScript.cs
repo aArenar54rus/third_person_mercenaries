@@ -23,7 +23,5 @@ public class TestScript : MonoBehaviour
         ComponentCharacterController characterController = _characterSpawnController.CreateCharacter();
         if (characterController is PlayerComponentCharacterController player)
             cameraService.SetCameraState<CameraStateThirdPerson>(player.CameraTransform, characterController.CharacterTransform);
-
-        _characterSpawnController.CreatePuppet();
     }
 }

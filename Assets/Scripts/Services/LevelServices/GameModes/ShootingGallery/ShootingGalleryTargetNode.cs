@@ -8,10 +8,10 @@ namespace Arenar.Services.LevelsService
     public class ShootingGalleryTargetNode
     {
         [SerializeField] private float activateTime;
-        [SerializeField] private int _pathPointIndex;
+        [SerializeField] private int[] _pathPointIndexes;
 
 
         public float ActivateTime => activateTime;
-        public int PathPointIndex => _pathPointIndex;
+        public int[] PathPointIndexes => _pathPointIndexes;
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Arenar.Character;
 using Arenar.Services.LevelsService;
 using UnityEngine;
@@ -12,16 +13,13 @@ namespace Arenar
         
         
         private Transform _charactersContainer;
-        private ComponentCharacterController _componentCharacterPrefabs;
-        private PuppetComponentCharacterController _puppetComponentCharacterPrefab;
         
         private ICharacterEntityFactory<ComponentCharacterController> _playerFactory;
         private ICharacterEntityFactory<ShootingGalleryTargetCharacterController> _shootingGalleryTargetFactory;
         
         private ComponentCharacterController playerCharacter;
-        
-        private bool canSpawn = false;
-        private float spawnTimer = default;
+
+        private Dictionary<Type, List<ComponentCharacterController>> _createdCharacters;
 
 
         public ComponentCharacterController PlayerCharacter => playerCharacter;
@@ -43,27 +41,31 @@ namespace Arenar
 
 
         public CharacterSpawnController(ICharacterEntityFactory<ComponentCharacterController> playerFactory,
-                                    ICharacterEntityFactory<ShootingGalleryTargetCharacterController> shootingGalleryTargetFactory,
-                                    ComponentCharacterController componentCharacterPrefabs,
-                                    PuppetComponentCharacterController puppetComponentCharacterPrefab)
+                                    ICharacterEntityFactory<ShootingGalleryTargetCharacterController> shootingGalleryTargetFactory)
         {
             _playerFactory = playerFactory;
-            _componentCharacterPrefabs = componentCharacterPrefabs;
-            _puppetComponentCharacterPrefab = puppetComponentCharacterPrefab;
             _shootingGalleryTargetFactory = shootingGalleryTargetFactory;
+            _createdCharacters = new Dictionary<Type, List<ComponentCharacterController>>();
         }
         
         
         public ComponentCharacterController CreateCharacter()
         {
+            if (_createdCharacters.ContainsKey(typeof(ComponentCharacterController)))
+                return _createdCharacters[typeof(ComponentCharacterController)][0];
+            
+            _createdCharacters.Add(typeof(ComponentCharacterController), new List<ComponentCharacterController>());
+                
             ComponentCharacterController componentCharacter = _playerFactory.Create(CharactersContainer);
             componentCharacter.gameObject.transform.SetParent(CharactersContainer);
             playerCharacter = componentCharacter;
+                
+            _createdCharacters[typeof(ComponentCharacterController)].Add(componentCharacter);
             OnCreatePlayerCharacter?.Invoke(playerCharacter);
             return componentCharacter;
         }
 
-        public PuppetComponentCharacterController CreatePuppet()
+        /*public PuppetComponentCharacterController CreatePuppet()
         {
             PuppetComponentCharacterController componentCharacter =
                 (PuppetComponentCharacterController)_playerFactory.Create(CharactersContainer);
@@ -71,14 +73,25 @@ namespace Arenar
             componentCharacter.gameObject.transform.SetParent(CharactersContainer);
             componentCharacter.gameObject.transform.position = new Vector3(2, 0, 0);
             return componentCharacter;
-        }
+        }*/
 
         public ShootingGalleryTargetCharacterController CreateShootingGalleryTarget()
         {
-            ShootingGalleryTargetCharacterController target =
-                _shootingGalleryTargetFactory.Create(CharactersContainer);
+            if (!_createdCharacters.ContainsKey(typeof(ShootingGalleryTargetCharacterController)))
+                _createdCharacters.Add(typeof(ShootingGalleryTargetCharacterController), new List<ComponentCharacterController>());
+            
+            foreach (var createdTarget in _createdCharacters[typeof(ShootingGalleryTargetCharacterController)])
+            {
+                if (createdTarget.gameObject.activeSelf)
+                    continue;
 
-            return target;
+                return (ShootingGalleryTargetCharacterController)createdTarget;
+            }
+            
+            ShootingGalleryTargetCharacterController newTarget = _shootingGalleryTargetFactory.Create(CharactersContainer);
+            _createdCharacters[typeof(ShootingGalleryTargetCharacterController)].Add(newTarget);
+
+            return newTarget;
         }
     }
 }

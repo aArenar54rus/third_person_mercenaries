@@ -394,13 +394,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _addressablesCharacters:
-    _addressablesPlayerPath: 
+    _addressablesPlayerPath: PlayerCharacterRobot
     _npcCharacterDatas:
       IsSingleLineView: 1
       list:
       - Key: 1
         Value:
-          _addressablesCharacterPath: 
+          _addressablesCharacterPath: ShootingGalleryTarget
 --- !u!1 &6614943140198684415
 GameObject:
   m_ObjectHideFlags: 0

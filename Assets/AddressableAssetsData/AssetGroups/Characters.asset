@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Characters
+  m_EditorClassIdentifier: 
+  m_GroupName: Characters
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 22535ccba3763d44089e8def528243bb
+  m_SerializeEntries:
+  - m_GUID: 1d321af736df10f4a901a9520948c692
+    m_Address: PlayerCharacterRobot
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 9efe808d6941e8f41a1872ba7e99cf58
+    m_Address: PuppetCharacter
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: c854e309d7221554db0c23af0c4a3adf
+    m_Address: ShootingGalleryTarget
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 15d1a77347bb5d247af03867161aacf6, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 7ab4e532de4965a4ca638524138a267c, type: 2}
+    - {fileID: 11400000, guid: da005d52315469840b32ad55499aff70, type: 2}

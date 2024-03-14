@@ -15,7 +15,6 @@ namespace TakeTop.PreferenceSystem
 					 .FromInstance(_preferenceManager)
 					 //.FromComponentInHierarchy()
 					 .AsSingle();
-			Debug.LogError(123);
-        }
+		}
 	}
 }

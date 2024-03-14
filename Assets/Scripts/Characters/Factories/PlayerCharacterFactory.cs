@@ -32,7 +32,7 @@ namespace Arenar.Character
 
             var handle = Addressables.LoadAssetAsync<ComponentCharacterController>(_playerCharacterAddrPath);
             handle.WaitForCompletion();
-            playerCharacterController = handle.Result;
+            playerCharacterController = (ComponentCharacterController)GameObject.Instantiate(handle.Result, parent);
 
             InstallPostBindings(subContainer, playerCharacterController);
             subContainer.Inject(playerCharacterController);
