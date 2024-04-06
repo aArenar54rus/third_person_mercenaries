@@ -6,14 +6,12 @@ using Zenject;
 
 namespace Arenar.Character
 {
-    public abstract class ComponentCharacterController : MonoBehaviour,
-                                   ICharacterEntity
+    public abstract class ComponentCharacterController : MonoBehaviour, ICharacterEntity
     {
         private Dictionary<Type, ICharacterComponent> characterComponentsPool;
 
 
         public abstract Transform CharacterTransform { get; }
-
 
 
         [Inject]

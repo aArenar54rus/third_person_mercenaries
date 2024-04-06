@@ -28,8 +28,7 @@ namespace Arenar.Character
             _tickableManager = tickableManager;
             _levelsService = levelsService;
         }
-
-
+        
         public void Initialize()
         {
             _tickableManager.AddFixed(this);
@@ -42,6 +41,7 @@ namespace Arenar.Character
             IsControlBlocked = true;
             _aiStateMachine.DeInitialize();
             _tickableManager.RemoveFixed(this);
+            _aiStateMachine = null;
         }
 
         public void OnStart()

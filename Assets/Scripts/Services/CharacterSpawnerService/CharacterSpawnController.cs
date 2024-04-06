@@ -85,6 +85,7 @@ namespace Arenar
                 if (createdTarget.gameObject.activeSelf)
                     continue;
 
+                createdTarget.gameObject.SetActive(true);
                 return (ShootingGalleryTargetCharacterController)createdTarget;
             }
             

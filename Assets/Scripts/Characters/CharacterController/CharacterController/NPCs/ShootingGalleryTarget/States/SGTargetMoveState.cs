@@ -77,6 +77,16 @@ namespace Arenar.Character
         public override void OnStateBegin()
         {
             _progressPointIndex = 0;
+            if (_character is ShootingGalleryTargetCharacterController SGTargetController)
+            {
+                int characterIndex = SGTargetController.TargetCharacterIndex;
+
+                _currentCharacterPathNode =
+                    _shootingGalleryLevelInfoCollection
+                        .ShootingGalleriesInfos[_levelsService.CurrentLevelContext.LevelData.LevelIndex][characterIndex];
+            }
+            
+            _character.CharacterTransform.position = CurrentPathPoint.Position;
             
             #if UNITY_EDITOR
             if (_testLine == null)

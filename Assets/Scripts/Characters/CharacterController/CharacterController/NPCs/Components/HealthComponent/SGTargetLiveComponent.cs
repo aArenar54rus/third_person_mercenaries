@@ -15,12 +15,14 @@ namespace Arenar.Character
 
         private ShootingGalleryTargetCharacterController _character;
         private ShootingGalleryTargetParameters _shootingGalleryTargetParameters;
-        private int _health;
+        
         private Transform _characterTransform;
         private Rigidbody _characterRigidbody;
         private EffectsSpawner _effectsSpawner;
         
         private Tween _deathTween;
+        
+        private int _health;
         
         
         public bool IsAlive => _health > 0;
@@ -30,10 +32,8 @@ namespace Arenar.Character
             get => _health;
             private set
             {
-                if (value < 0)
-                    value = 0;
-                
-                _health = value;
+                _health = Mathf.Clamp(value, 0, HealthMax);
+                OnCharacterChangeHealthValue?.Invoke(HealthMax, Health);
             }
         }
 
@@ -81,7 +81,8 @@ namespace Arenar.Character
                 _characterRigidbody.AddForce(damageData.BulletMight, ForceMode.Impulse);
             
             Health -= damageData.Damage;
-            OnCharacterChangeHealthValue?.Invoke(HealthMax, Health);
+            OnCharacterGetDamageBy?.Invoke(damageData.DamageSetterCharacter);
+            
             if (Health <= 0)
                 SetDeath();
         }
@@ -98,6 +99,7 @@ namespace Arenar.Character
         {
             _characterRigidbody.useGravity = true;
             Health = 0;
+            OnCharacterDie?.Invoke();
             
             _deathTween = DOVirtual.DelayedCall(1.0f, () =>
             {
@@ -108,9 +110,6 @@ namespace Arenar.Character
                 
                 _characterTransform.gameObject.SetActive(false);
             });
-
-            OnCharacterDie?.Invoke();
-            _characterRigidbody.useGravity = true;
         }
     }
 }

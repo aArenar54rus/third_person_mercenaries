@@ -184,11 +184,8 @@ namespace Arenar.Services.UI
             _characterOnCross = enemyCharacterController;
         }
 
-        private void OnEnemyCharacterChangeHealthValue(int health, int healthMax)
-        {
-            Debug.LogError($"{health} / {healthMax}");
+        private void OnEnemyCharacterChangeHealthValue(int health, int healthMax) =>
             _gameplayInformationLayer.EnemyTargetInformationPanel.UpdateEnemyHealth(health, healthMax, false);
-        }
 
         private void OnEnemyCharacterInfoDisable()
         {
