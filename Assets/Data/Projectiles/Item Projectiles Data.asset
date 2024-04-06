@@ -23,4 +23,7 @@ MonoBehaviour:
     list:
     - Key: 2
       Value: {fileID: 19812720, guid: 5e8e4f6ac60e72d4c849003deef732c6, type: 3}
+    - Key: 3
+      Value: {fileID: 198290842651589160, guid: c4d208ca1dd83f54abab75a2551d4f74,
+        type: 3}
   defaultSpawnCount: 10

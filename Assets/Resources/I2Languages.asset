@@ -271,6 +271,25 @@ MonoBehaviour:
       - 
       Flags: 000000
       Languages_Touch: []
+    - Term: loc_key_robot_target_name
+      TermType: 0
+      Description: 
+      Languages:
+      - Training target
+      - "\u0422\u0440\u0435\u043D\u0438\u0440\u043E\u0432\u043E\u0447\u043D\u0430\u044F
+        \u0446\u0435\u043B\u044C"
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: loc_key_robot_target_description
+      TermType: 0
+      Description: 
+      Languages:
+      - 
+      - 
+      - 
+      Flags: 000000
+      Languages_Touch: []
     CaseInsensitiveTerms: 0
     OnMissingTranslation: 1
     mTerm_AppName: 

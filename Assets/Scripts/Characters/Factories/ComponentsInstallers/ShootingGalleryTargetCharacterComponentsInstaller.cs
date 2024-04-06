@@ -27,7 +27,7 @@ namespace Arenar.Character
             Container.BindInstance(characterLiveComponent).AsSingle();
             Container.Inject(characterLiveComponent);
             
-            ICharacterDescriptionComponent characterDescriptionComponent = new PuppetCharacterDescriptionComponent();
+            ICharacterDescriptionComponent characterDescriptionComponent = new RobotTargetCharacterDescriptionComponent();
             characterComponentsPool.Add(typeof(ICharacterDescriptionComponent), characterDescriptionComponent);
             Container.BindInstance(characterDescriptionComponent).AsSingle();
             Container.Inject(characterDescriptionComponent);

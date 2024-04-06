@@ -50,13 +50,12 @@ namespace Arenar
 
         private void OnTriggerEnter(Collider other)
         {
-            Debug.LogError("fly end");
-
             if (other.gameObject.TryGetComponent<ComponentCharacterController>(out ComponentCharacterController characterController)
                 && characterController.TryGetCharacterComponent<ICharacterLiveComponent>(out ICharacterLiveComponent characterLiveComponent))
             {
                 characterLiveComponent.SetDamage(_damageData);
             }
+            
             DeInitialize();
         }
     }

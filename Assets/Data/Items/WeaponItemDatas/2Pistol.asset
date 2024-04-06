@@ -19,6 +19,7 @@ MonoBehaviour:
   _itemRarity: 2
   _stackCountMax: 1
   _itemMass: 3
+  _bulletPhysicalMight: 15
   _worldVisual:
     mesh: {fileID: 4300000, guid: 5d9f2288b713c9a419505face764a134, type: 3}
     mass: 5

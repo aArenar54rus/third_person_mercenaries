@@ -64,7 +64,6 @@ namespace Arenar.Character
             }
 
             _character.CharacterTransform.position = CurrentPathPoint.Position;
-            Debug.LogError(_character.CharacterTransform.position);
         }
 
         public override void DeInitialize()

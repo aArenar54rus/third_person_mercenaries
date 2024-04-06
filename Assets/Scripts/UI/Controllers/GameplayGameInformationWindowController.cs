@@ -1,5 +1,6 @@
 using Arenar.Character;
 using Arenar.Services.PlayerInputService;
+using I2.Loc;
 using UnityEngine;
 using Zenject;
 
@@ -162,7 +163,9 @@ namespace Arenar.Services.UI
 
                 if (isEnemyOnCross && _characterLiveComponent.IsAlive)
                 {
-                    _gameplayInformationLayer.EnemyTargetInformationPanel.SetEnemy(_descriptionComponent.CharacterName, _descriptionComponent.CharacterDescription);
+                    var locName = LocalizationManager.GetTranslation(_descriptionComponent.CharacterName);
+                    var locDesc = LocalizationManager.GetTranslation(_descriptionComponent.CharacterDescription);
+                    _gameplayInformationLayer.EnemyTargetInformationPanel.SetEnemy(locName, locDesc);
                     OnEnemyCharacterChangeHealthValue(_characterLiveComponent.Health, _characterLiveComponent.HealthMax);
                     
                     _characterLiveComponent.OnCharacterChangeHealthValue += OnEnemyCharacterChangeHealthValue;
@@ -181,8 +184,11 @@ namespace Arenar.Services.UI
             _characterOnCross = enemyCharacterController;
         }
 
-        private void OnEnemyCharacterChangeHealthValue(int health, int healthMax) =>
-            _gameplayInformationLayer.EnemyTargetInformationPanel.UpdateEnemyHealth(health, healthMax);
+        private void OnEnemyCharacterChangeHealthValue(int health, int healthMax)
+        {
+            Debug.LogError($"{health} / {healthMax}");
+            _gameplayInformationLayer.EnemyTargetInformationPanel.UpdateEnemyHealth(health, healthMax, false);
+        }
 
         private void OnEnemyCharacterInfoDisable()
         {

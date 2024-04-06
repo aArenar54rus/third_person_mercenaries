@@ -32,6 +32,7 @@ namespace Arenar.Character
 
         public void Initialize()
         {
+            _tickableManager.AddFixed(this);
             _aiStateMachine = new AiStateMachineController(_characterEntity, _aiStates);
             _aiStateMachine.Initialize();
         }
@@ -47,7 +48,6 @@ namespace Arenar.Character
         {
             _aiStateMachine.OnStart();
             IsControlBlocked = false;
-            _tickableManager.AddFixed(this);
         }
 
         public void SwitchState<T>() where T : IAIState 

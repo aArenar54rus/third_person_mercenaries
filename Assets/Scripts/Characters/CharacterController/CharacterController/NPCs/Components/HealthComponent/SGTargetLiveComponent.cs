@@ -81,6 +81,7 @@ namespace Arenar.Character
                 _characterRigidbody.AddForce(damageData.BulletMight, ForceMode.Impulse);
             
             Health -= damageData.Damage;
+            OnCharacterChangeHealthValue?.Invoke(HealthMax, Health);
             if (Health <= 0)
                 SetDeath();
         }
@@ -101,6 +102,7 @@ namespace Arenar.Character
             _deathTween = DOVirtual.DelayedCall(1.0f, () =>
             {
                 var effect = _effectsSpawner.GetEffect(EffectType.RobotBlow);
+                effect.gameObject.SetActive(true);
                 effect.transform.position = _characterTransform.position;
                 effect.Play();
                 
