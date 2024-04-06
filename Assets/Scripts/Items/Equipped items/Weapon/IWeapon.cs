@@ -8,6 +8,7 @@ namespace Arenar
         float Damage { get; }
         ItemInventoryData ItemInventoryData { get; }
         WeaponType WeaponType { get; }
+        float TimeBetweenShots { get; }
 
 
         void InitializeWeapon(ItemInventoryData itemInventoryData);

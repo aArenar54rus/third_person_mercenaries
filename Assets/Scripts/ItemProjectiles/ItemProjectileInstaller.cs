@@ -11,7 +11,7 @@ namespace Arenar
         
         public override void InstallBindings()
         {
-            Container.BindInterfacesAndSelfTo<ItemProjectileSpawner>()
+            Container.BindInterfacesAndSelfTo<EffectsSpawner>()
                 .AsSingle()
                 .NonLazy();
             

@@ -1,7 +1,7 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.Serialization;
 
 
 namespace Arenar.Character
@@ -9,11 +9,11 @@ namespace Arenar.Character
     [Serializable]
     public class AddressablesCharacters
     {
-        [SerializeField] private string _addressablesPlayerPath;
+        [SerializeField] private AssetReference _addressablesPlayer;
         [SerializeField] private SerializableDictionary<NpcType, CharacterData> _npcCharacterDatas;
 
 
-        public string AddressablesPlayerPath => _addressablesPlayerPath;
+        public AssetReference AddressablesPlayer => _addressablesPlayer;
         public SerializableDictionary<NpcType, CharacterData> NpcCharacterDatas => _npcCharacterDatas;
 
 
@@ -21,10 +21,10 @@ namespace Arenar.Character
         [Serializable]
         public class CharacterData
         {
-            [SerializeField] private string _addressablesCharacterPath;
+            [SerializeField] private AssetReference _addressablesCharacter;
 
 
-            public string AddressablesCharacterPath => _addressablesCharacterPath;
+            public AssetReference AddressablesCharacter => _addressablesCharacter;
         }
     }
 }

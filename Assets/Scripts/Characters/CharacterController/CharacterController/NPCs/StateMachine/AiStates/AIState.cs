@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -7,8 +5,8 @@ namespace Arenar.Character
 {
     public abstract class AIState : IAIState
     {
-        protected ICharacterEntity character;
-        protected AiStateMachineController aiStateMachineController;
+        protected ICharacterEntity _character;
+        protected AiStateMachineController _aiStateMachineController;
         
         
         public Vector3 MoveDirection { get; protected set; }
@@ -17,10 +15,10 @@ namespace Arenar.Character
         
         
         public void SetupAiStateMachineBehaviour(AiStateMachineController aiStateMachineController) =>
-            this.aiStateMachineController = aiStateMachineController;
+            this._aiStateMachineController = aiStateMachineController;
 
         public virtual void Initialize(ICharacterEntity character) =>
-            this.character = character;
+            this._character = character;
 
         public abstract void DeInitialize();
         

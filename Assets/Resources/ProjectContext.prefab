@@ -394,13 +394,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _addressablesCharacters:
-    _addressablesPlayerPath: PlayerCharacterRobot
+    _addressablesPlayer:
+      m_AssetGUID: 1d321af736df10f4a901a9520948c692
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
     _npcCharacterDatas:
       IsSingleLineView: 1
       list:
       - Key: 1
         Value:
-          _addressablesCharacterPath: ShootingGalleryTarget
+          _addressablesCharacter:
+            m_AssetGUID: c854e309d7221554db0c23af0c4a3adf
+            m_SubObjectName: 
+            m_SubObjectType: 
+            m_EditorAssetChanged: 0
+  _shootingGalleryTargetParameters: {fileID: 11400000, guid: d0859fc89c0ac2b4c8691d3881b1066a,
+    type: 2}
 --- !u!1 &6614943140198684415
 GameObject:
   m_ObjectHideFlags: 0
@@ -815,6 +825,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c2f586f630852f4c9a581c019ea7983, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _shootingGalleryLevelInfoCollection: {fileID: 11400000, guid: c2fb7534daeb4904f8ae7cfbcd347307,
+    type: 2}
 --- !u!1001 &275706123431743964
 PrefabInstance:
   m_ObjectHideFlags: 0

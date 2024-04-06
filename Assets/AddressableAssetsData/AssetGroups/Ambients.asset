@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Ambients
+  m_EditorClassIdentifier: 
+  m_GroupName: Ambients
+  m_Data:
+    m_SerializedData: []
+  m_GUID: c030a56657361df489024fd2a487f526
+  m_SerializeEntries:
+  - m_GUID: 8ea361dae6b69d54e87d8c1b88c3b1ab
+    m_Address: Assets/Content/Audio/Ambient/Powerful-Trap-(chosic.com).mp3
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: da77e0bb3e0445c40a95de4134dcf90f
+    m_Address: Assets/Content/Audio/Ambient/dramatic-background-intro-theme.mp3
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 15d1a77347bb5d247af03867161aacf6, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 866285e97fcf45748a4397935bcfee44, type: 2}
+    - {fileID: 11400000, guid: 5cca257a99d609a4b8af8f438471263e, type: 2}

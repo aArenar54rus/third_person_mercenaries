@@ -13,6 +13,7 @@ namespace Arenar
         [SerializeField] protected ItemRarity _itemRarity = default;
         [SerializeField] private int _stackCountMax = default;
         [SerializeField] private float _itemMass = default;
+        [SerializeField] private float _bulletPhysicalMight = default;
         [SerializeField] protected ItemWorldVisual _worldVisual = default;
 
 
@@ -26,6 +27,8 @@ namespace Arenar
 
         public float ItemMass => _itemMass;
 
+        public float BulletPhysicalMight => _bulletPhysicalMight;
+
         public bool CanStack =>
             _stackCountMax > 1;
 
@@ -37,7 +40,5 @@ namespace Arenar
             Resources.Load<Sprite>("Sprites/Items/" + _id);
 
         public ItemWorldVisual WorldVisual => _worldVisual;
-        
-        
     }
 }

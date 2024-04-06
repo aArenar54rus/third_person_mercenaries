@@ -16,7 +16,11 @@ namespace Arenar
         [SerializeField] protected LineRenderer lineRendererEffect;
         [SerializeField] protected FirearmWeaponCameraRecoilComponent firearmWeaponCameraRecoilComponent;
         
-        [Inject] protected ItemProjectileSpawner projectileSpawner;
+        [Inject] protected EffectsSpawner projectileSpawner;
+
+        private Tween _timeBetweenShotsTween;
+
+        private bool _isBetweenShotsLock = false;
 
 
         public Transform GunMuzzleTransform =>
@@ -33,6 +37,9 @@ namespace Arenar
         public int ClipSizeMax { get; private set; }
 
         public int ClipSize { get; private set; }
+
+        public float TimeBetweenShots { get; private set; }
+        
         public ItemInventoryData ItemInventoryData { get; private set; }
 
         public WeaponType WeaponType => WeaponType.Firearm;
@@ -49,6 +56,8 @@ namespace Arenar
 
         private Vector3 RecoilShakeDirection =>
             new Vector3(Random.Range(-1.0f, 1.0f), 1.0f, 0.0f) / 100.0f * firearmWeaponData.RecoilShakeDefaultValue;
+        
+        private float BulletPhysicalMight { get; set; }
 
 
         public void ReloadClip(bool isFull)
@@ -63,6 +72,8 @@ namespace Arenar
                 if (ClipSize > ClipSizeMax)
                     ClipSize = ClipSizeMax;
             }
+            
+            _timeBetweenShotsTween?.Kill(true);
         }
 
         public void InitializeWeapon(ItemInventoryData itemInventoryData)
@@ -77,8 +88,10 @@ namespace Arenar
             Damage = CalculateWeaponDamage();
             ClipSizeMax = GetClipSizeMax();
             ClipSize = ClipSizeMax;
+            BulletPhysicalMight = itemInventoryData.BulletPhysicalMight;
             ProjectileSpeed = GetProjectileSpeed();
             ReloadSpeed = firearmWeaponData.DefaultReloadSpeed;
+            TimeBetweenShots = firearmWeaponData.TimeBetweenShots;
         }
 
         public void TakeWeaponInHand(ICharacterEntity weaponOwner)
@@ -91,6 +104,11 @@ namespace Arenar
 
         public virtual void MakeShot(Vector3 direction, bool isInfinityClip = false)
         {
+            if (_isBetweenShotsLock)
+            {
+                return;
+            }
+            
             if (ClipSize <= 0)
             {
                 Debug.LogError("EmptyClip");
@@ -101,19 +119,27 @@ namespace Arenar
             PlayMuzzleFlashEffect();
             InitializeBullets(direction);
 
-            firearmWeaponCameraRecoilComponent.ApplyShootRecoil(RecoilShakeDirection);
+            if (firearmWeaponCameraRecoilComponent != null)
+                firearmWeaponCameraRecoilComponent.ApplyShootRecoil(RecoilShakeDirection);
 
             if (!isInfinityClip)
                 ClipSize--;
+            
+            _isBetweenShotsLock = true;
+            _timeBetweenShotsTween = DOVirtual.DelayedCall(TimeBetweenShots,() => _isBetweenShotsLock = false);
         }
 
         public void SetLaserStatus(bool status)
         {
-            lineRendererEffect.gameObject.SetActive(status);
+            if (lineRendererEffect != null)
+                lineRendererEffect.gameObject.SetActive(status);
         }
 
-        public void SetLaserPosition(Vector3 position) =>
-            lineRendererEffect.SetPosition(1, position);
+        public void SetLaserPosition(Vector3 position)
+        {
+            if (lineRendererEffect != null)
+                lineRendererEffect.SetPosition(1, position);
+        }
 
         protected virtual float CalculateWeaponDamage()
         {
@@ -140,7 +166,7 @@ namespace Arenar
         
         protected void CreateBullet(Vector3 direction)
         {
-            DamageData damageData = new DamageData(WeaponOwner, (int)Damage);
+            DamageData damageData = new DamageData(WeaponOwner, (int)Damage, direction * BulletPhysicalMight);
             
             switch (firearmWeaponData.FirearmWeaponAttackType)
             {
@@ -171,7 +197,8 @@ namespace Arenar
 
         private void Update()
         {
-            lineRendererEffect.SetPosition(0, gunMuzzleTransform.position);
+            if (lineRendererEffect != null)
+                lineRendererEffect.SetPosition(0, gunMuzzleTransform.position);
         }
 
         private void PlayMuzzleFlashEffect()

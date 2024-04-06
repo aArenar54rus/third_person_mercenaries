@@ -1,17 +1,16 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
-using Zenject;
 
 
 namespace Arenar.Character
 {
-    public class AiStateMachineController : IFixedTickable
+    public class AiStateMachineController
     {
 	    private ICharacterEntity characterEntity;
-	    private TickableManager tickableManager;
 
 	    private ICharacterLiveComponent characterLiveComponent;
 	    
@@ -19,51 +18,46 @@ namespace Arenar.Character
 	    private IAIState currentState;
 	    private IAIState stateToSwitch;
 
-	    private bool isControlBlocked;
-
 	    private Task asyncUpdateTask;
 
-
-		protected Vector3 MoveDirection { get; set; }
+	    protected Vector3 MoveDirection { get; set; }
 
 		protected Vector3 RotationDirection { get; set; }
 		
 		
-
 		internal AiStateMachineController(
 				ICharacterEntity characterEntity,
-				TickableManager tickableManager,
 				IAIState[] aiStates)
 		{
 			this.characterEntity = characterEntity;
-			
-			this.tickableManager = tickableManager;
-			tickableManager.AddFixed(this);
-			
-			if (aiInitedStates == null || aiInitedStates.Count >= 0)
+
+			aiInitedStates = new Dictionary<Type, IAIState>();
+			foreach (var state in aiStates)
 			{
-				aiInitedStates = new Dictionary<Type, IAIState>();
-				foreach (var state in aiStates)
-				{
-					state.SetupAiStateMachineBehaviour(this);
-					aiInitedStates.Add(state.GetType(), state);
-				}
+				state.SetupAiStateMachineBehaviour(this);
+				aiInitedStates.Add(state.GetType(), state);
 			}
-			
-			currentState = aiStates[0];
-			currentState.OnStateBegin();
 
 			characterEntity.TryGetCharacterComponent(out characterLiveComponent);
 		}
 
 
-		public void FixedTick() =>
+		public void OnFixedTick() =>
 			HandleBaseLogic();
 
 		public void Initialize()
 		{
 			foreach (var state in aiInitedStates.Values)
 				state?.Initialize(characterEntity);
+		}
+
+		public void OnStart()
+		{
+			if (currentState == null)
+			{
+				currentState = aiInitedStates.First().Value;
+				currentState.OnStateBegin();
+			}
 		}
 
 		public void DeInitialize()
@@ -73,16 +67,11 @@ namespace Arenar.Character
 
 			asyncUpdateTask.Wait();
 			asyncUpdateTask.Dispose();
-			tickableManager.RemoveFixed(this);
 		}
 
-		public void AiBlockStatus(bool status) =>
-			isControlBlocked = status;
-		
 		private void HandleBaseLogic()
 		{
-			if ((characterLiveComponent != null && !characterLiveComponent.IsAlive)
-			    || isControlBlocked)
+			if ((characterLiveComponent != null && !characterLiveComponent.IsAlive))
 			{
 				MoveDirection = Vector3.zero;
 				return;

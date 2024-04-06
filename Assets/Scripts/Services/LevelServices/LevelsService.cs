@@ -7,7 +7,7 @@ using Zenject;
 
 namespace Arenar.Services.LevelsService
 {
-    public class LevelsService : ILevelsService, ITickable
+    public class LevelsService : ILevelsService
     {
         public event Action<LevelContext> onCompleteLevel;
         
@@ -22,6 +22,9 @@ namespace Arenar.Services.LevelsService
         private GameModeController _gameModeController;
 
         private CharacterSpawnController _сharacterSpawnController;
+        private ShootingGalleryLevelInfoCollection _shootingGalleryLevelInfoCollection;
+
+        private TickableManager _tickableManager;
 
 
         
@@ -35,12 +38,16 @@ namespace Arenar.Services.LevelsService
         public void Construct(ZenjectSceneLoader sceneLoader,
                               ISaveAndLoadService<SaveDelegate> saveAndLoadService,
                               LevelData[] levelDatas,
-                              CharacterSpawnController сharacterSpawnController)
+                              CharacterSpawnController сharacterSpawnController,
+                              TickableManager tickableManager,
+                              ShootingGalleryLevelInfoCollection shootingGalleryLevelInfoCollection)
         {
             _sceneLoader = sceneLoader;
             _saveAndLoadService = saveAndLoadService;
             _levelDatas = levelDatas;
             _сharacterSpawnController = сharacterSpawnController;
+            _tickableManager = tickableManager;
+            _shootingGalleryLevelInfoCollection = shootingGalleryLevelInfoCollection;
         }
         
         public bool TryGetLevelDataByIndex(int levelIndex, out LevelData levelData)
@@ -69,11 +76,12 @@ namespace Arenar.Services.LevelsService
             
             _sceneLoader.LoadScene(CurrentLevelContext.LevelData.SceneKey, LoadSceneMode.Additive);
             
-            _gameModeController = CreateGameModeController();
+            _gameModeController = CreateGame();
             _gameModeController.StartGame();
+            _tickableManager.Add(_gameModeController);
 
 
-            GameModeController CreateGameModeController()
+            GameModeController CreateGame()
             {
                 switch (gameMode)
                 {
@@ -85,6 +93,8 @@ namespace Arenar.Services.LevelsService
                     
                     case GameMode.ShootingGallery:
                         ShootingGalleryGameModeController shootingGalleryGameMode = new(_сharacterSpawnController);
+                        shootingGalleryGameMode.Initialize(_shootingGalleryLevelInfoCollection.ShootingGalleriesInfos[levelIndex]);
+                        shootingGalleryGameMode.SetLevelContext(CurrentLevelContext);
                         return shootingGalleryGameMode;
                     
                     default:
@@ -116,20 +126,14 @@ namespace Arenar.Services.LevelsService
             _gameModeController.EndGame();
             
             onCompleteLevel?.Invoke(CurrentLevelContext);
+            
+            _tickableManager.Remove(_gameModeController);
         }
 
         public void UnloadCurrentLevelScene()
         {
             if (CurrentLevelContext != null)
                 SceneManager.UnloadSceneAsync(CurrentLevelContext.LevelData.LevelNameKey);
-        }
-
-        public void Tick()
-        {
-            if (_gameModeController == null)
-                return;
-            
-            _gameModeController.OnUpdate();
         }
     }
 }

@@ -7,7 +7,7 @@ namespace Arenar.Character
 {
     public class PlayerCharacterFactory : ICharacterEntityFactory<ComponentCharacterController>
     {
-        private string _playerCharacterAddrPath;
+        private readonly AssetReference _playerCharacterAddrPath;
         private readonly DiContainer container;
         private readonly TickableManager tickableManager;
         private readonly InitializableManager initializableManager;
@@ -21,7 +21,7 @@ namespace Arenar.Character
             this.container = container;
             this.tickableManager = tickableManager;
             this.initializableManager = initializableManager;
-            _playerCharacterAddrPath = addressablesCharacters.AddressablesPlayerPath;
+            _playerCharacterAddrPath = addressablesCharacters.AddressablesPlayer;
         }
         
         
@@ -30,9 +30,9 @@ namespace Arenar.Character
             ComponentCharacterController playerCharacterController = null;
             DiContainer subContainer = container.CreateSubContainer();
 
-            var handle = Addressables.LoadAssetAsync<ComponentCharacterController>(_playerCharacterAddrPath);
+            var handle = _playerCharacterAddrPath.InstantiateAsync(parent);
             handle.WaitForCompletion();
-            playerCharacterController = (ComponentCharacterController)GameObject.Instantiate(handle.Result, parent);
+            playerCharacterController = handle.Result.GetComponent<ComponentCharacterController>();
 
             InstallPostBindings(subContainer, playerCharacterController);
             subContainer.Inject(playerCharacterController);
@@ -50,26 +50,18 @@ namespace Arenar.Character
             subContainer.Rebind<InitializableManager>()
                 .FromInstance(initializableManager)
                 .NonLazy();
-
-            switch (characterControl)
-            {
-                case PuppetComponentCharacterController:
-                    subContainer.Install<PuppetCharacterComponentsInstaller>();
-                    break;
-                    
-                case PlayerComponentCharacterController:
-                    subContainer.Bind(typeof(ICharacterEntity),
-                            typeof(ICharacterDataStorage<CharacterAudioDataStorage>),
-                            typeof(ICharacterDataStorage<CharacterVisualDataStorage>),
-                            typeof(ICharacterDataStorage<CharacterAnimatorDataStorage>),
-                            typeof(ICharacterDataStorage<CharacterPhysicsDataStorage>),
-                            typeof(ICharacterDataStorage<CharacterAimAnimationDataStorage>))
-                        .To<PlayerComponentCharacterController>()
-                        .FromInstance(characterControl)
-                        .AsSingle();
-                    subContainer.Install<PlayerCharacterComponentsInstaller>();
-                    break;
-            }
+            
+            subContainer.Bind(typeof(ICharacterEntity),
+                        typeof(ICharacterDataStorage<CharacterAudioDataStorage>),
+                        typeof(ICharacterDataStorage<CharacterVisualDataStorage>),
+                        typeof(ICharacterDataStorage<CharacterAnimatorDataStorage>),
+                        typeof(ICharacterDataStorage<CharacterPhysicsDataStorage>),
+                        typeof(ICharacterDataStorage<CharacterAimAnimationDataStorage>))
+                    .To<PlayerComponentCharacterController>()
+                    .FromInstance(characterControl)
+                    .AsSingle();
+            
+            subContainer.Install<PlayerCharacterComponentsInstaller>();
         }
     }
 }

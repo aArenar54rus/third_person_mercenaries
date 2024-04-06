@@ -14,7 +14,7 @@ namespace Arenar.Services.LevelsService
 
         private CharacterSpawnController _сharacterSpawnController;
         private ShootingGalleryTargetNode[] _shootingGalleryTargets;
-
+        
         private Tween _tween;
 
         
@@ -26,8 +26,13 @@ namespace Arenar.Services.LevelsService
             
             _сharacterSpawnController = сharacterSpawnController;
         }
+
         
-        
+        public void Initialize(ShootingGalleryTargetNode[] shootingGalleryTargets)
+        {
+            _shootingGalleryTargets = shootingGalleryTargets;
+        }
+
         public override void StartGame()
         {
             _tween = DOVirtual.DelayedCall(GAME_WAIT_TIME, () => _isGameWork = true)
@@ -39,7 +44,7 @@ namespace Arenar.Services.LevelsService
             KillTween();
         }
 
-        public void OnUpdate()
+        public override void OnUpdate()
         {
             if (!_isGameWork)
                 return;
@@ -57,38 +62,21 @@ namespace Arenar.Services.LevelsService
                 return;
             }
             
-            if (_shootingGalleryTargets[_progressIndex].ActivateTime < _gameTime)
+            if (_shootingGalleryTargets[_progressIndex].ActivateTime > _gameTime)
                 return;
 
-            ActivateShootTarget(_shootingGalleryTargets[_progressIndex], _progressIndex);
+            ActivateShootTarget();
             _progressIndex++;
 
             if (_progressIndex >= _shootingGalleryTargets.Length)
                 _gameTime = 0;
         }
 
-        private void ActivateShootTarget(ShootingGalleryTargetNode targetNode, int targetIndex)
+        private void ActivateShootTarget()
         {
-            foreach (var entity in CharacterEntities)
-            {
-                ShootingGalleryTargetCharacterController
-                    targetEntity = (ShootingGalleryTargetCharacterController)entity;
-                if (targetEntity.gameObject.activeSelf)
-                    continue;
-
-                Spawn(targetEntity, targetIndex);
-                return;
-            }
-            
-            ShootingGalleryTargetCharacterController target =
-                _сharacterSpawnController.CreateShootingGalleryTarget();
-
-            CharacterEntities.Add(target);
-        }
-
-        public void Spawn(ShootingGalleryTargetCharacterController target, int targetIndex)
-        {
-            target.ReInitialize();
+            var shootingGalleryTargetNpc = _сharacterSpawnController.CreateShootingGalleryTarget();
+            shootingGalleryTargetNpc.InitializeShooterGalleryTarget(_progressIndex, GetRandomEnemyLevel());
+            shootingGalleryTargetNpc.ReInitialize();
         }
 
         private void KillTween()

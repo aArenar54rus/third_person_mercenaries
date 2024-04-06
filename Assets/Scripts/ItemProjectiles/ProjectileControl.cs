@@ -52,8 +52,8 @@ namespace Arenar
         {
             Debug.LogError("fly end");
 
-            if (other.gameObject.TryGetComponent<CharacterController>(out CharacterController characterController)
-                && characterController.TryGetComponent<ICharacterLiveComponent>(out ICharacterLiveComponent characterLiveComponent))
+            if (other.gameObject.TryGetComponent<ComponentCharacterController>(out ComponentCharacterController characterController)
+                && characterController.TryGetCharacterComponent<ICharacterLiveComponent>(out ICharacterLiveComponent characterLiveComponent))
             {
                 characterLiveComponent.SetDamage(_damageData);
             }

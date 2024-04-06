@@ -1,19 +1,15 @@
-using System;
 using UnityEngine;
-using Zenject;
 
 
 namespace Arenar.Services.LevelsService
 {
     [CreateAssetMenu(menuName = "LevelsData/ShootingGalleryLevelInfoCollection")]
-    public class ShootingGalleryLevelInfoCollection : ScriptableObjectInstaller<ShootingGalleryLevelInfoCollection>
+    public class ShootingGalleryLevelInfoCollection : ScriptableObject
     {
         [SerializeField] private SerializableDictionary<int, ShootingGalleryTargetNode[]> _shootingGalleriesInfos;
-        
-        
-        public override void InstallBindings()
-        {
-            Container.BindInstance(_shootingGalleriesInfos).AsSingle();
-        }
+
+
+        public SerializableDictionary<int, ShootingGalleryTargetNode[]> ShootingGalleriesInfos =>
+            _shootingGalleriesInfos;
     }
 }

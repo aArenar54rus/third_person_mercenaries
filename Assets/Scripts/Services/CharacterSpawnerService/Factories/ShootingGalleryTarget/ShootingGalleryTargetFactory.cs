@@ -35,9 +35,9 @@ namespace Arenar.Character
             var subContainer = _container.CreateSubContainer();
             InstallPreBindings(subContainer);
 
-            var handle = Addressables.LoadAssetAsync<ShootingGalleryTargetCharacterController>(_characterData.AddressablesCharacterPath);
+            var handle = _characterData.AddressablesCharacter.InstantiateAsync(parent);
             handle.WaitForCompletion();
-            characterController = GameObject.Instantiate(handle.Result);
+            characterController = handle.Result.GetComponent<ShootingGalleryTargetCharacterController>();
 
             InstallPostBindings(subContainer, characterController);
             subContainer.Inject(characterController);
@@ -68,10 +68,13 @@ namespace Arenar.Character
 
             subContainer.Bind(typeof(ICharacterEntity),
                     typeof(ICharacterDataStorage<CharacterAudioDataStorage>),
-                    typeof(ICharacterDataStorage<CharacterPhysicsDataStorage>))
+                    typeof(ICharacterDataStorage<SGTargetPhysicalDataStorage>),
+                    typeof(ICharacterDataStorage<SGTargetWeaponDataStorage>))
                 .To<ShootingGalleryTargetCharacterController>()
                 .FromInstance(characterControl)
                 .AsSingle();
+            
+            subContainer.Install<ShootingGalleryTargetCharacterComponentsInstaller>();
         }
     }
 }

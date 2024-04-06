@@ -9,10 +9,10 @@ namespace Arenar.Character
     {
         private readonly DiContainer container;
         private readonly InitializableManager initializableManager;
-        private ItemProjectileSpawner projectileSpawner;
+        private EffectsSpawner projectileSpawner;
         
         
-        public FirearmWeaponFactory(DiContainer container, InitializableManager initializableManager, ItemProjectileSpawner projectileSpawner)
+        public FirearmWeaponFactory(DiContainer container, InitializableManager initializableManager, EffectsSpawner projectileSpawner)
         {
             this.container = container;
             this.initializableManager = initializableManager;
@@ -44,7 +44,7 @@ namespace Arenar.Character
                 .FromInstance(initializableManager)
                 .NonLazy();
 
-            subContainer.Rebind<ItemProjectileSpawner>()
+            subContainer.Rebind<EffectsSpawner>()
                 .FromInstance(projectileSpawner);
             
             subContainer.Inject(weapon);

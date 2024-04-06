@@ -35,6 +35,7 @@ namespace Arenar.Services.UI
         
         public void OpenWindow()
         {
+            OnSelectLevel(0);
             OnLevelDifficult(LevelDifficult.Easy);
         }
         
@@ -51,6 +52,8 @@ namespace Arenar.Services.UI
             LevelSelectionLayer.onCanvasLayerShowBegin += OnShowBegin_LoadSelectedLevelData;
             _levelSelectionWindow.OnShowEnd.AddListener(OnWindowShowEnd_SelectElements);
             _levelSelectionWindow.OnHideBegin.AddListener(OnWindowHideBegin_DeselectElements);
+
+            _currentLevelIndex = -1;
         }
 
         protected override void OnWindowShowEnd_SelectElements()
@@ -96,7 +99,7 @@ namespace Arenar.Services.UI
             LevelDifficultLayer.BackToMenuButton.onClick.AddListener(OnReturnToMainMenuButtonClick);
         }
 
-        void OnLevelDifficult(LevelDifficult levelDifficult)
+        private void OnLevelDifficult(LevelDifficult levelDifficult)
         {
             _levelDifficult = levelDifficult;
 
@@ -154,7 +157,9 @@ namespace Arenar.Services.UI
                     selectedLevelData = levelSelectionButton.LevelData;
                 }
             }
-            
+
+            if (selectedLevelData == null)
+                return;
             _currentLevelIndex = selectedLevelData.LevelIndex;
             _currentGameMode = selectedLevelData.GameMode;
         }

@@ -128,6 +128,7 @@ GameObject:
   - component: {fileID: 19923774}
   - component: {fileID: 19828288}
   - component: {fileID: -2186943879038141547}
+  - component: {fileID: 9127946759949580211}
   m_Layer: 0
   m_Name: BulletYellow
   m_TagString: Untagged
@@ -4975,7 +4976,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bulletTransform: {fileID: 402954}
-  addedRotation: {x: 0, y: 90, z: 0}
+  _liveTimeMax: 5
+--- !u!136 &9127946759949580211
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 149566}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 0.1
+  m_Height: 0.71
+  m_Direction: 2
+  m_Center: {x: 0, y: 0, z: 0.01}
 --- !u!1 &156448
 GameObject:
   m_ObjectHideFlags: 0
