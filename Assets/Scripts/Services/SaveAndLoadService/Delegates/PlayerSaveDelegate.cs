@@ -5,5 +5,7 @@ namespace Arenar.Services.SaveAndLoad
         public string playerName = "Player";
         
         public int playerCharacterLevel;
+
+        public int currentXpPoints;
     }
 }

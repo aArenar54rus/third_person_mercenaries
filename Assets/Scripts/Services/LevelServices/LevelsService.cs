@@ -1,4 +1,5 @@
 using System;
+using Arenar.Character;
 using Arenar.Services.SaveAndLoad;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -25,7 +26,6 @@ namespace Arenar.Services.LevelsService
         private ShootingGalleryLevelInfoCollection _shootingGalleryLevelInfoCollection;
 
         private TickableManager _tickableManager;
-
 
         
         public LevelData[] LevelDatas => _levelDatas;
@@ -72,10 +72,13 @@ namespace Arenar.Services.LevelsService
                 return;
             }
 
-            CurrentLevelContext = new LevelContext(levelData, levelDifficult, gameMode);
+            CurrentLevelContext = new LevelContext(levelData,
+                levelDifficult,
+                gameMode,
+                _shootingGalleryLevelInfoCollection.ShootingGalleriesInfos[levelIndex].Length);
             
             _sceneLoader.LoadScene(CurrentLevelContext.LevelData.SceneKey, LoadSceneMode.Additive);
-            
+
             _gameModeController = CreateGame();
             _gameModeController.StartGame();
             _tickableManager.Add(_gameModeController);
@@ -108,26 +111,43 @@ namespace Arenar.Services.LevelsService
         {
             if (CurrentLevelContext == null
                 || CurrentLevelContext.LevelData.LevelIndex <= _lastCompleteLevel)
-                return;
-
-            _lastCompleteLevel = CurrentLevelContext.LevelData.LevelIndex;
-            if (_lastCompleteLevel == _levelDatas.Length - 1)
             {
-                _lastCompleteLevel = 0;
-                if (_lastCompleteDifficult != LevelDifficult.Infinity)
-                    _lastCompleteDifficult++;
+                Debug.LogError("Data is lost!");
+                return;
             }
 
-            var saveDelegate = new LevelProgressionSaveDelegate();
-            saveDelegate.completeDifficult = CurrentLevelContext.LevelDifficult;
-            saveDelegate.completedLevel = _lastCompleteLevel;
-            _saveAndLoadService.MakeSave(saveDelegate);
+            if (!_сharacterSpawnController.PlayerCharacter
+                    .TryGetCharacterComponent<ICharacterLiveComponent>(out ICharacterLiveComponent liveComponent))
+            {
+                return;
+            }
+
+            CurrentLevelContext.CompleteLevel(liveComponent.IsAlive
+                ? LevelContext.GameResult.Victory
+                : LevelContext.GameResult.Defeat);
             
+            if (CurrentLevelContext.GameResultStatus == LevelContext.GameResult.Victory)
+            {
+                _lastCompleteLevel = CurrentLevelContext.LevelData.LevelIndex;
+                if (_lastCompleteLevel == _levelDatas.Length - 1)
+                {
+                    _lastCompleteLevel = 0;
+                    if (_lastCompleteDifficult != LevelDifficult.Infinity)
+                        _lastCompleteDifficult++;
+                }
+
+                LevelProgressionSaveDelegate saveDelegate = new LevelProgressionSaveDelegate
+                {
+                    completeDifficult = CurrentLevelContext.LevelDifficult,
+                    completedLevel = _lastCompleteLevel
+                };
+                _saveAndLoadService.MakeSave(saveDelegate);
+            }
+
+            _tickableManager.Remove(_gameModeController);
             _gameModeController.EndGame();
             
             onCompleteLevel?.Invoke(CurrentLevelContext);
-            
-            _tickableManager.Remove(_gameModeController);
         }
 
         public void UnloadCurrentLevelScene()

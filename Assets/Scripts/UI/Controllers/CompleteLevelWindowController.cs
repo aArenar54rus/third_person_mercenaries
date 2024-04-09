@@ -1,3 +1,4 @@
+using Arenar.Character;
 using Arenar.Services.LevelsService;
 using Arenar.Services.PlayerInputService;
 using UnityEngine.InputSystem;
@@ -11,6 +12,7 @@ namespace Arenar.Services.UI
         
         private CompleteLevelCanvasWindow _completeLevelCanvasWindow;
         private CompleteLevelLayer _completeLevelLayer;
+        private PlayerCharacterLevelData _playerCharacterLevelData;
 
 
         private ProgressLevelMarksVisualControl ProgressLevelMarksVisualControl =>
@@ -20,10 +22,14 @@ namespace Arenar.Services.UI
             _completeLevelLayer.CompleteLevelItemRewardsVisualControl;
 
         
-        public CompleteLevelWindowController(ILevelsService levelsService, IPlayerInputService playerInputService) : base(playerInputService)
+        public CompleteLevelWindowController(ILevelsService levelsService,
+            IPlayerInputService playerInputService,
+            PlayerCharacterLevelData playerCharacterLevelData)
+            : base(playerInputService)
         {
             _playerInputService = playerInputService;
             _levelsService = levelsService;
+            _playerCharacterLevelData = playerCharacterLevelData;
         }
 
 

@@ -21,8 +21,9 @@ MonoBehaviour:
       TermType: 0
       Description: 
       Languages:
-      - Options
-      - "\u041D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0438"
+      - Return in main menu
+      - "\u0412\u0435\u0440\u043D\u0443\u0442\u044C\u0441\u044F \u0432 \u0433\u043B\u0430\u0432\u043D\u043E\u0435
+        \u043C\u0435\u043D\u044E"
       - 
       Flags: 000000
       Languages_Touch: []
@@ -211,8 +212,8 @@ MonoBehaviour:
       TermType: 0
       Description: 
       Languages:
-      - "\u041D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0438"
-      - 
+      - Continue
+      - "\u041F\u0440\u043E\u0434\u043E\u043B\u0436\u0438\u0442\u044C"
       - 
       Flags: 000000
       Languages_Touch: []
@@ -297,6 +298,33 @@ MonoBehaviour:
       Languages:
       - "\u041F\u0440\u043E\u0432\u0430\u043B\u0435\u043D\u043E"
       - Level failed
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: loc_key_return_in_main_menu
+      TermType: 0
+      Description: 
+      Languages:
+      - "\u041D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0438"
+      - 
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: loc_key_clear_level
+      TermType: 0
+      Description: 
+      Languages:
+      - Genocide
+      - "\u0413\u0435\u043D\u043E\u0446\u0438\u0434"
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: loc_key_time
+      TermType: 0
+      Description: 
+      Languages:
+      - Time
+      - "\u0412\u0440\u0435\u043C\u044F"
       - 
       Flags: 000000
       Languages_Touch: []

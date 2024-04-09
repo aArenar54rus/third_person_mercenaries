@@ -8,6 +8,7 @@ namespace Arenar.Installers
     public class CharactersSpawnerInstaller : MonoInstaller<CharactersSpawnerInstaller>
     {
         [SerializeField] private AddressablesCharacters _addressablesCharacters;
+        [SerializeField] private PlayerCharacterLevelData _playerCharacterLevelData;
         [SerializeField] private ShootingGalleryTargetParameters _shootingGalleryTargetParameters;
 
         
@@ -22,6 +23,9 @@ namespace Arenar.Installers
                 .AsSingle().NonLazy();
 
             Container.BindInstance(_addressablesCharacters)
+                .AsSingle().NonLazy();
+
+            Container.BindInstance(_playerCharacterLevelData)
                 .AsSingle().NonLazy();
 
             BindNpcBaseParameters();

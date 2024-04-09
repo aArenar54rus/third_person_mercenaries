@@ -1,4 +1,5 @@
 using System;
+using Arenar.Services.LevelsService;
 using DG.Tweening;
 using UnityEngine;
 using Zenject;
@@ -19,6 +20,8 @@ namespace Arenar.Character
         private Transform _characterTransform;
         private Rigidbody _characterRigidbody;
         private EffectsSpawner _effectsSpawner;
+
+        private ILevelsService _levelsService;
         
         private Tween _deathTween;
         
@@ -44,11 +47,13 @@ namespace Arenar.Character
         public void Construct(ICharacterEntity characterEntity,
             ICharacterDataStorage<SGTargetPhysicalDataStorage> characterPhysicsDataStorage,
             ShootingGalleryTargetParameters shootingGalleryTargetParameters,
+            ILevelsService levelsService,
             EffectsSpawner effectsSpawner)
         {
             _character = (ShootingGalleryTargetCharacterController)characterEntity;
             _characterTransform = characterPhysicsDataStorage.Data.CharacterTransform;
             _characterRigidbody = characterPhysicsDataStorage.Data.CharacterModelRigidbody;
+            _levelsService = levelsService;
             _shootingGalleryTargetParameters = shootingGalleryTargetParameters;
             _effectsSpawner = effectsSpawner;
         }
@@ -79,7 +84,8 @@ namespace Arenar.Character
             
             if (damageData.BulletMight != Vector3.zero)
                 _characterRigidbody.AddForce(damageData.BulletMight, ForceMode.Impulse);
-            
+
+            _levelsService.CurrentLevelContext.SettedDamage += damageData.Damage;
             Health -= damageData.Damage;
             OnCharacterGetDamageBy?.Invoke(damageData.DamageSetterCharacter);
             
@@ -99,6 +105,7 @@ namespace Arenar.Character
         {
             _characterRigidbody.useGravity = true;
             Health = 0;
+            _levelsService.CurrentLevelContext.NeededTargetCount++;
             OnCharacterDie?.Invoke();
             
             _deathTween = DOVirtual.DelayedCall(1.0f, () =>

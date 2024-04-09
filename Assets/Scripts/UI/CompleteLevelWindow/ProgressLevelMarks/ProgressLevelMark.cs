@@ -1,14 +1,16 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-
-public class ProgressLevelMark : MonoBehaviour
+namespace Arenar.Services.UI
 {
-    [SerializeField] private Image _markImage;
-    [SerializeField] private Sprite _activeImage;
-    [SerializeField] private Sprite _deactiveImage;
+    public class ProgressLevelMark : MonoBehaviour
+    {
+        [SerializeField] private Image _markImage;
+        [SerializeField] private Color _successColor;
+        [SerializeField] private Color _failedColor;
 
 
-    public void SetMarkSuccessStatus(bool status) =>
-        _markImage.sprite = status ? _activeImage : _deactiveImage;
+        public void SetMarkSuccessStatus(bool status) =>
+            _markImage.color = status ? _successColor : _failedColor;
+    }
 }

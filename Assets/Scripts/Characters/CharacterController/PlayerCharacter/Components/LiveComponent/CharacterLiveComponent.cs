@@ -1,4 +1,5 @@
 using System;
+using Arenar.Services.LevelsService;
 using DG.Tweening;
 using UnityEngine;
 using Zenject;
@@ -18,6 +19,8 @@ namespace Arenar.Character
         private int healthMax;
         private int health;
 
+        private ILevelsService _levelsService;
+
         private Tween _deathTween;
 
         
@@ -33,10 +36,12 @@ namespace Arenar.Character
 
         [Inject]
         public void Construct(ICharacterDataStorage<CharacterPhysicsDataStorage> characterPhysicsDataStorage,
+            ILevelsService levelsService,
             PlayerCharacterParametersData playerCharacterParametersData)
         {
             characterTransform = characterPhysicsDataStorage.Data.CharacterTransform;
             this.playerCharacterParametersData = playerCharacterParametersData;
+            _levelsService = levelsService;
         }
 
         public void SetDamage(DamageData damageData)
@@ -44,6 +49,7 @@ namespace Arenar.Character
             if (!IsAlive)
                 return;
             
+            _levelsService.CurrentLevelContext.GettedDamage += damageData.Damage;
             health -= damageData.Damage;
             if (health <= 0)
                 SetDeath();
@@ -56,8 +62,13 @@ namespace Arenar.Character
 
         public void SetDeath()
         {
-            _deathTween = DOVirtual.DelayedCall(1.0f, () => characterTransform.gameObject.SetActive(false));
+            _deathTween = DOVirtual.DelayedCall(1.0f, () =>
+            {
+                characterTransform.gameObject.SetActive(false);
+                _levelsService.CompleteLevel();
+            });
             health = 0;
+            _levelsService.CurrentLevelContext.PlayerDeath++;
 
             OnCharacterDie?.Invoke();
         }
