@@ -1,0 +1,22 @@
+{
+    "name": "GeneralModuleEditor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:6b6e27ea7b74b2b49b759ec14c437130",
+        "GUID:6546d7765b4165b40850b3667f981c26",
+        "GUID:0d8beb7f090555447a6cf5ce9e54dbb4",
+        "GUID:d0acddb179989574c8355991596bd3e6",
+        "GUID:4db1229c02f3f629bdd928353859c2b3"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

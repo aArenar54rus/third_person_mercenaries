@@ -1,0 +1,19 @@
+{
+  "name": "com.taketop.general",
+  "displayName": "Module: General",
+  "version": "0.7.28",
+  "unity": "2019.2",
+  "unityRelease": "0a10",
+  "dependencies": {
+    "com.unity.nuget.newtonsoft-json": "2.0.0",
+    "com.unity.textmeshpro": "2.1.6",
+    "com.unity.burst": "1.7.0"
+  },
+  "description": "General module for TakeTop",
+  "keywords": [
+    "General"
+  ],
+  "category": "Tools",
+  "author": "TakeTop",
+  "license": "UNLICENSED"
+}

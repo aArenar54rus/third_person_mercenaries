@@ -1,6 +1,7 @@
 using System;
 using Arenar.Character;
 using Arenar.Services.SaveAndLoad;
+using TakeTop.PreferenceSystem;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Zenject;
@@ -17,7 +18,7 @@ namespace Arenar.Services.LevelsService
         private LevelDifficult _lastCompleteDifficult;
 
         private ZenjectSceneLoader _sceneLoader;
-        private ISaveAndLoadService<SaveDelegate> _saveAndLoadService;
+        private IPreferenceManager _preferenceManager;
         private LevelData[] _levelDatas;
 
         private GameModeController _gameModeController;
@@ -36,14 +37,14 @@ namespace Arenar.Services.LevelsService
 
         [Inject]
         public void Construct(ZenjectSceneLoader sceneLoader,
-                              ISaveAndLoadService<SaveDelegate> saveAndLoadService,
+                              IPreferenceManager preferenceManager,
                               LevelData[] levelDatas,
                               CharacterSpawnController сharacterSpawnController,
                               TickableManager tickableManager,
                               ShootingGalleryLevelInfoCollection shootingGalleryLevelInfoCollection)
         {
             _sceneLoader = sceneLoader;
-            _saveAndLoadService = saveAndLoadService;
+            _preferenceManager = preferenceManager;
             _levelDatas = levelDatas;
             _сharacterSpawnController = сharacterSpawnController;
             _tickableManager = tickableManager;
@@ -136,12 +137,10 @@ namespace Arenar.Services.LevelsService
                         _lastCompleteDifficult++;
                 }
 
-                LevelProgressionSaveDelegate saveDelegate = new LevelProgressionSaveDelegate
-                {
-                    completeDifficult = CurrentLevelContext.LevelDifficult,
-                    completedLevel = _lastCompleteLevel
-                };
-                _saveAndLoadService.MakeSave(saveDelegate);
+                var playerSaveData = _preferenceManager.LoadValue<LevelProgressionSaveDelegate>();
+                playerSaveData.completeDifficult = CurrentLevelContext.LevelDifficult;
+                playerSaveData.completedLevel = _lastCompleteLevel;
+                _preferenceManager.SaveValue(playerSaveData);
             }
 
             _tickableManager.Remove(_gameModeController);

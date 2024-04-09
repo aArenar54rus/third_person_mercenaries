@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-1198258184673104459
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5ec37554cf50184dabb97ef210d9a2f, type: 3}
+  m_Name: DefaultScriptableObjectContext
+  m_EditorClassIdentifier: 
+  sources: []
+  targets: []
+  map: {fileID: -475455959024664962, guid: 4a9e7209ca1a20c4c89693bfccc5e4a3, type: 2}
+  foldersForSearch: []
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd6befb071723e44b9f8dbcbc184b2a4, type: 3}
+  m_Name: ScriptableObjectReferencesContextContainer
+  m_EditorClassIdentifier: 
+  contexts:
+    items:
+    - {fileID: -1198258184673104459}

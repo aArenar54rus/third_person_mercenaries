@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using Module.General;
 using TakeTop.JSON;
 using TakeTop.MainThread;
 using UnityEngine;
 using Zenject;
-
 
 namespace TakeTop.PreferenceSystem
 {

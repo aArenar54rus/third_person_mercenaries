@@ -1,24 +1,31 @@
+using Arenar.Character;
 using Arenar.Services.PlayerInputService;
 using Arenar.Services.SaveAndLoad;
+using I2.Loc;
+using TakeTop.PreferenceSystem;
 
 
 namespace Arenar.Services.UI
 {
     public class MainMenuWindowController : CanvasWindowController
     {
-        private ISaveAndLoadService<SaveDelegate> _saveAndLoadService;
+        private IPreferenceManager _preferenceManager;
 
         private MainMenuWindow _mainMenuWindow;
         private OptionsWindow _optionsWindow;
         
         private MainMenuButtonsLayer _mainMenuButtonsLayer;
         private MainMenuPlayerInformationLayer _mainMenuPlayerInfoLayer;
+        private PlayerCharacterLevelData _playerCharacterLevelData;
 
 
-        public MainMenuWindowController(ISaveAndLoadService<SaveDelegate> saveAndLoadService, IPlayerInputService playerInputService)
+        public MainMenuWindowController(IPreferenceManager preferenceManager,
+            PlayerCharacterLevelData playerCharacterLevelData,
+            IPlayerInputService playerInputService)
             : base(playerInputService)
         {
-            _saveAndLoadService = saveAndLoadService;
+            _preferenceManager = preferenceManager;
+            _playerCharacterLevelData = playerCharacterLevelData;
             _playerInputService = playerInputService;
         }
         
@@ -35,6 +42,7 @@ namespace Arenar.Services.UI
             
             _playerInputService.SetInputControlType(InputActionMapType.UI, true);
 
+            _mainMenuWindow.OnShowBegin.AddListener(OnShowWindowBegin);
             _mainMenuWindow.OnShowEnd.AddListener(OnWindowShowEnd_SelectElements);
         }
 
@@ -93,5 +101,31 @@ namespace Arenar.Services.UI
         }
 
         protected override void OnWindowHideBegin_DeselectElements() { }
+
+        private void OnShowWindowBegin()
+        {
+            UpdatePlayerData();
+        }
+        
+        private void UpdatePlayerData()
+        {
+            var playerProgress = _preferenceManager.LoadValue<PlayerSaveDelegate>();
+            _mainMenuPlayerInfoLayer = _mainMenuWindow.GetWindowLayer<MainMenuPlayerInformationLayer>();
+
+            if (playerProgress.playerCharacterLevel >= _playerCharacterLevelData.MaxLevel)
+            {
+                string maxLevelText = LocalizationManager.GetTranslation("loc_key_max_level");
+                _mainMenuPlayerInfoLayer.LevelText.text = maxLevelText;
+                _mainMenuPlayerInfoLayer.LevelProgressSlider.maxValue = 1;
+                _mainMenuPlayerInfoLayer.LevelProgressSlider.value = 1;
+            }
+            else
+            {
+                _mainMenuPlayerInfoLayer.LevelText.text = playerProgress.playerCharacterLevel.ToString();
+                _mainMenuPlayerInfoLayer.LevelProgressSlider.maxValue =
+                    _playerCharacterLevelData.GetExperienceForNextLevel(playerProgress.playerCharacterLevel + 1);
+                _mainMenuPlayerInfoLayer.LevelProgressSlider.value = playerProgress.currentXpPoints;
+            }
+        }
     }
 }

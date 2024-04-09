@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using Module.General;
 using UnityEngine;
-
 
 namespace TakeTop.MainThread
 {
-	public class MainThreadExecutor : MonoBehaviour
+	public class MainThreadExecutor : UpdatableObject
 	{
 		private readonly ConcurrentQueue<Action> globalRunnables = new ConcurrentQueue<Action>();
 		private readonly ConcurrentQueue<Action> sceneRunnables = new ConcurrentQueue<Action>();
@@ -24,7 +24,7 @@ namespace TakeTop.MainThread
 			globalRunnables.Enqueue(runnable);
 		}
 
-		public void OnUpdate()
+		public override void OnUpdate()
 		{
 			if (!isResolved)
 			{

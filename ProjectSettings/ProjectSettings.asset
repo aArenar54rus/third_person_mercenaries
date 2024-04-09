@@ -812,7 +812,7 @@ PlayerSettings:
     PS5: TextMeshPro
     Stadia: TextMeshPro
     Standalone: STARTER_ASSETS_PACKAGES_CHECKED;TextMeshPro
-    WebGL: TextMeshPro
+    WebGL: TextMeshPro;ODIN_INSPECTOR;ODIN_INSPECTOR_3
     Windows Store Apps: TextMeshPro
     XboxOne: TextMeshPro
     iPhone: TextMeshPro

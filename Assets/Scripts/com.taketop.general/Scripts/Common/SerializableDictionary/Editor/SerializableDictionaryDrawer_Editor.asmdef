@@ -1,0 +1,19 @@
+{
+    "name": "SerializableDictionaryDrawer_Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:6b6e27ea7b74b2b49b759ec14c437130",
+        "GUID:2f1afc357048d4de0b647b0fef287fee"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
