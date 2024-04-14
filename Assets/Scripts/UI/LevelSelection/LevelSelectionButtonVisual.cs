@@ -37,6 +37,12 @@ namespace Arenar.Services.UI
         public ButtonStatus ButtonStatusValue { get; private set; }
 
         public LevelData LevelData => _levelData;
+        
+        public bool Interactable
+        {
+            get => _levelSelectionButton.interactable;
+            set => _levelSelectionButton.interactable = value;
+        }
 
 
         public void Initialize(LevelData levelData, Action<int> onButtonAction)
@@ -75,7 +81,7 @@ namespace Arenar.Services.UI
             
             OnLocalize();
         }
-        
+
         public void Select() =>
             _levelSelectionButton.Select();
 

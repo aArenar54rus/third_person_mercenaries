@@ -87,12 +87,16 @@ namespace Arenar.Services.UI
                 _playerInputService.SetInputControlType(InputActionMapType.Gameplay, false);        
                 playerInput.UI.Decline.performed += OnInputAction_Decline;
             }
+
+            SetButtonsStatus(true);
         }
 
         protected override void OnWindowHideBegin_DeselectElements()
         {
             if (_playerInputService.InputActionCollection is PlayerInput playerInput)
                 playerInput.UI.Decline.performed -= OnInputAction_Decline;
+
+            SetButtonsStatus(false);
         }
 
         private void OnInputAction_Decline(InputAction.CallbackContext callbackContext) =>
@@ -186,6 +190,13 @@ namespace Arenar.Services.UI
                         GameplayCanvasWindow,
                         CompleteLevelCanvasWindow>
                     (true, false, null);
+        }
+
+        private void SetButtonsStatus(bool status)
+        {
+            _completeLevelLayer.ContinueButton.interactable = status;
+            _completeLevelLayer.AdRewardButton.interactable = status;
+            _failedLevelLayer.ReturnInMainMenuButton.interactable = status;
         }
     }
 }

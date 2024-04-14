@@ -1,3 +1,4 @@
+using Arenar.AudioSystem;
 using Arenar.Services.LevelsService;
 using Arenar.Services.PlayerInputService;
 using UnityEngine;
@@ -14,6 +15,8 @@ namespace Arenar.Services.UI
         private int _currentLevelIndex;
         private GameMode _currentGameMode;
         private LevelDifficult _levelDifficult;
+        
+        private IUiSoundManager _uiSoundManager;
 
         private LevelSelectionButtonVisual[] _levelSelectionButtonVisuals;
 
@@ -26,11 +29,13 @@ namespace Arenar.Services.UI
         
 
         public LevelSelectionWindowController(ILevelsService levelsService,
-            IPlayerInputService playerInputService)
+            IPlayerInputService playerInputService,
+            IUiSoundManager uiSoundManager)
             : base(playerInputService)
         {
             _playerInputService = playerInputService;
             _levelsService = levelsService;
+            _uiSoundManager = uiSoundManager;
         }
 
         
@@ -64,12 +69,16 @@ namespace Arenar.Services.UI
             
             if (_playerInputService.InputActionCollection is PlayerInput playerInput)
                 playerInput.UI.Decline.performed += OnInputAction_Decline;
+
+            SetButtonsStatus(true);
         }
 
         protected override void OnWindowHideBegin_DeselectElements()
         {
             if (_playerInputService.InputActionCollection is PlayerInput playerInput)
                 playerInput.UI.Decline.performed -= OnInputAction_Decline;
+            
+            SetButtonsStatus(false);
         }
 
         private void OnInputAction_Decline(InputAction.CallbackContext context) =>
@@ -167,6 +176,7 @@ namespace Arenar.Services.UI
 
         private void OnStartMatchButtonClick()
         {
+            _uiSoundManager.PlaySound(UiSoundType.StandartButtonClick);
             _canvasService.TransitionController
                 .PlayTransition<TransitionOverlayCanvasWindowController, 
                     LevelSelectionWindow, 
@@ -181,6 +191,7 @@ namespace Arenar.Services.UI
 
         private void OnReturnToMainMenuButtonClick()
         {
+            _uiSoundManager.PlaySound(UiSoundType.StandartButtonClick);
             _canvasService.TransitionController
                 .PlayTransition<TransitionCrossFadeCanvasWindowLayerController, 
                     LevelSelectionWindow, 
@@ -194,6 +205,21 @@ namespace Arenar.Services.UI
         {
             OnSelectLevel(_currentLevelIndex);
             OnLevelDifficult(LevelDifficult.Easy);
+            
+        }
+        
+        private void SetButtonsStatus(bool status)
+        {
+            foreach (LevelSelectionButtonVisual levelSelectionButton in _levelSelectionButtonVisuals)
+            {
+                levelSelectionButton.Interactable = status;
+            }
+
+            foreach (LevelDifficultButton levelDifficultButton in LevelDifficultLayer.LevelDifficultButtons)
+                levelDifficultButton.Interactable = status;
+
+            LevelDifficultLayer.LevelStartButton.interactable = status;
+            LevelDifficultLayer.BackToMenuButton.interactable = status;
         }
     }
 }

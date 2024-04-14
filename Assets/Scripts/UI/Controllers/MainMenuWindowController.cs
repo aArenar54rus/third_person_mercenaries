@@ -30,8 +30,8 @@ namespace Arenar.Services.UI
             PlayerCharacterLevelData playerCharacterLevelData,
             IPlayerInputService playerInputService,
             IAmbientManager ambientManager,
-            IUiSoundManager uiSoundManager,
-            YandexGames yandexGames)
+            IUiSoundManager uiSoundManager/*,
+            YandexGames yandexGames*/)
             : base(playerInputService)
         {
             _preferenceManager = preferenceManager;
@@ -39,6 +39,7 @@ namespace Arenar.Services.UI
             _playerInputService = playerInputService;
             _ambientManager = ambientManager;
             _uiSoundManager = uiSoundManager;
+            //_yandexGames = yandexGames;
         }
         
 
@@ -53,6 +54,8 @@ namespace Arenar.Services.UI
             InitMainMenuPlayerInformationLayer();
             
             _playerInputService.SetInputControlType(InputActionMapType.UI, true);
+            
+            _mainMenuWindow.OnHideBegin.AddListener(OnWindowHideBegin_DeselectElements);
 
             _mainMenuWindow.OnShowBegin.AddListener(OnShowWindowBegin);
             _mainMenuWindow.OnShowEnd.AddListener(OnWindowShowEnd_SelectElements);
@@ -115,9 +118,13 @@ namespace Arenar.Services.UI
         protected override void OnWindowShowEnd_SelectElements()
         {
             _mainMenuButtonsLayer.NewChallengeButton.Select();
+            SetButtonsStatus(true);
         }
 
-        protected override void OnWindowHideBegin_DeselectElements() { }
+        protected override void OnWindowHideBegin_DeselectElements()
+        {
+            SetButtonsStatus(false);
+        }
 
         private void OnShowWindowBegin()
         {
@@ -144,6 +151,14 @@ namespace Arenar.Services.UI
                     _playerCharacterLevelData.GetExperienceForNextLevel(playerProgress.playerCharacterLevel);
                 _mainMenuPlayerInfoLayer.LevelProgressSlider.value = playerProgress.currentXpPoints;
             }
+        }
+
+        private void SetButtonsStatus(bool status)
+        {
+            _mainMenuButtonsLayer.NewChallengeButton.interactable = status;
+            _mainMenuButtonsLayer.OutfitButton.interactable = status;
+            _mainMenuButtonsLayer.OptionsButton.interactable = status;
+            _mainMenuButtonsLayer.RateUsButton.interactable = status;
         }
     }
 }

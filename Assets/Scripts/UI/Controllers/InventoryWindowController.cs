@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Arenar.AudioSystem;
 using Arenar.Services.InventoryService;
 using Arenar.Services.PlayerInputService;
 using UnityEngine.InputSystem;
@@ -17,13 +18,18 @@ namespace Arenar.Services.UI
         private InventoryItemDescriptionCanvasLayer _inventoryItemDescriptionCanvasLayer;
         private InventoryControlButtonsCanvasLayer _inventoryControlButtonsCanvasLayer;
         
+        private IUiSoundManager _uiSoundManager;
+        
         
         [Inject]
-        public InventoryWindowController(IInventoryService inventoryService, IPlayerInputService playerInputService)
+        public InventoryWindowController(IInventoryService inventoryService,
+            IPlayerInputService playerInputService,
+            IUiSoundManager uiSoundManager)
             : base(playerInputService)
         {
             _inventoryService = inventoryService;
             _playerInputService = playerInputService;
+            _uiSoundManager = uiSoundManager;
         }
         
         
@@ -136,6 +142,7 @@ namespace Arenar.Services.UI
 
         private void OnReturnToMenuBtnClick()
         {
+            _uiSoundManager.PlaySound(UiSoundType.StandartButtonClick);
             _canvasService.TransitionController
                 .PlayTransition<TransitionCrossFadeCanvasWindowLayerController,
                         InventoryCanvasWindow,

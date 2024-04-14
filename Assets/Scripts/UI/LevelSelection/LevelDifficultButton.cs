@@ -28,6 +28,12 @@ public class LevelDifficultButton : MonoBehaviour
 
     public LevelDifficult LevelDifficult => levelDifficult;
     
+    public bool Interactable
+    {
+        get => _levelDiddicultButton.interactable;
+        set => _levelDiddicultButton.interactable = value;
+    }
+    
 
     public void Initialize(Action<LevelDifficult> action)
     {

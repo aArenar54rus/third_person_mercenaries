@@ -58,12 +58,16 @@ namespace Arenar.Services.UI
             _optionsButtonsLayer.MusicButton.Select();
             if (_playerInputService.InputActionCollection is PlayerInput playerInput)
                 playerInput.UI.Decline.performed += OnInputAction_Decline;
+
+            SetButtonsStatus(true);
         }
 
         protected override void OnWindowHideBegin_DeselectElements()
         {
             if (_playerInputService.InputActionCollection is PlayerInput playerInput)
                 playerInput.UI.Decline.performed -= OnInputAction_Decline;
+            
+            SetButtonsStatus(false);
         }
 
         private void OnInputAction_Decline(InputAction.CallbackContext context)
@@ -83,6 +87,16 @@ namespace Arenar.Services.UI
             _optionsButtonsLayer.LanguageLastButton.onClick.AddListener(OnLastLanguageButtonClick);
             _optionsButtonsLayer.LanguageNextButton.onClick.AddListener(OnNextLanguageButtonClick);
             _optionsButtonsLayer.LanguageButton.onClick.AddListener(OnNextLanguageButtonClick);
+        }
+
+        private void SetButtonsStatus(bool status)
+        {
+            _optionsButtonsLayer.BackButton.interactable = status;
+            _optionsButtonsLayer.MusicButton.interactable = status;
+            _optionsButtonsLayer.SoundButton.interactable = status;
+            _optionsButtonsLayer.LanguageLastButton.interactable = status;
+            _optionsButtonsLayer.LanguageNextButton.interactable = status;
+            _optionsButtonsLayer.LanguageButton.interactable = status;
         }
 
         private void OnBackButtonClick()
