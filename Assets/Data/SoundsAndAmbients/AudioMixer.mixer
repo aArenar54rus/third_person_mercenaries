@@ -50,12 +50,20 @@ AudioMixerController:
   m_UpdateMode: 0
   m_ExposedParameters:
   - guid: 0161231adb3a8634e9a92149b90d5281
+    name: AmbientPitch
+  - guid: ec4995724a1e1ee47a517f76badadfbc
     name: Ambient
   - guid: da3a16962ef9bfd49aa63b341e0f952e
+    name: MasterPitch
+  - guid: 789051284a6921147a3bd9e0ced14da7
     name: Master
   - guid: 4eace5961b2a21a4f938c19662d89a61
+    name: SoundsPitch
+  - guid: ae11b852908044a449b3a6cc386c7711
     name: Sounds
   - guid: b6e15685c50505942bc2a9033857b0ee
+    name: UiSoundsPitch
+  - guid: 23b3ca7008e893c4da1eae26f387c570
     name: UiSounds
   m_AudioMixerGroupViews:
   - guids:
