@@ -22,6 +22,7 @@ namespace Arenar.Services.LevelsService
         public void Tick()
         {
             OnUpdate();
+            _levelContext.OnUpdate();
         }
 
         protected int GetRandomEnemyLevel()

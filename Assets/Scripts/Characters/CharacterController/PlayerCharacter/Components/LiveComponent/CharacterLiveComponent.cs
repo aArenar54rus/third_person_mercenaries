@@ -9,7 +9,7 @@ namespace Arenar.Character
 {
     public class CharacterLiveComponent : ICharacterLiveComponent
     {
-        public event Action OnCharacterDie;
+        public event Action<ICharacterEntity> OnCharacterDie;
         public event Action<ICharacterEntity> OnCharacterGetDamageBy;
         public event Action<int, int> OnCharacterChangeHealthValue;
 
@@ -19,6 +19,7 @@ namespace Arenar.Character
         private int healthMax;
         private int health;
 
+        private ICharacterEntity _playerEntity;
         private ILevelsService _levelsService;
 
         private Tween _deathTween;
@@ -35,13 +36,15 @@ namespace Arenar.Character
 
 
         [Inject]
-        public void Construct(ICharacterDataStorage<CharacterPhysicsDataStorage> characterPhysicsDataStorage,
+        public void Construct(ICharacterEntity playerEntity,
+            ICharacterDataStorage<CharacterPhysicsDataStorage> characterPhysicsDataStorage,
             ILevelsService levelsService,
             PlayerCharacterParametersData playerCharacterParametersData)
         {
             characterTransform = characterPhysicsDataStorage.Data.CharacterTransform;
             this.playerCharacterParametersData = playerCharacterParametersData;
             _levelsService = levelsService;
+            _playerEntity = playerEntity;
         }
 
         public void SetDamage(DamageData damageData)
@@ -70,7 +73,7 @@ namespace Arenar.Character
             health = 0;
             _levelsService.CurrentLevelContext.PlayerDeath++;
 
-            OnCharacterDie?.Invoke();
+            OnCharacterDie?.Invoke(_playerEntity);
         }
 
         public void Initialize()

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -26,16 +24,28 @@ namespace Arenar.Services.PlayerInputService
             {
                 case InputActionMapType.UI:
                     if (status)
+                    {
                         _playerInput.UI.Enable();
+                        Cursor.lockState = CursorLockMode.None;
+                    }
                     else
+                    {
                         _playerInput.UI.Disable();
+                    }
+
                     break;
                 
                 case InputActionMapType.Gameplay:
                     if (status)
+                    {
                         _playerInput.Player.Enable();
+                        Cursor.lockState = CursorLockMode.Locked;
+                    }
                     else
+                    {
                         _playerInput.Player.Disable();
+                    }
+
                     break;
                 
                 case InputActionMapType.None:

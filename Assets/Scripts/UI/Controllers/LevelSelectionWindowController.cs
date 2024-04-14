@@ -2,7 +2,6 @@ using Arenar.Services.LevelsService;
 using Arenar.Services.PlayerInputService;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using Zenject;
 
 
 namespace Arenar.Services.UI
@@ -26,7 +25,9 @@ namespace Arenar.Services.UI
             _levelSelectionWindow.GetWindowLayer<LevelDifficultLayer>();
         
 
-        public LevelSelectionWindowController(ILevelsService levelsService, IPlayerInputService playerInputService) : base(playerInputService)
+        public LevelSelectionWindowController(ILevelsService levelsService,
+            IPlayerInputService playerInputService)
+            : base(playerInputService)
         {
             _playerInputService = playerInputService;
             _levelsService = levelsService;

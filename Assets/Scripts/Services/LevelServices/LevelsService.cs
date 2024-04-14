@@ -1,4 +1,5 @@
 using System;
+using Arenar.CameraService;
 using Arenar.Character;
 using Arenar.Services.SaveAndLoad;
 using TakeTop.PreferenceSystem;
@@ -23,6 +24,7 @@ namespace Arenar.Services.LevelsService
 
         private GameModeController _gameModeController;
 
+        private ICameraService _cameraService;
         private CharacterSpawnController _сharacterSpawnController;
         private ShootingGalleryLevelInfoCollection _shootingGalleryLevelInfoCollection;
 
@@ -41,6 +43,7 @@ namespace Arenar.Services.LevelsService
                               LevelData[] levelDatas,
                               CharacterSpawnController сharacterSpawnController,
                               TickableManager tickableManager,
+                              ICameraService cameraService,
                               ShootingGalleryLevelInfoCollection shootingGalleryLevelInfoCollection)
         {
             _sceneLoader = sceneLoader;
@@ -49,6 +52,7 @@ namespace Arenar.Services.LevelsService
             _сharacterSpawnController = сharacterSpawnController;
             _tickableManager = tickableManager;
             _shootingGalleryLevelInfoCollection = shootingGalleryLevelInfoCollection;
+            _cameraService = cameraService;
         }
         
         public bool TryGetLevelDataByIndex(int levelIndex, out LevelData levelData)
@@ -76,12 +80,14 @@ namespace Arenar.Services.LevelsService
             CurrentLevelContext = new LevelContext(levelData,
                 levelDifficult,
                 gameMode,
-                _shootingGalleryLevelInfoCollection.ShootingGalleriesInfos[levelIndex].Length);
+                _shootingGalleryLevelInfoCollection.ShootingGalleriesInfos[levelIndex].Length,
+                _shootingGalleryLevelInfoCollection.LevelTime);
             
             _sceneLoader.LoadScene(CurrentLevelContext.LevelData.SceneKey, LoadSceneMode.Additive);
 
             _gameModeController = CreateGame();
             _gameModeController.StartGame();
+            _gameModeController.onGameComplete += CompleteLevel;
             _tickableManager.Add(_gameModeController);
 
 
@@ -96,7 +102,7 @@ namespace Arenar.Services.LevelsService
                         return null;
                     
                     case GameMode.ShootingGallery:
-                        ShootingGalleryGameModeController shootingGalleryGameMode = new(_сharacterSpawnController);
+                        ShootingGalleryGameModeController shootingGalleryGameMode = new(_сharacterSpawnController, _cameraService);
                         shootingGalleryGameMode.Initialize(_shootingGalleryLevelInfoCollection.ShootingGalleriesInfos[levelIndex]);
                         shootingGalleryGameMode.SetLevelContext(CurrentLevelContext);
                         return shootingGalleryGameMode;
@@ -110,8 +116,9 @@ namespace Arenar.Services.LevelsService
 
         public void CompleteLevel()
         {
-            if (CurrentLevelContext == null
-                || CurrentLevelContext.LevelData.LevelIndex <= _lastCompleteLevel)
+            _gameModeController.onGameComplete -= CompleteLevel;
+            
+            if (CurrentLevelContext == null)
             {
                 Debug.LogError("Data is lost!");
                 return;

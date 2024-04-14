@@ -40,8 +40,6 @@ namespace Arenar.CameraService
             isInitialize = true;
         }
         
-        
-
         public void SetCameraState<TCameraState>(Transform followTarget, Transform lookAtTarget)
             where TCameraState : ICameraState
         {
@@ -53,8 +51,7 @@ namespace Arenar.CameraService
             currentState.SetStateActive(GameCamera, CinemachineVirtualCameras, followTarget, lookAtTarget);
             lastActiveState = currentState;
         }
-
-
+        
         public void SetCinemachineVirtualCamera(CinemachineCameraType cinemachineCameraType)
         {
             if (lastActiveType == cinemachineCameraType)
@@ -62,7 +59,7 @@ namespace Arenar.CameraService
 
             lastActiveType = cinemachineCameraType;
             foreach (var virtualCamera in CinemachineVirtualCameras)
-                virtualCamera.Value.enabled = virtualCamera.Key == lastActiveType;
+                virtualCamera.Value.enabled = (virtualCamera.Key == lastActiveType);
         }
 
         public void Tick()

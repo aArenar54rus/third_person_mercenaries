@@ -9,7 +9,7 @@ namespace Arenar.Services.UI
     public class CompleteLevelItemRewardsVisualControl : MonoBehaviour
     {
         [SerializeField] private RectTransform _itemsContainer;
-        [SerializeField] private TMP_Text _emptyRewardsText;
+        [SerializeField] private TMP_Text _xpRewardText;
         [SerializeField] private InventoryBagCellController _inventoryBagCellPrefab;
 
         private List<InventoryBagCellController> _inventoryBags = new List<InventoryBagCellController>();
@@ -22,8 +22,6 @@ namespace Arenar.Services.UI
                 invBag.SetEmpty();
                 invBag.gameObject.SetActive(false);
             }
-            
-            _emptyRewardsText.gameObject.SetActive(true);
         }
 
         public void AddItem(InventoryItemCellData invItemCellData)
@@ -46,8 +44,11 @@ namespace Arenar.Services.UI
 
             bag.gameObject.SetActive(true);
             bag.SetItem(invItemCellData);
-            
-            _emptyRewardsText.gameObject.SetActive(false);
+        }
+
+        public void SetXpValue(int xpValue)
+        {
+            _xpRewardText.text = xpValue.ToString();
         }
     }
 }

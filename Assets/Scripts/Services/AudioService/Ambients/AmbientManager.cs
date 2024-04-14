@@ -20,6 +20,7 @@ namespace Arenar.AudioSystem
             AmbientAudioSource = audioSystemManager.CreateAudioSource(camera.gameObject, AudioSystemType.Music);
             audioController = new AudioController(AmbientAudioSource);
             ambientLibrary = audioLibrary.AmbientLibrary;
+            lastAmbientType = AmbientType.None;
         }
 
 
@@ -29,6 +30,7 @@ namespace Arenar.AudioSystem
                 return;
 
             lastAmbientType = ambientType;
+            var ambient = ambientLibrary.GetAmbientByType(ambientType);
             audioController.PlaySound(ambientLibrary.GetAmbientByType(ambientType), loop);
         }
 

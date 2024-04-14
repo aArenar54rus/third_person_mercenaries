@@ -25,6 +25,8 @@ namespace Arenar.Character
         {
             foreach (var characterComponent in characterComponentsPool)
                 characterComponent.Value.OnStart();
+            
+            gameObject.SetActive(true);
         }
         
         public bool TryGetCharacterComponent<TCharacterComponent>(out TCharacterComponent resultComponent)
@@ -47,7 +49,7 @@ namespace Arenar.Character
                 characterComponent.Value.Initialize();
         }
 
-        private void DeInitialize()
+        public void DeInitialize()
         {
             foreach (var characterComponent in characterComponentsPool)
                 characterComponent.Value.DeInitialize();

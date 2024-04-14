@@ -747,7 +747,7 @@ MonoBehaviour:
   m_BlockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 823
 --- !u!114 &1059288618632403527
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -763,10 +763,10 @@ MonoBehaviour:
   _backButton: {fileID: 7080380063985425970}
   _soundButton: {fileID: 5207382861044904154}
   _soundIcon: {fileID: 8541537047672856056}
-  _soundLockIcon: {fileID: 738334649116627653}
+  _soundLockIcon: {fileID: 6808839520906315904}
   _musicButton: {fileID: 4692872757265964400}
   _musicIcon: {fileID: 3339429285103133938}
-  _musicLockIcon: {fileID: 6808839520906315904}
+  _musicLockIcon: {fileID: 738334649116627653}
   _countryIcon: {fileID: 0}
   _languageNextButton: {fileID: 2517854689237651289}
   _languageLastButton: {fileID: 4577172222080032901}
@@ -1510,6 +1510,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7906151514184862265, guid: c829b59da83f7bf4f8c5be4d7d6f9744,
+        type: 3}
+      propertyPath: m_Name
+      value: LockIconSound
+      objectReference: {fileID: 0}
+    - target: {fileID: 7906151514184862265, guid: c829b59da83f7bf4f8c5be4d7d6f9744,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9011227522693502950, guid: c829b59da83f7bf4f8c5be4d7d6f9744,
         type: 3}
       propertyPath: m_Name
@@ -1586,6 +1596,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 969359545248480249}
     m_Modifications:
+    - target: {fileID: 613330940926813798, guid: f30f43e8b1e5a584abb0030f088a6f57,
+        type: 3}
+      propertyPath: m_Name
+      value: LockIconMusic
+      objectReference: {fileID: 0}
+    - target: {fileID: 613330940926813798, guid: f30f43e8b1e5a584abb0030f088a6f57,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3140249109519388773, guid: f30f43e8b1e5a584abb0030f088a6f57,
         type: 3}
       propertyPath: m_Navigation.m_Mode

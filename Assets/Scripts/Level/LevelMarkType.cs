@@ -7,5 +7,6 @@ namespace Arenar
         TimeSuccess = 2,
         NoDamage = 3,
         Genocide = 4,
+        AllMarksComplete = 5,
     }
 }

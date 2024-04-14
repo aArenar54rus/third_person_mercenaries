@@ -18,25 +18,25 @@ MonoBehaviour:
     - Key: 0
       Value:
       - activateTime: 1
-        _pathPointIndexes: 01000000070000000a000000190000001e000000
-      - activateTime: 4
-        _pathPointIndexes: 050000000c000000160000001c000000
-      - activateTime: 7
-        _pathPointIndexes: 02000000060000000b000000110000001d000000
-      - activateTime: 11
-        _pathPointIndexes: 01000000060000000e0000001300000018000000
+        _pathPointIndexes: 0100000018000000130000000a00000011000000
+      - activateTime: 1
+        _pathPointIndexes: 03000000060000001b0000001e000000
+      - activateTime: 5
+        _pathPointIndexes: 0200000013000000100000000f0000000e000000
+      - activateTime: 5
+        _pathPointIndexes: 0000000017000000070000000a0000000c000000
+      - activateTime: 12
+        _pathPointIndexes: 01000000140000001a0000001b0000001d000000
+      - activateTime: 12
+        _pathPointIndexes: 0600000007000000090000000c00000011000000
       - activateTime: 15
-        _pathPointIndexes: 00000000060000000d0000001400000019000000
+        _pathPointIndexes: 030000000600000012000000110000000e000000
       - activateTime: 20
-        _pathPointIndexes: 030000000900000010000000140000001a000000
-      - activateTime: 25
-        _pathPointIndexes: 01000000080000000e000000150000001d000000
-      - activateTime: 27
-        _pathPointIndexes: 040000000a0000000f000000130000001c000000
-      - activateTime: 30
-        _pathPointIndexes: 0000000004000000090000001100000016000000
-      - activateTime: 32
-        _pathPointIndexes: 020000000800000010000000160000001d000000
+        _pathPointIndexes: 000000000b0000001a0000000a0000000d000000
+      - activateTime: 20
+        _pathPointIndexes: 0200000015000000130000000f0000001e000000
+      - activateTime: 20
+        _pathPointIndexes: 0600000008000000110000001d000000
     - Key: 1
       Value: []
     - Key: 2
@@ -45,3 +45,4 @@ MonoBehaviour:
       Value: []
     - Key: 4
       Value: []
+  _levelTime: 60

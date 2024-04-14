@@ -5,7 +5,7 @@ namespace Arenar.Character
 {
     public class ImmortalCharacterLiveComponent : ICharacterLiveComponent
     {
-        public event Action OnCharacterDie;
+        public event Action<ICharacterEntity> OnCharacterDie;
         public event Action<ICharacterEntity> OnCharacterGetDamageBy;
         public event Action<int, int> OnCharacterChangeHealthValue;
 

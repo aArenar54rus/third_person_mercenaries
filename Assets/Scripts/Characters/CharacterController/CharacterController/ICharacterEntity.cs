@@ -12,5 +12,7 @@ namespace Arenar.Character
             where TCharacterComponent : ICharacterComponent;
 
         void ReInitialize();
+
+        void DeInitialize();
     }
 }

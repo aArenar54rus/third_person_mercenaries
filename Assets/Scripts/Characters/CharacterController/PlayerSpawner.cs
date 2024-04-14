@@ -16,7 +16,7 @@ namespace Arenar
 
         private void Start()
         {
-            componentCharacter = _characterSpawnController.CreateCharacter();
+            componentCharacter = _characterSpawnController.CreatePlayerCharacter(Vector3.zero, Quaternion.identity);
             cameraService.SetCinemachineVirtualCamera(CinemachineCameraType.DefaultTPS);
         }
         

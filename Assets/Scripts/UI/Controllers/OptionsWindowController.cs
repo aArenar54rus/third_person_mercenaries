@@ -1,3 +1,4 @@
+using Arenar.AudioSystem;
 using Arenar.Options;
 using Arenar.Services.Localization;
 using Arenar.Services.PlayerInputService;
@@ -9,19 +10,22 @@ namespace Arenar.Services.UI
     public class OptionsWindowController : CanvasWindowController
     {
         private OptionsWindow _optionsWindow;
-        
-        private OptionsButtonsLayer optionsButtonsLayer;
 
         private IOptionsController _optionsController;
         private ILocalizationService _localizationService;
+        private IAudioSystemManager _audioSystemManager;
+
+        private OptionsButtonsLayer _optionsButtonsLayer;
 
         
         private OptionsWindowController(IOptionsController optionsController,
+            IAudioSystemManager audioSystemManager,
             ILocalizationService localizationService,
             IPlayerInputService playerInputService)
             : base(playerInputService)
         {
             _optionsController = optionsController;
+            _audioSystemManager = audioSystemManager;
             _localizationService = localizationService;
             _playerInputService = playerInputService;
         }
@@ -32,6 +36,7 @@ namespace Arenar.Services.UI
             base.Initialize(canvasService);
 
             _optionsWindow = _canvasService.GetWindow<OptionsWindow>();
+            _optionsButtonsLayer = _optionsWindow.GetWindowLayer<OptionsButtonsLayer>();
             
             InitMainMenuOptionsLayer();
             
@@ -41,7 +46,13 @@ namespace Arenar.Services.UI
 
         protected override void OnWindowShowEnd_SelectElements()
         {
-            optionsButtonsLayer.MusicButton.Select();
+            MusicOption musicOption = _optionsController.GetOption<MusicOption>();
+            _optionsButtonsLayer.MusicLockIcon.gameObject.SetActive(musicOption.Volume == 0);
+            
+            SoundOption soundOption = _optionsController.GetOption<SoundOption>();
+            _optionsButtonsLayer.SoundLockIcon.gameObject.SetActive(soundOption.Volume == 0);
+
+            _optionsButtonsLayer.MusicButton.Select();
             if (_playerInputService.InputActionCollection is PlayerInput playerInput)
                 playerInput.UI.Decline.performed += OnInputAction_Decline;
         }
@@ -59,16 +70,16 @@ namespace Arenar.Services.UI
 
         private void InitMainMenuOptionsLayer()
         {
-            optionsButtonsLayer = _optionsWindow.GetWindowLayer<OptionsButtonsLayer>();
+            _optionsButtonsLayer = _optionsWindow.GetWindowLayer<OptionsButtonsLayer>();
             
-            optionsButtonsLayer.BackButton.onClick.AddListener(OnBackButtonClick);
+            _optionsButtonsLayer.BackButton.onClick.AddListener(OnBackButtonClick);
             
-            optionsButtonsLayer.MusicButton.onClick.AddListener(OnMusicButtonClick);
-            optionsButtonsLayer.SoundButton.onClick.AddListener(OnSoundButtonClick);
+            _optionsButtonsLayer.MusicButton.onClick.AddListener(OnMusicButtonClick);
+            _optionsButtonsLayer.SoundButton.onClick.AddListener(OnSoundButtonClick);
             
-            optionsButtonsLayer.LanguageLastButton.onClick.AddListener(OnLastLanguageButtonClick);
-            optionsButtonsLayer.LanguageNextButton.onClick.AddListener(OnNextLanguageButtonClick);
-            optionsButtonsLayer.LanguageButton.onClick.AddListener(OnNextLanguageButtonClick);
+            _optionsButtonsLayer.LanguageLastButton.onClick.AddListener(OnLastLanguageButtonClick);
+            _optionsButtonsLayer.LanguageNextButton.onClick.AddListener(OnNextLanguageButtonClick);
+            _optionsButtonsLayer.LanguageButton.onClick.AddListener(OnNextLanguageButtonClick);
         }
 
         private void OnBackButtonClick()
@@ -82,12 +93,39 @@ namespace Arenar.Services.UI
         
         private void OnMusicButtonClick()
         {
+            MusicOption musicOption = _optionsController.GetOption<MusicOption>();
+            bool status;
+            if (musicOption.Volume > 0)
+            {
+                musicOption.Volume = 0;
+                status = false;
+            }
+            else
+            {
+                musicOption.Volume = 1;
+                status = true;
+            }
             
+            _audioSystemManager.SetVolume(AudioSystemType.Music, status, musicOption.Volume);
+            _optionsButtonsLayer.MusicLockIcon.gameObject.SetActive(!status);
         }
 
         private void OnSoundButtonClick()
         {
+            SoundOption soundOption = _optionsController.GetOption<SoundOption>();
+            bool status;
+            if (soundOption.Volume > 0)
+            {
+                soundOption.Volume = 0;
+                status = false;
+            }
+            else
+            {
+                soundOption.Volume = 1;
+                status = true;
+            }
             
+            _optionsButtonsLayer.SoundLockIcon.gameObject.SetActive(!status);
         }
 
         private void OnLastLanguageButtonClick()

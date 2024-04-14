@@ -803,7 +803,7 @@ PlayerSettings:
   webGLThreadsSupport: 0
   webGLDecompressionFallback: 1
   scriptingDefineSymbols:
-    Android: STARTER_ASSETS_PACKAGES_CHECKED;TextMeshPro
+    Android: STARTER_ASSETS_PACKAGES_CHECKED;TextMeshPro;ODIN_INSPECTOR;ODIN_INSPECTOR_3
     EmbeddedLinux: TextMeshPro
     GameCoreXboxOne: TextMeshPro
     Lumin: TextMeshPro

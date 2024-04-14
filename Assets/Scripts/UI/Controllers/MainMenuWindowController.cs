@@ -1,3 +1,4 @@
+using Arenar.AudioSystem;
 using Arenar.Character;
 using Arenar.Services.PlayerInputService;
 using Arenar.Services.SaveAndLoad;
@@ -18,15 +19,19 @@ namespace Arenar.Services.UI
         private MainMenuPlayerInformationLayer _mainMenuPlayerInfoLayer;
         private PlayerCharacterLevelData _playerCharacterLevelData;
 
+        private IAmbientManager _ambientManager;
+
 
         public MainMenuWindowController(IPreferenceManager preferenceManager,
             PlayerCharacterLevelData playerCharacterLevelData,
-            IPlayerInputService playerInputService)
+            IPlayerInputService playerInputService,
+            IAmbientManager ambientManager)
             : base(playerInputService)
         {
             _preferenceManager = preferenceManager;
             _playerCharacterLevelData = playerCharacterLevelData;
             _playerInputService = playerInputService;
+            _ambientManager = ambientManager;
         }
         
 
@@ -105,6 +110,7 @@ namespace Arenar.Services.UI
         private void OnShowWindowBegin()
         {
             UpdatePlayerData();
+            _ambientManager.PlayAmbient(AmbientType.MainMenu, true);
         }
         
         private void UpdatePlayerData()
@@ -121,9 +127,9 @@ namespace Arenar.Services.UI
             }
             else
             {
-                _mainMenuPlayerInfoLayer.LevelText.text = playerProgress.playerCharacterLevel.ToString();
+                _mainMenuPlayerInfoLayer.LevelText.text = (playerProgress.playerCharacterLevel + 1).ToString();
                 _mainMenuPlayerInfoLayer.LevelProgressSlider.maxValue =
-                    _playerCharacterLevelData.GetExperienceForNextLevel(playerProgress.playerCharacterLevel + 1);
+                    _playerCharacterLevelData.GetExperienceForNextLevel(playerProgress.playerCharacterLevel);
                 _mainMenuPlayerInfoLayer.LevelProgressSlider.value = playerProgress.currentXpPoints;
             }
         }

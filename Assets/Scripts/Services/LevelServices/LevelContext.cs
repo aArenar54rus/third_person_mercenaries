@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Arenar.Services.LevelsService
 {
@@ -26,7 +27,7 @@ namespace Arenar.Services.LevelsService
         
         public GameResult GameResultStatus { get; private set; }
         
-        public int NeededTargetCount { get; set; }
+        public int NeededTargetCount { get; private set; }
         
         public int CurrentTargetCount { get; set; }
         
@@ -36,16 +37,22 @@ namespace Arenar.Services.LevelsService
         
         public int PlayerDeath { get; set; }
 
-        public int Score { get; set; } = 0;
+        public int XpPoints { get; set; } = 0;
+
+        public float LevelTime { get; private set; } 
         
         
-        public LevelContext(LevelData levelData, LevelDifficult levelDifficult, GameMode gameMode, int neededTargetCount)
+        public LevelContext(LevelData levelData,
+            LevelDifficult levelDifficult,
+            GameMode gameMode,
+            int neededTargetCount,
+            float levelTime)
         {
             LevelData = levelData;
             LevelDifficult = levelDifficult;
 
             GameMode = gameMode;
-            Score = 0;
+            XpPoints = 0;
 
             NeededTargetCount = neededTargetCount;
             CurrentTargetCount = 0;
@@ -53,16 +60,31 @@ namespace Arenar.Services.LevelsService
             GettedDamage = 0;
             PlayerDeath = 0;
             GameResultStatus = GameResult.None;
-            
+
+            if (levelTime != 0)
+                LevelTime = levelTime;
+            else LevelTime = -1.0f;
+
             LevelMarkTypeResult = new Dictionary<LevelMarkType, bool>()
             {
                 { LevelMarkType.ClearLevel, false },
                 { LevelMarkType.Genocide, false },
                 { LevelMarkType.NoDamage, false },
                 { LevelMarkType.TimeSuccess, false },
+                { LevelMarkType.AllMarksComplete, false },
             };
         }
-        
+
+
+        public void OnUpdate()
+        {
+            if (LevelTime > 0)
+            {
+                LevelTime -= Time.deltaTime;
+                if (LevelTime < 0)
+                    LevelTime = 0;
+            }
+        }
         
         public void CompleteLevel(GameResult result)
         {
@@ -71,7 +93,15 @@ namespace Arenar.Services.LevelsService
             LevelMarkTypeResult[LevelMarkType.ClearLevel] = (result == GameResult.Victory);
             LevelMarkTypeResult[LevelMarkType.NoDamage] = (GettedDamage == 0);
             LevelMarkTypeResult[LevelMarkType.Genocide] = (NeededTargetCount == CurrentTargetCount);
-            LevelMarkTypeResult[LevelMarkType.TimeSuccess] = false;
+            if (LevelTime != -1.0f)
+            {
+                LevelMarkTypeResult[LevelMarkType.TimeSuccess] = LevelTime > 0.0f;
+            }
+            
+            LevelMarkTypeResult[LevelMarkType.AllMarksComplete] =
+                LevelMarkTypeResult[LevelMarkType.ClearLevel]
+                && LevelMarkTypeResult[LevelMarkType.NoDamage]
+                && LevelMarkTypeResult[LevelMarkType.Genocide];
 
             UpdateScore();
         }
@@ -81,10 +111,10 @@ namespace Arenar.Services.LevelsService
             foreach (var mark in LevelMarkTypeResult)
             {
                 if (mark.Value)
-                    Score += MARK_SCORE_COST;
+                    XpPoints += MARK_SCORE_COST;
             }
 
-            Score += CurrentTargetCount * TARGET_SCORE_COST;
+            XpPoints += CurrentTargetCount * TARGET_SCORE_COST;
         }
     }
 }

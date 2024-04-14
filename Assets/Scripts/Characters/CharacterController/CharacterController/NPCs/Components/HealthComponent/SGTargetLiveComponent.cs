@@ -9,7 +9,7 @@ namespace Arenar.Character
 {
     public class SGTargetLiveComponent : ICharacterLiveComponent
     {
-        public event Action OnCharacterDie;
+        public event Action<ICharacterEntity> OnCharacterDie;
         public event Action<ICharacterEntity> OnCharacterGetDamageBy;
         public event Action<int, int> OnCharacterChangeHealthValue;
 
@@ -105,8 +105,8 @@ namespace Arenar.Character
         {
             _characterRigidbody.useGravity = true;
             Health = 0;
-            _levelsService.CurrentLevelContext.NeededTargetCount++;
-            OnCharacterDie?.Invoke();
+            _levelsService.CurrentLevelContext.CurrentTargetCount++;
+            OnCharacterDie?.Invoke(_character);
             
             _deathTween = DOVirtual.DelayedCall(1.0f, () =>
             {

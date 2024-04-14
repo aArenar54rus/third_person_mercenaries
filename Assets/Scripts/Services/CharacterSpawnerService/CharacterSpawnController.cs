@@ -49,19 +49,28 @@ namespace Arenar
         }
         
         
-        public ComponentCharacterController CreateCharacter()
+        public ComponentCharacterController CreatePlayerCharacter(Vector3 position, Quaternion rotation)
         {
+            ComponentCharacterController componentCharacter = null;
             if (_createdCharacters.ContainsKey(typeof(ComponentCharacterController)))
-                return _createdCharacters[typeof(ComponentCharacterController)][0];
-            
-            _createdCharacters.Add(typeof(ComponentCharacterController), new List<ComponentCharacterController>());
-                
-            ComponentCharacterController componentCharacter = _playerFactory.Create(CharactersContainer);
-            componentCharacter.gameObject.transform.SetParent(CharactersContainer);
-            playerCharacter = componentCharacter;
-                
-            _createdCharacters[typeof(ComponentCharacterController)].Add(componentCharacter);
+            {
+                componentCharacter = _createdCharacters[typeof(ComponentCharacterController)][0];
+            }
+            else
+            {
+                _createdCharacters.Add(typeof(ComponentCharacterController), new List<ComponentCharacterController>());
+
+                componentCharacter = _playerFactory.Create(CharactersContainer);
+                componentCharacter.gameObject.transform.SetParent(CharactersContainer);
+                playerCharacter = componentCharacter;
+
+                _createdCharacters[typeof(ComponentCharacterController)].Add(componentCharacter);
+            }
+
+            playerCharacter.CharacterTransform.position = position;
+            playerCharacter.CharacterTransform.rotation = rotation;
             OnCreatePlayerCharacter?.Invoke(playerCharacter);
+            
             return componentCharacter;
         }
 
@@ -93,6 +102,18 @@ namespace Arenar
             _createdCharacters[typeof(ShootingGalleryTargetCharacterController)].Add(newTarget);
 
             return newTarget;
+        }
+
+        public void DisableAllCharacters()
+        {
+            foreach (var characters in _createdCharacters)
+            {
+                foreach (var character in characters.Value)
+                {
+                    character.DeInitialize();
+                    character.gameObject.SetActive(false);
+                }
+            }
         }
     }
 }

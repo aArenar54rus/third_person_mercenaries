@@ -1,11 +1,14 @@
-﻿using DG.Tweening;
+﻿using Arenar.CameraService;
+using Arenar.Character;
+using DG.Tweening;
 using UnityEngine;
 
 namespace Arenar.Services.LevelsService
 {
     public class ShootingGalleryGameModeController : GameModeController
     {
-        private const int GAME_WAIT_TIME = 5;
+        private const int GAME_WAIT_START_TIME = 5;
+        private const int GAME_WAIT_END_TIME = 3;
         
         
         private int _progressIndex = 0;
@@ -13,21 +16,25 @@ namespace Arenar.Services.LevelsService
         private bool _isGameWork = false;
 
         private CharacterSpawnController _сharacterSpawnController;
+        private ICameraService _cameraService;
         private ShootingGalleryTargetNode[] _shootingGalleryTargets;
-        
+
+        private int _killedEnemyCounter = 0;
         private Tween _tween;
 
         
-        public ShootingGalleryGameModeController(CharacterSpawnController сharacterSpawnController)
+        public ShootingGalleryGameModeController(CharacterSpawnController сharacterSpawnController, ICameraService cameraService)
         {
             _progressIndex = 0;
             _gameTime = 0.0f;
+            _killedEnemyCounter = 0;
             _isGameWork = false;
             
             _сharacterSpawnController = сharacterSpawnController;
+            _cameraService = cameraService;
         }
 
-        
+
         public void Initialize(ShootingGalleryTargetNode[] shootingGalleryTargets)
         {
             _shootingGalleryTargets = shootingGalleryTargets;
@@ -35,7 +42,16 @@ namespace Arenar.Services.LevelsService
 
         public override void StartGame()
         {
-            _tween = DOVirtual.DelayedCall(GAME_WAIT_TIME, () => _isGameWork = true)
+            var character = _сharacterSpawnController.CreatePlayerCharacter(new Vector3(3,0,0), Quaternion.Euler(new Vector3(0, 90, 0)));
+
+            if (character is PlayerComponentCharacterController player)
+            {
+                _cameraService.SetCameraState<CameraStateThirdPerson>(player.CameraTransform,
+                    player.CharacterTransform);
+                _cameraService.SetCinemachineVirtualCamera(CinemachineCameraType.DefaultTPS);
+            }
+
+            _tween = DOVirtual.DelayedCall(GAME_WAIT_END_TIME, () => _isGameWork = true)
                 .OnComplete(KillTween);
         }
 
@@ -50,18 +66,7 @@ namespace Arenar.Services.LevelsService
                 return;
             
             _gameTime += Time.deltaTime;
-            
-            if (_progressIndex >= _shootingGalleryTargets.Length)
-            {
-                if (_gameTime < GAME_WAIT_TIME)
-                    return;
 
-                _isGameWork = false;
-                onGameComplete?.Invoke();
-
-                return;
-            }
-            
             if (_shootingGalleryTargets[_progressIndex].ActivateTime > _gameTime)
                 return;
 
@@ -69,7 +74,7 @@ namespace Arenar.Services.LevelsService
             _progressIndex++;
 
             if (_progressIndex >= _shootingGalleryTargets.Length)
-                _gameTime = 0;
+                _isGameWork = false;
         }
 
         private void ActivateShootTarget()
@@ -77,6 +82,26 @@ namespace Arenar.Services.LevelsService
             var shootingGalleryTargetNpc = _сharacterSpawnController.CreateShootingGalleryTarget();
             shootingGalleryTargetNpc.InitializeShooterGalleryTarget(_progressIndex, GetRandomEnemyLevel());
             shootingGalleryTargetNpc.ReInitialize();
+            
+            if (shootingGalleryTargetNpc.TryGetCharacterComponent<ICharacterLiveComponent>(out ICharacterLiveComponent characterLiveComponent))
+            {
+                characterLiveComponent.OnCharacterDie += OnEnemyCharacterDie;
+            }
+        }
+
+        private void OnEnemyCharacterDie(ICharacterEntity enemyEntity)
+        {
+            if (enemyEntity.TryGetCharacterComponent<ICharacterLiveComponent>(out ICharacterLiveComponent characterLiveComponent))
+            {
+                characterLiveComponent.OnCharacterDie -= OnEnemyCharacterDie;
+            }
+
+            _killedEnemyCounter++;
+            if (_killedEnemyCounter >= _shootingGalleryTargets.Length)
+            {
+                _isGameWork = false;
+                _tween = DOVirtual.DelayedCall(GAME_WAIT_END_TIME, () => { onGameComplete?.Invoke(); });
+            }
         }
 
         private void KillTween()

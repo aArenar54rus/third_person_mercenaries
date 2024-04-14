@@ -71,7 +71,7 @@ namespace Arenar.Character
         public void StopSound() =>
             audioController.StopSound();
 
-        private void OnCharacterDie()
+        private void OnCharacterDie(ICharacterEntity characterEntity)
         {
             StopSound();
         }

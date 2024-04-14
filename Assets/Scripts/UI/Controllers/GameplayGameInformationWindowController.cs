@@ -187,6 +187,11 @@ namespace Arenar.Services.UI
         private void OnEnemyCharacterChangeHealthValue(int health, int healthMax) =>
             _gameplayInformationLayer.EnemyTargetInformationPanel.UpdateEnemyHealth(health, healthMax, false);
 
+        private void OnEnemyCharacterInfoDisable(ICharacterEntity characterEntity)
+        {
+            OnEnemyCharacterInfoDisable();
+        }
+        
         private void OnEnemyCharacterInfoDisable()
         {
             _gameplayInformationLayer.EnemyTargetInformationPanel.UnsetEnemy();
