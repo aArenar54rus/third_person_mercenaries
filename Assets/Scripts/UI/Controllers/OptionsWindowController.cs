@@ -14,12 +14,14 @@ namespace Arenar.Services.UI
         private IOptionsController _optionsController;
         private ILocalizationService _localizationService;
         private IAudioSystemManager _audioSystemManager;
+        private IUiSoundManager _uiSoundManager;
 
         private OptionsButtonsLayer _optionsButtonsLayer;
 
         
         private OptionsWindowController(IOptionsController optionsController,
             IAudioSystemManager audioSystemManager,
+            IUiSoundManager uiSoundManager,
             ILocalizationService localizationService,
             IPlayerInputService playerInputService)
             : base(playerInputService)
@@ -28,6 +30,7 @@ namespace Arenar.Services.UI
             _audioSystemManager = audioSystemManager;
             _localizationService = localizationService;
             _playerInputService = playerInputService;
+            _uiSoundManager = uiSoundManager;
         }
 
         
@@ -84,6 +87,7 @@ namespace Arenar.Services.UI
 
         private void OnBackButtonClick()
         {
+            _uiSoundManager.PlaySound(UiSoundType.StandartButtonClick);
             _canvasService.TransitionController
                 .PlayTransition<TransitionCrossFadeCanvasWindowLayerController,
                         OptionsWindow,
@@ -93,6 +97,7 @@ namespace Arenar.Services.UI
         
         private void OnMusicButtonClick()
         {
+            _uiSoundManager.PlaySound(UiSoundType.StandartButtonClick);
             MusicOption musicOption = _optionsController.GetOption<MusicOption>();
             bool status;
             if (musicOption.Volume > 0)
@@ -112,16 +117,20 @@ namespace Arenar.Services.UI
 
         private void OnSoundButtonClick()
         {
+            _uiSoundManager.PlaySound(UiSoundType.StandartButtonClick);
             SoundOption soundOption = _optionsController.GetOption<SoundOption>();
+            UiSoundOption uiSoundOption = _optionsController.GetOption<UiSoundOption>();
             bool status;
             if (soundOption.Volume > 0)
             {
                 soundOption.Volume = 0;
+                uiSoundOption.Volume = 0;
                 status = false;
             }
             else
             {
                 soundOption.Volume = 1;
+                uiSoundOption.Volume = 1;
                 status = true;
             }
             
@@ -130,11 +139,13 @@ namespace Arenar.Services.UI
 
         private void OnLastLanguageButtonClick()
         {
+            _uiSoundManager.PlaySound(UiSoundType.StandartButtonClick);
             LastLanguage();
         }
 
         private void OnNextLanguageButtonClick()
         {
+            _uiSoundManager.PlaySound(UiSoundType.StandartButtonClick);
             SetNextLanguage();
         }
         

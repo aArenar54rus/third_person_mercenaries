@@ -2,6 +2,7 @@ using Arenar.AudioSystem;
 using Arenar.Character;
 using Arenar.Services.PlayerInputService;
 using Arenar.Services.SaveAndLoad;
+using Arenar.SimpleYandexGames;
 using I2.Loc;
 using TakeTop.PreferenceSystem;
 
@@ -13,25 +14,31 @@ namespace Arenar.Services.UI
         private IPreferenceManager _preferenceManager;
 
         private MainMenuWindow _mainMenuWindow;
-        private OptionsWindow _optionsWindow;
         
         private MainMenuButtonsLayer _mainMenuButtonsLayer;
         private MainMenuPlayerInformationLayer _mainMenuPlayerInfoLayer;
         private PlayerCharacterLevelData _playerCharacterLevelData;
-
+        
+        private OptionsWindow _optionsWindow;
         private IAmbientManager _ambientManager;
+        private IUiSoundManager _uiSoundManager;
+
+        private YandexGames _yandexGames;
 
 
         public MainMenuWindowController(IPreferenceManager preferenceManager,
             PlayerCharacterLevelData playerCharacterLevelData,
             IPlayerInputService playerInputService,
-            IAmbientManager ambientManager)
+            IAmbientManager ambientManager,
+            IUiSoundManager uiSoundManager,
+            YandexGames yandexGames)
             : base(playerInputService)
         {
             _preferenceManager = preferenceManager;
             _playerCharacterLevelData = playerCharacterLevelData;
             _playerInputService = playerInputService;
             _ambientManager = ambientManager;
+            _uiSoundManager = uiSoundManager;
         }
         
 
@@ -70,6 +77,7 @@ namespace Arenar.Services.UI
 
         private void OnNewChallengeButtonClick()
         {
+            _uiSoundManager.PlaySound(UiSoundType.StandartButtonClick);
             _canvasService.TransitionController
                 .PlayTransition<TransitionCrossFadeCanvasWindowLayerController,
                                 MainMenuWindow,
@@ -79,6 +87,7 @@ namespace Arenar.Services.UI
 
         private void OnOutfitButtonClick()
         {
+            _uiSoundManager.PlaySound(UiSoundType.StandartButtonClick);
             _canvasService.TransitionController
                 .PlayTransition<TransitionCrossFadeCanvasWindowLayerController,
                         MainMenuWindow,
@@ -88,6 +97,7 @@ namespace Arenar.Services.UI
 
         private void OnOptionsButtonClick()
         {
+            _uiSoundManager.PlaySound(UiSoundType.StandartButtonClick);
             _canvasService.TransitionController
                 .PlayTransition<TransitionCrossFadeCanvasWindowLayerController,
                         MainMenuWindow,
@@ -97,6 +107,8 @@ namespace Arenar.Services.UI
 
         private void OnRateUsButtonClick()
         {
+            _uiSoundManager.PlaySound(UiSoundType.StandartButtonClick);
+            //_yandexGames.
             // web rate us
         }
 

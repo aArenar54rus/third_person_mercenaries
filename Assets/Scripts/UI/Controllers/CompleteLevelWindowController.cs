@@ -1,3 +1,4 @@
+using Arenar.AudioSystem;
 using Arenar.CameraService;
 using Arenar.Character;
 using Arenar.Services.LevelsService;
@@ -24,6 +25,7 @@ namespace Arenar.Services.UI
         private ICameraService _cameraService;
         private CharacterSpawnController _сharacterSpawnController;
         private IPreferenceManager _preferenceManager;
+        private IUiSoundManager _uiSoundManager;
         private ZenjectSceneLoader _sceneLoader;
 
         private PlayerSaveDelegate _playerSaveDelegate;
@@ -39,6 +41,7 @@ namespace Arenar.Services.UI
             PlayerCharacterLevelData playerCharacterLevelData,
             IPreferenceManager preferenceManager,
             ICameraService cameraService,
+            IUiSoundManager uiSoundManager,
             ZenjectSceneLoader sceneLoader,
             CharacterSpawnController сharacterSpawnController)
             : base(playerInputService)
@@ -50,6 +53,7 @@ namespace Arenar.Services.UI
             _cameraService = cameraService;
             _sceneLoader = sceneLoader;
             _сharacterSpawnController = сharacterSpawnController;
+            _uiSoundManager = uiSoundManager;
         }
 
 
@@ -96,6 +100,7 @@ namespace Arenar.Services.UI
 
         private void OnContinueButtonClick()
         {
+            _uiSoundManager.PlaySound(UiSoundType.StandartButtonClick);
             if (!_isPlayerLevelMax)
                 UpdateReward(1);
             ReturnInMainMenu();
@@ -103,6 +108,7 @@ namespace Arenar.Services.UI
 
         private void OnContinueButtonClickRewarded()
         {
+            _uiSoundManager.PlaySound(UiSoundType.StandartButtonClick);
             _completeLevelLayer.CompleteLevelItemRewardsVisualControl.SetXpValue(_lastLevelContext.XpPoints * 3);
             if (!_isPlayerLevelMax)
                 UpdateReward(3);
