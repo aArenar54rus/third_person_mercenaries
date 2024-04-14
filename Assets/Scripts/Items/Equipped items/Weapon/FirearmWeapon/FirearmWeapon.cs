@@ -172,7 +172,12 @@ namespace Arenar
             {
                 case FirearmWeaponAttackType.Projectile:
                     var projectile = projectileSpawner.GetItemProjectile(firearmWeaponData.EffectType);
-                    projectile.Initialize(gunMuzzleTransform.position, gunMuzzleTransform.rotation, direction, ProjectileSpeed, damageData);
+                    projectile.Initialize(gunMuzzleTransform.position,
+                        gunMuzzleTransform.rotation, 
+                        direction,
+                        ProjectileSpeed,
+                        damageData,
+                        projectileSpawner);
                     return;
 
                 case FirearmWeaponAttackType.Raycast:
@@ -186,7 +191,13 @@ namespace Arenar
                             out ICharacterLiveComponent characterLiveComponent))
                     {
                         characterLiveComponent.SetDamage(damageData);
+
                     }
+                    
+                    ParticleSystem effect = projectileSpawner.GetEffect(EffectType.BulletCollision);
+                    effect.transform.position = hit.transform.position;
+                    effect.Play();
+                    
                     return;
                 
                 default:

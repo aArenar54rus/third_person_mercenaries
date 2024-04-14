@@ -1,6 +1,7 @@
 using System;
 using Arenar.CameraService;
 using Arenar.Character;
+using Arenar.LocationService;
 using Arenar.Services.SaveAndLoad;
 using TakeTop.PreferenceSystem;
 using UnityEngine;
@@ -18,7 +19,7 @@ namespace Arenar.Services.LevelsService
         private int _lastCompleteLevel;
         private LevelDifficult _lastCompleteDifficult;
 
-        private ZenjectSceneLoader _sceneLoader;
+        private ILocationService _locationService;
         private IPreferenceManager _preferenceManager;
         private LevelData[] _levelDatas;
 
@@ -38,7 +39,7 @@ namespace Arenar.Services.LevelsService
 
 
         [Inject]
-        public void Construct(ZenjectSceneLoader sceneLoader,
+        public void Construct(ILocationService locationService,
                               IPreferenceManager preferenceManager,
                               LevelData[] levelDatas,
                               CharacterSpawnController сharacterSpawnController,
@@ -46,7 +47,7 @@ namespace Arenar.Services.LevelsService
                               ICameraService cameraService,
                               ShootingGalleryLevelInfoCollection shootingGalleryLevelInfoCollection)
         {
-            _sceneLoader = sceneLoader;
+            _locationService = locationService;
             _preferenceManager = preferenceManager;
             _levelDatas = levelDatas;
             _сharacterSpawnController = сharacterSpawnController;
@@ -83,7 +84,7 @@ namespace Arenar.Services.LevelsService
                 _shootingGalleryLevelInfoCollection.ShootingGalleriesInfos[levelIndex].Length,
                 _shootingGalleryLevelInfoCollection.LevelTime);
             
-            _sceneLoader.LoadScene(CurrentLevelContext.LevelData.SceneKey, LoadSceneMode.Additive);
+            _locationService.LoadLocation(LocationName.Level_ShootingGallery);
 
             _gameModeController = CreateGame();
             _gameModeController.StartGame();
@@ -159,7 +160,9 @@ namespace Arenar.Services.LevelsService
         public void UnloadCurrentLevelScene()
         {
             if (CurrentLevelContext != null)
-                SceneManager.UnloadSceneAsync(CurrentLevelContext.LevelData.LevelNameKey);
+            {
+                _locationService.UnloadLastLoadedLocation();
+            }
         }
     }
 }

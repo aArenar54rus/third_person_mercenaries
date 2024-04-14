@@ -15,7 +15,8 @@ namespace Arenar.Services.UI
         private int _currentLevelIndex;
         private GameMode _currentGameMode;
         private LevelDifficult _levelDifficult;
-        
+
+        private IAmbientManager _ambientManager;
         private IUiSoundManager _uiSoundManager;
 
         private LevelSelectionButtonVisual[] _levelSelectionButtonVisuals;
@@ -30,12 +31,14 @@ namespace Arenar.Services.UI
 
         public LevelSelectionWindowController(ILevelsService levelsService,
             IPlayerInputService playerInputService,
-            IUiSoundManager uiSoundManager)
+            IUiSoundManager uiSoundManager,
+            IAmbientManager ambientManager)
             : base(playerInputService)
         {
             _playerInputService = playerInputService;
             _levelsService = levelsService;
             _uiSoundManager = uiSoundManager;
+            _ambientManager = ambientManager;
         }
 
         
@@ -176,6 +179,7 @@ namespace Arenar.Services.UI
 
         private void OnStartMatchButtonClick()
         {
+            _ambientManager.StopAmbient();
             _uiSoundManager.PlaySound(UiSoundType.StandartButtonClick);
             _canvasService.TransitionController
                 .PlayTransition<TransitionOverlayCanvasWindowController, 
@@ -186,6 +190,7 @@ namespace Arenar.Services.UI
                         () =>
                         {
                             _levelsService.StartLevel(_currentLevelIndex, _levelDifficult, _currentGameMode);
+                            _ambientManager.PlayAmbient(AmbientType.Gameplay);
                         });
         }
 

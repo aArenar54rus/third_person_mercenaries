@@ -30,7 +30,6 @@ namespace Arenar.AudioSystem
                 return;
 
             lastAmbientType = ambientType;
-            var ambient = ambientLibrary.GetAmbientByType(ambientType);
             audioController.PlaySound(ambientLibrary.GetAmbientByType(ambientType), loop);
         }
 

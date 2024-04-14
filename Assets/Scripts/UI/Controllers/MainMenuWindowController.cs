@@ -1,5 +1,7 @@
 using Arenar.AudioSystem;
+using Arenar.CameraService;
 using Arenar.Character;
+using Arenar.LocationService;
 using Arenar.Services.PlayerInputService;
 using Arenar.Services.SaveAndLoad;
 using Arenar.SimpleYandexGames;
@@ -18,20 +20,25 @@ namespace Arenar.Services.UI
         private MainMenuButtonsLayer _mainMenuButtonsLayer;
         private MainMenuPlayerInformationLayer _mainMenuPlayerInfoLayer;
         private PlayerCharacterLevelData _playerCharacterLevelData;
+
+        private ICameraService _cameraService;
         
         private OptionsWindow _optionsWindow;
         private IAmbientManager _ambientManager;
         private IUiSoundManager _uiSoundManager;
+        private ILocationService _locationService;
 
         private YandexGames _yandexGames;
 
 
         public MainMenuWindowController(IPreferenceManager preferenceManager,
             PlayerCharacterLevelData playerCharacterLevelData,
+            ICameraService cameraService,
             IPlayerInputService playerInputService,
             IAmbientManager ambientManager,
-            IUiSoundManager uiSoundManager/*,
-            YandexGames yandexGames*/)
+            IUiSoundManager uiSoundManager,
+            YandexGames yandexGames,
+            ILocationService locationService)
             : base(playerInputService)
         {
             _preferenceManager = preferenceManager;
@@ -39,7 +46,9 @@ namespace Arenar.Services.UI
             _playerInputService = playerInputService;
             _ambientManager = ambientManager;
             _uiSoundManager = uiSoundManager;
-            //_yandexGames = yandexGames;
+            _cameraService = cameraService;
+            _yandexGames = yandexGames;
+            _locationService = locationService;
         }
         
 
@@ -59,6 +68,9 @@ namespace Arenar.Services.UI
 
             _mainMenuWindow.OnShowBegin.AddListener(OnShowWindowBegin);
             _mainMenuWindow.OnShowEnd.AddListener(OnWindowShowEnd_SelectElements);
+            
+            _locationService.LoadLocation(LocationName.MainMenuLocation);
+            _cameraService.SetCameraState<CameraStateMainMenu>(null, null);
         }
 
         private void InitMainMenuButtonsLayer()

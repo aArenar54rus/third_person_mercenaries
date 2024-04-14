@@ -12,6 +12,7 @@ namespace Arenar.CameraService
 
             foreach (var cinemachineVirtualCamera in cinemachineVirtualCameras)
             {
+                cinemachineVirtualCamera.Value.enabled = true;
                 cinemachineVirtualCamera.Value.Follow = followTarget;
                 cinemachineVirtualCamera.Value.LookAt = lookAtTarget;
 

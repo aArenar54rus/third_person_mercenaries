@@ -17,12 +17,15 @@ namespace Arenar.CameraService
         private bool isInitialize = false;
         private CinemachineCameraType lastActiveType = CinemachineCameraType.DefaultTPS;
 
+        private TickableManager _tickableManager;
+
 
         [Inject]
         public void Construct(Camera camera,
                               SerializableDictionary<CinemachineCameraType, CinemachineVirtualCamera> cinemachineVirtualCameras,
                               ICameraState[] states,
-                              CameraStatesFactory cameraStatesFactory)
+                              CameraStatesFactory cameraStatesFactory,
+                              TickableManager tickableManager)
         {
             GameCamera = camera;
             CinemachineVirtualCameras = cinemachineVirtualCameras;
@@ -37,6 +40,10 @@ namespace Arenar.CameraService
                 CameraStates.Add(cameraStateType, state);
             }
 
+            _tickableManager = tickableManager;
+            _tickableManager.Add(this);
+            _tickableManager.AddLate(this);
+            
             isInitialize = true;
         }
         

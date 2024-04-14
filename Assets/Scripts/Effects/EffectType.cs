@@ -4,4 +4,5 @@ public enum EffectType : byte
     DefaultBullet = 1,
     MuzzleFlashYellow = 2,
     RobotBlow = 3,
+    BulletCollision = 4,
 }

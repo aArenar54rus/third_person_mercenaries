@@ -15,11 +15,18 @@ namespace Arenar
         protected float _speed;
 
         private float _liveTime;
+        private EffectsSpawner _effectsSpawner;
+        
 
         public bool IsActive { get; private set; } = false;
 
 
-        public void Initialize(Vector3 startPoint, Quaternion rotation, Vector3 movementVector, float speed, DamageData damageData)
+        public void Initialize(Vector3 startPoint,
+            Quaternion rotation,
+            Vector3 movementVector,
+            float speed,
+            DamageData damageData,
+            EffectsSpawner effectsSpawner)
         {
             bulletTransform.position = startPoint;
             bulletTransform.rotation = rotation;
@@ -30,6 +37,8 @@ namespace Arenar
             
             gameObject.SetActive(true);
             _liveTime = 0;
+
+            _effectsSpawner = effectsSpawner;
             
             IsActive = true;
         }
@@ -56,6 +65,11 @@ namespace Arenar
                 characterLiveComponent.SetDamage(_damageData);
             }
             
+            ParticleSystem effect = _effectsSpawner.GetEffect(EffectType.BulletCollision);
+            effect.transform.position = this.transform.position;
+            effect.gameObject.SetActive(true);
+            effect.Play();
+
             DeInitialize();
         }
     }
