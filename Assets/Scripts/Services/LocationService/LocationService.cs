@@ -52,5 +52,11 @@ namespace Arenar.LocationService
 
             SceneManager.UnloadSceneAsync(locationName.ToString());
         }
+
+        public void ChangeLoadedScene(LocationName newLocationName)
+        {
+            UnloadLastLoadedLocation();
+            LoadLocation(newLocationName);
+        }
     }
 }

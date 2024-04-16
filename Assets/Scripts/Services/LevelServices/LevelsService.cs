@@ -84,7 +84,7 @@ namespace Arenar.Services.LevelsService
                 _shootingGalleryLevelInfoCollection.ShootingGalleriesInfos[levelIndex].Length,
                 _shootingGalleryLevelInfoCollection.LevelTime);
             
-            _locationService.LoadLocation(LocationName.Level_ShootingGallery);
+            _locationService.ChangeLoadedScene(LocationName.Level_ShootingGallery);
 
             _gameModeController = CreateGame();
             _gameModeController.StartGame();
@@ -161,7 +161,7 @@ namespace Arenar.Services.LevelsService
         {
             if (CurrentLevelContext != null)
             {
-                _locationService.UnloadLastLoadedLocation();
+                _locationService.ChangeLoadedScene(LocationName.MainMenuLocation);
             }
         }
     }

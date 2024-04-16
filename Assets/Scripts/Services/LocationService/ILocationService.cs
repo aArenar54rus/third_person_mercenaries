@@ -7,5 +7,7 @@ namespace Arenar.LocationService
         void UnloadLastLoadedLocation();
         
         void UnloadLocation(LocationName locationName);
+
+        void ChangeLoadedScene(LocationName newLocationName);
     }
 }

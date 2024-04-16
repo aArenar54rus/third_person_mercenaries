@@ -1,6 +1,7 @@
 using Arenar.AudioSystem;
 using Arenar.CameraService;
 using Arenar.Character;
+using Arenar.LocationService;
 using Arenar.Services.LevelsService;
 using Arenar.Services.PlayerInputService;
 using Arenar.Services.SaveAndLoad;
@@ -26,6 +27,7 @@ namespace Arenar.Services.UI
         private CharacterSpawnController _сharacterSpawnController;
         private IPreferenceManager _preferenceManager;
         private IUiSoundManager _uiSoundManager;
+        private ILocationService _locationService;
         private ZenjectSceneLoader _sceneLoader;
 
         private PlayerSaveDelegate _playerSaveDelegate;
@@ -42,6 +44,7 @@ namespace Arenar.Services.UI
             IPreferenceManager preferenceManager,
             ICameraService cameraService,
             IUiSoundManager uiSoundManager,
+            ILocationService locationService,
             ZenjectSceneLoader sceneLoader,
             CharacterSpawnController сharacterSpawnController)
             : base(playerInputService)
@@ -54,6 +57,7 @@ namespace Arenar.Services.UI
             _sceneLoader = sceneLoader;
             _сharacterSpawnController = сharacterSpawnController;
             _uiSoundManager = uiSoundManager;
+            _locationService = locationService;
         }
 
 
@@ -148,9 +152,11 @@ namespace Arenar.Services.UI
                 .PlayTransition<TransitionOverlayCanvasWindowController,
                         CompleteLevelCanvasWindow,
                         MainMenuWindow>
-                    (false, false, () =>
+                    (true, true, () =>
                     {
-                        SceneManager.UnloadSceneAsync("Level_ShootingGallery");
+                        _locationService.UnloadLastLoadedLocation();
+                        _locationService.LoadLocation(LocationName.MainMenuLocation);
+                        
                         _cameraService.SetCameraState<CameraStateMainMenu>(null, null);
                         _сharacterSpawnController.DisableAllCharacters();
                     });

@@ -72,7 +72,15 @@ namespace Arenar.Character
 
         private void AnimationAimProcess()
         {
-            _aimAnimationProcess = Mathf.Clamp01(_aimAnimationProcess + (IsAim ? (Time.deltaTime) : (-Time.deltaTime)));
+            if (IsAim)
+            {
+                _aimAnimationProcess = Mathf.Clamp01(_aimAnimationProcess + Time.deltaTime);
+            }
+            else
+            {
+                _aimAnimationProcess = 0;
+            }
+
             CharacterAnimationComponent.SetAnimationValue(CharacterAnimationComponent.AnimationValue.Aim, _aimAnimationProcess);
         }
     }
