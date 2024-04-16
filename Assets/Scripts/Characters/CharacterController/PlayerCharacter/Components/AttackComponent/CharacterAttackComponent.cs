@@ -21,6 +21,7 @@ namespace Arenar.Character
         private IInventoryService inventoryService;
         
         private ICharacterInputComponent characterInputComponent;
+        private ICharacterAimComponent characterAimComponent;
         private ICharacterRayCastComponent characterRayCastComponent;
         private FirearmWeaponFactory firearmWeaponFactory;
         private ICharacterAnimationComponent<CharacterAnimationComponent.Animation, CharacterAnimationComponent.AnimationValue> characterAnimationComponent;
@@ -40,13 +41,23 @@ namespace Arenar.Character
         public bool IsFirearmWeaponEquipped => firearmWeapon != null;
 
 
-        public ICharacterInputComponent CharacterInputComponent
+        private ICharacterInputComponent CharacterInputComponent
         {
             get
             {
                 if (characterInputComponent == null)
                     character.TryGetCharacterComponent<ICharacterInputComponent>(out characterInputComponent);
                 return characterInputComponent;
+            }
+        }
+
+        private ICharacterAimComponent CharacterAimComponent
+        {
+            get
+            {
+                if (characterAimComponent == null)
+                    character.TryGetCharacterComponent<ICharacterAimComponent>(out characterAimComponent);
+                return characterAimComponent;
             }
         }
         
@@ -203,7 +214,7 @@ namespace Arenar.Character
             if (!IsFirearmWeaponEquipped)
                 return;
             
-            if (CharacterInputComponent.AimAction && !_lockAction)
+            if (CharacterInputComponent.AimAction && !_lockAction && CharacterAimComponent.IsAim && CharacterAimComponent.AimProgress >= 1)
             {
                 firearmWeapon.SetLaserStatus(true);
                 firearmWeapon.SetLaserPosition(characterAimAnimationData.BodyPistolAimPointObject.position);

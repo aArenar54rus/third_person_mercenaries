@@ -7,6 +7,9 @@ namespace Arenar.Character
 {
     public class PlayerCharacterAimComponent : ICharacterAimComponent, ITickable
     {
+        private const float AIM_SPEED_MULTIPLIER = 3.0f;
+        
+        
         private ICharacterEntity character;
         private TickableManager tickableManager;
         private ICameraService cameraService;
@@ -18,6 +21,8 @@ namespace Arenar.Character
 
 
         public bool IsAim { get; private set; } = false;
+        
+        public float AimProgress => _aimAnimationProcess;
         
         private CharacterAnimationComponent CharacterAnimationComponent { get; set; }
 
@@ -74,7 +79,7 @@ namespace Arenar.Character
         {
             if (IsAim)
             {
-                _aimAnimationProcess = Mathf.Clamp01(_aimAnimationProcess + Time.deltaTime);
+                _aimAnimationProcess = Mathf.Clamp01(_aimAnimationProcess + AIM_SPEED_MULTIPLIER * Time.deltaTime);
             }
             else
             {
