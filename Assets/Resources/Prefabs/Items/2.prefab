@@ -158,6 +158,7 @@ MonoBehaviour:
     isAutomaticShoot: 0
     clipSizeMax: 10
     defaultReloadSpeed: 1.5
+    timeBetweenShots: 0.35
     isFullClipReload: 1
     projectileSpeed: 60
     recoilShakeDefaultValue: 3

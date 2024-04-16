@@ -9,7 +9,7 @@ namespace Arenar.Character
         public event Action onReloadStart; 
         public event Action onReloadEnd; 
         public event Action<float, float> onReloadProgress;
-        public event Action<int, int, bool> onUpdateWeaponClipSize;
+        public event Action<int, int> onUpdateWeaponClipSize;
 
 
         public void CompleteAction();

@@ -12,7 +12,7 @@ namespace Arenar.Character
         public event Action onReloadStart; 
         public event Action onReloadEnd; 
         public event Action<float, float> onReloadProgress; 
-        public event Action<int, int, bool> onUpdateWeaponClipSize;
+        public event Action<int, int> onUpdateWeaponClipSize;
         
         
         private ICharacterEntity character;
@@ -22,7 +22,6 @@ namespace Arenar.Character
         
         private ICharacterInputComponent characterInputComponent;
         private ICharacterAimComponent characterAimComponent;
-        private ICharacterRayCastComponent characterRayCastComponent;
         private FirearmWeaponFactory firearmWeaponFactory;
         private ICharacterAnimationComponent<CharacterAnimationComponent.Animation, CharacterAnimationComponent.AnimationValue> characterAnimationComponent;
         
@@ -91,8 +90,7 @@ namespace Arenar.Character
         {
             bool success = false;
             character.TryGetCharacterComponent<ICharacterInputComponent>(out characterInputComponent);
-            character.TryGetCharacterComponent<ICharacterRayCastComponent>(out characterRayCastComponent);
-            
+
             if (character.TryGetCharacterComponent<ICharacterAnimationComponent>(out ICharacterAnimationComponent animationComponent))
             {
                 if (animationComponent is CharacterAnimationComponent neededAnimationComponent)
@@ -151,7 +149,7 @@ namespace Arenar.Character
                 direction = direction.normalized;
                 
                 firearmWeapon.MakeShot(direction, false);
-                onUpdateWeaponClipSize?.Invoke(firearmWeapon.ClipSize, firearmWeapon.ClipSizeMax, false);
+                onUpdateWeaponClipSize?.Invoke(firearmWeapon.ClipSize, firearmWeapon.ClipSizeMax);
                 characterAnimationComponent.PlayAnimation(CharacterAnimationComponent.Animation.Shoot);
                 
                 _lockAction = true;
@@ -186,7 +184,7 @@ namespace Arenar.Character
                     {
                         onReloadEnd?.Invoke();
                         firearmWeapon.ReloadClip(firearmWeapon.IsFullClipReload);
-                        onUpdateWeaponClipSize?.Invoke(firearmWeapon.ClipSize, firearmWeapon.ClipSizeMax, false);
+                        onUpdateWeaponClipSize?.Invoke(firearmWeapon.ClipSize, firearmWeapon.ClipSizeMax);
 
                         if (firearmWeapon.IsFullClipReload || firearmWeapon.ClipSize >= firearmWeapon.ClipSizeMax)
                         {
@@ -243,7 +241,7 @@ namespace Arenar.Character
                 firearmWeapon = firearmWeaponFactory.Create(equippedWeapon, characterPhysicsData.RightHandPoint);
                 characterAnimationComponent.SetAnimationValue(CharacterAnimationComponent.AnimationValue.HandPistol, 1);
                 
-                onUpdateWeaponClipSize?.Invoke(firearmWeapon.ClipSize, firearmWeapon.ClipSizeMax, false);
+                onUpdateWeaponClipSize?.Invoke(firearmWeapon.ClipSize, firearmWeapon.ClipSizeMax);
             }
         }
     }

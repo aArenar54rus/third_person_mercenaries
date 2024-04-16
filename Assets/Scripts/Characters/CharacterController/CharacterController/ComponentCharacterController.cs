@@ -47,6 +47,9 @@ namespace Arenar.Character
         {
             foreach (var characterComponent in characterComponentsPool)
                 characterComponent.Value.Initialize();
+            
+            foreach (var characterComponent in characterComponentsPool)
+                characterComponent.Value.OnStart();
         }
 
         public void DeInitialize()

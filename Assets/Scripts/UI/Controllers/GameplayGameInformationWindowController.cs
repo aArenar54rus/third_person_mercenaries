@@ -92,6 +92,7 @@ namespace Arenar.Services.UI
         protected override void OnWindowShowEnd_SelectElements()
         {
             DisableProgressSlider();
+            //OnUpdateWeaponClipSize(PlayerCharacterAttackComponent, int clipSizeMax, bool isPercent)
         }
 
         protected override void OnWindowHideBegin_DeselectElements()
@@ -129,8 +130,9 @@ namespace Arenar.Services.UI
             _gameplayInformationLayer.ProgressBarController.SetBarValuePercent(value, valueMax);
         }
 
-        private void OnUpdateWeaponClipSize(int clipSize, int clipSizeMax, bool isPercent)
+        private void OnUpdateWeaponClipSize(int clipSize, int clipSizeMax)
         {
+            bool isPercent = false;
             if (isPercent)
                 _gameplayInformationLayer.WeaponInfoPanel.UpdateWeaponClipSizeInfoPercent(clipSize, clipSizeMax);
             else
