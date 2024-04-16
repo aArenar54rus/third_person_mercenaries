@@ -13,16 +13,13 @@ namespace Arenar.Character
         private ICharacterEntity character;
         private TickableManager tickableManager;
         private ICameraService cameraService;
-
-
+        
         private ICharacterInputComponent _inputComponent;
-
-        private float _aimAnimationProcess = 0.0f;
 
 
         public bool IsAim { get; private set; } = false;
-        
-        public float AimProgress => _aimAnimationProcess;
+
+        public float AimProgress { get; private set; } = 0.0f;
         
         private CharacterAnimationComponent CharacterAnimationComponent { get; set; }
 
@@ -79,14 +76,14 @@ namespace Arenar.Character
         {
             if (IsAim)
             {
-                _aimAnimationProcess = Mathf.Clamp01(_aimAnimationProcess + AIM_SPEED_MULTIPLIER * Time.deltaTime);
+                AimProgress = Mathf.Clamp01(AimProgress + AIM_SPEED_MULTIPLIER * Time.deltaTime);
             }
             else
             {
-                _aimAnimationProcess = 0;
+                AimProgress = 0;
             }
 
-            CharacterAnimationComponent.SetAnimationValue(CharacterAnimationComponent.AnimationValue.Aim, _aimAnimationProcess);
+            CharacterAnimationComponent.SetAnimationValue(CharacterAnimationComponent.AnimationValue.Aim, AimProgress);
         }
     }
 }

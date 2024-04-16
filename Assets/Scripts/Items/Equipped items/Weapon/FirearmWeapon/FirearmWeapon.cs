@@ -54,6 +54,8 @@ namespace Arenar
 
         public Vector3 LocalRotation => localRotation;
 
+        public bool IsShootLock => _isBetweenShotsLock;
+
         private Vector3 RecoilShakeDirection =>
             new Vector3(Random.Range(-1.0f, 1.0f), 1.0f, 0.0f) / 100.0f * firearmWeaponData.RecoilShakeDefaultValue;
         

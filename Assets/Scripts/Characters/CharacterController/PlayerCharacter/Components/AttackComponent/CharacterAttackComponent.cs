@@ -62,7 +62,7 @@ namespace Arenar.Character
         }
         
         private bool CanMakeDistanceAttack =>
-            IsFirearmWeaponEquipped && CharacterInputComponent.AttackAction;
+            IsFirearmWeaponEquipped && CharacterInputComponent.AttackAction && !firearmWeapon.IsShootLock;
 
         private bool IsReload =>
             CharacterInputComponent.ReloadAction;
