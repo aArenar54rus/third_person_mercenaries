@@ -28,7 +28,7 @@ namespace Arenar.Character
         private CharacterPhysicsDataStorage characterPhysicsData;
         private CharacterAimAnimationDataStorage characterAimAnimationData;
         private CharacterAnimatorDataStorage characterAnimatorData;
-        
+
         private FirearmWeapon firearmWeapon;
 
         private int _equippedWeaponIndex = 0;
@@ -80,7 +80,7 @@ namespace Arenar.Character
             this.tickableManager = tickableManager;
             this.inventoryService = inventoryService;
             this.firearmWeaponFactory = firearmWeaponFactory;
-            
+
             characterPhysicsData = characterPhysicsDataStorage.Data;
             characterAimAnimationData = characterAimAnimationDataStorage.Data;
             characterAnimatorData = characterAnimatorDataStorage.Data;
@@ -239,6 +239,7 @@ namespace Arenar.Character
             else
             {
                 firearmWeapon = firearmWeaponFactory.Create(equippedWeapon, characterPhysicsData.RightHandPoint);
+                firearmWeapon.TakeWeaponInHand(character);
                 characterAnimationComponent.SetAnimationValue(CharacterAnimationComponent.AnimationValue.HandPistol, 1);
                 
                 onUpdateWeaponClipSize?.Invoke(firearmWeapon.ClipSize, firearmWeapon.ClipSizeMax);

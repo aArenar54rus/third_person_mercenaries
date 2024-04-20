@@ -1,4 +1,5 @@
 using Arenar.Character;
+using Arenar.Services.DamageNumbersService;
 using DG.Tweening;
 using UnityEngine;
 using Zenject;

@@ -1,4 +1,5 @@
 using System;
+using Arenar.Services.DamageNumbersService;
 using Arenar.Services.LevelsService;
 using DG.Tweening;
 using UnityEngine;
@@ -22,6 +23,7 @@ namespace Arenar.Character
         private EffectsSpawner _effectsSpawner;
 
         private ILevelsService _levelsService;
+        private IDamageNumbersService _damageNumbersService;
         
         private Tween _deathTween;
         
@@ -48,7 +50,8 @@ namespace Arenar.Character
             ICharacterDataStorage<SGTargetPhysicalDataStorage> characterPhysicsDataStorage,
             ShootingGalleryTargetParameters shootingGalleryTargetParameters,
             ILevelsService levelsService,
-            EffectsSpawner effectsSpawner)
+            EffectsSpawner effectsSpawner,
+            IDamageNumbersService damageNumbersService)
         {
             _character = (ShootingGalleryTargetCharacterController)characterEntity;
             _characterTransform = characterPhysicsDataStorage.Data.CharacterTransform;
@@ -56,6 +59,7 @@ namespace Arenar.Character
             _levelsService = levelsService;
             _shootingGalleryTargetParameters = shootingGalleryTargetParameters;
             _effectsSpawner = effectsSpawner;
+            _damageNumbersService = damageNumbersService;
         }
         
         public void Initialize()
@@ -87,6 +91,7 @@ namespace Arenar.Character
 
             _levelsService.CurrentLevelContext.SettedDamage += damageData.Damage;
             Health -= damageData.Damage;
+            _damageNumbersService.PlayDamageNumber(damageData.Damage, _characterRigidbody.transform, damageData.DamageSetterCharacter.CharacterTransform);
             OnCharacterGetDamageBy?.Invoke(damageData.DamageSetterCharacter);
             
             if (Health <= 0)
