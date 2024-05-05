@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using Arenar.Services.LevelsService;
-using UnityEngine;
 using Zenject;
 
 
@@ -9,17 +5,17 @@ namespace Arenar.Character
 {
     public class SGTargetSearchTargetState : AIState
     {
-        private ISearchTargetComponent _searchTargetComponent;
+        private ICharacterAggressionComponent _aggressionComponent;
         private ICharacterEntity _playerCharacter;
 
 
-        private ISearchTargetComponent SearchTargetComponent
+        private ICharacterAggressionComponent AggressionComponent
         {
             get
             {
-                if (_searchTargetComponent == null)
-                    _character.TryGetCharacterComponent(out _searchTargetComponent);
-                return _searchTargetComponent;
+                if (_aggressionComponent == null)
+                    _character.TryGetCharacterComponent(out _aggressionComponent);
+                return _aggressionComponent;
             }
         }
         
@@ -44,13 +40,13 @@ namespace Arenar.Character
 
         public override void OnStateSyncUpdate()
         {
-            if (SearchTargetComponent.CharacterEntityTarget == null)
+            if (AggressionComponent.MaxAggressionTarget == null)
             {
                 if (_playerCharacter.TryGetCharacterComponent<ICharacterLiveComponent>(
                         out ICharacterLiveComponent characterLiveComponent)
                     && characterLiveComponent.IsAlive)
                 {
-                    SearchTargetComponent.AddAggression(1000, _playerCharacter);
+                    AggressionComponent.AddAggressionScore(_playerCharacter, 1000);
                     _aiStateMachineController.SwitchState<SGTargetAttackState>();
                     return;
                 }

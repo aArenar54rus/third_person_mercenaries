@@ -31,11 +31,6 @@ namespace Arenar.Character
             characterComponentsPool.Add(typeof(ICharacterDescriptionComponent), characterDescriptionComponent);
             Container.BindInstance(characterDescriptionComponent).AsSingle();
             Container.Inject(characterDescriptionComponent);
-            
-            ISearchTargetComponent aiSearchTargetComponent = new AiSearchTargetComponent();
-            characterComponentsPool.Add(typeof(ISearchTargetComponent), aiSearchTargetComponent);
-            Container.BindInstance(aiSearchTargetComponent).AsSingle();
-            Container.Inject(aiSearchTargetComponent);
 
             ICharacterMovementComponent characterMovementComponent = new SGTargetMovementComponent();
             characterComponentsPool.Add(typeof(ICharacterMovementComponent), characterMovementComponent);

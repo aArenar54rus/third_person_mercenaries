@@ -52,6 +52,8 @@ namespace Arenar.Character
         public override void Initialize(ICharacterEntity character)
         {
             base.Initialize(character);
+            if (_pathPoints[0] == null)
+                _pathPoints = GameObject.FindObjectOfType<ShootingGalleryTargetPointsCollection>().TargetPoints;
             
             _progressPointIndex = 0;
             if (_character is ShootingGalleryTargetCharacterController SGTargetController)

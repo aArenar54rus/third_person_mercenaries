@@ -40,7 +40,7 @@ MonoBehaviour:
     - Key: 1
       Value:
       - activateTime: 0
-        _pathPointIndexes: 0200000014000000100000000d0000000500000019000000
+        _pathPointIndexes: 0200000014000000
     - Key: 2
       Value: []
     - Key: 3

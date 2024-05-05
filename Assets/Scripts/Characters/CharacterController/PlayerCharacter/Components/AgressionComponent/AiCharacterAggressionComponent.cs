@@ -5,78 +5,94 @@ namespace Arenar.Character
 {
     public class AiCharacterAggressionComponent : ICharacterAggressionComponent
     {
-        public Dictionary<ICharacterEntity, int> CharacterAggressionScores { get; private set; }
-        public ICharacterEntity AggressionTarget { get; private set; }
+        private List<AggressionTarget> _characterTargetsData;
+        
+        
+        public ICharacterEntity MaxAggressionTarget { get; private set; }
         
         
         public void Initialize()
         {
-            CharacterAggressionScores = new Dictionary<ICharacterEntity, int>();
+            _characterTargetsData = new List<AggressionTarget>();
             UpdateAggressionTargets();
         }
 
         public void DeInitialize()
         {
-            CharacterAggressionScores.Clear();
-            CharacterAggressionScores = null;
+            _characterTargetsData = null;
         }
 
         public void OnActivate()
         {
-            CharacterAggressionScores.Clear();
+            _characterTargetsData.Clear();
             UpdateAggressionTargets();
         }
 
         public void OnDeactivate()
         {
-            CharacterAggressionScores.Clear();
+            _characterTargetsData.Clear();
         }
 
         public void AddAggressionScore(ICharacterEntity aggressor, int aggrScore)
         {
-            if (!CharacterAggressionScores.ContainsKey(aggressor))
+            foreach (var aggressionTarget in _characterTargetsData)
             {
-                CharacterAggressionScores.Add(aggressor, aggrScore);
-                return;
+                if (aggressionTarget.target == aggressor)
+                {
+                    aggressionTarget.aggression += aggrScore;
+                    UpdateAggressionTargets();
+                    return;
+                }
             }
 
-            CharacterAggressionScores[aggressor] += aggrScore;
+            AggressionTarget newTarget = new AggressionTarget();
+            newTarget.target = aggressor;
+            newTarget.aggression = aggrScore;
+            _characterTargetsData.Add(newTarget);
             UpdateAggressionTargets();
         }
 
         private void UpdateAggressionTargets()
         {
-            if (CharacterAggressionScores.Count == 0)
+            if (_characterTargetsData.Count == 0)
             {
-                AggressionTarget = null;
+                MaxAggressionTarget = null;
                 return;
             }
             
-            ICharacterEntity newAggressionTarget = null;
-            List<ICharacterEntity> lostTargets = new();
+            ICharacterEntity maxAggressionTarget = null;
+            List<AggressionTarget> lostTargets = new();
             int score = 0;
-            foreach (var aggression in CharacterAggressionScores)
+            foreach (var aggressionTarget in _characterTargetsData)
             {
-                if (!aggression.Key.TryGetCharacterComponent(out ICharacterLiveComponent liveComponent))
+                if (!aggressionTarget.target.TryGetCharacterComponent(out ICharacterLiveComponent liveComponent))
                     continue;
 
-                if (!liveComponent.IsAlive || aggression.Value <= 0)
+                if (!liveComponent.IsAlive || aggressionTarget.aggression <= 0)
                 {
-                    lostTargets.Add(aggression.Key);
+                    lostTargets.Add(aggressionTarget);
                     continue;
                 }
                     
-                if (aggression.Value > score)
+                if (aggressionTarget.aggression > score)
                 {
-                    score = aggression.Value;
-                    newAggressionTarget = aggression.Key;
+                    score = aggressionTarget.aggression;
+                    maxAggressionTarget = aggressionTarget.target;
                 }
             }
 
-            AggressionTarget = newAggressionTarget;
+            MaxAggressionTarget = maxAggressionTarget;
 
             foreach (var lostTarget in lostTargets)
-                CharacterAggressionScores.Remove(lostTarget);
+                _characterTargetsData.Remove(lostTarget);
+        }
+        
+        
+        
+        class AggressionTarget
+        {
+            public int aggression;
+            public ICharacterEntity target;
         }
     }
 }

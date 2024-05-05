@@ -68,6 +68,8 @@ namespace Arenar.Character
             if (direction == Vector3.zero)
             {
                 SpeedAcceleration -= _speedAccelerationMultiply * Time.deltaTime;
+                _targetPhysicalData.CharacterModelRigidbody.velocity = Vector3.zero;
+                return;
             }
             else
             {

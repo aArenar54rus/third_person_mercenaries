@@ -10,11 +10,12 @@ namespace Arenar.Character
         private ICharacterMovementComponent _characterMovementComponent;
         private ICharacterAggressionComponent _characterAggressionComponent;
 
-        private ICharacterEntity _playerCharacterEntity;
+        private ICharacterEntity _AggressionTargetCharacter;
 
         private ICharacterEntity _character;
         private FirearmWeapon _weapon;
         private WeaponInventoryItemData _weaponInventoryData;
+        private EffectsSpawner _projectileSpawner;
         private ShootingGalleryLevelInfoCollection _shootingGalleryLevelInfoCollection;
         
         
@@ -42,12 +43,14 @@ namespace Arenar.Character
         [Inject]
         private void Construct(ICharacterEntity character,
             ICharacterDataStorage<SGTargetWeaponDataStorage> weaponDataStorage,
-            ShootingGalleryLevelInfoCollection shootingGalleryLevelInfoCollection)
+            ShootingGalleryLevelInfoCollection shootingGalleryLevelInfoCollection,
+            EffectsSpawner projectileSpawner)
         {
             _character = character;
             _weapon = weaponDataStorage.Data.Weapon;
             _weaponInventoryData = weaponDataStorage.Data.WeaponInventoryData;
             _shootingGalleryLevelInfoCollection = shootingGalleryLevelInfoCollection;
+            _projectileSpawner = projectileSpawner;
         }
         
         public override void DeInitialize()
@@ -57,18 +60,22 @@ namespace Arenar.Character
 
         public override void OnStateBegin()
         {
-            _playerCharacterEntity = CharacterAggressionComponent.AggressionTarget;
+            _weapon.InitializeWeapon(_weaponInventoryData);
+            _weapon.projectileSpawner ??= _projectileSpawner;
+            _AggressionTargetCharacter = CharacterAggressionComponent.MaxAggressionTarget;
         }
 
         public override void OnStateSyncUpdate()
         {
-            if (_playerCharacterEntity == null)
+            if (_AggressionTargetCharacter == null)
                 return;
-            Vector3 direction = _playerCharacterEntity.CharacterTransform.position - _character.CharacterTransform.position;
+            Vector3 direction = (_AggressionTargetCharacter.CharacterTransform.position + Vector3.up) - _character.CharacterTransform.position;
             CharacterMovementComponent.Move(Vector3.zero);
             CharacterMovementComponent.Rotation(direction);
+            
+            float angle = Vector3.Angle(direction, _character.CharacterTransform.forward);
 
-            if (direction.magnitude < 5.0f)
+            if (angle < 5.0f)
             {
                 _weapon.MakeShot(_character.CharacterTransform.forward, true);
             }

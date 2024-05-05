@@ -10,6 +10,9 @@ namespace Arenar.Services.LevelsService
         [SerializeField] private List<ShootingGalleryTargetPoint> _targetPoints;
 
 
+        public List<ShootingGalleryTargetPoint> TargetPoints => _targetPoints;
+        
+
         public override void InstallBindingsIntoContainer(DiContainer container)
         {
             container.Rebind<List<ShootingGalleryTargetPoint>>()

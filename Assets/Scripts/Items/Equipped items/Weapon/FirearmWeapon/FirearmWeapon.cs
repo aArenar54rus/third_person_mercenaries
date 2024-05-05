@@ -17,7 +17,7 @@ namespace Arenar
         [SerializeField] protected LineRenderer lineRendererEffect;
         [SerializeField] protected FirearmWeaponCameraRecoilComponent firearmWeaponCameraRecoilComponent;
         
-        [Inject] protected EffectsSpawner projectileSpawner;
+        [Inject] public EffectsSpawner projectileSpawner;
 
         private Tween _timeBetweenShotsTween;
 
@@ -112,7 +112,7 @@ namespace Arenar
                 return;
             }
             
-            if (ClipSize <= 0)
+            if (ClipSize <= 0 && !isInfinityClip)
             {
                 Debug.LogError("EmptyClip");
                 return;

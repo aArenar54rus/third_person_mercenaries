@@ -52,13 +52,14 @@ namespace Arenar
         public ComponentCharacterController CreatePlayerCharacter(Vector3 position, Quaternion rotation)
         {
             ComponentCharacterController componentCharacter = null;
-            if (_createdCharacters.ContainsKey(typeof(ComponentCharacterController)))
+            if (_createdCharacters.ContainsKey(typeof(ComponentCharacterController)) && _createdCharacters[typeof(ComponentCharacterController)].Count > 0)
             {
                 componentCharacter = _createdCharacters[typeof(ComponentCharacterController)][0];
             }
             else
             {
-                _createdCharacters.Add(typeof(ComponentCharacterController), new List<ComponentCharacterController>());
+                if (!_createdCharacters.ContainsKey(typeof(ComponentCharacterController)))
+                    _createdCharacters.Add(typeof(ComponentCharacterController), new List<ComponentCharacterController>());
 
                 componentCharacter = _playerFactory.Create(CharactersContainer);
                 componentCharacter.gameObject.transform.SetParent(CharactersContainer);
@@ -112,8 +113,12 @@ namespace Arenar
                 foreach (var character in characters.Value)
                 {
                     character.DeActivate();
+                    character.DeInitialize();
                     character.gameObject.SetActive(false);
+                    GameObject.Destroy(character);
                 }
+                
+                characters.Value.Clear();
             }
         }
     }

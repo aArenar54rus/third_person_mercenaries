@@ -58,11 +58,5 @@ namespace Arenar.Character
             foreach (var characterComponent in characterComponentsPool)
                 characterComponent.Value.DeInitialize();
         }
-
-        private void OnDestroy()
-        {
-            DeActivate();
-            DeInitialize();
-        }
     }
 }
