@@ -59,6 +59,8 @@ namespace Arenar.Character
             
             _levelsService.CurrentLevelContext.GettedDamage += damageData.Damage;
             health -= damageData.Damage;
+            
+            OnCharacterChangeHealthValue?.Invoke(health, healthMax);
             if (health <= 0)
                 SetDeath();
         }

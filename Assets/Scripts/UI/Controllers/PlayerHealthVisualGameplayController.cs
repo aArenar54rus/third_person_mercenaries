@@ -95,23 +95,12 @@ namespace Arenar.Services.UI
         private void OnInstallNewCharacter(ComponentCharacterController characterController)
         {
             playerCharacterController = characterController;
-            
             PlayerCharacterLiveComponent.OnCharacterChangeHealthValue += OnCharacterChangeHealthValue;
-            PlayerCharacterProgressionComponent.OnUpdateExperience += OnUpdateExperience;
-            PlayerCharacterProgressionComponent.OnUpdateLevel += OnUpdateLevel;
-            
+
             OnCharacterChangeHealthValue(PlayerCharacterLiveComponent.Health, PlayerCharacterLiveComponent.HealthMax);
-            OnUpdateExperience(PlayerCharacterProgressionComponent.Experience, PlayerCharacterProgressionComponent.ExperienceMax);
-            OnUpdateLevel(PlayerCharacterProgressionComponent.Level);
         }
 
         private void OnCharacterChangeHealthValue(int health, int healthMax) =>
             gameplayPlayerParametersWindowLayer.UpdatePlayerHealth(health, healthMax);
-
-        private void OnUpdateExperience(int currentExp, int maxExp) =>
-            gameplayPlayerParametersWindowLayer.UpdatePlayerExperience(currentExp, maxExp);
-
-        private void OnUpdateLevel(int level) =>
-            gameplayPlayerParametersWindowLayer.UpdatePlayerLevel(level);
     }
 }
