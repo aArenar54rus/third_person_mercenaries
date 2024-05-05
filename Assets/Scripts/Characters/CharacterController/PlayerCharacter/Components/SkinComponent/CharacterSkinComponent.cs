@@ -23,17 +23,23 @@ namespace Arenar.Character
 
         public void Initialize()
         {
-            inventoryService.OnUpdateEquippedWeaponItem += OnUpdateEquippedWeaponItem;
+           
         }
 
         public void DeInitialize()
         {
-            inventoryService.OnUpdateEquippedWeaponItem -= OnUpdateEquippedWeaponItem;
+            
         }
 
-        public void OnStart()
+        public void OnActivate()
         {
+            inventoryService.OnUpdateEquippedWeaponItem += OnUpdateEquippedWeaponItem;
             OnUpdateEquippedWeaponItem();
+        }
+
+        public void OnDeactivate()
+        {
+            inventoryService.OnUpdateEquippedWeaponItem -= OnUpdateEquippedWeaponItem;
         }
 
         public void SetSkin()

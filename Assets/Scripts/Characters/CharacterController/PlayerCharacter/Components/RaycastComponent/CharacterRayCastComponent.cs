@@ -50,16 +50,20 @@ namespace Arenar.Character
         public void Initialize()
         {
             _characterEntity.TryGetCharacterComponent<ICharacterLiveComponent>(out characterLiveComponent);
-            _tickableManager.Add(this);
         }
 
-        public void DeInitialize()
+        public void DeInitialize() { }
+
+        public void OnActivate()
+        {
+            _tickableManager.Add(this);
+        }
+        
+        public void OnDeactivate()
         {
             _tickableManager.Remove(this);
         }
 
-        public void OnStart() { }
-        
         public void Tick()
         {
             if (!characterLiveComponent.IsAlive)

@@ -62,8 +62,7 @@ namespace Arenar.Character
         private Vector3 InputDirection =>
             new Vector3(characterInputComponent.MoveAction.x, 0.0f, characterInputComponent.MoveAction.y).normalized;
 
-
-
+        
         [Inject]
         public void Construct(ICharacterEntity character,
                               Camera camera,
@@ -80,8 +79,6 @@ namespace Arenar.Character
 
         public void Initialize()
         {
-            tickableManager.Add(this);
-            
             character.TryGetCharacterComponent<ICharacterLiveComponent>(out characterLiveComponent);
             character.TryGetCharacterComponent<ICharacterRayCastComponent>(out characterRayCastComponent);
             character.TryGetCharacterComponent<ICharacterInputComponent>(out characterInputComponent);
@@ -93,10 +90,17 @@ namespace Arenar.Character
             }
         }
 
-        public void DeInitialize() =>
-            tickableManager.Remove(this);
+        public void DeInitialize() { }
 
-        public void OnStart() { }
+        public void OnActivate()
+        {
+            tickableManager.Add(this);
+        }
+        
+        public void OnDeactivate()
+        {
+            tickableManager.Remove(this);
+        }
 
         public void Tick()
         {

@@ -18,13 +18,20 @@ namespace Arenar.Character
         public void DeInitialize()
         {
             CharacterAggressionScores.Clear();
+            CharacterAggressionScores = null;
         }
 
-        public void OnStart()
+        public void OnActivate()
         {
+            CharacterAggressionScores.Clear();
             UpdateAggressionTargets();
         }
-        
+
+        public void OnDeactivate()
+        {
+            CharacterAggressionScores.Clear();
+        }
+
         public void AddAggressionScore(ICharacterEntity aggressor, int aggrScore)
         {
             if (!CharacterAggressionScores.ContainsKey(aggressor))

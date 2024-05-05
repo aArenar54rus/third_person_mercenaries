@@ -51,7 +51,7 @@ namespace Arenar.Character
         private float _aimAnimationProcess = 0.0f;
 
 
-        private Animator KittyAnimator =>
+        private Animator Animator =>
             characterAnimatorDataStorage.Animator;
         
         private bool IsFindObject =>
@@ -85,16 +85,19 @@ namespace Arenar.Character
             characterEntity.TryGetCharacterComponent<ICharacterAimComponent>(out characterAimComponent);
 
             InitIndexIDs();
-            
-            tickableManager.Add(this);
         }
 
-        public void DeInitialize()
+        public void DeInitialize() { }
+
+        public void OnActivate()
+        {
+            tickableManager.Add(this);
+        }
+        
+        public void OnDeactivate()
         {
             tickableManager.Remove(this);
         }
-
-        public void OnStart() {}
 
         public void PlayAnimation(Animation animationType)
         {
@@ -159,16 +162,16 @@ namespace Arenar.Character
         }
 
         private void PlayAnimation(string animationKey) =>
-            KittyAnimator.Play(animationKey);
+            Animator.Play(animationKey);
 
         private void SetAnimationTrigger(string triggerName) =>
-            KittyAnimator.SetTrigger(triggerName);
+            Animator.SetTrigger(triggerName);
 
         private void SetAnimationBool(int animationIndex, bool value) =>
-            KittyAnimator.SetBool(animationIndex, value);
+            Animator.SetBool(animationIndex, value);
         
         private void SetAnimationFloat(int animationIndex, float value) =>
-            KittyAnimator.SetFloat(animationIndex, value);
+            Animator.SetFloat(animationIndex, value);
 
         private void SetHeadAnimationRotation()
         {

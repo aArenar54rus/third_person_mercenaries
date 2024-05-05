@@ -64,23 +64,29 @@ namespace Arenar.Character
         
         public void Initialize()
         {
-            _deathTween?.Kill(false);
 
-            HealthMax = _shootingGalleryTargetParameters.BaseHealth
-                        + _shootingGalleryTargetParameters.AddedHealthByLvl * (_character.CharacterLevel - 1);
-            Health = HealthMax;
         }
 
         public void DeInitialize()
         {
-
+            _deathTween?.Kill(false);
         }
 
-        public void OnStart()
+        public void OnActivate()
         {
+            _deathTween?.Kill(false);
+            
+            HealthMax = _shootingGalleryTargetParameters.BaseHealth
+                        + _shootingGalleryTargetParameters.AddedHealthByLvl * (_character.CharacterLevel - 1);
+            Health = HealthMax;
             SetAlive();
         }
-        
+
+        public void OnDeactivate()
+        {
+            _deathTween?.Kill(false);
+        }
+
         public void SetDamage(DamageData damageData)
         {
             if (!IsAlive)

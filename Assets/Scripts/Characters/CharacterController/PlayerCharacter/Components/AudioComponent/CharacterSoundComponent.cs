@@ -35,19 +35,24 @@ namespace Arenar.Character
         {
             characterEntity.TryGetCharacterComponent<ICharacterLiveComponent>(out liveComponent);
             audioController = new AudioController(characterAudioDataStorage.AudioSource);
-            characterAudioDataStorage.AnimationReactionsTriggerController.onFootStep += PlayRandomFootstepSound;
-            liveComponent.OnCharacterDie += OnCharacterDie;
         }
 
         public void DeInitialize()
         {
             audioController = null;
-            characterAudioDataStorage.AnimationReactionsTriggerController.onFootStep -= PlayRandomFootstepSound;
-            liveComponent.OnCharacterDie -= OnCharacterDie;
         }
 
-        public void OnStart()
+        public void OnActivate()
         {
+            characterAudioDataStorage.AnimationReactionsTriggerController.onFootStep += PlayRandomFootstepSound;
+            liveComponent.OnCharacterDie += OnCharacterDie;
+            StopSound();
+        }
+
+        public void OnDeactivate()
+        {
+            characterAudioDataStorage.AnimationReactionsTriggerController.onFootStep -= PlayRandomFootstepSound;
+            liveComponent.OnCharacterDie -= OnCharacterDie;
             StopSound();
         }
 

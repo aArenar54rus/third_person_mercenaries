@@ -50,9 +50,6 @@ namespace Arenar.Character
         
         public void Initialize()
         {
-            tickableManager.Add(this);
-            
-            bool isSuccess = false;
             character.TryGetCharacterComponent<ICharacterLiveComponent>(out _liveComponent);
             character.TryGetCharacterComponent<ICharacterRayCastComponent>(out _rayCastComponent);
             character.TryGetCharacterComponent<ICharacterInputComponent>(out _inputComponent);
@@ -65,19 +62,24 @@ namespace Arenar.Character
                     _characterAnimationComponent = neededComponent;
                 }
             }
-
-
-            CanInteract = true;
         }
 
         public void DeInitialize()
         {
-            tickableManager.Remove(this);
+            
         }
 
-        public void OnStart()
+        public void OnActivate()
         {
             isInteractible = true;
+            tickableManager.Add(this);
+            CanInteract = true;
+        }
+
+        public void OnDeactivate()
+        {
+            tickableManager.Remove(this);
+            CanInteract = false;
         }
 
         public void Tick()

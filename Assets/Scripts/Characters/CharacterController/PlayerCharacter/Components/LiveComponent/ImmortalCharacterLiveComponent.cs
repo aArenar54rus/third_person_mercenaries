@@ -15,15 +15,17 @@ namespace Arenar.Character
         public int HealthMax { get; private set; }
 
 
-        public void Initialize()
+        public void Initialize() { }
+
+        public void DeInitialize() { }
+
+        public void OnActivate()
         {
             IsAlive = true;
             HealthMax = Health = 1;
         }
-
-        public void DeInitialize() { }
-
-        public void OnStart() { }
+        
+        public void OnDeactivate() { }
 
         public void SetDamage(DamageData damageData)
         {

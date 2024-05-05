@@ -88,7 +88,6 @@ namespace Arenar.Character
         
         public void Initialize()
         {
-            bool success = false;
             character.TryGetCharacterComponent<ICharacterInputComponent>(out characterInputComponent);
 
             if (character.TryGetCharacterComponent<ICharacterAnimationComponent>(out ICharacterAnimationComponent animationComponent))
@@ -96,24 +95,27 @@ namespace Arenar.Character
                 if (animationComponent is CharacterAnimationComponent neededAnimationComponent)
                     characterAnimationComponent = neededAnimationComponent;
             }
-
-            OnUpdateEquippedWeaponItem();
-            
-            inventoryService.OnUpdateEquippedWeaponItem += OnUpdateEquippedWeaponItem;
-            characterAnimatorData.AnimationReactionsTriggerController.onCompleteAction += CompleteAction;
-            tickableManager.Add(this);
         }
 
         public void DeInitialize()
         {
+
+        }
+
+        public void OnActivate()
+        {
+            OnUpdateEquippedWeaponItem();
+            inventoryService.OnUpdateEquippedWeaponItem += OnUpdateEquippedWeaponItem;
+            characterAnimatorData.AnimationReactionsTriggerController.onCompleteAction += CompleteAction;
+            tickableManager.Add(this);
+            _lockAction = false;
+        }
+
+        public void OnDeactivate()
+        {
             inventoryService.OnUpdateEquippedWeaponItem -= OnUpdateEquippedWeaponItem;
             characterAnimatorData.AnimationReactionsTriggerController.onCompleteAction -= CompleteAction;
             tickableManager.Remove(this);
-        }
-
-        public void OnStart()
-        {
-            _lockAction = false;
         }
 
         public void Tick()

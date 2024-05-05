@@ -65,6 +65,7 @@ namespace Arenar
                 playerCharacter = componentCharacter;
 
                 _createdCharacters[typeof(ComponentCharacterController)].Add(componentCharacter);
+                componentCharacter.Initialize();
             }
 
             playerCharacter.CharacterTransform.position = position;
@@ -93,13 +94,13 @@ namespace Arenar
             {
                 if (createdTarget.gameObject.activeSelf)
                     continue;
-
-                createdTarget.gameObject.SetActive(true);
+                
                 return (ShootingGalleryTargetCharacterController)createdTarget;
             }
             
             ShootingGalleryTargetCharacterController newTarget = _shootingGalleryTargetFactory.Create(CharactersContainer);
             _createdCharacters[typeof(ShootingGalleryTargetCharacterController)].Add(newTarget);
+            newTarget.Initialize();
 
             return newTarget;
         }
@@ -110,7 +111,7 @@ namespace Arenar
             {
                 foreach (var character in characters.Value)
                 {
-                    character.DeInitialize();
+                    character.DeActivate();
                     character.gameObject.SetActive(false);
                 }
             }

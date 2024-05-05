@@ -18,17 +18,8 @@ namespace Arenar.Character
         public void Construct(Dictionary<Type, ICharacterComponent> characterComponentsPool)
         {
             this.characterComponentsPool = characterComponentsPool;
-            Initialize();
         }
-        
-        public void ReInitialize()
-        {
-            foreach (var characterComponent in characterComponentsPool)
-                characterComponent.Value.OnStart();
-            
-            gameObject.SetActive(true);
-        }
-        
+
         public bool TryGetCharacterComponent<TCharacterComponent>(out TCharacterComponent resultComponent)
             where TCharacterComponent : ICharacterComponent
         {
@@ -43,13 +34,23 @@ namespace Arenar.Character
             return true;
         }
         
-        private void Initialize()
+        public void Initialize()
         {
             foreach (var characterComponent in characterComponentsPool)
                 characterComponent.Value.Initialize();
-            
+        }
+        
+        public void Activate()
+        {
+            gameObject.SetActive(true);
             foreach (var characterComponent in characterComponentsPool)
-                characterComponent.Value.OnStart();
+                characterComponent.Value.OnActivate();
+        }
+
+        public void DeActivate()
+        {
+            foreach (var characterComponent in characterComponentsPool)
+                characterComponent.Value.OnDeactivate();
         }
 
         public void DeInitialize()
@@ -58,7 +59,10 @@ namespace Arenar.Character
                 characterComponent.Value.DeInitialize();
         }
 
-        private void OnDestroy() =>
+        private void OnDestroy()
+        {
+            DeActivate();
             DeInitialize();
+        }
     }
 }

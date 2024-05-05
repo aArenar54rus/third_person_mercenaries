@@ -42,14 +42,16 @@ namespace Arenar.Services.LevelsService
 
         public override void StartGame()
         {
-            var character = _сharacterSpawnController.CreatePlayerCharacter(new Vector3(3,0,0), Quaternion.Euler(new Vector3(0, 90, 0)));
+            var playerCharacter = _сharacterSpawnController.CreatePlayerCharacter(new Vector3(3,0,0), Quaternion.Euler(new Vector3(0, 0, 0)));
 
-            if (character is PlayerComponentCharacterController player)
+            if (playerCharacter is PlayerComponentCharacterController player)
             {
                 _cameraService.SetCameraState<CameraStateThirdPerson>(player.CameraTransform,
                     player.CharacterTransform);
                 _cameraService.SetCinemachineVirtualCamera(CinemachineCameraType.DefaultTPS);
             }
+            
+            playerCharacter.Activate();
 
             _tween = DOVirtual.DelayedCall(GAME_WAIT_END_TIME, () => _isGameWork = true)
                 .OnComplete(KillTween);
@@ -67,6 +69,9 @@ namespace Arenar.Services.LevelsService
             
             _gameTime += Time.deltaTime;
 
+            if (_shootingGalleryTargets == null || _shootingGalleryTargets.Length == 0)
+                return;
+            
             if (_shootingGalleryTargets[_progressIndex].ActivateTime > _gameTime)
                 return;
 
@@ -81,8 +86,8 @@ namespace Arenar.Services.LevelsService
         {
             var shootingGalleryTargetNpc = _сharacterSpawnController.CreateShootingGalleryTarget();
             shootingGalleryTargetNpc.InitializeShooterGalleryTarget(_progressIndex, GetRandomEnemyLevel());
-            shootingGalleryTargetNpc.ReInitialize();
-            
+            shootingGalleryTargetNpc.Activate();
+
             if (shootingGalleryTargetNpc.TryGetCharacterComponent<ICharacterLiveComponent>(out ICharacterLiveComponent characterLiveComponent))
             {
                 characterLiveComponent.OnCharacterDie += OnEnemyCharacterDie;

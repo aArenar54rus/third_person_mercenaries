@@ -29,6 +29,7 @@ namespace Arenar.Character
             set
             {
                 _experience = value;
+                return;
                 if (_experience >= _experienceMax)
                 {
                     _experience -= _experienceMax;
@@ -58,7 +59,9 @@ namespace Arenar.Character
 
         public void DeInitialize() { }
 
-        public void OnStart() { }
+        public void OnActivate() { }
+        
+        public void OnDeactivate() { }
 
         private int GetExperienceMaxValue()
         {

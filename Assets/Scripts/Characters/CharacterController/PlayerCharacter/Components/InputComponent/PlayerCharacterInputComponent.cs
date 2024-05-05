@@ -46,19 +46,19 @@ namespace Arenar.Character
 
         public void SetControlStatus(bool status)
         {
+            _playerInputService.SetInputControlType(InputActionMapType.UI, !status);
             _playerInputService.SetInputControlType(InputActionMapType.Gameplay, status);
         }
 
-        public void Initialize()
-        {
-            SetControlStatus(true);
-        }
+        public void Initialize() { }
 
         public void DeInitialize() { }
 
-        public void OnStart()
+        public void OnActivate()
         {
             SetControlStatus(true);
         }
+
+        public void OnDeactivate() { }
     }
 }

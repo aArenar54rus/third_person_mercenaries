@@ -11,8 +11,12 @@ namespace Arenar.Character
         bool TryGetCharacterComponent<TCharacterComponent>(out TCharacterComponent resultComponent)
             where TCharacterComponent : ICharacterComponent;
 
-        void ReInitialize();
+        void Activate();
+        
+        void DeActivate();
 
+        void Initialize();
+        
         void DeInitialize();
     }
 }

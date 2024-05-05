@@ -44,7 +44,11 @@ namespace Arenar.Character
             _targetPhysicalData = characterPhysicsDataStorage.Data;
         }
         
-        public void Initialize()
+        public void Initialize() { }
+
+        public void DeInitialize() { }
+
+        public void OnActivate()
         {
             MoveSpeed = _parameters.BaseSpeed[_levelsService.CurrentLevelContext.LevelDifficult];
             RotationSpeed = _parameters.BaseRotationSpeed[_levelsService.CurrentLevelContext.LevelDifficult];
@@ -54,14 +58,9 @@ namespace Arenar.Character
             SpeedAcceleration = 0;
         }
 
-        public void DeInitialize()
+        public void OnDeactivate()
         {
             _targetPhysicalData.CharacterModelRigidbody.velocity = Vector3.zero;
-        }
-
-        public void OnStart()
-        {
-            SpeedAcceleration = 0;
         }
 
         public void Move(Vector3 direction)

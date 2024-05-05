@@ -13,7 +13,7 @@ namespace Arenar.Character
         private AiStateMachineController _aiStateMachine;
 
 
-        public bool IsControlBlocked { get; set; }
+        public bool IsControlBlocked { get; set; } = true;
 
 
         [Inject]
@@ -31,23 +31,28 @@ namespace Arenar.Character
         
         public void Initialize()
         {
-            _tickableManager.AddFixed(this);
             _aiStateMachine = new AiStateMachineController(_characterEntity, _aiStates);
-            _aiStateMachine.Initialize();
         }
 
         public void DeInitialize()
         {
-            IsControlBlocked = true;
-            _aiStateMachine.DeInitialize();
-            _tickableManager.RemoveFixed(this);
             _aiStateMachine = null;
         }
 
-        public void OnStart()
+        public void OnActivate()
         {
+            if (IsControlBlocked)
+                _tickableManager.AddFixed(this);
+            _aiStateMachine.Initialize();
             _aiStateMachine.OnStart();
             IsControlBlocked = false;
+        }
+
+        public void OnDeactivate()
+        {
+            IsControlBlocked = true;
+            _tickableManager.RemoveFixed(this);
+            _aiStateMachine.DeInitialize();
         }
 
         public void SwitchState<T>() where T : IAIState 

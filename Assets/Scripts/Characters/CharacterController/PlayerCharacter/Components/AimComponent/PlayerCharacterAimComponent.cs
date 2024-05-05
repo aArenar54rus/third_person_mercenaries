@@ -44,18 +44,19 @@ namespace Arenar.Character
                 if (animationComponent is CharacterAnimationComponent characterAnimationComponent)
                     CharacterAnimationComponent = characterAnimationComponent;
             }
-            
-            tickableManager.Add(this);
         }
 
-        public void DeInitialize()
+        public void DeInitialize() { }
+
+        public void OnActivate()
+        {
+            tickableManager.Add(this);
+            IsAim = false;
+        }
+
+        public void OnDeactivate()
         {
             tickableManager.Remove(this);
-        }
-
-        public void OnStart()
-        {
-            IsAim = false;
         }
 
         public void Tick()

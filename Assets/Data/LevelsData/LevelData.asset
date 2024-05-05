@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d89bcb6ceae4a9642964b1cbd89a4665, type: 3}
-  m_Name: New Level Data SO Installer
+  m_Name: LevelData
   m_EditorClassIdentifier: 
   _levelDatas:
   - _levelIndex: 0
     _levelNameKey: loc_key_level1
-    _sceneKey: Level_ShootingGallery
     _levelPortrait: {fileID: 21300000, guid: fa01a32d397234543ba5700283d6c72c, type: 3}
+    _locationName: 2
     _difficultData:
       IsSingleLineView: 0
       list:
@@ -43,8 +43,8 @@ MonoBehaviour:
     _gameMode: 3
   - _levelIndex: 1
     _levelNameKey: loc_key_level2
-    _sceneKey: Level_ShootingGallery
     _levelPortrait: {fileID: 21300000, guid: 3539eb04cbdb92747af6dfd92deaee74, type: 3}
+    _locationName: 3
     _difficultData:
       IsSingleLineView: 0
       list:
@@ -71,8 +71,8 @@ MonoBehaviour:
     _gameMode: 3
   - _levelIndex: 2
     _levelNameKey: loc_key_level3
-    _sceneKey: Level_ShootingGallery
     _levelPortrait: {fileID: 21300000, guid: 45fe71963a568ce43a483bbf9e5d4437, type: 3}
+    _locationName: 4
     _difficultData:
       IsSingleLineView: 0
       list:
@@ -99,8 +99,8 @@ MonoBehaviour:
     _gameMode: 3
   - _levelIndex: 3
     _levelNameKey: loc_key_level4
-    _sceneKey: Level_ShootingGallery
     _levelPortrait: {fileID: 21300000, guid: 75b08bc74520f34469e18bad21bdc202, type: 3}
+    _locationName: 5
     _difficultData:
       IsSingleLineView: 0
       list:
@@ -127,8 +127,8 @@ MonoBehaviour:
     _gameMode: 3
   - _levelIndex: 4
     _levelNameKey: loc_key_level5
-    _sceneKey: Level_ShootingGallery
     _levelPortrait: {fileID: 21300000, guid: c99dea6269d007e4fa24c149bd300d9e, type: 3}
+    _locationName: 6
     _difficultData:
       IsSingleLineView: 0
       list:

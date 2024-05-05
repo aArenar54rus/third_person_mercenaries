@@ -1,6 +1,8 @@
 using System;
 using Arenar.Services.LevelsService;
+using Arenar.Services.SaveAndLoad;
 using DG.Tweening;
+using TakeTop.PreferenceSystem;
 using UnityEngine;
 using Zenject;
 
@@ -15,6 +17,7 @@ namespace Arenar.Character
 
         
         private PlayerCharacterParametersData playerCharacterParametersData;
+        private IPreferenceManager preferenceManager;
         private Transform characterTransform;
         private int healthMax;
         private int health;
@@ -39,10 +42,12 @@ namespace Arenar.Character
         public void Construct(ICharacterEntity playerEntity,
             ICharacterDataStorage<CharacterPhysicsDataStorage> characterPhysicsDataStorage,
             ILevelsService levelsService,
+            IPreferenceManager preferenceManager,
             PlayerCharacterParametersData playerCharacterParametersData)
         {
             characterTransform = characterPhysicsDataStorage.Data.CharacterTransform;
             this.playerCharacterParametersData = playerCharacterParametersData;
+            this.preferenceManager = preferenceManager;
             _levelsService = levelsService;
             _playerEntity = playerEntity;
         }
@@ -61,6 +66,7 @@ namespace Arenar.Character
         public void SetAlive()
         {
             health = healthMax;
+            OnCharacterChangeHealthValue?.Invoke(health, healthMax);
         }
 
         public void SetDeath()
@@ -79,8 +85,6 @@ namespace Arenar.Character
         public void Initialize()
         {
             _deathTween?.Kill(false);
-            healthMax = playerCharacterParametersData.DefaultHealthMax;
-            health = healthMax;
         }
 
         public void DeInitialize()
@@ -88,9 +92,17 @@ namespace Arenar.Character
             _deathTween?.Kill(true);
         }
 
-        public void OnStart()
+        public void OnActivate()
         {
+            int playerLevel = preferenceManager.LoadValue<PlayerSaveDelegate>().playerCharacterLevel;
+            healthMax = playerCharacterParametersData.DefaultHealthMax + playerCharacterParametersData.LevelHealthAdded * playerLevel;
+            health = healthMax;
             SetAlive();
+        }
+
+        public void OnDeactivate()
+        {
+            _deathTween?.Kill(true);
         }
     }
 }

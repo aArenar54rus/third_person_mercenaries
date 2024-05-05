@@ -6,6 +6,8 @@ namespace Arenar.Character
 
         void DeInitialize();
 
-        void OnStart();
+        void OnActivate();
+
+        void OnDeactivate();
     }
 }

@@ -10,6 +10,7 @@ namespace Arenar.Character
 
         public void DeInitialize() { }
 
-        public void OnStart() { }
+        public void OnActivate() { }
+        public void OnDeactivate() { }
     }
 }

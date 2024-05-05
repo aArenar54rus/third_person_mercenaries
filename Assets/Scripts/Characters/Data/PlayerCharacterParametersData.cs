@@ -9,6 +9,7 @@ namespace Arenar
     {
         [Space(10), Header("Base Health")]
         [SerializeField] private int defaultHealthMax = 100;
+        [SerializeField] private int levelHealthAdded = 10;
         
         [Space(10), Header("Movement")]
         [Tooltip("Move speed of the character in m/s")]
@@ -65,6 +66,7 @@ namespace Arenar
 
 
         public int DefaultHealthMax => defaultHealthMax;
+        public int LevelHealthAdded => levelHealthAdded;
         
         public float MoveSpeed => moveSpeed;
         public float SprintSpeed => sprintSpeed;

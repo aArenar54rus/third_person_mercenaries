@@ -44,13 +44,19 @@ namespace Arenar.Character
 
         public void DeInitialize()
         {
+            CharacterEntityTarget = null;
+            _characterTargets.Clear();
+            _characterTargets = null;
+        }
+
+        public void OnActivate()
+        {
             _characterTargets.Clear();
             CharacterEntityTarget = null;
         }
 
-        public void OnStart()
+        public void OnDeactivate()
         {
-            _characterTargets.Clear();
             CharacterEntityTarget = null;
         }
 
