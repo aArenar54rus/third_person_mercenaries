@@ -9,11 +9,11 @@ namespace Arenar.Character
     [Serializable]
     public class AddressablesCharacters
     {
-        [SerializeField] private AssetReference _addressablesPlayer;
+        [SerializeField] private string _resourcesPlayerPrefab;
         [SerializeField] private SerializableDictionary<NpcType, CharacterData> _npcCharacterDatas;
 
 
-        public AssetReference AddressablesPlayer => _addressablesPlayer;
+        public string ResourcesPlayerPrefab => _resourcesPlayerPrefab;
         public SerializableDictionary<NpcType, CharacterData> NpcCharacterDatas => _npcCharacterDatas;
 
 
@@ -21,10 +21,10 @@ namespace Arenar.Character
         [Serializable]
         public class CharacterData
         {
-            [SerializeField] private AssetReference _addressablesCharacter;
+            [SerializeField] private string characterPrefabResources;
 
-
-            public AssetReference AddressablesCharacter => _addressablesCharacter;
+            
+            public string CharacterPrefabResources => characterPrefabResources;
         }
     }
 }

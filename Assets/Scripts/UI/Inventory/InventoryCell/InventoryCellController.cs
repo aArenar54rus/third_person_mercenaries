@@ -50,6 +50,7 @@ namespace Arenar.Services.UI
             PlayerInput.Player.Enable();
             CellIndex = cellIndex;
             
+            /*
             var devices =  InputSystem.devices;
             foreach (var device in devices)
             {
@@ -63,6 +64,7 @@ namespace Arenar.Services.UI
                 Debug.Log("devices2 " + device);
                 Debug.Log("devices2 " + device.lastUpdateTime);
             }
+            */
             
             _cellButton.onClick.AddListener(() => onCellClicked?.Invoke(CellIndex));
         }

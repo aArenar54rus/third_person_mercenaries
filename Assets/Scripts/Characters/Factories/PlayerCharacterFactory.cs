@@ -7,7 +7,7 @@ namespace Arenar.Character
 {
     public class PlayerCharacterFactory : ICharacterEntityFactory<ComponentCharacterController>
     {
-        private readonly AssetReference _playerCharacterAddrPath;
+        private readonly string _playerCharacterResourcePath;
         private readonly DiContainer container;
         private readonly TickableManager tickableManager;
         private readonly InitializableManager initializableManager;
@@ -21,7 +21,7 @@ namespace Arenar.Character
             this.container = container;
             this.tickableManager = tickableManager;
             this.initializableManager = initializableManager;
-            _playerCharacterAddrPath = addressablesCharacters.AddressablesPlayer;
+            _playerCharacterResourcePath = addressablesCharacters.ResourcesPlayerPrefab;
         }
         
         
@@ -29,10 +29,10 @@ namespace Arenar.Character
         {
             ComponentCharacterController playerCharacterController = null;
             DiContainer subContainer = container.CreateSubContainer();
-
-            var handle = _playerCharacterAddrPath.InstantiateAsync(parent);
-            handle.WaitForCompletion();
-            playerCharacterController = handle.Result.GetComponent<ComponentCharacterController>();
+            
+            var prefab = Resources.Load<GameObject>(_playerCharacterResourcePath);
+            prefab = GameObject.Instantiate(prefab, parent);
+            playerCharacterController = prefab.GetComponent<ComponentCharacterController>();
 
             InstallPostBindings(subContainer, playerCharacterController);
             subContainer.Inject(playerCharacterController);

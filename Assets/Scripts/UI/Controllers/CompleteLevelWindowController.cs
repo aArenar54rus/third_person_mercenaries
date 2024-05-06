@@ -7,7 +7,7 @@ using Arenar.Services.PlayerInputService;
 using Arenar.Services.SaveAndLoad;
 using TakeTop.PreferenceSystem;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
+using YG;
 using Zenject;
 
 
@@ -28,7 +28,6 @@ namespace Arenar.Services.UI
         private IPreferenceManager _preferenceManager;
         private IUiSoundManager _uiSoundManager;
         private ILocationService _locationService;
-        private ZenjectSceneLoader _sceneLoader;
 
         private PlayerSaveDelegate _playerSaveDelegate;
         private bool _isPlayerLevelMax;
@@ -45,7 +44,6 @@ namespace Arenar.Services.UI
             ICameraService cameraService,
             IUiSoundManager uiSoundManager,
             ILocationService locationService,
-            ZenjectSceneLoader sceneLoader,
             CharacterSpawnController сharacterSpawnController)
             : base(playerInputService)
         {
@@ -54,7 +52,6 @@ namespace Arenar.Services.UI
             _playerCharacterLevelData = playerCharacterLevelData;
             _preferenceManager = preferenceManager;
             _cameraService = cameraService;
-            _sceneLoader = sceneLoader;
             _сharacterSpawnController = сharacterSpawnController;
             _uiSoundManager = uiSoundManager;
             _locationService = locationService;
@@ -111,6 +108,8 @@ namespace Arenar.Services.UI
             _uiSoundManager.PlaySound(UiSoundType.StandartButtonClick);
             if (!_isPlayerLevelMax)
                 UpdateReward(1);
+            
+            YandexGame.Instance._FullscreenShow();
             ReturnInMainMenu();
         }
 
@@ -120,6 +119,8 @@ namespace Arenar.Services.UI
             _completeLevelLayer.CompleteLevelItemRewardsVisualControl.SetXpValue(_lastLevelContext.XpPoints * 3);
             if (!_isPlayerLevelMax)
                 UpdateReward(3);
+            
+            YandexGame.Instance._RewardedShow(0);
             ReturnInMainMenu();
         }
 

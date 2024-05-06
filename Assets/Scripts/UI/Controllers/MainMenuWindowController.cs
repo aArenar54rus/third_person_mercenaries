@@ -4,9 +4,9 @@ using Arenar.Character;
 using Arenar.LocationService;
 using Arenar.Services.PlayerInputService;
 using Arenar.Services.SaveAndLoad;
-using Arenar.SimpleYandexGames;
 using I2.Loc;
 using TakeTop.PreferenceSystem;
+using YG;
 
 
 namespace Arenar.Services.UI
@@ -27,8 +27,10 @@ namespace Arenar.Services.UI
         private IAmbientManager _ambientManager;
         private IUiSoundManager _uiSoundManager;
         private ILocationService _locationService;
-
-        private YandexGames _yandexGames;
+        
+        
+        private YandexGame YGInstance =>
+            YandexGame.Instance;
 
 
         public MainMenuWindowController(IPreferenceManager preferenceManager,
@@ -37,7 +39,6 @@ namespace Arenar.Services.UI
             IPlayerInputService playerInputService,
             IAmbientManager ambientManager,
             IUiSoundManager uiSoundManager,
-            YandexGames yandexGames,
             ILocationService locationService)
             : base(playerInputService)
         {
@@ -47,7 +48,6 @@ namespace Arenar.Services.UI
             _ambientManager = ambientManager;
             _uiSoundManager = uiSoundManager;
             _cameraService = cameraService;
-            _yandexGames = yandexGames;
             _locationService = locationService;
         }
         
@@ -123,8 +123,7 @@ namespace Arenar.Services.UI
         private void OnRateUsButtonClick()
         {
             _uiSoundManager.PlaySound(UiSoundType.StandartButtonClick);
-            //_yandexGames.
-            // web rate us
+            YGInstance._ReviewShow(true);
         }
 
         protected override void OnWindowShowEnd_SelectElements()

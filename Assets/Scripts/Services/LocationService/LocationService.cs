@@ -6,17 +6,21 @@ using Zenject;
 
 namespace Arenar.LocationService
 {
-    public class LocationService : ILocationService
+    public class LocationService : ILocationService, ITickable
     {
         private ZenjectSceneLoader _zenjectSceneLoader;
         
         private List<LocationName> _loadedLocation = new List<LocationName>();
         private LocationName _lastLoadedLocation;
 
+        private LocationName _needToUnloadLocationName;
 
-        public LocationService(ZenjectSceneLoader zenjectSceneLoader)
+
+        public LocationService(ZenjectSceneLoader zenjectSceneLoader,
+            TickableManager tickableManager)
         {
             _zenjectSceneLoader = zenjectSceneLoader;
+            tickableManager.Add(this);
         }
         
         
@@ -27,10 +31,11 @@ namespace Arenar.LocationService
                 Debug.LogError($"Location {locationName} load early!");
                 return;
             }
-            
+
             _loadedLocation.Add(locationName);
             _lastLoadedLocation = locationName;
-            _zenjectSceneLoader.LoadScene(_lastLoadedLocation.ToString(), LoadSceneMode.Additive);
+            SceneManager.LoadScene(_lastLoadedLocation.ToString(), LoadSceneMode.Additive);
+            //_zenjectSceneLoader.LoadScene(_lastLoadedLocation.ToString(), LoadSceneMode.Additive);
         }
 
         public void UnloadLastLoadedLocation()
@@ -46,17 +51,26 @@ namespace Arenar.LocationService
                 return;
             }
             
-            _loadedLocation.Remove(locationName);
-            if (_loadedLocation.Count > 0)
-                _lastLoadedLocation = _loadedLocation[^1];
-
-            SceneManager.UnloadSceneAsync(locationName.ToString());
+            _needToUnloadLocationName = locationName;
         }
 
         public void ChangeLoadedScene(LocationName newLocationName)
         {
             UnloadLastLoadedLocation();
             LoadLocation(newLocationName);
+        }
+
+        public void Tick()
+        {
+            if (_needToUnloadLocationName == LocationName.None)
+                return;
+            
+            _loadedLocation.Remove(_needToUnloadLocationName);
+            if (_loadedLocation.Count > 0)
+                _lastLoadedLocation = _loadedLocation[^1];
+
+            SceneManager.UnloadScene(_needToUnloadLocationName.ToString());
+            _needToUnloadLocationName = LocationName.None;
         }
     }
 }

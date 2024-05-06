@@ -9,7 +9,7 @@ namespace Arenar.Character
 {
     public class ShootingGalleryTargetFactory : ICharacterEntityFactory<ShootingGalleryTargetCharacterController>
     {
-        private readonly AddressablesCharacters.CharacterData _characterData;
+        private readonly string _characterResourcePath;
         private readonly DiContainer _container;
         
         private TickableManager _tickableManager;
@@ -24,7 +24,7 @@ namespace Arenar.Character
             _container = container;
             _tickableManager = tickableManager;
             _initializableManager = initializableManager;
-            _characterData = addressablesCharacters.NpcCharacterDatas[NpcType.ShootingGalleryTarget];
+            _characterResourcePath = addressablesCharacters.NpcCharacterDatas[NpcType.ShootingGalleryTarget].CharacterPrefabResources;
         }
         
 
@@ -35,9 +35,10 @@ namespace Arenar.Character
             var subContainer = _container.CreateSubContainer();
             InstallPreBindings(subContainer);
 
-            var handle = _characterData.AddressablesCharacter.InstantiateAsync(parent);
-            handle.WaitForCompletion();
-            characterController = handle.Result.GetComponent<ShootingGalleryTargetCharacterController>();
+                        
+            var prefab = Resources.Load<GameObject>(_characterResourcePath);
+            prefab = GameObject.Instantiate(prefab, parent);
+            characterController = prefab.GetComponent<ShootingGalleryTargetCharacterController>();
 
             InstallPostBindings(subContainer, characterController);
             subContainer.Inject(characterController);
