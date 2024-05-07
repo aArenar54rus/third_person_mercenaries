@@ -20,6 +20,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Level_ShootingGallery_3.unity
     guid: 64b223a1e8ebb6a48bbc2c4e118d77d3
+  - enabled: 1
+    path: Assets/Scenes/Level_ShootingGallery_4.unity
+    guid: 9f3397df99c24f449abc5c957ebb1476
+  - enabled: 1
+    path: Assets/Scenes/Level_ShootingGallery_5.unity
+    guid: 77060513192ecc64a93c2a986769633a
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: 96e301efbe0f3574c866d17bbecf2414,
       type: 2}

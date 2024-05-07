@@ -97,7 +97,8 @@ namespace Arenar.Character
 
             _levelsService.CurrentLevelContext.SettedDamage += damageData.Damage;
             Health -= damageData.Damage;
-            _damageNumbersService.PlayDamageNumber(damageData.Damage, _characterRigidbody.transform, damageData.DamageSetterCharacter.CharacterTransform);
+            if (_damageNumbersService != null && _characterRigidbody != null)
+                _damageNumbersService.PlayDamageNumber(damageData.Damage, _characterRigidbody.transform, damageData.DamageSetterCharacter.CharacterTransform);
             OnCharacterGetDamageBy?.Invoke(damageData.DamageSetterCharacter);
             
             if (Health <= 0)

@@ -1,6 +1,8 @@
 using System;
 using Arenar.Services.InventoryService;
+using Arenar.Services.SaveAndLoad;
 using DG.Tweening;
+using TakeTop.PreferenceSystem;
 using UnityEngine;
 using Zenject;
 
@@ -22,6 +24,8 @@ namespace Arenar.Character
         
         private ICharacterInputComponent characterInputComponent;
         private ICharacterAimComponent characterAimComponent;
+        private IPreferenceManager preferenceManager;
+        
         private FirearmWeaponFactory firearmWeaponFactory;
         private ICharacterAnimationComponent<CharacterAnimationComponent.Animation, CharacterAnimationComponent.AnimationValue> characterAnimationComponent;
         
@@ -72,6 +76,7 @@ namespace Arenar.Character
                               TickableManager tickableManager,
                               IInventoryService inventoryService,
                               FirearmWeaponFactory firearmWeaponFactory,
+                              IPreferenceManager preferenceManager,
                               ICharacterDataStorage<CharacterPhysicsDataStorage> characterPhysicsDataStorage,
                               ICharacterDataStorage<CharacterAimAnimationDataStorage> characterAimAnimationDataStorage,
                               ICharacterDataStorage<CharacterAnimatorDataStorage> characterAnimatorDataStorage)
@@ -80,6 +85,7 @@ namespace Arenar.Character
             this.tickableManager = tickableManager;
             this.inventoryService = inventoryService;
             this.firearmWeaponFactory = firearmWeaponFactory;
+            this.preferenceManager = preferenceManager;
 
             characterPhysicsData = characterPhysicsDataStorage.Data;
             characterAimAnimationData = characterAimAnimationDataStorage.Data;
@@ -242,6 +248,9 @@ namespace Arenar.Character
             {
                 firearmWeapon = firearmWeaponFactory.Create(equippedWeapon, characterPhysicsData.RightHandPoint);
                 firearmWeapon.TakeWeaponInHand(character);
+                
+                int playerLevel = preferenceManager.LoadValue<PlayerSaveDelegate>().playerCharacterLevel;
+                firearmWeapon.SetWeaponLevel(playerLevel);
                 characterAnimationComponent.SetAnimationValue(CharacterAnimationComponent.AnimationValue.HandPistol, 1);
                 
                 onUpdateWeaponClipSize?.Invoke(firearmWeapon.ClipSize, firearmWeapon.ClipSizeMax);

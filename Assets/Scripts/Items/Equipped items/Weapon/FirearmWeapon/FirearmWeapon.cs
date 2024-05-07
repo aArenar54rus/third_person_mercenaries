@@ -22,6 +22,10 @@ namespace Arenar
         private Tween _timeBetweenShotsTween;
 
         private bool _isBetweenShotsLock = false;
+        
+        private int _defaultDamage;
+        private int _minDamage;
+        private int _maxDamage;
 
 
         public Transform GunMuzzleTransform =>
@@ -31,7 +35,17 @@ namespace Arenar
         
         public int ItemLevel { get; protected set; }
 
-        public float Damage { get; protected set; }
+        public float Damage
+        { 
+            get
+            {
+                int damage = _defaultDamage;
+                for (int i = 0; i < ItemLevel; i++)
+                    damage += Random.Range(_minDamage, _maxDamage);
+
+                return damage;
+            } 
+        }
 
         public float ReloadSpeed { get; protected set; }
 
@@ -59,9 +73,12 @@ namespace Arenar
 
         private Vector3 RecoilShakeDirection =>
             new Vector3(Random.Range(-1.0f, 1.0f), 1.0f, 0.0f) / 100.0f * firearmWeaponData.RecoilShakeDefaultValue;
-        
-        private float BulletPhysicalMight { get; set; }
 
+        private float BulletPhysicalMight
+        {
+            get;
+            set;
+        } = 0;
 
         public void ReloadClip(bool isFull)
         {
@@ -88,13 +105,24 @@ namespace Arenar
             }
             
             ItemInventoryData = itemInventoryData;
-            Damage = CalculateWeaponDamage();
+            
             ClipSizeMax = GetClipSizeMax();
             ClipSize = ClipSizeMax;
+            
             BulletPhysicalMight = itemInventoryData.BulletPhysicalMight;
+            
+            _defaultDamage = (int)itemInventoryData.DefaultDamage;
+            _minDamage = (int)itemInventoryData.BulletLevelMinDamage;
+            _maxDamage = (int)itemInventoryData.BulletLevelMaxDamage;
+            
             ProjectileSpeed = GetProjectileSpeed();
             ReloadSpeed = firearmWeaponData.DefaultReloadSpeed;
             TimeBetweenShots = firearmWeaponData.TimeBetweenShots;
+        }
+
+        public void SetWeaponLevel(int level)
+        {
+            ItemLevel = level;
         }
 
         public void TakeWeaponInHand(ICharacterEntity weaponOwner)
@@ -142,14 +170,6 @@ namespace Arenar
         {
             if (lineRendererEffect != null)
                 lineRendererEffect.SetPosition(1, position);
-        }
-
-        protected virtual float CalculateWeaponDamage()
-        {
-            float multiplierByLevel = Mathf.Clamp(firearmWeaponData.DamageMultiplierByItemLevel * ItemLevel, 1, float.MaxValue);
-            return firearmWeaponData.BaseDamage
-                   * multiplierByLevel
-                   * firearmWeaponData.ItemDamageMultiplierByRarity[ItemInventoryData.ItemRarity];
         }
 
         protected virtual void InitializeBullets(Vector3 direction)
