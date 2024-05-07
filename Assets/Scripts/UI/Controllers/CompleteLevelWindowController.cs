@@ -155,11 +155,11 @@ namespace Arenar.Services.UI
                         MainMenuWindow>
                     (true, true, () =>
                     {
+                        _сharacterSpawnController.DisableAllCharacters();
                         _locationService.UnloadLastLoadedLocation();
                         _locationService.LoadLocation(LocationName.MainMenuLocation);
                         
                         _cameraService.SetCameraState<CameraStateMainMenu>(null, null);
-                        _сharacterSpawnController.DisableAllCharacters();
                     });
         }
         

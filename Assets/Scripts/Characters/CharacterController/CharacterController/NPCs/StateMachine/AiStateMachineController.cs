@@ -19,6 +19,8 @@ namespace Arenar.Character
 	    private IAIState stateToSwitch;
 
 	    private Task asyncUpdateTask;
+	    
+	    private bool _isActiveAsync;
 
 	    protected Vector3 MoveDirection { get; set; }
 
@@ -29,6 +31,12 @@ namespace Arenar.Character
 				ICharacterEntity characterEntity,
 				IAIState[] aiStates)
 		{
+			#if UNITY_WEBGL
+			_isActiveAsync = false;
+			#else
+			_isActiveAsync = true;
+			#endif
+			
 			this.characterEntity = characterEntity;
 
 			aiInitedStates = new Dictionary<Type, IAIState>();
@@ -65,8 +73,11 @@ namespace Arenar.Character
 			foreach (IAIState state in aiInitedStates.Values)
 				state?.DeInitialize();
 
-			asyncUpdateTask.Wait();
-			asyncUpdateTask.Dispose();
+			if (_isActiveAsync)
+			{
+				asyncUpdateTask.Wait();
+				asyncUpdateTask.Dispose();
+			}
 		}
 
 		private void HandleBaseLogic()
@@ -119,8 +130,11 @@ namespace Arenar.Character
 
 		private void HandleCurrentStateUpdate()
 		{
-			asyncUpdateTask = Task.Factory.StartNew(CurrentStateAsyncUpdate,
-				CancellationToken.None, TaskCreationOptions.AttachedToParent, TaskScheduler.Default);
+			if (_isActiveAsync)
+			{
+				asyncUpdateTask = Task.Factory.StartNew(CurrentStateAsyncUpdate,
+					CancellationToken.None, TaskCreationOptions.AttachedToParent, TaskScheduler.Default);
+			}
 
 			currentState.OnStateSyncUpdate();
 
