@@ -27,10 +27,6 @@ namespace Arenar.Services.UI
         private IAmbientManager _ambientManager;
         private IUiSoundManager _uiSoundManager;
         private ILocationService _locationService;
-        
-        
-        private YandexGame YGInstance =>
-            YandexGame.Instance;
 
 
         public MainMenuWindowController(IPreferenceManager preferenceManager,
@@ -86,8 +82,14 @@ namespace Arenar.Services.UI
         private void InitMainMenuPlayerInformationLayer()
         {
             _mainMenuPlayerInfoLayer = _mainMenuWindow.GetWindowLayer<MainMenuPlayerInformationLayer>();
-
-            _mainMenuPlayerInfoLayer.NickNameText.text = "Player";
+            if (YandexGame.auth)
+            {
+                _mainMenuPlayerInfoLayer.NickNameText.text = YandexGame.playerName;
+            }
+            else
+            {
+                _mainMenuPlayerInfoLayer.NickNameText.text = "";
+            }
         }
 
         private void OnNewChallengeButtonClick()
@@ -123,7 +125,7 @@ namespace Arenar.Services.UI
         private void OnRateUsButtonClick()
         {
             _uiSoundManager.PlaySound(UiSoundType.StandartButtonClick);
-            YGInstance._ReviewShow(true);
+            YandexGame.ReviewShow(true);
         }
 
         protected override void OnWindowShowEnd_SelectElements()

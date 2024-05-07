@@ -9,7 +9,7 @@ namespace Arenar.Character
         private const float THRESHOLD = 0.01f;
         
         
-        private ICharacterEntity character;
+        private ICharacterEntity _character;
         private CharacterPhysicsDataStorage characterPhysicsDataStorage;
         private PlayerCharacterParametersData _playerCharacterParametersData;
         private TickableManager tickableManager;
@@ -40,14 +40,15 @@ namespace Arenar.Character
         // camera
         private float cinemachineTargetYaw;
         private float cinemachineTargetPitch;
+
+        private ICharacterAimComponent _aimComponent;
         
         // rotate
         private bool IsRotateOnMove =>
-            !characterInputComponent.AimAction;
-        
+            !AimComponent.IsAim;
 
-        private Transform characterTransform =>
-            character.CharacterTransform;
+        private Transform CharacterTransform =>
+            _character.CharacterTransform;
 
         private PlayerInput PlayerInputs
         {
@@ -62,6 +63,16 @@ namespace Arenar.Character
         private Vector3 InputDirection =>
             new Vector3(characterInputComponent.MoveAction.x, 0.0f, characterInputComponent.MoveAction.y).normalized;
 
+        private ICharacterAimComponent AimComponent
+        {
+            get
+            {
+                if (_aimComponent == null)
+                    _character.TryGetCharacterComponent<ICharacterAimComponent>(out _aimComponent);
+                return _aimComponent;
+            }
+        }
+
         
         [Inject]
         public void Construct(ICharacterEntity character,
@@ -71,19 +82,19 @@ namespace Arenar.Character
                               PlayerCharacterParametersData playerCharacterParametersData)
         {
             mainCamera = camera;
-            this.character = character;
-            this._playerCharacterParametersData = playerCharacterParametersData;
+            _character = character;
+            _playerCharacterParametersData = playerCharacterParametersData;
             this.tickableManager = tickableManager;
             this.characterPhysicsDataStorage = characterPhysicsDataStorage.Data;
         }
 
         public void Initialize()
         {
-            character.TryGetCharacterComponent<ICharacterLiveComponent>(out characterLiveComponent);
-            character.TryGetCharacterComponent<ICharacterRayCastComponent>(out characterRayCastComponent);
-            character.TryGetCharacterComponent<ICharacterInputComponent>(out characterInputComponent);
+            _character.TryGetCharacterComponent<ICharacterLiveComponent>(out characterLiveComponent);
+            _character.TryGetCharacterComponent<ICharacterRayCastComponent>(out characterRayCastComponent);
+            _character.TryGetCharacterComponent<ICharacterInputComponent>(out characterInputComponent);
             
-            if (character.TryGetCharacterComponent<ICharacterAnimationComponent>(out ICharacterAnimationComponent animComponent))
+            if (_character.TryGetCharacterComponent<ICharacterAnimationComponent>(out ICharacterAnimationComponent animComponent))
             {
                 if (animComponent is CharacterAnimationComponent characterAnimationComponent)
                     this.characterAnimationComponent = characterAnimationComponent;
@@ -201,22 +212,22 @@ namespace Arenar.Character
                 
                 targetRotation = Mathf.Atan2(InputDirection.x, InputDirection.z) * Mathf.Rad2Deg +
                                  mainCamera.transform.eulerAngles.y;
-                float rotation = Mathf.SmoothDampAngle(characterTransform.eulerAngles.y, targetRotation,
+                float rotation = Mathf.SmoothDampAngle(CharacterTransform.eulerAngles.y, targetRotation,
                     ref rotationVelocity,
                     _playerCharacterParametersData.RotationSmoothTime);
 
                 // rotate to face input direction relative to camera position
-                characterTransform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
+                CharacterTransform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
             }
             else
             {
                 targetRotation = mainCamera.transform.eulerAngles.y;
 
-                float rotation = Mathf.SmoothDampAngle(characterTransform.eulerAngles.y, targetRotation,
+                float rotation = Mathf.SmoothDampAngle(CharacterTransform.eulerAngles.y, targetRotation,
                     ref rotationVelocity,
                     _playerCharacterParametersData.RotationSmoothTime);
                 
-                characterTransform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
+                CharacterTransform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
             }
         }
 
@@ -237,7 +248,7 @@ namespace Arenar.Character
                     verticalVelocity = -2f;
                 
                 // Jump
-                if (characterInputComponent.JumpAction && jumpTimeoutDelta <= 0.0f)
+                if (_playerCharacterParametersData.CanJump && characterInputComponent.JumpAction && jumpTimeoutDelta <= 0.0f)
                 {
                     // the square root of H * -2 * G = how much velocity needed to reach desired height
                     verticalVelocity = Mathf.Sqrt(_playerCharacterParametersData.JumpHeight * -2f * _playerCharacterParametersData.Gravity);
@@ -304,7 +315,7 @@ namespace Arenar.Character
 
         private float GetSensitivity()
         {
-            if (characterInputComponent.AimAction)
+            if (AimComponent.IsAim)
                 return _playerCharacterParametersData.AimCameraSensitivity;
             else return _playerCharacterParametersData.DefaultCameraSensitivity;
         }

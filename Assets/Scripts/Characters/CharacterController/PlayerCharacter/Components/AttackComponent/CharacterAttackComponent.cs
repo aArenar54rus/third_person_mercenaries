@@ -131,7 +131,7 @@ namespace Arenar.Character
                 return;
             }
 
-            if (!CharacterInputComponent.AimAction)
+            if (!CharacterAimComponent.IsAim)
             {
                 TryMakeMeleeAttack();
             }
@@ -214,7 +214,7 @@ namespace Arenar.Character
             if (!IsFirearmWeaponEquipped)
                 return;
             
-            if (CharacterInputComponent.AimAction && !_lockAction && CharacterAimComponent.IsAim && CharacterAimComponent.AimProgress >= 1)
+            if (!_lockAction && CharacterAimComponent.IsAim && CharacterAimComponent.AimProgress >= 1)
             {
                 firearmWeapon.SetLaserStatus(true);
                 firearmWeapon.SetLaserPosition(characterAimAnimationData.BodyPistolAimPointObject.position);

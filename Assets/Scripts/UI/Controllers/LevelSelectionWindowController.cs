@@ -3,12 +3,15 @@ using Arenar.Services.LevelsService;
 using Arenar.Services.PlayerInputService;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 
 namespace Arenar.Services.UI
 {
     public class LevelSelectionWindowController : CanvasWindowController
     {
+        private const int ADDED_WIGHT = 50;
+        
         private ILevelsService _levelsService;
         private LevelSelectionWindow _levelSelectionWindow;
 
@@ -16,6 +19,7 @@ namespace Arenar.Services.UI
         private GameMode _currentGameMode;
         private LevelDifficult _levelDifficult;
 
+        private ICanvasService _canvasService;
         private IAmbientManager _ambientManager;
         private IUiSoundManager _uiSoundManager;
 
@@ -32,13 +36,15 @@ namespace Arenar.Services.UI
         public LevelSelectionWindowController(ILevelsService levelsService,
             IPlayerInputService playerInputService,
             IUiSoundManager uiSoundManager,
-            IAmbientManager ambientManager)
+            IAmbientManager ambientManager,
+            ICanvasService canvasService)
             : base(playerInputService)
         {
             _playerInputService = playerInputService;
             _levelsService = levelsService;
             _uiSoundManager = uiSoundManager;
             _ambientManager = ambientManager;
+            _canvasService = canvasService;
         }
 
         
@@ -101,8 +107,27 @@ namespace Arenar.Services.UI
                 
                 _levelSelectionButtonVisuals[i].Initialize(_levelsService.LevelDatas[i], OnSelectLevel);
             }
-        }
 
+            ChangeContainerWidth();
+            
+            
+            void ChangeContainerWidth()
+            {
+                float levelSelectionButtonLenght =
+                    _levelSelectionButtonVisuals[0].GetComponent<RectTransform>().rect.width;
+
+                float spacing = LevelSelectionLayer.LevelButtonsContainer.GetComponent<HorizontalLayoutGroup>().spacing;
+
+                float width = levelSelectionButtonLenght * _levelSelectionButtonVisuals.Length
+                              + spacing * (_levelSelectionButtonVisuals.Length - 1) + ADDED_WIGHT;
+                width *= _canvasService.RootCanvas.scaleFactor;
+
+                RectTransform levelButtonsContainerTransform =
+                    LevelSelectionLayer.LevelButtonsContainer.GetComponent<RectTransform>();
+                levelButtonsContainerTransform.sizeDelta = new Vector2(width, levelButtonsContainerTransform.sizeDelta.y);
+            }
+        }
+        
         private void InitLevelDifficultLayer()
         {
             foreach (LevelDifficultButton levelDifficultButton in LevelDifficultLayer.LevelDifficultButtons)

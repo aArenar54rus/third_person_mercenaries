@@ -32,6 +32,7 @@ namespace Arenar
         [SerializeField] private float bottomClamp = -30.0f;
         
         [Space(5)]
+        [SerializeField] private bool canJump = false;
         [Tooltip("The height the player can jump")]
         [SerializeField] private float jumpHeight = 1.2f;
         [Tooltip("The character uses its own gravity value.")]
@@ -78,6 +79,7 @@ namespace Arenar
         public float AimCameraSensitivity => aimCameraSensitivity;
         
         
+        public bool CanJump => canJump;
         public float JumpHeight => jumpHeight;
         public float Gravity => gravity;
         public float JumpTimeout =>jumpTimeout;

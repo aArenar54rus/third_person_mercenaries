@@ -1,7 +1,7 @@
 using Arenar.Options;
 using DG.Tweening;
-using I2.Loc;
-//using Arenar.SimpleYandexGames;
+using UnityEngine;
+using YG;
 
 namespace Arenar.Services.Localization
 {
@@ -9,9 +9,7 @@ namespace Arenar.Services.Localization
     {
         private Tween _loadingYandexLangTween;
 
-        //[Inject] private YandexGames yandexGames;
 
-        
         public I2LocalizationYandexService(IOptionsController optionsController) : base(optionsController)
         {
             _optionsController = optionsController;
@@ -22,20 +20,18 @@ namespace Arenar.Services.Localization
 
         public override void Initialize()
         {
-            _languages = LocalizationManager.GetAllLanguages(true).ToArray();
-            
+            base.Initialize();
             _loadingYandexLangTween =
-                DOVirtual.DelayedCall(0.1f, YandexLoadingLanguage)
-                    .SetLoops(-1);
+                DOVirtual.DelayedCall(0.1f, YandexLoadingLanguage);
         }
         
         private void YandexLoadingLanguage()
         {
-            /*while (!yandexGames.IsInitialized)
-                yield return null;
-            
-            var currentLanguageKey = yandexGames.CurrentLanguage;
-            SetLanguage(currentLanguageKey); */
+            CurrentLanguage = YandexGame.lang;
+            YandexGame.SwitchLangEvent += (languageName) =>
+            {
+                CurrentLanguage = languageName;
+            };
         }
     }
 }

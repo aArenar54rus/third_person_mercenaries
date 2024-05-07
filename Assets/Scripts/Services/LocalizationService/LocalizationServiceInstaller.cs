@@ -6,7 +6,7 @@ public class LocalizationServiceInstaller : MonoInstaller
 {
     public override void InstallBindings()
     {
-        # if UNITY_WEBGL_YANDEX
+        # if YG_PLUGIN_YANDEX_GAME
         Container.Bind<ILocalizationService>()
             .To<I2LocalizationYandexService>()
             .AsSingle()

@@ -374,17 +374,26 @@ MonoBehaviour:
       - 
       Flags: 000000
       Languages_Touch: []
+    - Term: loc_key_level_selection
+      TermType: 0
+      Description: 
+      Languages:
+      - Level selection
+      - "\u0412\u044B\u0431\u043E\u0440 \u0443\u0440\u043E\u0432\u043D\u044F"
+      - 
+      Flags: 000000
+      Languages_Touch: []
     CaseInsensitiveTerms: 0
     OnMissingTranslation: 1
     mTerm_AppName: 
     mLanguages:
-    - Name: English
+    - Name: en
       Code: en
       Flags: 0
-    - Name: Russian
+    - Name: ru
       Code: ru
       Flags: 0
-    - Name: Turkish
+    - Name: tr
       Code: tr
       Flags: 0
     IgnoreDeviceLanguage: 0

@@ -103,6 +103,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "AimContinue",
+                    "type": "Button",
+                    "id": "9c72e2bd-cc0f-4733-8796-4e402e8b5f29",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -422,6 +431,17 @@
                     "processors": "",
                     "groups": "PS4 Controller;Xbox Controller;Gamepad",
                     "action": "CharacterInformationMenu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d71a7946-a7eb-4a20-884f-516064d7fdb7",
+                    "path": "<Mouse>/middleButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "AimContinue",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

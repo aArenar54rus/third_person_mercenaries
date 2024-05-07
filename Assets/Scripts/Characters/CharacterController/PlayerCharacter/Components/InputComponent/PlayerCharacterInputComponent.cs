@@ -37,6 +37,9 @@ namespace Arenar.Character
         public bool ReloadAction =>
             PlayerInput.Player.Reload.WasPressedThisFrame();
 
+        public bool AimContinueAction =>
+            PlayerInput.Player.AimContinue.WasPressedThisFrame();
+
 
         [Inject]
         public void Construct(IPlayerInputService playerInputService)

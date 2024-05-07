@@ -7,7 +7,7 @@ namespace Arenar.Services.Localization
 {
     public class I2LocalizationService : ILocalizationService
     {
-        private const string DEFAULT_LANGUAGE = "English";
+        private const string DEFAULT_LANGUAGE = "en";
         
         
         protected string[] _languages;
@@ -28,9 +28,6 @@ namespace Arenar.Services.Localization
             get => _languageOptions.LanguageKey;
             set
             {
-                if (_languageOptions.LanguageKey == value)
-                    return;
-
                 for (int i = 0; i < _languages.Length; i++)
                 {
                     if (_languages[i] != value)

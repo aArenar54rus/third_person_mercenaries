@@ -16,8 +16,15 @@ namespace Arenar.Character
         
         private ICharacterInputComponent _inputComponent;
 
+        private bool _isAim = false;
+        private bool _isAimContinue = false;
 
-        public bool IsAim { get; private set; } = false;
+
+        public bool IsAim
+        {
+            get => _isAim || _isAimContinue;
+            private set => _isAim = value;
+        }
 
         public float AimProgress { get; private set; } = 0.0f;
         
@@ -63,11 +70,14 @@ namespace Arenar.Character
         {
             AnimationAimProcess();
             
+            if (_inputComponent.AimContinueAction)
+                _isAimContinue = !_isAimContinue;
+            
             if (_inputComponent.AimAction == IsAim)
                 return;
 
             IsAim = _inputComponent.AimAction;
-
+            
             cameraService.SetCinemachineVirtualCamera(IsAim
                 ? CinemachineCameraType.AimTPS
                 : CinemachineCameraType.DefaultTPS);
