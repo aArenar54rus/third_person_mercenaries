@@ -92,67 +92,65 @@ MonoBehaviour:
     - Key: 3
       Value:
       - activateTime: 0
-        _pathPointIndexes: 
+        _pathPointIndexes: 0d0000001b000000
       - activateTime: 0
-        _pathPointIndexes: 
+        _pathPointIndexes: 0a00000019000000
       - activateTime: 0
-        _pathPointIndexes: 
+        _pathPointIndexes: 0800000017000000
+      - activateTime: 4
+        _pathPointIndexes: 0700000015000000
+      - activateTime: 4
+        _pathPointIndexes: 0500000010000000
+      - activateTime: 4
+        _pathPointIndexes: 030000000e000000
+      - activateTime: 6
+        _pathPointIndexes: 0100000013000000
+      - activateTime: 8
+        _pathPointIndexes: 020000001700000014000000
+      - activateTime: 10
+        _pathPointIndexes: 040000001000000011000000
+      - activateTime: 12
+        _pathPointIndexes: 0600000018000000
+      - activateTime: 15
+        _pathPointIndexes: 0700000015000000
+      - activateTime: 15
+        _pathPointIndexes: 0d0000001b000000
+      - activateTime: 15
+        _pathPointIndexes: 0800000016000000
+      - activateTime: 15
+        _pathPointIndexes: 030000000e000000
       - activateTime: 0
-        _pathPointIndexes: 
-      - activateTime: 0
-        _pathPointIndexes: 
-      - activateTime: 0
-        _pathPointIndexes: 
-      - activateTime: 0
-        _pathPointIndexes: 
-      - activateTime: 0
-        _pathPointIndexes: 
-      - activateTime: 0
-        _pathPointIndexes: 
-      - activateTime: 0
-        _pathPointIndexes: 
-      - activateTime: 0
-        _pathPointIndexes: 
-      - activateTime: 0
-        _pathPointIndexes: 
-      - activateTime: 0
-        _pathPointIndexes: 
-      - activateTime: 0
-        _pathPointIndexes: 
-      - activateTime: 0
-        _pathPointIndexes: 
-      - activateTime: 0
-        _pathPointIndexes: 
+        _pathPointIndexes: 0500000018000000
     - Key: 4
       Value:
       - activateTime: 0
-        _pathPointIndexes: 
+        _pathPointIndexes: 000000001600000011000000
       - activateTime: 0
-        _pathPointIndexes: 
-      - activateTime: 0
-        _pathPointIndexes: 
-      - activateTime: 0
-        _pathPointIndexes: 
-      - activateTime: 0
-        _pathPointIndexes: 
-      - activateTime: 0
-        _pathPointIndexes: 
-      - activateTime: 0
-        _pathPointIndexes: 
-      - activateTime: 0
-        _pathPointIndexes: 
-      - activateTime: 0
-        _pathPointIndexes: 
-      - activateTime: 0
-        _pathPointIndexes: 
-      - activateTime: 0
-        _pathPointIndexes: 
-      - activateTime: 0
-        _pathPointIndexes: 
-      - activateTime: 0
-        _pathPointIndexes: 
-      - activateTime: 0
-        _pathPointIndexes: 
-      - activateTime: 0
-        _pathPointIndexes: 
+        _pathPointIndexes: 06000000120000000f000000
+      - activateTime: 5
+        _pathPointIndexes: 01000000130000001d000000
+      - activateTime: 5
+        _pathPointIndexes: 05000000140000001e000000
+      - activateTime: 5
+        _pathPointIndexes: 070000000a0000000e000000
+      - activateTime: 9
+        _pathPointIndexes: 030000001a000000
+      - activateTime: 9
+        _pathPointIndexes: 0600000018000000
+      - activateTime: 12
+        _pathPointIndexes: 080000000a000000
+      - activateTime: 15
+        _pathPointIndexes: 0300000015000000120000000f000000
+      - activateTime: 15
+        _pathPointIndexes: 0b000000140000000a0000000d000000
+      - activateTime: 15
+        _pathPointIndexes: 090000000c0000000e000000
+      - activateTime: 20
+        _pathPointIndexes: 080000001b000000
+      - activateTime: 20
+        _pathPointIndexes: 090000001a000000
+      - activateTime: 23
+        _pathPointIndexes: 08000000120000000f000000
+      - activateTime: 23
+        _pathPointIndexes: 070000000a0000001e000000
   _levelTime: 60
