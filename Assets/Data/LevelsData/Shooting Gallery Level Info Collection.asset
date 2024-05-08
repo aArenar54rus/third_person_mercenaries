@@ -40,11 +40,119 @@ MonoBehaviour:
     - Key: 1
       Value:
       - activateTime: 0
-        _pathPointIndexes: 0200000014000000
+        _pathPointIndexes: 02000000120000001d000000
+      - activateTime: 1
+        _pathPointIndexes: 040000001400000020000000
+      - activateTime: 5
+        _pathPointIndexes: 0c0000001a00000025000000
+      - activateTime: 6
+        _pathPointIndexes: 0a0000001600000022000000
+      - activateTime: 9
+        _pathPointIndexes: 0300000011000000
+      - activateTime: 9
+        _pathPointIndexes: 0900000016000000
+      - activateTime: 9
+        _pathPointIndexes: 0d0000001a000000
+      - activateTime: 13
+        _pathPointIndexes: 010000000f0000001c000000
+      - activateTime: 13
+        _pathPointIndexes: 05000000130000001e000000
+      - activateTime: 13
+        _pathPointIndexes: 080000001600000022000000
+      - activateTime: 13
+        _pathPointIndexes: 0b0000001800000023000000
+      - activateTime: 15
+        _pathPointIndexes: 0c0000001b00000029000000
     - Key: 2
-      Value: []
+      Value:
+      - activateTime: 0
+        _pathPointIndexes: 00000000100000001c000000
+      - activateTime: 0
+        _pathPointIndexes: 0d0000001900000020000000
+      - activateTime: 0
+        _pathPointIndexes: 07000000150000001e000000
+      - activateTime: 5
+        _pathPointIndexes: 03000000120000001f000000
+      - activateTime: 5
+        _pathPointIndexes: 09000000150000001e000000
+      - activateTime: 5
+        _pathPointIndexes: 0b000000180000001c000000
+      - activateTime: 11
+        _pathPointIndexes: 0a00000019000000
+      - activateTime: 11
+        _pathPointIndexes: 0800000016000000
+      - activateTime: 11
+        _pathPointIndexes: 0400000011000000
+      - activateTime: 17
+        _pathPointIndexes: 09000000160000001d000000
+      - activateTime: 17
+        _pathPointIndexes: 050000001300000020000000
+      - activateTime: 17
+        _pathPointIndexes: 0d0000001b000000
     - Key: 3
-      Value: []
+      Value:
+      - activateTime: 0
+        _pathPointIndexes: 
+      - activateTime: 0
+        _pathPointIndexes: 
+      - activateTime: 0
+        _pathPointIndexes: 
+      - activateTime: 0
+        _pathPointIndexes: 
+      - activateTime: 0
+        _pathPointIndexes: 
+      - activateTime: 0
+        _pathPointIndexes: 
+      - activateTime: 0
+        _pathPointIndexes: 
+      - activateTime: 0
+        _pathPointIndexes: 
+      - activateTime: 0
+        _pathPointIndexes: 
+      - activateTime: 0
+        _pathPointIndexes: 
+      - activateTime: 0
+        _pathPointIndexes: 
+      - activateTime: 0
+        _pathPointIndexes: 
+      - activateTime: 0
+        _pathPointIndexes: 
+      - activateTime: 0
+        _pathPointIndexes: 
+      - activateTime: 0
+        _pathPointIndexes: 
+      - activateTime: 0
+        _pathPointIndexes: 
     - Key: 4
-      Value: []
+      Value:
+      - activateTime: 0
+        _pathPointIndexes: 
+      - activateTime: 0
+        _pathPointIndexes: 
+      - activateTime: 0
+        _pathPointIndexes: 
+      - activateTime: 0
+        _pathPointIndexes: 
+      - activateTime: 0
+        _pathPointIndexes: 
+      - activateTime: 0
+        _pathPointIndexes: 
+      - activateTime: 0
+        _pathPointIndexes: 
+      - activateTime: 0
+        _pathPointIndexes: 
+      - activateTime: 0
+        _pathPointIndexes: 
+      - activateTime: 0
+        _pathPointIndexes: 
+      - activateTime: 0
+        _pathPointIndexes: 
+      - activateTime: 0
+        _pathPointIndexes: 
+      - activateTime: 0
+        _pathPointIndexes: 
+      - activateTime: 0
+        _pathPointIndexes: 
+      - activateTime: 0
+        _pathPointIndexes: 
   _levelTime: 60
