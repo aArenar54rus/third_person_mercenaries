@@ -38,7 +38,7 @@ namespace Arenar.Character
             private set
             {
                 _health = Mathf.Clamp(value, 0, HealthMax);
-                OnCharacterChangeHealthValue?.Invoke(HealthMax, Health);
+                OnCharacterChangeHealthValue?.Invoke(Health, HealthMax);
             }
         }
 

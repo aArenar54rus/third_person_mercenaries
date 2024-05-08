@@ -274,9 +274,9 @@ MonoBehaviour:
       TermType: 0
       Description: 
       Languages:
-      - Termirobot
-      - "\u0422\u0435\u0440\u043C\u0438\u0440\u043E\u0431\u043E\u0442\u043E"
-      - Termiroboto
+      - Killbot
+      - "\u041A\u0438\u043B\u043B\u0431\u043E\u0442"
+      - "Killbotlar\u0131n"
       Flags: 000000
       Languages_Touch: []
     - Term: loc_key_robot_target_description

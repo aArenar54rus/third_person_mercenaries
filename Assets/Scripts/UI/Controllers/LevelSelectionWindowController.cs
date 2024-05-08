@@ -46,20 +46,13 @@ namespace Arenar.Services.UI
             _ambientManager = ambientManager;
             _canvasService = canvasService;
         }
-
         
-        public void OpenWindow()
-        {
-            OnSelectLevel(0);
-            OnLevelDifficult(LevelDifficult.Easy);
-        }
         
         public override void Initialize(ICanvasService canvasService)
         {
             base.Initialize(canvasService);
 
             _levelSelectionWindow = canvasService.GetWindow<LevelSelectionWindow>();
-            _levelSelectionWindow.OnShowBegin.AddListener(OpenWindow);
 
             InitLevelSelectionLayer();
             InitLevelDifficultLayer();
@@ -68,7 +61,7 @@ namespace Arenar.Services.UI
             _levelSelectionWindow.OnShowEnd.AddListener(OnWindowShowEnd_SelectElements);
             _levelSelectionWindow.OnHideBegin.AddListener(OnWindowHideBegin_DeselectElements);
 
-            _currentLevelIndex = -1;
+            _currentLevelIndex = 0;
         }
 
         protected override void OnWindowShowEnd_SelectElements()
@@ -150,11 +143,9 @@ namespace Arenar.Services.UI
             if (_levelsService.LastCompleteDifficult > levelDifficult - 1)
             {
                 foreach (LevelSelectionButtonVisual levelSelectionButton in _levelSelectionButtonVisuals)
-                {
-                    levelSelectionButton.SetButtonStatus((levelSelectionButton.LevelData.LevelIndex == _currentLevelIndex)
-                        ? LevelSelectionButtonVisual.ButtonStatus.Selected
-                        : LevelSelectionButtonVisual.ButtonStatus.Active);
-                }
+                    levelSelectionButton.SetButtonStatus(LevelSelectionButtonVisual.ButtonStatus.Active);
+
+                OnSelectLevel(Mathf.Min(_levelsService.LastCompleteLevel + 1, _levelSelectionButtonVisuals.Length));
             }
             else if (_levelsService.LastCompleteDifficult < levelDifficult - 1)
             {
@@ -163,20 +154,15 @@ namespace Arenar.Services.UI
             }
             else
             {
-                int lastAvailableLevel = _levelsService.LastCompleteLevel;
                 foreach (LevelSelectionButtonVisual levelSelectionButton in _levelSelectionButtonVisuals)
                 {
-                    if (levelSelectionButton.LevelData.LevelIndex >= lastAvailableLevel)
-                    {
-                        levelSelectionButton.SetButtonStatus((levelSelectionButton.LevelData.LevelIndex == _currentLevelIndex)
-                            ? LevelSelectionButtonVisual.ButtonStatus.Selected
-                            : LevelSelectionButtonVisual.ButtonStatus.Active);
-                    }
-                    else
-                    {
-                        levelSelectionButton.SetButtonStatus(LevelSelectionButtonVisual.ButtonStatus.Locked);
-                    }
+                    levelSelectionButton.SetButtonStatus(
+                        (levelSelectionButton.LevelData.LevelIndex <= _levelsService.LastCompleteLevel + 1)
+                            ? LevelSelectionButtonVisual.ButtonStatus.Active
+                            : LevelSelectionButtonVisual.ButtonStatus.Locked);
                 }
+                
+                OnSelectLevel(Mathf.Min(_levelsService.LastCompleteLevel + 1, _levelSelectionButtonVisuals.Length));
             }
         }
 
@@ -185,11 +171,13 @@ namespace Arenar.Services.UI
             LevelData selectedLevelData = null;
             foreach (LevelSelectionButtonVisual levelSelectionButton in _levelSelectionButtonVisuals)
             {
-                if (levelSelectionButton.LevelData.LevelIndex == _currentLevelIndex)
+                if (levelSelectionButton.LevelData.LevelIndex == _currentLevelIndex && _currentLevelIndex != levelIndex)
                 {
                     levelSelectionButton.SetButtonStatus(LevelSelectionButtonVisual.ButtonStatus.Active);
+                    continue;
                 }
-                else if (levelSelectionButton.LevelData.LevelIndex == levelIndex)
+                
+                if (levelSelectionButton.LevelData.LevelIndex == levelIndex)
                 {
                     levelSelectionButton.SetButtonStatus(LevelSelectionButtonVisual.ButtonStatus.Selected);
                     selectedLevelData = levelSelectionButton.LevelData;
@@ -233,9 +221,7 @@ namespace Arenar.Services.UI
 
         private void OnShowBegin_LoadSelectedLevelData(CanvasWindowLayer layer)
         {
-            OnSelectLevel(_currentLevelIndex);
             OnLevelDifficult(LevelDifficult.Easy);
-            
         }
         
         private void SetButtonsStatus(bool status)

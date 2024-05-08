@@ -16,7 +16,7 @@ namespace Arenar.Services.LevelsService
         public event Action<LevelContext> onCompleteLevel;
         
         
-        private int _lastCompleteLevel;
+        private int _lastCompleteLevel = 0;
         private LevelDifficult _lastCompleteDifficult;
 
         private ILocationService _locationService;
@@ -54,6 +54,10 @@ namespace Arenar.Services.LevelsService
             _tickableManager = tickableManager;
             _shootingGalleryLevelInfoCollection = shootingGalleryLevelInfoCollection;
             _cameraService = cameraService;
+            
+            var playerSaveData = _preferenceManager.LoadValue<LevelProgressionSaveDelegate>();
+            _lastCompleteLevel = playerSaveData.completedLevel;
+            _lastCompleteDifficult = playerSaveData.completeDifficult;
         }
         
         public bool TryGetLevelDataByIndex(int levelIndex, out LevelData levelData)
@@ -138,15 +142,17 @@ namespace Arenar.Services.LevelsService
             if (CurrentLevelContext.GameResultStatus == LevelContext.GameResult.Victory)
             {
                 _lastCompleteLevel = CurrentLevelContext.LevelData.LevelIndex;
-                if (_lastCompleteLevel == _levelDatas.Length - 1)
-                {
-                    _lastCompleteLevel = 0;
-                    if (_lastCompleteDifficult != LevelDifficult.Infinity)
-                        _lastCompleteDifficult++;
-                }
-
                 var playerSaveData = _preferenceManager.LoadValue<LevelProgressionSaveDelegate>();
-                playerSaveData.completeDifficult = CurrentLevelContext.LevelDifficult;
+                if (_lastCompleteLevel >= _levelDatas.Length - 1)
+                {
+                    _lastCompleteLevel = -1;
+                    if (_lastCompleteDifficult != LevelDifficult.Infinity)
+                    {
+                        _lastCompleteDifficult++;
+                        playerSaveData.completeDifficult++;
+                    }
+                }
+                
                 playerSaveData.completedLevel = _lastCompleteLevel;
                 _preferenceManager.SaveValue(playerSaveData);
             }
