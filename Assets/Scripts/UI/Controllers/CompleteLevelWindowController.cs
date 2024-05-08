@@ -32,6 +32,8 @@ namespace Arenar.Services.UI
         private PlayerSaveDelegate _playerSaveDelegate;
         private bool _isPlayerLevelMax;
 
+        private YandexGamesAdsService _yandexGamesAdsService;
+
 
         private ProgressLevelMarksVisualControl ProgressLevelMarksVisualControl =>
             _completeLevelLayer.ProgressLevelMarksVisualControl;
@@ -44,7 +46,8 @@ namespace Arenar.Services.UI
             ICameraService cameraService,
             IUiSoundManager uiSoundManager,
             ILocationService locationService,
-            CharacterSpawnController сharacterSpawnController)
+            CharacterSpawnController сharacterSpawnController,
+            YandexGamesAdsService yandexGamesAdsService)
             : base(playerInputService)
         {
             _playerInputService = playerInputService;
@@ -55,6 +58,7 @@ namespace Arenar.Services.UI
             _сharacterSpawnController = сharacterSpawnController;
             _uiSoundManager = uiSoundManager;
             _locationService = locationService;
+            _yandexGamesAdsService = yandexGamesAdsService;
         }
 
 
@@ -109,7 +113,7 @@ namespace Arenar.Services.UI
             if (!_isPlayerLevelMax)
                 UpdateReward(1);
             
-            YandexGame.Instance._FullscreenShow();
+            _yandexGamesAdsService.ShowInterstitial();
             ReturnInMainMenu();
         }
 
@@ -120,7 +124,7 @@ namespace Arenar.Services.UI
             if (!_isPlayerLevelMax)
                 UpdateReward(3);
             
-            YandexGame.Instance._RewardedShow(0);
+            _yandexGamesAdsService.ShowRewarded();
             ReturnInMainMenu();
         }
 

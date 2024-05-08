@@ -1,3 +1,4 @@
+using Arenar;
 using UnityEngine;
 using Zenject;
 
@@ -12,6 +13,9 @@ namespace TakeTop.Web
         {
             //Container.BindInstance<YandexGames>(_yandexGames)
                // .AsSingle().NonLazy();
+               //
+            Container.Bind<YandexGamesAdsService>()
+               .AsSingle().NonLazy();
         }
     }
 }
