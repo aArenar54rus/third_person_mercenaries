@@ -97,7 +97,7 @@ namespace Arenar.Character
 
             _levelsService.CurrentLevelContext.SettedDamage += damageData.Damage;
             Health -= damageData.Damage;
-            if (_damageNumbersService != null && _characterRigidbody != null)
+            if (damageData.DamageSetterCharacter != null)
                 _damageNumbersService.PlayDamageNumber(damageData.Damage, _characterRigidbody.transform, damageData.DamageSetterCharacter.CharacterTransform);
             OnCharacterGetDamageBy?.Invoke(damageData.DamageSetterCharacter);
             
@@ -108,7 +108,6 @@ namespace Arenar.Character
         public void SetAlive()
         {
             Health = HealthMax;
-            
             _characterRigidbody.velocity = Vector3.zero;
             _characterRigidbody.useGravity = false;
         }
