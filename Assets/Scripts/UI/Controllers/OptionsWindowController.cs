@@ -131,7 +131,6 @@ namespace Arenar.Services.UI
 
         private void OnSoundButtonClick()
         {
-            _uiSoundManager.PlaySound(UiSoundType.StandartButtonClick);
             SoundOption soundOption = _optionsController.GetOption<SoundOption>();
             UiSoundOption uiSoundOption = _optionsController.GetOption<UiSoundOption>();
             bool status;
@@ -148,7 +147,10 @@ namespace Arenar.Services.UI
                 status = true;
             }
             
+            _audioSystemManager.SetVolume(AudioSystemType.Sound, status, soundOption.Volume);
+            _audioSystemManager.SetVolume(AudioSystemType.UI, status, uiSoundOption.Volume);
             _optionsButtonsLayer.SoundLockIcon.gameObject.SetActive(!status);
+            _uiSoundManager.PlaySound(UiSoundType.StandartButtonClick);
         }
 
         private void OnLastLanguageButtonClick()

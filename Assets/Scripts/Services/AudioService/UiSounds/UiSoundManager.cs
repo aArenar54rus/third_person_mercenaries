@@ -15,7 +15,8 @@ namespace Arenar.AudioSystem
         [Inject]
         public void Construct(IAudioSystemManager audioSystemManager,
                               IAmbientManager ambientManager,
-                              AudioLibrary soundsLibrary, Camera camera)
+                              AudioLibrary soundsLibrary,
+                              Camera camera)
         {
             this.camera = camera;
             AudioSource uiSoundSource =
@@ -26,9 +27,7 @@ namespace Arenar.AudioSystem
         
         public void Initialize(AudioSource uiSoundSource, AudioLibrary audioLibrary)
         {
-            AudioSource uiAudioSource = camera.AddComponent<AudioSource>();
-            uiSoundController = new AudioController(uiAudioSource);
-
+            uiSoundController = new AudioController(uiSoundSource);
             uiSoundLibrary = audioLibrary.UiSoundsLibrary;
         }
 
