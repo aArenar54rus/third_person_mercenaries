@@ -1,13 +1,14 @@
 using Arenar.AudioSystem;
 using Arenar.Options;
 using DG.Tweening;
+using UnityEngine;
 using YG;
 using Zenject;
 
 
 namespace Arenar
 {
-    public class YandexGamesAdsService
+    public class YandexGamesAdsService : MonoBehaviour
     {
         private IOptionsController _optionsController;
         private IAudioSystemManager _audioSystemManager;
@@ -16,6 +17,9 @@ namespace Arenar
         private bool _isMusicOn;
 
         private Tween _checkerTween;
+        
+        
+        public bool IsAdShownProcess { get; private set; }
 
 
         [Inject]
@@ -23,20 +27,23 @@ namespace Arenar
         {
             _optionsController = optionsController;
             _audioSystemManager = audioSystemManager;
+            DontDestroyOnLoad(this);
         }
 
         public void ShowInterstitial()
         {
-            DisableAudio();
+            _audioSystemManager.DisableAudio(false);
             YandexGame.FullscreenShow();
             StartCheckerTween();
+            IsAdShownProcess = true;
         }
 
         public void ShowRewarded()
         {
-            DisableAudio();
+            _audioSystemManager.DisableAudio(false);
             YandexGame.RewVideoShow(0);
             StartCheckerTween();
+            IsAdShownProcess = true;
         }
 
         private void StartCheckerTween()
@@ -46,37 +53,22 @@ namespace Arenar
                 if (YandexGame.nowAdsShow)
                     return;
 
-                EnableAudio();
-                    
+                _audioSystemManager.EnableAudio();
+                IsAdShownProcess = false;
                 _checkerTween?.Kill();
             }).SetLoops(-1);
         }
 
-        private void DisableAudio()
+        private void OnApplicationFocus(bool hasFocus)
         {
-            _isMusicOn = _optionsController.GetOption<MusicOption>().IsActive;
-            if (_isMusicOn)
+            if (!hasFocus)
             {
-                _audioSystemManager.SetVolume(AudioSystemType.Music, false, 0);
+                _audioSystemManager.DisableAudio(false);
             }
-
-            _isSoundOn = _optionsController.GetOption<SoundOption>().IsActive;
-            if (_isSoundOn)
+            else
             {
-                _audioSystemManager.SetVolume(AudioSystemType.Sound, false, 0);
-                _audioSystemManager.SetVolume(AudioSystemType.UI, false, 0);
-            }
-        }
-
-        private void EnableAudio()
-        {
-            if (_isMusicOn)
-                _audioSystemManager.SetVolume(AudioSystemType.Music, _isMusicOn, 1);
-                    
-            if (!_isSoundOn)
-            {
-                _audioSystemManager.SetVolume(AudioSystemType.Sound, _isSoundOn, 1);
-                _audioSystemManager.SetVolume(AudioSystemType.UI, _isSoundOn, 1);
+                if (!IsAdShownProcess)
+                    _audioSystemManager.EnableAudio();
             }
         }
     }

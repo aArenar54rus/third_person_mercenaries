@@ -5,9 +5,13 @@ namespace Arenar.AudioSystem
 {
     public interface IAudioSystemManager
     {
-        void InitializeVolumes();
+        void Initialize();
 
         void SetVolume(AudioSystemType type, bool status, float volume);
+
+        void DisableAudio(bool withSave = false);
+
+        void EnableAudio();
 
 		AudioMixerGroup GetAudioMixerGroup(AudioSystemType type);
 

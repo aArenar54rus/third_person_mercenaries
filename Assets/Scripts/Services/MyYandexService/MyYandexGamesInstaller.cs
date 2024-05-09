@@ -6,16 +6,16 @@ namespace TakeTop.Web
 {
     public class MyYandexGamesInstaller : MonoInstaller
     {
-        //[SerializeField] private YandexGames _yandexGames;
-        
-        
         public override void InstallBindings()
         {
-            //Container.BindInstance<YandexGames>(_yandexGames)
-               // .AsSingle().NonLazy();
-               //
+            YandexGamesAdsService service =
+               new GameObject("Yandex Games Ads Service")
+                   .AddComponent<YandexGamesAdsService>();
+            
             Container.Bind<YandexGamesAdsService>()
-               .AsSingle().NonLazy();
+                .FromInstance(service)
+                .AsSingle()
+                .NonLazy();
         }
     }
 }

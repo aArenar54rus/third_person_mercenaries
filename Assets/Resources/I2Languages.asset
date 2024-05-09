@@ -30,10 +30,11 @@ MonoBehaviour:
       TermType: 0
       Description: 
       Languages:
-      - Rate Us
-      - "\u041F\u043E\u0441\u0442\u0430\u0432\u044C\u0442\u0435 \u043D\u0430\u043C
+      - Log In and rate us
+      - "\u0417\u0430\u043B\u043E\u0433\u0438\u043D\u044C\u0442\u0435\u0441\u044C
+        \u0438 \u043F\u043E\u0441\u0442\u0430\u0432\u044C\u0442\u0435 \u043D\u0430\u043C
         \u043E\u0446\u0435\u043D\u043A\u0443"
-      - "Bizi de\u011Ferlendirin"
+      - "Giri\u015F yap\u0131n ve bizi de\u011Ferlendirin"
       Flags: 000000
       Languages_Touch: []
     - Term: loc_key_start_match

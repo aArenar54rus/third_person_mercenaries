@@ -23,21 +23,13 @@ namespace Arenar.AudioSystem
         {
             this.audioMixerData = audioMixerData;
             this.optionsController = optionsController;
-            
-			DOVirtual.DelayedCall(0.0f, InitializeVolumes);
+            DOVirtual.DelayedCall(0.0f, Initialize);
         }
 
 
-        public void InitializeVolumes()
+        public void Initialize()
         {
-            MusicOption musicOption = optionsController.GetOption<MusicOption>();
-            SetVolume(AudioSystemType.Music, musicOption.IsActive, musicOption.Volume);
-
-            SoundOption soundOption = optionsController.GetOption<SoundOption>();
-            SetVolume(AudioSystemType.Sound, soundOption.IsActive, soundOption.Volume);
-
-            UiSoundOption uiSoundOption = optionsController.GetOption<UiSoundOption>();
-            SetVolume(AudioSystemType.UI, uiSoundOption.IsActive, uiSoundOption.Volume);
+            EnableAudio();
         }
 
         public AudioSource CreateAudioSource(GameObject audioSourceParent, AudioSystemType type)
@@ -47,6 +39,32 @@ namespace Arenar.AudioSystem
             audioSource.outputAudioMixerGroup = GetAudioMixerGroup(type);
 
             return audioSource;
+        }
+
+        public void DisableAudio(bool withSave = false)
+        {
+            if (withSave)
+            {
+                
+            }
+            else
+            {
+                SetVolume(AudioSystemType.Music, false, 0);
+                SetVolume(AudioSystemType.Sound, false, 0);
+                SetVolume(AudioSystemType.UI, false, 0);
+            }
+        }
+
+        public void EnableAudio()
+        {
+            MusicOption musicOption = optionsController.GetOption<MusicOption>();
+            SetVolume(AudioSystemType.Music, musicOption.IsActive, musicOption.Volume);
+
+            SoundOption soundOption = optionsController.GetOption<SoundOption>();
+            SetVolume(AudioSystemType.Sound, soundOption.IsActive, soundOption.Volume);
+
+            UiSoundOption uiSoundOption = optionsController.GetOption<UiSoundOption>();
+            SetVolume(AudioSystemType.UI, uiSoundOption.IsActive, uiSoundOption.Volume);
         }
 
         public void SetVolume(AudioSystemType type, bool status, float volume)
