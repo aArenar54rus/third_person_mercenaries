@@ -16,27 +16,7 @@ MonoBehaviour:
     IsSingleLineView: 1
     list:
     - Key: 0
-      Value:
-      - activateTime: 1
-        _pathPointIndexes: 01000000110000001500000020000000
-      - activateTime: 1
-        _pathPointIndexes: 0a0000001700000026000000
-      - activateTime: 5
-        _pathPointIndexes: 070000001500000020000000
-      - activateTime: 5
-        _pathPointIndexes: 080000001600000024000000
-      - activateTime: 12
-        _pathPointIndexes: 0a000000190000001700000027000000
-      - activateTime: 12
-        _pathPointIndexes: 0400000010000000130000001f000000
-      - activateTime: 15
-        _pathPointIndexes: 030000000600000012000000110000000e000000
-      - activateTime: 20
-        _pathPointIndexes: 010000000e00000021000000
-      - activateTime: 20
-        _pathPointIndexes: 0d0000001a00000025000000
-      - activateTime: 20
-        _pathPointIndexes: 090000000700000009000000070000001500000021000000
+      Value: []
     - Key: 1
       Value:
       - activateTime: 0
