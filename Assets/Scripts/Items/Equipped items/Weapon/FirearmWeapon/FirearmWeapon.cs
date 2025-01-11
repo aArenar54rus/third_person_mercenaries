@@ -1,7 +1,9 @@
 using Arenar.Character;
 using Arenar.Services.DamageNumbersService;
 using DG.Tweening;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Zenject;
 
 
@@ -11,21 +13,16 @@ namespace Arenar
     {
         [SerializeField] protected Transform gunMuzzleTransform;
         [SerializeField] protected Transform clipTransform;
-        [SerializeField] protected FirearmWeaponData firearmWeaponData;
         [SerializeField] protected Transform secondHandPoint;
         [SerializeField] protected Vector3 localRotation = new Vector3(-15, 90, -90);
         [SerializeField] protected LineRenderer lineRendererEffect;
         [SerializeField] protected FirearmWeaponCameraRecoilComponent firearmWeaponCameraRecoilComponent;
         
-        [Inject] public EffectsSpawner projectileSpawner;
+        [Inject] public EffectsSpawner effectsSpawner;
 
-        private Tween _timeBetweenShotsTween;
+
 
         private bool _isBetweenShotsLock = false;
-        
-        private int _defaultDamage;
-        private int _minDamage;
-        private int _maxDamage;
 
 
         public Transform GunMuzzleTransform =>
@@ -33,38 +30,54 @@ namespace Arenar
 
         public ICharacterEntity WeaponOwner { get; protected set; }
         
+        public WeaponInventoryItemData WeaponInventoryItemData
+        {
+            get;
+            private set;
+        }
+
+        public IFirearmWeaponAttackItemComponent AttackComponent
+        {
+            get;
+            private set;
+        }
+
+        protected IClipComponent ClipComponent
+        {
+            get;
+            set;
+        }
+        
         public int ItemLevel { get; protected set; }
 
         public float Damage
         { 
             get
             {
-                int damage = _defaultDamage;
+                int damage = (int) WeaponInventoryItemData.FirearmWeaponData.DefaultDamage;
                 for (int i = 0; i < ItemLevel; i++)
-                    damage += Random.Range(_minDamage, _maxDamage);
+                    damage += Random.Range(
+                        (int)WeaponInventoryItemData.FirearmWeaponData.BulletLevelMinDamage, (int)WeaponInventoryItemData.FirearmWeaponData.BulletLevelMaxDamage);
 
                 return damage;
             } 
         }
 
-        public float ReloadSpeed { get; protected set; }
+        public float ReloadSpeed => WeaponInventoryItemData.FirearmWeaponData.DefaultReloadSpeed;
+        public int ClipSizeMax => ClipComponent.ClipSizeMax;
 
-        public int ClipSizeMax { get; private set; }
+        public int ClipSize => ClipComponent.ClipSize;
 
-        public int ClipSize { get; private set; }
-
-        public float TimeBetweenShots { get; private set; }
+        public float TimeBetweenShots => WeaponInventoryItemData.FirearmWeaponData.TimeBetweenShots;
         
         public ItemInventoryData ItemInventoryData { get; private set; }
 
         public WeaponType WeaponType => WeaponType.Firearm;
 
-        public bool IsAutomaticAction => firearmWeaponData.IsAutomaticShoot;
+        public bool IsAutomaticAction => WeaponInventoryItemData.FirearmWeaponData.IsAutomaticShoot;
 
-        public bool IsFullClipReload => firearmWeaponData.IsFullClipReload;
-
-        public float ProjectileSpeed { get; protected set; }
-
+        public bool IsFullClipReload => WeaponInventoryItemData.FirearmWeaponData.IsFullClipReload;
+        
         public Transform SecondHandPoint => secondHandPoint;
 
         public Vector3 LocalRotation => localRotation;
@@ -72,7 +85,7 @@ namespace Arenar
         public bool IsShootLock => _isBetweenShotsLock;
 
         private Vector3 RecoilShakeDirection =>
-            new Vector3(Random.Range(-1.0f, 1.0f), 1.0f, 0.0f) / 100.0f * firearmWeaponData.RecoilShakeDefaultValue;
+            new Vector3(Random.Range(-1.0f, 1.0f), 1.0f, 0.0f) / 100.0f * WeaponInventoryItemData.FirearmWeaponData.RecoilShakeDefaultValue;
 
         private float BulletPhysicalMight
         {
@@ -80,44 +93,27 @@ namespace Arenar
             set;
         } = 0;
 
-        public void ReloadClip(bool isFull)
+        public void ReloadClip()
         {
-            if (isFull)
-            {
-                ClipSize = ClipSizeMax;
-            }
-            else
-            {
-                ClipSize++;
-                if (ClipSize > ClipSizeMax)
-                    ClipSize = ClipSizeMax;
-            }
-            
-            _timeBetweenShotsTween?.Kill(true);
+            ClipComponent.Reload();
         }
 
-        public void InitializeWeapon(ItemInventoryData itemInventoryData)
+        public void InitializeWeapon(ItemInventoryData itemInventoryData, List<IEquippedItemComponent> itemComponents)
         {
-            if (itemInventoryData.ItemType != ItemType.Weapon)
+            if (itemInventoryData is not WeaponInventoryItemData weaponInventoryItemData
+                || itemInventoryData.ItemType != ItemType.Weapon)
             {
                 Debug.LogError($"You try initialize weapon as {itemInventoryData.ItemType}. Check your code, asshole!");
                 return;
             }
-            
+
+            WeaponInventoryItemData = weaponInventoryItemData;
             ItemInventoryData = itemInventoryData;
             
-            ClipSizeMax = GetClipSizeMax();
-            ClipSize = ClipSizeMax;
+            AttackComponent = GetEquippedComponent<IFirearmWeaponAttackItemComponent>(itemComponents);
+            ClipComponent = GetEquippedComponent<IClipComponent>(itemComponents);
             
-            BulletPhysicalMight = itemInventoryData.BulletPhysicalMight;
-            
-            _defaultDamage = (int)itemInventoryData.DefaultDamage;
-            _minDamage = (int)itemInventoryData.BulletLevelMinDamage;
-            _maxDamage = (int)itemInventoryData.BulletLevelMaxDamage;
-            
-            ProjectileSpeed = GetProjectileSpeed();
-            ReloadSpeed = firearmWeaponData.DefaultReloadSpeed;
-            TimeBetweenShots = firearmWeaponData.TimeBetweenShots;
+            BulletPhysicalMight = weaponInventoryItemData.FirearmWeaponData.BulletPhysicalMight;
         }
 
         public void SetWeaponLevel(int level)
@@ -147,14 +143,12 @@ namespace Arenar
             }
 
             SetLaserStatus(false);
-            PlayMuzzleFlashEffect();
             InitializeBullets(direction);
 
             if (firearmWeaponCameraRecoilComponent != null)
                 firearmWeaponCameraRecoilComponent.ApplyShootRecoil(RecoilShakeDirection);
 
-            if (!isInfinityClip)
-                ClipSize--;
+            ClipComponent.ClipSize--;
             
             _isBetweenShotsLock = true;
             _timeBetweenShotsTween = DOVirtual.DelayedCall(TimeBetweenShots,() => _isBetweenShotsLock = false);
@@ -179,75 +173,33 @@ namespace Arenar
         
         protected virtual int GetClipSizeMax()
         {
-            return firearmWeaponData.ClipSizeMax;
-        }
-
-        protected virtual float GetProjectileSpeed()
-        {
-            return firearmWeaponData.ProjectileSpeed;
+            return (int) WeaponInventoryItemData.FirearmWeaponData.ClipSizeMax;
         }
         
         protected void CreateBullet(Vector3 direction)
         {
             DamageData damageData = new DamageData(WeaponOwner, (int)Damage, direction * BulletPhysicalMight);
-            
-            switch (firearmWeaponData.FirearmWeaponAttackType)
+            AttackComponent.MakeShoot(gunMuzzleTransform, direction, damageData);
+        }
+
+
+        protected T GetEquippedComponent<T>(List<IEquippedItemComponent> components)
+            where T : IEquippedItemComponent
+        {
+            foreach (var component in components)
             {
-                case FirearmWeaponAttackType.Projectile:
-                    var projectile = projectileSpawner.GetItemProjectile(firearmWeaponData.EffectType);
-                    projectile.Initialize(gunMuzzleTransform.position,
-                        gunMuzzleTransform.rotation, 
-                        direction,
-                        ProjectileSpeed,
-                        damageData,
-                        projectileSpawner);
-                    return;
-
-                case FirearmWeaponAttackType.Raycast:
-                    Ray ray = new(gunMuzzleTransform.position, direction);
-                    if (!Physics.Raycast(ray, out RaycastHit hit))
-                        return;
-                    
-                    if (hit.transform.TryGetComponent<CharacterController>(
-                            out CharacterController characterController)
-                        && characterController.TryGetComponent<ICharacterLiveComponent>(
-                            out ICharacterLiveComponent characterLiveComponent))
-                    {
-                        characterLiveComponent.SetDamage(damageData);
-
-                    }
-                    
-                    ParticleSystem effect = projectileSpawner.GetEffect(EffectType.BulletCollision);
-                    effect.transform.position = hit.transform.position;
-                    effect.Play();
-                    
-                    return;
-                
-                default:
-                    Debug.LogError($"Unknown Firearm Weapon Attack Type {firearmWeaponData.FirearmWeaponAttackType}.");
-                    return;
+                if (component is T neededComponent)
+                    return neededComponent;
             }
+            
+            Debug.LogError($"No component of type {typeof(T)}");
+            return default;
         }
 
         private void Update()
         {
             if (lineRendererEffect != null)
                 lineRendererEffect.SetPosition(0, gunMuzzleTransform.position);
-        }
-
-        private void PlayMuzzleFlashEffect()
-        {
-            var effect = projectileSpawner.GetEffect(EffectType.MuzzleFlashYellow);
-            effect.gameObject.SetActive(true);
-            effect.transform.SetParent(gunMuzzleTransform);
-            effect.transform.localPosition = Vector3.zero;
-            effect.transform.rotation = Quaternion.Inverse(gunMuzzleTransform.rotation);  //gunMuzzleTransform.rotation;
-            effect.Play();
-
-            DOVirtual.DelayedCall(1.0f, () =>
-            {
-                projectileSpawner.ReturnEffect(effect);
-            });
         }
     }
 }

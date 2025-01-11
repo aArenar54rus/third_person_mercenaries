@@ -875,6 +875,7 @@ GameObject:
   - component: {fileID: 2680806513136186521}
   - component: {fileID: 2009154156989343524}
   - component: {fileID: 5834161856062466166}
+  - component: {fileID: 4394228811921439205}
   m_Layer: 8
   m_Name: F02_AllOutfits
   m_TagString: Untagged
@@ -953,6 +954,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ef2398c606b51c4d86ab36c91d95237, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!143 &4394228811921439205
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 354954420078919265}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 256
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Height: 1.8
+  m_Radius: 0.2
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0.9, z: 0}
 --- !u!1 &365222247805555965
 GameObject:
   m_ObjectHideFlags: 0
@@ -2236,7 +2263,7 @@ Transform:
   m_GameObject: {fileID: 588193685311019000}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.375, z: 0}
+  m_LocalPosition: {x: 0.425, y: 1.375, z: -0.58}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -9776,7 +9803,7 @@ Transform:
   - {fileID: 5052811902790341007}
   - {fileID: 3784386711812036931}
   - {fileID: 3662291989585427799}
-  - {fileID: 9190312591059743627}
+  - {fileID: 2415256702037651132}
   m_Father: {fileID: 2435829494631180415}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2309059338274472662
@@ -15705,64 +15732,6 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.000030683354, y: -0.0025922451, z: 0.09631019}
     m_Extent: {x: 0.054177523, y: 0.035124302, z: 0.03638325}
   m_DirtyAABB: 0
---- !u!1 &3558113916262719936
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7185293828129497861}
-  - component: {fileID: 7930569802002964375}
-  m_Layer: 0
-  m_Name: CharacterController
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7185293828129497861
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3558113916262719936}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 86962050847851156}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!143 &7930569802002964375
-CharacterController:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3558113916262719936}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Height: 1.8
-  m_Radius: 0.2
-  m_SlopeLimit: 45
-  m_StepOffset: 0.3
-  m_SkinWidth: 0.08
-  m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0.9, z: 0}
 --- !u!1 &3564600798947459132
 GameObject:
   m_ObjectHideFlags: 0
@@ -19391,12 +19360,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c86ba130e5a5458a98e3b482192a6dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  humanoidConfig: {fileID: 0}
+  humanoidConfig: {fileID: 11400000, guid: ec93c877e6f836940b0b05babb99d713, type: 2}
   targetRoot: {fileID: 2680806513136186521}
   state: 0
   stateSettings:
     killDuration: 1
-    deadMuscleWeight: 0.01
+    deadMuscleWeight: 10
     deadMuscleDamper: 2
     maxFreezeSqrVelocity: 0.02
     freezePermanently: 0
@@ -20177,7 +20146,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9190312591059743627}
   m_Layer: 0
-  m_Name: RIghtHandPoint
+  m_Name: RightHandPoint
   m_TagString: Untagged
   m_Icon: {fileID: 419385456094870383, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -20192,11 +20161,11 @@ Transform:
   m_GameObject: {fileID: 4473192055181891145}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.054, y: 0, z: 0}
+  m_LocalPosition: {x: 0.031, y: 0.055, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 8350778375629967263}
+  m_Father: {fileID: 7132106055501220091}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4478604950553219681
 GameObject:
@@ -26072,11 +26041,11 @@ Transform:
   m_GameObject: {fileID: 6132650756928507051}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.034}
+  m_LocalPosition: {x: -0.026, y: 0.085, z: -0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 7132106055501220091}
+  m_Father: {fileID: 8350778375629967263}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6146362533455623484
 GameObject:
@@ -29242,7 +29211,7 @@ Transform:
   - {fileID: 6017556048997308043}
   - {fileID: 4604089499552179833}
   - {fileID: 7239141409348495943}
-  - {fileID: 2415256702037651132}
+  - {fileID: 9190312591059743627}
   m_Father: {fileID: 6854900877382434003}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6912900158767052486
@@ -30000,7 +29969,6 @@ Transform:
   - {fileID: 3331087600728194231}
   - {fileID: 9042391851819263853}
   - {fileID: 2680806513136186521}
-  - {fileID: 7185293828129497861}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1100535803088907104
@@ -30035,9 +30003,9 @@ MonoBehaviour:
     reloadAnimationTriggerName: Reload
     isReloadByAnimation: 0
   characterPhysicsDataStorage:
-    characterTransform: {fileID: 4327190367145583700}
+    characterTransform: {fileID: 2680806513136186521}
     cameraTransform: {fileID: 5890264159404365299}
-    characterController: {fileID: 7930569802002964375}
+    characterController: {fileID: 4394228811921439205}
     puppetMaster: {fileID: 1940537443630780013}
     puppetBehaviours:
       IsSingleLineView: 1

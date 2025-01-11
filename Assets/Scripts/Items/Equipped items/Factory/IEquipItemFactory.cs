@@ -6,6 +6,6 @@ namespace Arenar.Character
 {
     public interface IEquipItemFactory<TItem>
     {
-        TItem Create(InventoryItemCellData equippedWeapon, Transform handOwner);
+        TItem Create(ItemInventoryData itemInventoryData, Transform handOwner);
     }
 }

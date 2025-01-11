@@ -1,5 +1,9 @@
+using System;
+
+
 namespace Arenar
 {
+    [Serializable]
     public enum WeaponType : byte
     {
         None = 0,

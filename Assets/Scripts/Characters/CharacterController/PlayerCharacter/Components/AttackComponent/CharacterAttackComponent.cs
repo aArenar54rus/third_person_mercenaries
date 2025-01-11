@@ -191,7 +191,7 @@ namespace Arenar.Character
                     }).OnComplete(() =>
                     {
                         onReloadEnd?.Invoke();
-                        firearmWeapon.ReloadClip(firearmWeapon.IsFullClipReload);
+                        firearmWeapon.ReloadClip();
                         onUpdateWeaponClipSize?.Invoke(firearmWeapon.ClipSize, firearmWeapon.ClipSizeMax);
 
                         if (firearmWeapon.IsFullClipReload || firearmWeapon.ClipSize >= firearmWeapon.ClipSizeMax)
@@ -246,7 +246,7 @@ namespace Arenar.Character
             }
             else
             {
-                firearmWeapon = firearmWeaponFactory.Create(equippedWeapon, characterPhysicsData.RightHandPoint);
+                firearmWeapon = firearmWeaponFactory.Create(equippedWeapon.itemInventoryData, characterPhysicsData.RightHandPoint);
                 firearmWeapon.TakeWeaponInHand(character);
                 
                 int playerLevel = preferenceManager.LoadValue<PlayerSaveDelegate>().playerCharacterLevel;

@@ -1,4 +1,6 @@
 using Arenar.Character;
+using System.Collections.Generic;
+
 
 namespace Arenar
 {
@@ -11,6 +13,6 @@ namespace Arenar
         float TimeBetweenShots { get; }
 
 
-        void InitializeWeapon(ItemInventoryData itemInventoryData);
+        void InitializeWeapon(ItemInventoryData itemInventoryData, List<IEquippedItemComponent> itemComponents);
     }
 }

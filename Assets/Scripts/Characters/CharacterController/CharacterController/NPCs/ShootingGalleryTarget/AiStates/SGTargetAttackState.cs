@@ -61,7 +61,7 @@ namespace Arenar.Character
         public override void OnStateBegin()
         {
             _weapon.InitializeWeapon(_weaponInventoryData);
-            _weapon.projectileSpawner ??= _projectileSpawner;
+            _weapon.effectsSpawner ??= _projectileSpawner;
             _AggressionTargetCharacter = CharacterAggressionComponent.MaxAggressionTarget;
         }
 
