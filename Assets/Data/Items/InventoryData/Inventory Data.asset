@@ -21,8 +21,4 @@ MonoBehaviour:
       _isLockWeapon: 1
       constantWeaponInventoryData: {fileID: 11400000, guid: e008748b3806a984cbd9d74fecece2fd,
         type: 2}
-    - _weaponCellIndex: 1
-      _isLockWeapon: 1
-      constantWeaponInventoryData: {fileID: 11400000, guid: ae94ce0ff5530174c9e931fd6390ebf5,
-        type: 2}
     _bagCellParametersArray: []

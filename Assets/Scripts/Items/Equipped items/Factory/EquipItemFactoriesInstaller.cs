@@ -1,6 +1,5 @@
-using Arenar.Character;
+using Arenar.Items;
 using Zenject;
-
 
 namespace Arenar.Services.InventoryService
 {

@@ -1,7 +1,7 @@
 using UnityEngine;
 
 
-namespace Arenar
+namespace Arenar.Items
 {
     public class ShotgunFirearmWeapon : FirearmWeapon
     {
@@ -10,6 +10,9 @@ namespace Arenar
         [SerializeField] private Vector3 _shotgunBulletRandomVector;
         
         
+        public override FirearmWeaponClass FirearmWeaponClass => FirearmWeaponClass.Shotgun;
+
+
         protected override void InitializeBullets(Vector3 direction)
         {
             for(int i = 0; i < _bulletsPerShot; i++)

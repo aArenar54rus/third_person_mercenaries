@@ -14,14 +14,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _id: 3
   _nameKey: BJ-17
-  _desckey: Heavy shotgun
+  _descKey: 
   _itemType: 2
-  _itemRarity: 2
+  _itemRarity: 0
   _stackCountMax: 1
   _itemMass: 7
-  _bulletPhysicalMight: 20
   _worldVisual:
     mesh: {fileID: 0}
     mass: 0
     materials: []
   _weaponType: 2
+  firearmWeaponData:
+    damageMultiplierByItemLevel: 2
+    itemDamageMultiplierByRarity:
+      IsSingleLineView: 1
+      list: []
+    _bulletPhysicalMight: 10
+    _defaultDamage: 7
+    _minDamageByLvl: 1
+    _maxDamageByLvl: 2
+    attackSpeed: 1
+    firearmWeaponAttackType: 1
+    effectType: 0
+    isAutomaticShoot: 0
+    clipSizeMax: 7
+    defaultReloadSpeed: 1
+    timeBetweenShots: 0.5
+    isFullClipReload: 0
+    projectileSpeed: 0
+    recoilShakeDefaultValue: 10

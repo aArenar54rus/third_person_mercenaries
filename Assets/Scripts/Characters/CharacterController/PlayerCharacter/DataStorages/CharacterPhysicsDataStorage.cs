@@ -1,6 +1,8 @@
 using RootMotion.Dynamics;
 using System;
 using UnityEngine;
+using UnityEngine.XR;
+
 
 namespace Arenar.Character
 {
@@ -17,8 +19,10 @@ namespace Arenar.Character
         
         [Space(5), Header("Transform points")]
         [SerializeField] private Transform characterCenterPoint = default;
-        [SerializeField] private Transform rightHandPoint = default;
-        [SerializeField] private Transform leftHandPoint = default;
+        
+        [Space(5), Header("Hands")]
+        [SerializeField] private CharacterHandPoint handRight = default;
+        [SerializeField] private CharacterHandPoint handLeft = default;
 
 
         public Transform CharacterTransform => characterTransform;
@@ -27,7 +31,7 @@ namespace Arenar.Character
         public PuppetMaster PuppetMaster => puppetMaster;
         public SerializableDictionary<string, BehaviourBase> PuppetBehaviours => puppetBehaviours;
         public Transform CharacterCenterPoint => characterCenterPoint;
-        public Transform RightHandPoint => rightHandPoint;
-        public Transform LeftHandPoint => leftHandPoint;
+        public CharacterHandPoint RightHandPoint => handRight;
+        public CharacterHandPoint LeftHandPoint => handLeft;
     }
 }

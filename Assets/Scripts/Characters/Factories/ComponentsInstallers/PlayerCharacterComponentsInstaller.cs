@@ -60,6 +60,11 @@ namespace Arenar.Character
             characterComponentsPool.Add(typeof(ICharacterPlayerInteractionComponent), characterPlayerInteractionComponent);
             Container.BindInstance(characterPlayerInteractionComponent).AsSingle();
             Container.Inject(characterPlayerInteractionComponent);
+
+            IInventoryComponent characterInventoryComponent = new CharacterInventoryComponent();
+            characterComponentsPool.Add(typeof(IInventoryComponent), characterInventoryComponent);
+            Container.BindInstance(characterInventoryComponent).AsSingle();
+            Container.Inject(characterInventoryComponent);
             
             ICharacterAttackComponent characterAttackComponent = new CharacterAttackComponent();
             characterComponentsPool.Add(typeof(ICharacterAttackComponent), characterAttackComponent);

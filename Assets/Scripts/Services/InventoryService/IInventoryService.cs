@@ -8,7 +8,6 @@ namespace Arenar.Services.InventoryService
     {
         event Action<List<int>> OnUpdateInventoryCells;
         event Action<ItemClothType> OnUpdateEquippedClothItemCell;
-        event Action OnUpdateEquippedWeaponItem;
         
         
         bool IsMassOverbalance { get; }

@@ -23,7 +23,8 @@ namespace Arenar.Character
             MotionSpeedX = 5,
             MotionSpeedY = 6,
             Aim = 7,
-            HandPistol = 8,
+            OneHanded = 8,
+            TwoHanded = 9,
         }
 
 
@@ -143,9 +144,10 @@ namespace Arenar.Character
                 
                 case AnimationValue.Aim:
                     SetAnimationBool(animIDAim, value > 0);
+                    Debug.LogError("Is Aim - " + (value > 0));
                     break;
                 
-                case AnimationValue.HandPistol:
+                case AnimationValue.OneHanded:
                     SetAnimationBool(animIDHandPistol, value > 0);
                     break;
 

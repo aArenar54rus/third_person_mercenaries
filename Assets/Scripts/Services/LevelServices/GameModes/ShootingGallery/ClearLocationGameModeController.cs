@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Arenar.Services.LevelsService
 {
-    public class ShootingGalleryGameModeController : GameModeController
+    public class ClearLocationGameModeController : GameModeController
     {
         private const int GAME_WAIT_START_TIME = 5;
         private const int GAME_WAIT_END_TIME = 3;
@@ -23,7 +23,7 @@ namespace Arenar.Services.LevelsService
         private Tween _tween;
 
         
-        public ShootingGalleryGameModeController(CharacterSpawnController сharacterSpawnController, ICameraService cameraService)
+        public ClearLocationGameModeController(CharacterSpawnController сharacterSpawnController, ICameraService cameraService)
         {
             _progressIndex = 0;
             _gameTime = 0.0f;

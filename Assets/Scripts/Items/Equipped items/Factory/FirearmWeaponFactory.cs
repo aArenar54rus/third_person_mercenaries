@@ -1,10 +1,10 @@
-using Arenar.Services.InventoryService;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
 
-namespace Arenar.Character
+namespace Arenar.Items
 {
     public class FirearmWeaponFactory : IEquipItemFactory<FirearmWeapon>
     {
@@ -21,7 +21,7 @@ namespace Arenar.Character
         }
         
         
-        public FirearmWeapon Create(ItemInventoryData itemInventoryData, Transform handOwner)
+        public FirearmWeapon Create(ItemInventoryData itemInventoryData)
         {
             if (itemInventoryData is not WeaponInventoryItemData weaponInventoryItemData)
             {
@@ -31,11 +31,11 @@ namespace Arenar.Character
             
             DiContainer subContainer = container.CreateSubContainer();
             FirearmWeapon weapon = GameObject.Instantiate(
-                Resources.Load<GameObject>("Prefabs/Items/" + itemInventoryData.Id), handOwner)
+                    Resources.Load<GameObject>("Prefabs/Items/" + itemInventoryData.Id), null)
                 .GetComponent<FirearmWeapon>();
 
             weapon.transform.localPosition = Vector3.zero;
-            weapon.transform.localRotation = Quaternion.Euler(weapon.LocalRotation);
+            // weapon.transform.localRotation = Quaternion.Euler(weapon.LocalRotation);
             
             subContainer.ResolveRoots();
             subContainer.Rebind<InitializableManager>()
@@ -47,16 +47,16 @@ namespace Arenar.Character
             
             subContainer.Inject(weapon);
 
-            List<IEquippedItemComponent> components = new List<IEquippedItemComponent>();
+            Dictionary<Type, IEquippedItemComponent> components = new Dictionary<Type, IEquippedItemComponent> ();
             
-            components.Add(GetAttackMechanism(weaponInventoryItemData));
-            components.Add(GetClipComponent(weaponInventoryItemData));
+            components.Add(typeof(IFirearmWeaponAttackItemComponent),GetAttackMechanism(weaponInventoryItemData));
+            components.Add(typeof(IClipComponent), GetClipComponent(weaponInventoryItemData));
+            components.Add(typeof(IEquippedItemAimComponent), new LaserAimComponent(weapon.LineRendererEffect) as IEquippedItemComponent);
             
-            weapon.InitializeWeapon(itemInventoryData, components);
+            weapon.InitializeItem(itemInventoryData, components);
             
             return weapon;
         }
-
 
         private IFirearmWeaponAttackItemComponent GetAttackMechanism(WeaponInventoryItemData weaponInventoryItemData)
         {

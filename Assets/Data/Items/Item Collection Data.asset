@@ -14,4 +14,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemWorldObjectControlPrefab: {fileID: 5127530591532848046, guid: a89a98028fc95364ca736a16af846060,
     type: 3}
-  moneyItemData: {fileID: 0}
+  itemRarityColorData:
+    itemRarityColors:
+      IsSingleLineView: 1
+      list:
+      - Key: 0
+        Value: {r: 1, g: 1, b: 1, a: 1}
+      - Key: 1
+        Value: {r: 0, g: 0.3683548, b: 1, a: 1}
+      - Key: 2
+        Value: {r: 0.40899786, g: 0.9528302, b: 0.4159257, a: 1}
+      - Key: 3
+        Value: {r: 0.8890365, g: 1, b: 0.19339621, a: 1}
+      - Key: 4
+        Value: {r: 0.745283, g: 0.54665047, b: 0, a: 1}
+      - Key: 5
+        Value: {r: 0.07475969, g: 0.4528302, b: 0.087031126, a: 1}

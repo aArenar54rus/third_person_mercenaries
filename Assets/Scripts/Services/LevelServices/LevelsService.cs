@@ -107,10 +107,10 @@ namespace Arenar.Services.LevelsService
                         return null;
                     
                     case GameMode.ShootingGallery:
-                        ShootingGalleryGameModeController shootingGalleryGameMode = new(_сharacterSpawnController, _cameraService);
-                        shootingGalleryGameMode.Initialize(_shootingGalleryLevelInfoCollection.ShootingGalleriesInfos[levelIndex]);
-                        shootingGalleryGameMode.SetLevelContext(CurrentLevelContext);
-                        return shootingGalleryGameMode;
+                        ClearLocationGameModeController clearLocationGameMode = new(_сharacterSpawnController, _cameraService);
+                        clearLocationGameMode.Initialize(_shootingGalleryLevelInfoCollection.ShootingGalleriesInfos[levelIndex]);
+                        clearLocationGameMode.SetLevelContext(CurrentLevelContext);
+                        return clearLocationGameMode;
                     
                     default:
                         Debug.LogError($"Unknown gameMode {gameMode}");

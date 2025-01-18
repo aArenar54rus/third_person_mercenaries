@@ -1,55 +1,53 @@
 using Arenar.Character;
-using Arenar.Services.DamageNumbersService;
 using DG.Tweening;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
-using Zenject;
 
-
-namespace Arenar
+namespace Arenar.Items
 {
     public abstract class FirearmWeapon : MonoBehaviour, IWeapon, ILevelItem
     {
         [SerializeField] protected Transform gunMuzzleTransform;
         [SerializeField] protected Transform clipTransform;
         [SerializeField] protected Transform secondHandPoint;
-        [SerializeField] protected Vector3 localRotation = new Vector3(-15, 90, -90);
+        [SerializeField] protected Vector3 rotationInHands;
         [SerializeField] protected LineRenderer lineRendererEffect;
         [SerializeField] protected FirearmWeaponCameraRecoilComponent firearmWeaponCameraRecoilComponent;
         
-        [Inject] public EffectsSpawner effectsSpawner;
-
-
+        private Tween _timeBetweenShotsTween;
 
         private bool _isBetweenShotsLock = false;
 
 
-        public Transform GunMuzzleTransform =>
-            gunMuzzleTransform;
-
-        public ICharacterEntity WeaponOwner { get; protected set; }
-        
+        public abstract FirearmWeaponClass FirearmWeaponClass { get; }
+        public Transform GunMuzzleTransform => gunMuzzleTransform;
+        public LineRenderer LineRendererEffect => lineRendererEffect;
+        public int ItemLevel { get; protected set; }
+        public ICharacterEntity ItemOwner { get; protected set; }
         public WeaponInventoryItemData WeaponInventoryItemData
         {
             get;
-            private set;
+            protected set;
         }
 
         public IFirearmWeaponAttackItemComponent AttackComponent
         {
             get;
-            private set;
+            protected set;
         }
 
-        protected IClipComponent ClipComponent
+        public IClipComponent ClipComponent
         {
             get;
-            set;
+            protected set;
         }
-        
-        public int ItemLevel { get; protected set; }
 
+        public IEquippedItemAimComponent AimComponent
+        {
+            get;
+            protected set;
+        }
+        public UnityEngine.Vector3 RotationInHands => rotationInHands;
         public float Damage
         { 
             get
@@ -75,13 +73,9 @@ namespace Arenar
         public WeaponType WeaponType => WeaponType.Firearm;
 
         public bool IsAutomaticAction => WeaponInventoryItemData.FirearmWeaponData.IsAutomaticShoot;
-
-        public bool IsFullClipReload => WeaponInventoryItemData.FirearmWeaponData.IsFullClipReload;
         
         public Transform SecondHandPoint => secondHandPoint;
-
-        public Vector3 LocalRotation => localRotation;
-
+        
         public bool IsShootLock => _isBetweenShotsLock;
 
         private Vector3 RecoilShakeDirection =>
@@ -98,7 +92,8 @@ namespace Arenar
             ClipComponent.Reload();
         }
 
-        public void InitializeWeapon(ItemInventoryData itemInventoryData, List<IEquippedItemComponent> itemComponents)
+        public void InitializeItem(ItemInventoryData itemInventoryData,
+                                   Dictionary<System.Type, IEquippedItemComponent> itemComponents)
         {
             if (itemInventoryData is not WeaponInventoryItemData weaponInventoryItemData
                 || itemInventoryData.ItemType != ItemType.Weapon)
@@ -112,18 +107,19 @@ namespace Arenar
             
             AttackComponent = GetEquippedComponent<IFirearmWeaponAttackItemComponent>(itemComponents);
             ClipComponent = GetEquippedComponent<IClipComponent>(itemComponents);
+            AimComponent = GetEquippedComponent<IEquippedItemAimComponent>(itemComponents);
             
             BulletPhysicalMight = weaponInventoryItemData.FirearmWeaponData.BulletPhysicalMight;
         }
-
-        public void SetWeaponLevel(int level)
+        
+        public void PickUpItem(ICharacterEntity characterOwner)
         {
-            ItemLevel = level;
+            ItemOwner = characterOwner;
         }
 
-        public void TakeWeaponInHand(ICharacterEntity weaponOwner)
+        public void DropItem()
         {
-            WeaponOwner = weaponOwner;
+            ItemOwner = null;
         }
 
         public void SetItemLevel(int itemLevel) =>
@@ -142,7 +138,7 @@ namespace Arenar
                 return;
             }
 
-            SetLaserStatus(false);
+            SetAimStatus(false);
             InitializeBullets(direction);
 
             if (firearmWeaponCameraRecoilComponent != null)
@@ -154,16 +150,16 @@ namespace Arenar
             _timeBetweenShotsTween = DOVirtual.DelayedCall(TimeBetweenShots,() => _isBetweenShotsLock = false);
         }
 
-        public void SetLaserStatus(bool status)
+        public void SetAimStatus(bool status)
         {
-            if (lineRendererEffect != null)
-                lineRendererEffect.gameObject.SetActive(status);
+            if (AimComponent != null)
+                AimComponent.SetAimStatus(status);
         }
 
         public void SetLaserPosition(Vector3 position)
         {
-            if (lineRendererEffect != null)
-                lineRendererEffect.SetPosition(1, position);
+            if (AimComponent != null)
+                AimComponent.OnUpdate(position);
         }
 
         protected virtual void InitializeBullets(Vector3 direction)
@@ -178,19 +174,16 @@ namespace Arenar
         
         protected void CreateBullet(Vector3 direction)
         {
-            DamageData damageData = new DamageData(WeaponOwner, (int)Damage, direction * BulletPhysicalMight);
+            DamageData damageData = new DamageData(ItemOwner, (int)Damage, direction * BulletPhysicalMight);
             AttackComponent.MakeShoot(gunMuzzleTransform, direction, damageData);
         }
 
 
-        protected T GetEquippedComponent<T>(List<IEquippedItemComponent> components)
+        protected T GetEquippedComponent<T>(Dictionary<System.Type, IEquippedItemComponent>  components)
             where T : IEquippedItemComponent
         {
-            foreach (var component in components)
-            {
-                if (component is T neededComponent)
-                    return neededComponent;
-            }
+            if (components.ContainsKey(typeof(T)))
+                return (T)components[typeof(T)];
             
             Debug.LogError($"No component of type {typeof(T)}");
             return default;

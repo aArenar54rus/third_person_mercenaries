@@ -1,3 +1,4 @@
+using Arenar.Items;
 using System;
 using Arenar.Services.InventoryService;
 using Arenar.Services.SaveAndLoad;
@@ -20,28 +21,23 @@ namespace Arenar.Character
         private ICharacterEntity character;
         private TickableManager tickableManager;
         private EffectsSpawner _effectsSpawner;
-        private IInventoryService inventoryService;
         
         private ICharacterInputComponent characterInputComponent;
         private ICharacterAimComponent characterAimComponent;
-        private IPreferenceManager preferenceManager;
+        private IInventoryComponent inventoryComponent;
         
-        private FirearmWeaponFactory firearmWeaponFactory;
         private ICharacterAnimationComponent<CharacterAnimationComponent.Animation, CharacterAnimationComponent.AnimationValue> characterAnimationComponent;
         
-        private CharacterPhysicsDataStorage characterPhysicsData;
         private CharacterAimAnimationDataStorage characterAimAnimationData;
         private CharacterAnimatorDataStorage characterAnimatorData;
-
-        private FirearmWeapon firearmWeapon;
-
+        
         private int _equippedWeaponIndex = 0;
         private bool _lockAction = false;
 
         private Tween _progressActionTween;
         
         
-        public bool IsFirearmWeaponEquipped => firearmWeapon != null;
+        public bool IsFirearmWeaponEquipped => InventoryComponent.EquippedFirearmWeapons != null;
 
 
         private ICharacterInputComponent CharacterInputComponent
@@ -63,9 +59,19 @@ namespace Arenar.Character
                 return characterAimComponent;
             }
         }
+
+        private IInventoryComponent InventoryComponent
+        {
+            get
+            {
+                if (inventoryComponent == null)
+                    character.TryGetCharacterComponent<IInventoryComponent>(out inventoryComponent);
+                return inventoryComponent;
+            }
+        }
         
         private bool CanMakeDistanceAttack =>
-            IsFirearmWeaponEquipped && CharacterInputComponent.AttackAction && !firearmWeapon.IsShootLock;
+            IsFirearmWeaponEquipped && CharacterInputComponent.AttackAction && !InventoryComponent.CurrentActiveWeapon.IsShootLock;
 
         private bool IsReload =>
             CharacterInputComponent.ReloadAction;
@@ -74,20 +80,12 @@ namespace Arenar.Character
         [Inject]
         public void Construct(ICharacterEntity character,
                               TickableManager tickableManager,
-                              IInventoryService inventoryService,
-                              FirearmWeaponFactory firearmWeaponFactory,
-                              IPreferenceManager preferenceManager,
-                              ICharacterDataStorage<CharacterPhysicsDataStorage> characterPhysicsDataStorage,
                               ICharacterDataStorage<CharacterAimAnimationDataStorage> characterAimAnimationDataStorage,
                               ICharacterDataStorage<CharacterAnimatorDataStorage> characterAnimatorDataStorage)
         {
             this.character = character;
             this.tickableManager = tickableManager;
-            this.inventoryService = inventoryService;
-            this.firearmWeaponFactory = firearmWeaponFactory;
-            this.preferenceManager = preferenceManager;
 
-            characterPhysicsData = characterPhysicsDataStorage.Data;
             characterAimAnimationData = characterAimAnimationDataStorage.Data;
             characterAnimatorData = characterAnimatorDataStorage.Data;
         }
@@ -110,8 +108,6 @@ namespace Arenar.Character
 
         public void OnActivate()
         {
-            OnUpdateEquippedWeaponItem();
-            inventoryService.OnUpdateEquippedWeaponItem += OnUpdateEquippedWeaponItem;
             characterAnimatorData.AnimationReactionsTriggerController.onCompleteAction += CompleteAction;
             tickableManager.Add(this);
             _lockAction = false;
@@ -119,19 +115,21 @@ namespace Arenar.Character
 
         public void OnDeactivate()
         {
-            inventoryService.OnUpdateEquippedWeaponItem -= OnUpdateEquippedWeaponItem;
             characterAnimatorData.AnimationReactionsTriggerController.onCompleteAction -= CompleteAction;
             tickableManager.Remove(this);
         }
 
         public void Tick()
         {
+            if (InventoryComponent == null || InventoryComponent.CurrentActiveWeapon == null)
+                return;
+            
             PaintLaserBeam();
             
             if (CharacterInputComponent == null || _lockAction)
                 return;
 
-            if (IsReload && firearmWeapon.ClipSize < firearmWeapon.ClipSizeMax)
+            if (IsReload && InventoryComponent.CurrentActiveWeapon.ClipSize < InventoryComponent.CurrentActiveWeapon.ClipSizeMax)
             {
                 Reload();
                 return;
@@ -146,18 +144,19 @@ namespace Arenar.Character
                 if (!CanMakeDistanceAttack)
                     return;
                 
-                if (firearmWeapon.ClipSize == 0)
+                if (InventoryComponent.CurrentActiveWeapon.ClipSize == 0)
                 {
                     Reload();
                     
                     return;
                 }
                     
-                Vector3 direction = characterAimAnimationData.BodyPistolAimPointObject.position - firearmWeapon.GunMuzzleTransform.position;
+                Vector3 direction = characterAimAnimationData.BodyPistolAimPointObject.position
+                    - InventoryComponent.CurrentActiveWeapon.GunMuzzleTransform.position;
                 direction = direction.normalized;
                 
-                firearmWeapon.MakeShot(direction, false);
-                onUpdateWeaponClipSize?.Invoke(firearmWeapon.ClipSize, firearmWeapon.ClipSizeMax);
+                inventoryComponent.CurrentActiveWeapon.MakeShot(direction, false);
+                onUpdateWeaponClipSize?.Invoke(InventoryComponent.CurrentActiveWeapon.ClipSize, InventoryComponent.CurrentActiveWeapon.ClipSizeMax);
                 characterAnimationComponent.PlayAnimation(CharacterAnimationComponent.Animation.Shoot);
                 
                 _lockAction = true;
@@ -173,7 +172,7 @@ namespace Arenar.Character
         {
             _lockAction = true;
 
-            firearmWeapon.SetLaserStatus(false);
+            InventoryComponent.CurrentActiveWeapon.SetAimStatus(false);
             if (characterAnimatorData.IsReloadByAnimation)
             {
                         
@@ -184,19 +183,26 @@ namespace Arenar.Character
                 onReloadProgress?.Invoke(0, 2.0f);
                 float progress = 0;
 
-                _progressActionTween = DOTween.To(() => progress, x => progress = x, firearmWeapon.ReloadSpeed, firearmWeapon.ReloadSpeed)
+                _progressActionTween = DOTween.To(
+                        () => progress, 
+                        x => progress = x, 
+                        InventoryComponent.CurrentActiveWeapon.ReloadSpeed,
+                        InventoryComponent.CurrentActiveWeapon.ReloadSpeed)
                     .OnUpdate(() =>
                     {
-                        onReloadProgress?.Invoke(progress, firearmWeapon.ReloadSpeed);
+                        onReloadProgress?.Invoke(progress,
+                            InventoryComponent.CurrentActiveWeapon.ReloadSpeed);
                     }).OnComplete(() =>
                     {
                         onReloadEnd?.Invoke();
-                        firearmWeapon.ReloadClip();
-                        onUpdateWeaponClipSize?.Invoke(firearmWeapon.ClipSize, firearmWeapon.ClipSizeMax);
+                        InventoryComponent.CurrentActiveWeapon.ReloadClip();
+                        onUpdateWeaponClipSize?.Invoke(InventoryComponent.CurrentActiveWeapon.ClipSize,
+                            InventoryComponent.CurrentActiveWeapon.ClipSizeMax);
 
-                        if (firearmWeapon.IsFullClipReload || firearmWeapon.ClipSize >= firearmWeapon.ClipSizeMax)
+                        if (inventoryComponent.CurrentActiveWeapon.ClipComponent is FirearmWeaponClipComponent
+                            || InventoryComponent.CurrentActiveWeapon.ClipSize >= InventoryComponent.CurrentActiveWeapon.ClipSizeMax)
                         {
-                            firearmWeapon.SetLaserStatus(true);
+                            InventoryComponent.CurrentActiveWeapon.SetAimStatus(true);
                             _lockAction = false;
                         }
                         else
@@ -219,41 +225,15 @@ namespace Arenar.Character
             
             if (!IsFirearmWeaponEquipped)
                 return;
-            
+
             if (!_lockAction && CharacterAimComponent.IsAim && CharacterAimComponent.AimProgress >= 1)
             {
-                firearmWeapon.SetLaserStatus(true);
-                firearmWeapon.SetLaserPosition(characterAimAnimationData.BodyPistolAimPointObject.position);
+                InventoryComponent.CurrentActiveWeapon.SetAimStatus(true);
+                InventoryComponent.CurrentActiveWeapon.SetLaserPosition(characterAimAnimationData.BodyPistolAimPointObject.position);
             }
             else
             {
-                firearmWeapon.SetLaserStatus(false);
-            }
-        }
-        
-        private void OnUpdateEquippedWeaponItem()
-        {
-            var equippedWeapon = inventoryService.GetEquippedWeapons()[_equippedWeaponIndex];
-            if (equippedWeapon == null || equippedWeapon.itemInventoryData == null)
-            {
-                if (firearmWeapon != null)
-                {
-                    GameObject.Destroy(firearmWeapon);
-                    firearmWeapon = null;
-                }
-                
-                characterAnimationComponent.SetAnimationValue(CharacterAnimationComponent.AnimationValue.HandPistol, 0);
-            }
-            else
-            {
-                firearmWeapon = firearmWeaponFactory.Create(equippedWeapon.itemInventoryData, characterPhysicsData.RightHandPoint);
-                firearmWeapon.TakeWeaponInHand(character);
-                
-                int playerLevel = preferenceManager.LoadValue<PlayerSaveDelegate>().playerCharacterLevel;
-                firearmWeapon.SetWeaponLevel(playerLevel);
-                characterAnimationComponent.SetAnimationValue(CharacterAnimationComponent.AnimationValue.HandPistol, 1);
-                
-                onUpdateWeaponClipSize?.Invoke(firearmWeapon.ClipSize, firearmWeapon.ClipSizeMax);
+                InventoryComponent.CurrentActiveWeapon.SetAimStatus(false);
             }
         }
     }

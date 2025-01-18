@@ -1,18 +1,13 @@
-using Arenar.Character;
-using System.Collections.Generic;
+using UnityEngine;
 
 
-namespace Arenar
+namespace Arenar.Items
 {
-    public interface IWeapon
+    public interface IWeapon : IEquippedItem
     {
-        ICharacterEntity WeaponOwner { get; }
+        public Vector3 RotationInHands { get; }
         float Damage { get; }
-        ItemInventoryData ItemInventoryData { get; }
         WeaponType WeaponType { get; }
         float TimeBetweenShots { get; }
-
-
-        void InitializeWeapon(ItemInventoryData itemInventoryData, List<IEquippedItemComponent> itemComponents);
     }
 }

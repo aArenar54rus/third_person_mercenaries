@@ -8,6 +8,7 @@ namespace Arenar
     public class FirearmWeaponData : WeaponData
     {
         [Space(5)]
+        [SerializeField] private FirearmWeaponClass firearmWeaponClass;
         [SerializeField] private FirearmWeaponAttackType firearmWeaponAttackType;
         [SerializeField] private EffectType effectType;
         [SerializeField] private bool isAutomaticShoot;
@@ -19,6 +20,9 @@ namespace Arenar
         [SerializeField] private float recoilShakeDefaultValue;
 
 
+        public FirearmWeaponClass FirearmWeaponClass =>
+            firearmWeaponClass;
+        
         public FirearmWeaponAttackType FirearmWeaponAttackType =>
             firearmWeaponAttackType;
 

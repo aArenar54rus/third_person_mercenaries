@@ -2,10 +2,10 @@ using Arenar.Services.InventoryService;
 using UnityEngine;
 
 
-namespace Arenar.Character
+namespace Arenar.Items
 {
     public interface IEquipItemFactory<TItem>
     {
-        TItem Create(ItemInventoryData itemInventoryData, Transform handOwner);
+        TItem Create(ItemInventoryData itemInventoryData);
     }
 }

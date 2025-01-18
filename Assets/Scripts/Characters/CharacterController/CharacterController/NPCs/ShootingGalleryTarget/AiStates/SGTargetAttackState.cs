@@ -1,3 +1,4 @@
+using Arenar.Items;
 using Arenar.Services.LevelsService;
 using UnityEngine;
 using Zenject;
@@ -60,15 +61,18 @@ namespace Arenar.Character
 
         public override void OnStateBegin()
         {
-            _weapon.InitializeWeapon(_weaponInventoryData);
-            _weapon.effectsSpawner ??= _projectileSpawner;
+            //_weapon.InitializeItem(_weaponInventoryData);
+            //_weapon.effectsSpawner ??= _projectileSpawner;
             _AggressionTargetCharacter = CharacterAggressionComponent.MaxAggressionTarget;
         }
 
         public override void OnStateSyncUpdate()
         {
+            // TODO: remove later
+            return;
             if (_AggressionTargetCharacter == null)
                 return;
+            
             Vector3 direction = (_AggressionTargetCharacter.CharacterTransform.position + Vector3.up) - _character.CharacterTransform.position;
             CharacterMovementComponent.Move(Vector3.zero);
             CharacterMovementComponent.Rotation(direction);
