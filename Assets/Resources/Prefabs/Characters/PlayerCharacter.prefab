@@ -491,7 +491,7 @@ GameObject:
   - component: {fileID: 1686066258263545427}
   m_Layer: 0
   m_Name: == Capes =================
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -878,7 +878,7 @@ GameObject:
   - component: {fileID: 4394228811921439205}
   m_Layer: 8
   m_Name: F02_AllOutfits
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2263,7 +2263,7 @@ Transform:
   m_GameObject: {fileID: 588193685311019000}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.425, y: 1.375, z: -0.58}
+  m_LocalPosition: {x: 0, y: 1.375, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2637,7 +2637,7 @@ GameObject:
   - component: {fileID: 6831761792917588016}
   m_Layer: 9
   m_Name: Foot Collider
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3337,7 +3337,7 @@ GameObject:
   - component: {fileID: 5662759233041392387}
   m_Layer: 9
   m_Name: CC_BaseCalf.R
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4795,7 +4795,7 @@ GameObject:
   - component: {fileID: 7901143308796204705}
   m_Layer: 0
   m_Name: == Dresses =================
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4831,7 +4831,7 @@ GameObject:
   - component: {fileID: 8817632180473433369}
   m_Layer: 0
   m_Name: C_hair_medium.03
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4991,7 +4991,7 @@ GameObject:
   - component: {fileID: 4475726003132368204}
   m_Layer: 0
   m_Name: C_hair_tied.03
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5502,7 +5502,7 @@ GameObject:
   - component: {fileID: 210163546041138356}
   m_Layer: 9
   m_Name: CC_BaseUpperarm.L
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5869,7 +5869,7 @@ GameObject:
   - component: {fileID: 8286338483342146438}
   m_Layer: 0
   m_Name: C_beard.005
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5937,7 +5937,7 @@ GameObject:
   - component: {fileID: 1717147203465963458}
   m_Layer: 9
   m_Name: CC_BaseUpperarm.R
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6187,7 +6187,7 @@ GameObject:
   - component: {fileID: 6267536574902555269}
   m_Layer: 0
   m_Name: BodyPistolAimRig
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6934,7 +6934,7 @@ GameObject:
   - component: {fileID: 4855766958330558891}
   m_Layer: 9
   m_Name: CC_BaseFoot.L
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7592,7 +7592,7 @@ GameObject:
   - component: {fileID: 4327190367145583700}
   m_Layer: 0
   m_Name: Armature_F
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8376,7 +8376,7 @@ GameObject:
   - component: {fileID: 6184264417271904265}
   m_Layer: 0
   m_Name: Head
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9031,7 +9031,7 @@ GameObject:
   - component: {fileID: 7620424222757279550}
   m_Layer: 0
   m_Name: hat01_helmet
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9216,7 +9216,7 @@ GameObject:
   - component: {fileID: 7975632338588728046}
   m_Layer: 0
   m_Name: F02_body_feet
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9532,7 +9532,7 @@ GameObject:
   - component: {fileID: 191864257899007554}
   m_Layer: 9
   m_Name: CC_Base_Spine01
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -10006,7 +10006,7 @@ GameObject:
   - component: {fileID: 1559034728151708476}
   m_Layer: 0
   m_Name: == Bottoms =================
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -10205,7 +10205,7 @@ GameObject:
   - component: {fileID: 3278519476437550183}
   m_Layer: 0
   m_Name: hair_tied_04-pony
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -10612,7 +10612,7 @@ GameObject:
   - component: {fileID: 7637093179333219855}
   m_Layer: 0
   m_Name: hat03_witch
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -10677,7 +10677,7 @@ GameObject:
   - component: {fileID: 8836900319352033130}
   m_Layer: 0
   m_Name: C_hair_medium.04
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -10875,7 +10875,7 @@ GameObject:
   - component: {fileID: 217785255012658126}
   m_Layer: 8
   m_Name: Puppet
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -10920,7 +10920,7 @@ MonoBehaviour:
   collisionLayers:
     serializedVersion: 2
     m_Bits: 515
-  collisionThreshold: 0.1
+  collisionThreshold: 100000
   collisionResistance:
     mode: 1
     floatValue: 700
@@ -11454,7 +11454,7 @@ GameObject:
   - component: {fileID: 7601242319232660051}
   m_Layer: 0
   m_Name: Behaviours
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -11536,7 +11536,7 @@ GameObject:
   - component: {fileID: 3558437558566756687}
   m_Layer: 0
   m_Name: C_beard.002
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -11848,7 +11848,7 @@ GameObject:
   - component: {fileID: 3289197490598726623}
   m_Layer: 0
   m_Name: C_hair_bangs.004
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -12266,7 +12266,7 @@ GameObject:
   - component: {fileID: 4797867741769858721}
   m_Layer: 9
   m_Name: CC_BaseCalf.L
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -12609,7 +12609,7 @@ GameObject:
   - component: {fileID: 4938686638393448888}
   m_Layer: 0
   m_Name: F02_body_shoulders
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -12764,7 +12764,7 @@ GameObject:
   - component: {fileID: 4856491602963663387}
   m_Layer: 0
   m_Name: C_hair_short.05
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -14220,7 +14220,7 @@ GameObject:
   - component: {fileID: 5738244849192365615}
   m_Layer: 0
   m_Name: MultiAimContraint_RightHand
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -14821,7 +14821,7 @@ GameObject:
   - component: {fileID: 7779748920738254175}
   m_Layer: 0
   m_Name: F02_body_hips
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -15108,7 +15108,7 @@ GameObject:
   - component: {fileID: 1564809782385971775}
   m_Layer: 9
   m_Name: Foot Collider
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -15195,7 +15195,7 @@ GameObject:
   - component: {fileID: 534470774166189110}
   m_Layer: 9
   m_Name: CC_Base_Head
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 7250588514170254948, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -15498,7 +15498,7 @@ GameObject:
   - component: {fileID: 3736285458600731366}
   m_Layer: 0
   m_Name: F02_body_torso
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -17340,7 +17340,7 @@ GameObject:
   - component: {fileID: 6893781713989149142}
   m_Layer: 0
   m_Name: C_mustache.003
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -17376,7 +17376,7 @@ GameObject:
   - component: {fileID: 446075333384762088}
   m_Layer: 9
   m_Name: CC_BaseForearm.R
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -17656,7 +17656,7 @@ GameObject:
   - component: {fileID: 7598773827476620514}
   m_Layer: 0
   m_Name: C_hair_bangs.005
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -17946,7 +17946,7 @@ GameObject:
   - component: {fileID: 6592312295889132102}
   m_Layer: 0
   m_Name: C_beard.003
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -18436,7 +18436,7 @@ GameObject:
   - component: {fileID: 1642382351398665072}
   m_Layer: 0
   m_Name: C_hair_bangs.006
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -18471,7 +18471,7 @@ GameObject:
   - component: {fileID: 1930504498377281215}
   m_Layer: 9
   m_Name: CC_BaseFoot.R
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -19327,7 +19327,7 @@ GameObject:
   - component: {fileID: 1940537443630780013}
   m_Layer: 9
   m_Name: PuppetMaster
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -20192,7 +20192,7 @@ GameObject:
   - component: {fileID: 2045542817962813293}
   m_Layer: 0
   m_Name: F02_body_legs_knee
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -20347,7 +20347,7 @@ GameObject:
   - component: {fileID: 9153247444900507109}
   m_Layer: 0
   m_Name: C_hair_long.02
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -20982,7 +20982,7 @@ GameObject:
   - component: {fileID: 4925724997049450470}
   m_Layer: 0
   m_Name: == Gloves =================
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -21497,7 +21497,7 @@ GameObject:
   - component: {fileID: 161039077374297186}
   m_Layer: 0
   m_Name: C_beard.001
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -22518,7 +22518,7 @@ GameObject:
   - component: {fileID: 8155050261265998110}
   m_Layer: 9
   m_Name: CC_Base_Hip
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -23632,7 +23632,7 @@ GameObject:
   - component: {fileID: 393671389532640550}
   m_Layer: 0
   m_Name: F02_body_arms_upper
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -23883,7 +23883,7 @@ GameObject:
   - component: {fileID: 4909781787321872298}
   m_Layer: 0
   m_Name: C_mustache.001
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -24077,7 +24077,7 @@ GameObject:
   - component: {fileID: 1649437266715122833}
   m_Layer: 0
   m_Name: == Tops =================
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -25466,7 +25466,7 @@ GameObject:
   - component: {fileID: 3379840681130192148}
   m_Layer: 0
   m_Name: Body
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -26809,7 +26809,7 @@ GameObject:
   - component: {fileID: 2032144077242132610}
   m_Layer: 0
   m_Name: C_mustache.002
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -26875,7 +26875,7 @@ GameObject:
   - component: {fileID: 9007322960466295272}
   m_Layer: 8
   m_Name: Fall
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -27192,7 +27192,7 @@ GameObject:
   - component: {fileID: 3505199988872458001}
   m_Layer: 0
   m_Name: C_mustache.004
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -27291,7 +27291,7 @@ GameObject:
   - component: {fileID: 9105281654627679987}
   m_Layer: 9
   m_Name: CC_BaseThigh.R
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -27603,7 +27603,7 @@ GameObject:
   - component: {fileID: 8967808284882383616}
   m_Layer: 0
   m_Name: MultiAimContraint_LeftHand
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -28872,7 +28872,7 @@ GameObject:
   - component: {fileID: 6857666852111093302}
   m_Layer: 0
   m_Name: F02_body_arms_lower
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -29531,7 +29531,7 @@ GameObject:
   - component: {fileID: 7440240169744352967}
   m_Layer: 0
   m_Name: C_beard.004
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -29974,7 +29974,7 @@ GameObject:
   - component: {fileID: 5703663104753995033}
   m_Layer: 0
   m_Name: PlayerCharacter
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -30325,7 +30325,7 @@ GameObject:
   - component: {fileID: 5954360766747715286}
   m_Layer: 0
   m_Name: C_mustache.005
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -30552,7 +30552,7 @@ GameObject:
   - component: {fileID: 1755469470712409807}
   m_Layer: 0
   m_Name: C_hair_short.06
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -30765,7 +30765,7 @@ GameObject:
   - component: {fileID: 3029727918224072588}
   m_Layer: 0
   m_Name: F02_body_hands
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -32545,7 +32545,7 @@ GameObject:
   - component: {fileID: 5247322103629018948}
   m_Layer: 0
   m_Name: F02_body_torso.001
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -32921,7 +32921,7 @@ GameObject:
   - component: {fileID: 3206256725882574972}
   m_Layer: 0
   m_Name: C_hair_long.03
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -33512,7 +33512,7 @@ GameObject:
   - component: {fileID: 8355747703479848945}
   m_Layer: 0
   m_Name: F02_body_torso.002
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -34894,7 +34894,7 @@ GameObject:
   - component: {fileID: 4060010626582511706}
   m_Layer: 0
   m_Name: == Boots =================
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -35480,7 +35480,7 @@ GameObject:
   - component: {fileID: 8851110468414028416}
   m_Layer: 0
   m_Name: F02_body_legs_upper
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -36261,7 +36261,7 @@ GameObject:
   - component: {fileID: 8457722528938070531}
   m_Layer: 9
   m_Name: CC_BaseForearm.L
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -37017,7 +37017,7 @@ GameObject:
   - component: {fileID: 5616238148763358014}
   m_Layer: 9
   m_Name: CC_BaseThigh.L
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -37294,7 +37294,7 @@ GameObject:
   - component: {fileID: 1216366973624418619}
   m_Layer: 0
   m_Name: HeadRig
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -37567,7 +37567,7 @@ GameObject:
   - component: {fileID: 1043395631518170225}
   m_Layer: 0
   m_Name: hat02_cleric
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -37666,7 +37666,7 @@ GameObject:
   - component: {fileID: 5928174534380778402}
   m_Layer: 0
   m_Name: F02_body_legs_lower
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

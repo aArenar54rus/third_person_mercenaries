@@ -144,7 +144,6 @@ namespace Arenar.Character
                 
                 case AnimationValue.Aim:
                     SetAnimationBool(animIDAim, value > 0);
-                    Debug.LogError("Is Aim - " + (value > 0));
                     break;
                 
                 case AnimationValue.OneHanded:
