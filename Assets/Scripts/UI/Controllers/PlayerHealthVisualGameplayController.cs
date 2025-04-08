@@ -11,11 +11,11 @@ namespace Arenar.Services.UI
         private ICharacterLiveComponent playerCharacterLiveComponent;
         private ICharacterProgressionComponent playerCharacterProgressionComponent;
         
-        private ComponentCharacterController playerCharacterController;
+        private ICharacterEntity playerCharacterController;
         private GameplayPlayerParametersWindowLayer gameplayPlayerParametersWindowLayer;
 
 
-        private ComponentCharacterController Character
+        private ICharacterEntity Character
         {
             get
             {
@@ -92,12 +92,14 @@ namespace Arenar.Services.UI
             //throw new System.NotImplementedException();
         }
 
-        private void OnInstallNewCharacter(ComponentCharacterController characterController)
+        private void OnInstallNewCharacter(ICharacterEntity characterController)
         {
             playerCharacterController = characterController;
             PlayerCharacterLiveComponent.OnCharacterChangeHealthValue += OnCharacterChangeHealthValue;
 
-            OnCharacterChangeHealthValue(PlayerCharacterLiveComponent.Health, PlayerCharacterLiveComponent.HealthMax);
+            OnCharacterChangeHealthValue(
+                PlayerCharacterLiveComponent.HealthContainer.Health,
+                PlayerCharacterLiveComponent.HealthContainer.HealthMax);
         }
 
         private void OnCharacterChangeHealthValue(int health, int healthMax) =>

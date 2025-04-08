@@ -13,8 +13,7 @@ namespace Arenar.Character
         public event Action<ICharacterEntity> OnCharacterDie;
         public event Action<ICharacterEntity> OnCharacterGetDamageBy;
         public event Action<int, int> OnCharacterChangeHealthValue;
-
-
+        
         private ShootingGalleryTargetCharacterController _character;
         private ShootingGalleryTargetParameters _shootingGalleryTargetParameters;
         
@@ -27,22 +26,9 @@ namespace Arenar.Character
         
         private Tween _deathTween;
         
-        private int _health;
         
-        
-        public bool IsAlive => _health > 0;
-
-        public int Health
-        {
-            get => _health;
-            private set
-            {
-                _health = Mathf.Clamp(value, 0, HealthMax);
-                OnCharacterChangeHealthValue?.Invoke(Health, HealthMax);
-            }
-        }
-
-        public int HealthMax { get; private set; }
+        public HealthContainer HealthContainer { get; set; }
+        public bool IsAlive => HealthContainer.Health > 0;
         
         
         [Inject]
@@ -75,10 +61,12 @@ namespace Arenar.Character
         public void OnActivate()
         {
             _deathTween?.Kill(false);
-            
-            HealthMax = _shootingGalleryTargetParameters.BaseHealth
-                        + _shootingGalleryTargetParameters.AddedHealthByLvl * (_character.CharacterLevel - 1);
-            Health = HealthMax;
+
+            HealthContainer = new HealthContainer();
+            HealthContainer.HealthMax = _shootingGalleryTargetParameters.BaseHealth
+                + _shootingGalleryTargetParameters.AddedHealthByLvl
+                * (_character.CharacterLevel - 1);
+            HealthContainer.Health = HealthContainer.HealthMax;
             SetAlive();
         }
 
@@ -96,18 +84,20 @@ namespace Arenar.Character
                 _characterRigidbody.AddForce(damageData.BulletMight, ForceMode.Impulse);
 
             _levelsService.CurrentLevelContext.SettedDamage += damageData.Damage;
-            Health -= damageData.Damage;
+            HealthContainer.Health -= damageData.Damage;
+            OnCharacterChangeHealthValue?.Invoke(HealthContainer.Health, HealthContainer.HealthMax);
+            
             if (damageData.DamageSetterCharacter != null)
                 _damageNumbersService.PlayDamageNumber(damageData.Damage, _characterRigidbody.transform, damageData.DamageSetterCharacter.CharacterTransform);
             OnCharacterGetDamageBy?.Invoke(damageData.DamageSetterCharacter);
             
-            if (Health <= 0)
+            if (HealthContainer.Health <= 0)
                 SetDeath();
         }
 
         public void SetAlive()
         {
-            Health = HealthMax;
+            HealthContainer.Health = HealthContainer.HealthMax;
             _characterRigidbody.velocity = Vector3.zero;
             _characterRigidbody.useGravity = false;
         }
@@ -115,7 +105,7 @@ namespace Arenar.Character
         public void SetDeath()
         {
             _characterRigidbody.useGravity = true;
-            Health = 0;
+            HealthContainer.Health = 0;
             _levelsService.CurrentLevelContext.CurrentTargetCount++;
             OnCharacterDie?.Invoke(_character);
             

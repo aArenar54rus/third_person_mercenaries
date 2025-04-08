@@ -9,9 +9,9 @@ namespace Arenar.Character
         private const float THRESHOLD = 0.01f;
         
         
-        private ICharacterEntity _character;
+        private ICharacterEntity characterOwner;
         private CharacterPhysicsDataStorage characterPhysicsDataStorage;
-        private PlayerCharacterParametersData _playerCharacterParametersData;
+        private PlayerCharacterParametersData playerCharacterParametersData;
         private TickableManager tickableManager;
         private PlayerInput playerInput;
         private Camera mainCamera;
@@ -22,7 +22,6 @@ namespace Arenar.Character
         private CharacterAnimationComponent characterAnimationComponent;
 
         // player
-        private float speed;
         private float animationBlend;
         private float targetRotation = 0.0f;
         private float rotationVelocity;
@@ -48,17 +47,7 @@ namespace Arenar.Character
             !AimComponent.IsAim;
 
         private Transform CharacterTransform =>
-            _character.CharacterTransform;
-
-        private PlayerInput PlayerInputs
-        {
-            get
-            {
-                playerInput ??= new PlayerInput();
-                playerInput.Player.Enable();
-                return playerInput;
-            }
-        }
+            characterOwner.CharacterTransform;
 
         private Vector3 InputDirection =>
             new Vector3(characterInputComponent.MoveAction.x, 0.0f, characterInputComponent.MoveAction.y).normalized;
@@ -68,7 +57,7 @@ namespace Arenar.Character
             get
             {
                 if (_aimComponent == null)
-                    _character.TryGetCharacterComponent<ICharacterAimComponent>(out _aimComponent);
+                    characterOwner.TryGetCharacterComponent<ICharacterAimComponent>(out _aimComponent);
                 return _aimComponent;
             }
         }
@@ -82,23 +71,27 @@ namespace Arenar.Character
                               PlayerCharacterParametersData playerCharacterParametersData)
         {
             mainCamera = camera;
-            _character = character;
-            _playerCharacterParametersData = playerCharacterParametersData;
+            characterOwner = character;
+            this.playerCharacterParametersData = playerCharacterParametersData;
             this.tickableManager = tickableManager;
             this.characterPhysicsDataStorage = characterPhysicsDataStorage.Data;
         }
 
         public void Initialize()
         {
-            _character.TryGetCharacterComponent<ICharacterLiveComponent>(out characterLiveComponent);
-            _character.TryGetCharacterComponent<ICharacterRayCastComponent>(out characterRayCastComponent);
-            _character.TryGetCharacterComponent<ICharacterInputComponent>(out characterInputComponent);
+            characterOwner.TryGetCharacterComponent<ICharacterLiveComponent>(out characterLiveComponent);
+            characterOwner.TryGetCharacterComponent<ICharacterRayCastComponent>(out characterRayCastComponent);
+            characterOwner.TryGetCharacterComponent<ICharacterInputComponent>(out characterInputComponent);
             
-            if (_character.TryGetCharacterComponent<ICharacterAnimationComponent>(out ICharacterAnimationComponent animComponent))
+            if (characterOwner.TryGetCharacterComponent<ICharacterAnimationComponent>(out ICharacterAnimationComponent animComponent))
             {
                 if (animComponent is CharacterAnimationComponent characterAnimationComponent)
                     this.characterAnimationComponent = characterAnimationComponent;
             }
+
+            MovementContainer = new MovementContainer();
+            MovementContainer.MovementSpeed = playerCharacterParametersData.MoveSpeed;
+            MovementContainer.SprintSpeed = playerCharacterParametersData.SprintSpeed;
         }
 
         public void DeInitialize() { }
@@ -123,13 +116,16 @@ namespace Arenar.Character
             Rotation(default);
             CameraRotation();
         }
+        
+        public MovementContainer MovementContainer { get; set; }
+
 
         public void Move(Vector3 direction)
         {
             // set target speed based on move speed, sprint speed and if sprint is pressed
             float targetSpeed = characterInputComponent.SprintAction
-                ? _playerCharacterParametersData.SprintSpeed
-                : _playerCharacterParametersData.MoveSpeed;
+                ? MovementContainer.SprintSpeed
+                : MovementContainer.MovementSpeed;
 
             // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 
@@ -144,7 +140,8 @@ namespace Arenar.Character
 
             float speedOffset = 0.1f;
             float inputMagnitude = characterInputComponent.MoveAction.magnitude;
-
+            float speed;
+            
             // accelerate or decelerate to target speed
             if (currentHorizontalSpeed < targetSpeed - speedOffset
                 || currentHorizontalSpeed > targetSpeed + speedOffset)
@@ -152,7 +149,7 @@ namespace Arenar.Character
                 // creates curved result rather than a linear one giving a more organic speed change
                 // note T in Lerp is clamped, so we don't need to clamp our speed
                 speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude,
-                    Time.deltaTime * _playerCharacterParametersData.SpeedChangeRate);
+                    Time.deltaTime * playerCharacterParametersData.SpeedChangeRate);
 
                 // round speed to 3 decimal places
                 speed = Mathf.Round(speed * 1000f) / 1000f;
@@ -163,7 +160,7 @@ namespace Arenar.Character
             }
 
             animationBlend = Mathf.Lerp(animationBlend, targetSpeed,
-                Time.deltaTime * _playerCharacterParametersData.SpeedChangeRate);
+                Time.deltaTime * playerCharacterParametersData.SpeedChangeRate);
 
             if (animationBlend < 0.01f)
                 animationBlend = 0f;
@@ -187,13 +184,13 @@ namespace Arenar.Character
             float runningAnimMultiplierY = runningAnimMultiplier * characterInputComponent.MoveAction.y;
 
             animationBlendX = Mathf.Lerp(animationBlendX, runningAnimMultiplierX,
-                Time.deltaTime * _playerCharacterParametersData.SpeedChangeRate);
+                Time.deltaTime * playerCharacterParametersData.SpeedChangeRate);
             animationBlendY = Mathf.Lerp(animationBlendY, runningAnimMultiplierY,
-                Time.deltaTime * _playerCharacterParametersData.SpeedChangeRate);
+                Time.deltaTime * playerCharacterParametersData.SpeedChangeRate);
 
             float animationSpeedBlend = 0;
             if (animationBlend > 0.05f)
-                animationSpeedBlend = currentHorizontalSpeed / _playerCharacterParametersData.MoveSpeed * runningAnimMultiplier;
+                animationSpeedBlend = currentHorizontalSpeed / playerCharacterParametersData.MoveSpeed * runningAnimMultiplier;
 
             characterAnimationComponent.SetAnimationValue(Character.CharacterAnimationComponent.AnimationValue.Speed, animationSpeedBlend);
             characterAnimationComponent.SetAnimationValue(Character.CharacterAnimationComponent.AnimationValue.MotionSpeedX, animationBlendX);
@@ -214,7 +211,7 @@ namespace Arenar.Character
                                  mainCamera.transform.eulerAngles.y;
                 float rotation = Mathf.SmoothDampAngle(CharacterTransform.eulerAngles.y, targetRotation,
                     ref rotationVelocity,
-                    _playerCharacterParametersData.RotationSmoothTime);
+                    playerCharacterParametersData.RotationSmoothTime);
 
                 // rotate to face input direction relative to camera position
                 CharacterTransform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
@@ -225,7 +222,7 @@ namespace Arenar.Character
 
                 float rotation = Mathf.SmoothDampAngle(CharacterTransform.eulerAngles.y, targetRotation,
                     ref rotationVelocity,
-                    _playerCharacterParametersData.RotationSmoothTime);
+                    playerCharacterParametersData.RotationSmoothTime);
                 
                 CharacterTransform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
             }
@@ -236,7 +233,7 @@ namespace Arenar.Character
             if (characterRayCastComponent.IsGrounded)
             {
                 // reset the fall timeout timer
-                fallTimeoutDelta = _playerCharacterParametersData.FallTimeout;
+                fallTimeoutDelta = playerCharacterParametersData.FallTimeout;
 
                 // update animator if using character
                 characterAnimationComponent.SetAnimationValue(CharacterAnimationComponent.AnimationValue.Grounded, 1); 
@@ -248,10 +245,10 @@ namespace Arenar.Character
                     verticalVelocity = -2f;
                 
                 // Jump
-                if (_playerCharacterParametersData.CanJump && characterInputComponent.JumpAction && jumpTimeoutDelta <= 0.0f)
+                if (playerCharacterParametersData.CanJump && characterInputComponent.JumpAction && jumpTimeoutDelta <= 0.0f)
                 {
                     // the square root of H * -2 * G = how much velocity needed to reach desired height
-                    verticalVelocity = Mathf.Sqrt(_playerCharacterParametersData.JumpHeight * -2f * _playerCharacterParametersData.Gravity);
+                    verticalVelocity = Mathf.Sqrt(playerCharacterParametersData.JumpHeight * -2f * playerCharacterParametersData.Gravity);
                     characterAnimationComponent.SetAnimationValue(Character.CharacterAnimationComponent.AnimationValue.Jump, 1);
                 }
 
@@ -263,7 +260,7 @@ namespace Arenar.Character
             {
                 characterAnimationComponent.SetAnimationValue(CharacterAnimationComponent.AnimationValue.Grounded, 0); 
                 // reset the jump timeout timer
-                jumpTimeoutDelta = _playerCharacterParametersData.JumpTimeout;
+                jumpTimeoutDelta = playerCharacterParametersData.JumpTimeout;
 
                 // fall timeout
                 if (fallTimeoutDelta >= 0.0f)
@@ -279,14 +276,14 @@ namespace Arenar.Character
             // apply gravity over time if under terminal (multiply by delta time twice to linearly speed up over time)
             if (verticalVelocity < terminalVelocity)
             {
-                verticalVelocity += _playerCharacterParametersData.Gravity * Time.deltaTime;
+                verticalVelocity += playerCharacterParametersData.Gravity * Time.deltaTime;
             }
         }
         
         private void CameraRotation()
         {
             // if there is an input and camera position is not fixed
-            if (characterInputComponent.LookAction.sqrMagnitude >= THRESHOLD && !_playerCharacterParametersData.LockCameraPosition)
+            if (characterInputComponent.LookAction.sqrMagnitude >= THRESHOLD && !playerCharacterParametersData.LockCameraPosition)
             {
                 //Don't multiply mouse input by Time.deltaTime;
                 //float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
@@ -299,10 +296,10 @@ namespace Arenar.Character
 
             // clamp our rotations so our values are limited 360 degrees
             cinemachineTargetYaw = ClampAngle(cinemachineTargetYaw, float.MinValue, float.MaxValue);
-            cinemachineTargetPitch = ClampAngle(cinemachineTargetPitch, _playerCharacterParametersData.BottomClamp, _playerCharacterParametersData.TopClamp);
+            cinemachineTargetPitch = ClampAngle(cinemachineTargetPitch, playerCharacterParametersData.BottomClamp, playerCharacterParametersData.TopClamp);
 
             // Cinemachine will follow this target
-            characterPhysicsDataStorage.CameraTransform.transform.rotation = Quaternion.Euler(cinemachineTargetPitch + _playerCharacterParametersData.CameraAngleOverride,
+            characterPhysicsDataStorage.CameraTransform.transform.rotation = Quaternion.Euler(cinemachineTargetPitch + playerCharacterParametersData.CameraAngleOverride,
                 cinemachineTargetYaw, 0.0f);
         }
         
@@ -316,8 +313,8 @@ namespace Arenar.Character
         private float GetSensitivity()
         {
             if (AimComponent.IsAim)
-                return _playerCharacterParametersData.AimCameraSensitivity;
-            else return _playerCharacterParametersData.DefaultCameraSensitivity;
+                return playerCharacterParametersData.AimCameraSensitivity;
+            else return playerCharacterParametersData.DefaultCameraSensitivity;
         }
     }
 }

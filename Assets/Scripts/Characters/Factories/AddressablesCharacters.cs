@@ -1,19 +1,16 @@
 using System;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
-using UnityEngine.Serialization;
-
 
 namespace Arenar.Character
 {
     [Serializable]
     public class AddressablesCharacters
     {
-        [SerializeField] private string _resourcesPlayerPrefab;
+        [SerializeField] private SerializableDictionary<CharacterTypeKeys, CharacterData> _resourcesPhysicalCharacterPrefabs;
         [SerializeField] private SerializableDictionary<NpcType, CharacterData> _npcCharacterDatas;
 
 
-        public string ResourcesPlayerPrefab => _resourcesPlayerPrefab;
+        public SerializableDictionary<CharacterTypeKeys, CharacterData> ResourcesPhysicsHumanoidPrefab => _resourcesPhysicalCharacterPrefabs;
         public SerializableDictionary<NpcType, CharacterData> NpcCharacterDatas => _npcCharacterDatas;
 
 

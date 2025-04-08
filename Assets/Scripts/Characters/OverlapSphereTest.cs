@@ -18,7 +18,7 @@ public class OverlapSphereTest : MonoBehaviour
     {
         get
         {
-            if (characterController is PlayerComponentCharacterController player)
+            if (characterController is PhysicalHumanoidComponentCharacterController player)
                 return player.CameraTransform;
 
             return null;

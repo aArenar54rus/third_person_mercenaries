@@ -1,45 +1,50 @@
 ﻿using UnityEngine;
-using UnityEngine.AddressableAssets;
 using Zenject;
-
 
 namespace Arenar.Character
 {
-    public class PlayerCharacterFactory : ICharacterEntityFactory<ComponentCharacterController>
+    public class PhysicsHumanoidCharacterFactory : ICharacterEntityFactory<PhysicalHumanoidComponentCharacterController>
     {
-        private readonly string _playerCharacterResourcePath;
+        private readonly Transform characterRoot;
+
+        
+        private readonly SerializableDictionary<CharacterTypeKeys, AddressablesCharacters.CharacterData> characterResourcePaths;
         private readonly DiContainer container;
         private readonly TickableManager tickableManager;
         private readonly InitializableManager initializableManager;
 
 
-        public PlayerCharacterFactory(DiContainer container,
-                                      TickableManager tickableManager,
-                                      InitializableManager initializableManager,
-                                      AddressablesCharacters addressablesCharacters)
+        public PhysicsHumanoidCharacterFactory(DiContainer container,
+                                               TickableManager tickableManager,
+                                               InitializableManager initializableManager,
+                                               AddressablesCharacters addressablesCharacters)
         {
             this.container = container;
             this.tickableManager = tickableManager;
             this.initializableManager = initializableManager;
-            _playerCharacterResourcePath = addressablesCharacters.ResourcesPlayerPrefab;
+            characterResourcePaths = addressablesCharacters.ResourcesPhysicsHumanoidPrefab;
+            
+            characterRoot = new GameObject("PhysicsHumanoidCharacterRoot").transform;
         }
         
         
-        public ComponentCharacterController Create(Transform parent)
+        public PhysicalHumanoidComponentCharacterController Create(CharacterTypeKeys characterEntityType)
         {
-            ComponentCharacterController playerCharacterController = null;
+            PhysicalHumanoidComponentCharacterController playerCharacterController = null;
             DiContainer subContainer = container.CreateSubContainer();
             
-            var prefab = Resources.Load<GameObject>(_playerCharacterResourcePath);
-            prefab = GameObject.Instantiate(prefab, parent);
-            playerCharacterController = prefab.GetComponent<ComponentCharacterController>();
+            var prefab = Resources.Load<GameObject>(characterResourcePaths[characterEntityType].CharacterPrefabResources);
+            prefab = GameObject.Instantiate(prefab, characterRoot);
+            playerCharacterController = prefab.GetComponent<PhysicalHumanoidComponentCharacterController>();
 
-            InstallPostBindings(subContainer, playerCharacterController);
+            InstallPostBindings(subContainer, playerCharacterController, characterEntityType);
             subContainer.Inject(playerCharacterController);
             return playerCharacterController;
         }
 
-        private void InstallPostBindings(DiContainer subContainer, ComponentCharacterController characterControl)
+        private void InstallPostBindings(DiContainer subContainer,
+                                         PhysicalHumanoidComponentCharacterController characterControl,
+                                         CharacterTypeKeys characterEntityType)
         {
             subContainer.ResolveRoots();
             
@@ -60,8 +65,17 @@ namespace Arenar.Character
                 .To<PhysicalHumanoidComponentCharacterController>()
                 .FromInstance(characterControl)
                 .AsSingle();
-            
-            subContainer.Install<PlayerCharacterComponentsInstaller>();
+
+            switch (characterEntityType)
+            {
+                case CharacterTypeKeys.Player:
+                    subContainer.Install<PlayerCharacterComponentsInstaller>();
+                    break;
+                
+                case CharacterTypeKeys.DefaultKnight:
+                    subContainer.Install<DefaultKnightComponentsInstaller>();
+                    break;
+            }
         }
     }
 }

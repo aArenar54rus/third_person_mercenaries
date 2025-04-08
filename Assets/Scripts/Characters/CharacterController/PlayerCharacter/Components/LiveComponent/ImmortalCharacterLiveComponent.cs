@@ -8,11 +8,10 @@ namespace Arenar.Character
         public event Action<ICharacterEntity> OnCharacterDie;
         public event Action<ICharacterEntity> OnCharacterGetDamageBy;
         public event Action<int, int> OnCharacterChangeHealthValue;
-
-
+        
+        
+        public HealthContainer HealthContainer { get; set; }
         public bool IsAlive { get; private set; }
-        public int Health { get; private set; }
-        public int HealthMax { get; private set; }
 
 
         public void Initialize() { }
@@ -22,14 +21,16 @@ namespace Arenar.Character
         public void OnActivate()
         {
             IsAlive = true;
-            HealthMax = Health = 1;
+            
+            HealthContainer = new HealthContainer();
+            HealthContainer.HealthMax = HealthContainer.Health = 1;
         }
         
         public void OnDeactivate() { }
 
         public void SetDamage(DamageData damageData)
         {
-            OnCharacterChangeHealthValue?.Invoke(Health, HealthMax);
+            OnCharacterChangeHealthValue?.Invoke(HealthContainer.Health, HealthContainer.HealthMax);
         }
 
         public void SetAlive() {}

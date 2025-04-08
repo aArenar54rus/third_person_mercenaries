@@ -9,6 +9,8 @@ namespace Arenar.Character
 {
     public class ShootingGalleryTargetFactory : ICharacterEntityFactory<ShootingGalleryTargetCharacterController>
     {
+        private Transform _characterRoot;
+        
         private readonly string _characterResourcePath;
         private readonly DiContainer _container;
         
@@ -25,10 +27,12 @@ namespace Arenar.Character
             _tickableManager = tickableManager;
             _initializableManager = initializableManager;
             _characterResourcePath = addressablesCharacters.NpcCharacterDatas[NpcType.ShootingGalleryTarget].CharacterPrefabResources;
+            
+            _characterRoot = new GameObject("CharacterRoot").transform;
         }
         
 
-        public ShootingGalleryTargetCharacterController Create(Transform parent)
+        public ShootingGalleryTargetCharacterController Create(CharacterTypeKeys characterEntityType)
         {
             ShootingGalleryTargetCharacterController characterController = null;
             
@@ -37,7 +41,7 @@ namespace Arenar.Character
 
                         
             var prefab = Resources.Load<GameObject>(_characterResourcePath);
-            prefab = GameObject.Instantiate(prefab, parent);
+            prefab = GameObject.Instantiate(prefab, _characterRoot);
             characterController = prefab.GetComponent<ShootingGalleryTargetCharacterController>();
 
             InstallPostBindings(subContainer, characterController);

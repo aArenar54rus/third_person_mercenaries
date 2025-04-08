@@ -3,12 +3,12 @@ using UnityEngine;
 
 namespace Arenar.Character
 {
-    public class PlayerComponentCharacterController : ComponentCharacterController,
-        ICharacterDataStorage<CharacterAudioDataStorage>,
-        ICharacterDataStorage<CharacterVisualDataStorage>,
-        ICharacterDataStorage<CharacterAnimatorDataStorage>,
-        ICharacterDataStorage<CharacterPhysicsDataStorage>,
-        ICharacterDataStorage<CharacterAimAnimationDataStorage>
+    public class PhysicalHumanoidComponentCharacterController : ComponentCharacterController,
+                                                                ICharacterDataStorage<CharacterAudioDataStorage>,
+                                                                ICharacterDataStorage<CharacterVisualDataStorage>,
+                                                                ICharacterDataStorage<CharacterAnimatorDataStorage>,
+                                                                ICharacterDataStorage<CharacterPhysicsDataStorage>,
+                                                                ICharacterDataStorage<CharacterAimAnimationDataStorage>
     {
         [SerializeField] private CharacterAudioDataStorage characterAudioDataStorage;
         [SerializeField] private CharacterVisualDataStorage characterVisualDataStorage;

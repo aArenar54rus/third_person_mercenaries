@@ -21,7 +21,7 @@ namespace Arenar.Character
             Container.BindInstance(animationComponent).AsSingle();
             Container.Inject(animationComponent);
             
-            ICharacterSoundComponent<CharacterSoundComponent.KittySounds> soundComponent = new CharacterSoundComponent();
+            ICharacterSoundComponent<CharacterSoundComponent.HumanoidSounds> soundComponent = new CharacterSoundComponent();
             characterComponentsPool.Add(typeof(ICharacterSoundComponent), soundComponent);
             Container.BindInstance(soundComponent).AsSingle();
             Container.Inject(soundComponent);

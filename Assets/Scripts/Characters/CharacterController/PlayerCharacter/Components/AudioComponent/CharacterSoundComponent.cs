@@ -5,9 +5,9 @@ using Zenject;
 
 namespace Arenar.Character
 {
-    public class CharacterSoundComponent : ICharacterSoundComponent<CharacterSoundComponent.KittySounds>
+    public class CharacterSoundComponent : ICharacterSoundComponent<CharacterSoundComponent.HumanoidSounds>
     {
-        public enum KittySounds
+        public enum HumanoidSounds
         {
             None = 0,
             Footstep = 1,
@@ -23,8 +23,8 @@ namespace Arenar.Character
         
         [Inject]
         public void Construct(ICharacterDataStorage<CharacterAudioDataStorage> characterAudioDataStorage,
-            ICharacterEntity characterEntity,
-            AudioLibrary audioLibrary)
+                              ICharacterEntity characterEntity,
+                              AudioLibrary audioLibrary)
         {
             this.soundsLibrary = audioLibrary.SoundsLibrary;
             this.characterEntity = characterEntity;
@@ -56,14 +56,14 @@ namespace Arenar.Character
             StopSound();
         }
 
-        public void PlaySound(KittySounds soundType)
+        public void PlaySound(HumanoidSounds soundType)
         {
             switch (soundType)
             {
-                case KittySounds.None:
+                case HumanoidSounds.None:
                     return;
                 
-                case KittySounds.Footstep:
+                case HumanoidSounds.Footstep:
                     audioController.PlaySound(soundsLibrary.GetRandomGroundStepSound(GroundType.Concrete), false);
                     return;
                 
@@ -83,7 +83,7 @@ namespace Arenar.Character
 
         private void PlayRandomFootstepSound()
         {
-            PlaySound(KittySounds.Footstep);
+            PlaySound(HumanoidSounds.Footstep);
         }
     }
 }

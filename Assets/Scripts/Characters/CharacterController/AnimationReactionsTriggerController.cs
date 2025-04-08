@@ -14,6 +14,7 @@ namespace Arenar.Character
         {
             if (animationEvent.animatorClipInfo.weight > 0.5f)
             {
+                Debug.Log("Footstep");
                 onFootStep?.Invoke();
             }
         }

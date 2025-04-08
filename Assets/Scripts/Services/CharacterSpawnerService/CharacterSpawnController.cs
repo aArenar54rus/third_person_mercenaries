@@ -1,30 +1,27 @@
 using System;
 using System.Collections.Generic;
 using Arenar.Character;
-using Arenar.Services.LevelsService;
 using UnityEngine;
-
 
 namespace Arenar
 {
     public class CharacterSpawnController
     {
-        public event Action<ComponentCharacterController> OnCreatePlayerCharacter;
+        public event Action<ICharacterEntity> OnCreatePlayerCharacter;
+        public event Action<ICharacterEntity> OnCreateEnemyCharacter;
         
         
         private Transform _charactersContainer;
         
-        private ICharacterEntityFactory<ComponentCharacterController> _playerFactory;
+        private ICharacterEntityFactory<PhysicalHumanoidComponentCharacterController> _physicsHumanoidCharacterFactory;
         private ICharacterEntityFactory<ShootingGalleryTargetCharacterController> _shootingGalleryTargetFactory;
         
-        private ComponentCharacterController playerCharacter;
-
-        private Dictionary<Type, List<ComponentCharacterController>> _createdCharacters;
-
-
-        public ComponentCharacterController PlayerCharacter => playerCharacter;
+        private Dictionary<CharacterTypeKeys, List<ICharacterEntity>> _activeHumanoidCharacters = new();
+        private Dictionary<CharacterTypeKeys, Queue<ICharacterEntity>> _createdHumanoidCharacters = new();
 
 
+        public ICharacterEntity PlayerCharacter => _activeHumanoidCharacters[CharacterTypeKeys.Player][0];
+        
         private Transform CharactersContainer
         {
             get
@@ -40,85 +37,78 @@ namespace Arenar
         }
 
 
-        public CharacterSpawnController(ICharacterEntityFactory<ComponentCharacterController> playerFactory,
-                                    ICharacterEntityFactory<ShootingGalleryTargetCharacterController> shootingGalleryTargetFactory)
+        public CharacterSpawnController(ICharacterEntityFactory<PhysicalHumanoidComponentCharacterController> physicsHumanoidCharacterFactory,
+                                        ICharacterEntityFactory<ShootingGalleryTargetCharacterController> shootingGalleryTargetFactory)
         {
-            _playerFactory = playerFactory;
+            _physicsHumanoidCharacterFactory = physicsHumanoidCharacterFactory;
             _shootingGalleryTargetFactory = shootingGalleryTargetFactory;
-            _createdCharacters = new Dictionary<Type, List<ComponentCharacterController>>();
+            _createdHumanoidCharacters = new Dictionary<CharacterTypeKeys, Queue<ICharacterEntity>>();
         }
         
         
-        public ComponentCharacterController CreatePlayerCharacter(Vector3 position, Quaternion rotation)
+        public ICharacterEntity GetCharacter(CharacterTypeKeys characterType)
         {
-            ComponentCharacterController componentCharacter = null;
-            if (_createdCharacters.ContainsKey(typeof(ComponentCharacterController)) && _createdCharacters[typeof(ComponentCharacterController)].Count > 0)
+            ICharacterEntity componentCharacter = GetHumanoidCharacter(characterType);
+            OnCreatePlayerCharacter?.Invoke(componentCharacter);
+            return componentCharacter;
+        }
+        
+        private ICharacterEntity GetHumanoidCharacter(CharacterTypeKeys characterType)
+        {
+            ICharacterEntity componentCharacter = null;
+
+            if (_createdHumanoidCharacters.ContainsKey(characterType)
+                && _createdHumanoidCharacters[CharacterTypeKeys.DefaultKnight].Count > 0)
             {
-                componentCharacter = _createdCharacters[typeof(ComponentCharacterController)][0];
+                componentCharacter = _createdHumanoidCharacters[characterType].Dequeue();
             }
             else
             {
-                if (!_createdCharacters.ContainsKey(typeof(ComponentCharacterController)))
-                    _createdCharacters.Add(typeof(ComponentCharacterController), new List<ComponentCharacterController>());
+                if (!_createdHumanoidCharacters.ContainsKey(characterType))
+                    _createdHumanoidCharacters.Add(characterType, new Queue<ICharacterEntity>());
+                
+                componentCharacter = _physicsHumanoidCharacterFactory.Create(characterType);
+                _createdHumanoidCharacters[characterType].Enqueue(componentCharacter);
 
-                componentCharacter = _playerFactory.Create(CharactersContainer);
-                componentCharacter.gameObject.transform.SetParent(CharactersContainer);
-                playerCharacter = componentCharacter;
-
-                _createdCharacters[typeof(ComponentCharacterController)].Add(componentCharacter);
+                componentCharacter.CharacterTransform.SetParent(CharactersContainer);
                 componentCharacter.Initialize();
             }
 
-            playerCharacter.CharacterTransform.position = position;
-            playerCharacter.CharacterTransform.rotation = rotation;
-            OnCreatePlayerCharacter?.Invoke(playerCharacter);
-            
             return componentCharacter;
         }
 
-        /*public PuppetComponentCharacterController CreatePuppet()
-        {
-            PuppetComponentCharacterController componentCharacter =
-                (PuppetComponentCharacterController)_playerFactory.Create(CharactersContainer);
-            
-            componentCharacter.gameObject.transform.SetParent(CharactersContainer);
-            componentCharacter.gameObject.transform.position = new Vector3(2, 0, 0);
-            return componentCharacter;
-        }*/
+       public ShootingGalleryTargetCharacterController CreateShootingGalleryTarget()
+       {
+           /*if (!_createdCharacters.ContainsKey(typeof(ShootingGalleryTargetCharacterController)))
+               _createdCharacters.Add(typeof(ShootingGalleryTargetCharacterController), new List<ComponentCharacterController>());
 
-        public ShootingGalleryTargetCharacterController CreateShootingGalleryTarget()
-        {
-            if (!_createdCharacters.ContainsKey(typeof(ShootingGalleryTargetCharacterController)))
-                _createdCharacters.Add(typeof(ShootingGalleryTargetCharacterController), new List<ComponentCharacterController>());
-            
-            foreach (var createdTarget in _createdCharacters[typeof(ShootingGalleryTargetCharacterController)])
-            {
-                if (createdTarget.gameObject.activeSelf)
-                    continue;
-                
-                return (ShootingGalleryTargetCharacterController)createdTarget;
-            }
-            
-            ShootingGalleryTargetCharacterController newTarget = _shootingGalleryTargetFactory.Create(CharactersContainer);
-            _createdCharacters[typeof(ShootingGalleryTargetCharacterController)].Add(newTarget);
-            newTarget.Initialize();
+           foreach (var createdTarget in _createdCharacters[typeof(ShootingGalleryTargetCharacterController)])
+           {
+               if (createdTarget.gameObject.activeSelf)
+                   continue;
 
-            return newTarget;
+               return (ShootingGalleryTargetCharacterController)createdTarget;
+           }
+
+           ShootingGalleryTargetCharacterController newTarget = _shootingGalleryTargetFactory.Create(CharactersContainer, null);
+           _createdCharacters[typeof(ShootingGalleryTargetCharacterController)].Add(newTarget);
+           newTarget.Initialize();
+
+           return newTarget;*/
+
+            return default;
         }
 
         public void DisableAllCharacters()
         {
-            foreach (var characters in _createdCharacters)
+            foreach (var characters in _createdHumanoidCharacters)
             {
                 foreach (var character in characters.Value)
                 {
                     character.DeActivate();
                     character.DeInitialize();
-                    character.gameObject.SetActive(false);
-                    GameObject.Destroy(character);
+                    character.CharacterTransform.gameObject.SetActive(false);
                 }
-                
-                characters.Value.Clear();
             }
         }
     }

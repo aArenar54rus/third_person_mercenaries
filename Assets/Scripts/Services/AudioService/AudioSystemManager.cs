@@ -8,18 +8,18 @@ namespace Arenar.AudioSystem
 {
     public class AudioSystemManager : IAudioSystemManager
     {
-		private const float DB_MINIMUM = -80f;
-		private const float DB_MAXIMUM = 0f;
+        private const float DB_MINIMUM = -80f;
+        private const float DB_MAXIMUM = 0f;
 
 
-		private AudioMixerData audioMixerData;
+        private AudioMixerData audioMixerData;
         private IOptionsController optionsController;
         private IUiSoundManager uiSoundManager;
-		private Tween disableSoundsTween;
+        private Tween disableSoundsTween;
 
 
         public AudioSystemManager(AudioMixerData audioMixerData,
-	        IOptionsController optionsController)
+                                  IOptionsController optionsController)
         {
             this.audioMixerData = audioMixerData;
             this.optionsController = optionsController;
@@ -87,13 +87,13 @@ namespace Arenar.AudioSystem
                 volume = 0f;
 
             if (!audioMixerData.AudioMixerGroup.audioMixer.SetFloat(audioGroupName,
-                Mathf.Lerp(DB_MINIMUM, DB_MAXIMUM, volume)))
+                    Mathf.Lerp(DB_MINIMUM, DB_MAXIMUM, volume)))
             {
                 Debug.LogError($"Not found {audioGroupName} audio type!");
             }
         }
 
-		public AudioMixerGroup GetAudioMixerGroup(AudioSystemType type)
+        public AudioMixerGroup GetAudioMixerGroup(AudioSystemType type)
         {
             audioMixerData.AudioGroupNames.TryGetValue(type, out string audioGroupName);
 

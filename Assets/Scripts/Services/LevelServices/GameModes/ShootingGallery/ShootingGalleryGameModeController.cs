@@ -42,9 +42,11 @@ namespace Arenar.Services.LevelsService
 
         public override void StartGame()
         {
-            var playerCharacter = _сharacterSpawnController.CreatePlayerCharacter(new Vector3(3,0,0), Quaternion.Euler(new Vector3(0, 0, 0)));
-
-            if (playerCharacter is PlayerComponentCharacterController player)
+            var playerCharacter = _сharacterSpawnController.GetCharacter(CharacterTypeKeys.Player);
+            playerCharacter.CharacterTransform.position = new Vector3(3, 0, 0); 
+            playerCharacter.CharacterTransform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
+            
+            if (playerCharacter is PhysicalHumanoidComponentCharacterController player)
             {
                 _cameraService.SetCameraState<CameraStateThirdPerson>(player.CameraTransform,
                     player.CharacterTransform);

@@ -17,7 +17,7 @@ namespace Arenar.Services.UI
 
         private ComponentCharacterController _characterOnCross;
         private ICharacterDescriptionComponent _descriptionComponent = null;
-        private ComponentCharacterController _playerCharacter;
+        private ICharacterEntity _playerCharacter;
         
         private ICharacterLiveComponent _enemyCharacterLiveComponent = null;
         
@@ -157,15 +157,16 @@ namespace Arenar.Services.UI
             {
                 
                 bool isEnemyOnCross = (enemyCharacterController != null
-                                       && enemyCharacterController.TryGetCharacterComponent(out _descriptionComponent)
-                                       && enemyCharacterController.TryGetCharacterComponent(out _enemyCharacterLiveComponent));
+                    && enemyCharacterController.TryGetCharacterComponent(out _descriptionComponent)
+                    && enemyCharacterController.TryGetCharacterComponent(out _enemyCharacterLiveComponent));
 
                 if (isEnemyOnCross && _enemyCharacterLiveComponent.IsAlive)
                 {
                     var locName = LocalizationManager.GetTranslation(_descriptionComponent.CharacterName);
                     var locDesc = LocalizationManager.GetTranslation(_descriptionComponent.CharacterDescription);
                     _gameplayInformationLayer.EnemyTargetInformationPanel.SetEnemy(locName, locDesc);
-                    OnEnemyCharacterChangeHealthValue(_enemyCharacterLiveComponent.Health, _enemyCharacterLiveComponent.HealthMax);
+                    OnEnemyCharacterChangeHealthValue(_enemyCharacterLiveComponent.HealthContainer.Health,
+                        _enemyCharacterLiveComponent.HealthContainer.HealthMax);
                     
                     _enemyCharacterLiveComponent.OnCharacterChangeHealthValue += OnEnemyCharacterChangeHealthValue;
                     _enemyCharacterLiveComponent.OnCharacterDie += OnEnemyCharacterInfoDisable;
@@ -207,7 +208,7 @@ namespace Arenar.Services.UI
             _characterOnCross = null;
         }
 
-        private void OnCreatePlayerCharacter(ComponentCharacterController playerCharacterController)
+        private void OnCreatePlayerCharacter(ICharacterEntity playerCharacterController)
         {
             _playerCharacter = playerCharacterController;
         }

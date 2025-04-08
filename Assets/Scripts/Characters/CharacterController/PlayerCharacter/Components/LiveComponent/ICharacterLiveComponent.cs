@@ -10,11 +10,8 @@ namespace Arenar.Character
         event Action<int, int> OnCharacterChangeHealthValue; 
         
         
+        HealthContainer HealthContainer { get; set; }
         bool IsAlive { get; }
-        
-        int Health { get; }
-        
-        int HealthMax { get; }
 
 
         void SetDamage(DamageData damageData);

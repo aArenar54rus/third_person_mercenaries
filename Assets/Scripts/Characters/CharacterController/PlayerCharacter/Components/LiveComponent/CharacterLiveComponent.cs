@@ -19,31 +19,23 @@ namespace Arenar.Character
         private PlayerCharacterParametersData playerCharacterParametersData;
         private IPreferenceManager preferenceManager;
         private Transform characterTransform;
-        private int healthMax;
-        private int health;
 
         private ICharacterEntity _playerEntity;
         private ILevelsService _levelsService;
 
         private Tween _deathTween;
-
         
-        public bool IsAlive =>
-            health > 0;
-
-        public int Health =>
-            health;
         
-        public int HealthMax =>
-            healthMax;
+        public bool IsAlive => HealthContainer.Health > 0;
+        public HealthContainer HealthContainer { get; set; }
 
 
         [Inject]
         public void Construct(ICharacterEntity playerEntity,
-            ICharacterDataStorage<CharacterPhysicsDataStorage> characterPhysicsDataStorage,
-            ILevelsService levelsService,
-            IPreferenceManager preferenceManager,
-            PlayerCharacterParametersData playerCharacterParametersData)
+                              ICharacterDataStorage<CharacterPhysicsDataStorage> characterPhysicsDataStorage,
+                              ILevelsService levelsService,
+                              IPreferenceManager preferenceManager,
+                              PlayerCharacterParametersData playerCharacterParametersData)
         {
             characterTransform = characterPhysicsDataStorage.Data.CharacterTransform;
             this.playerCharacterParametersData = playerCharacterParametersData;
@@ -58,17 +50,17 @@ namespace Arenar.Character
                 return;
             
             _levelsService.CurrentLevelContext.GettedDamage += damageData.Damage;
-            health -= damageData.Damage;
+            HealthContainer.Health -= damageData.Damage;
             
-            OnCharacterChangeHealthValue?.Invoke(health, healthMax);
-            if (health <= 0)
+            OnCharacterChangeHealthValue?.Invoke(HealthContainer.Health, HealthContainer.HealthMax);
+            if (HealthContainer.Health <= 0)
                 SetDeath();
         }
 
         public void SetAlive()
         {
-            health = healthMax;
-            OnCharacterChangeHealthValue?.Invoke(health, healthMax);
+            HealthContainer.Health = HealthContainer.HealthMax;
+            OnCharacterChangeHealthValue?.Invoke(HealthContainer.Health, HealthContainer.HealthMax);
         }
 
         public void SetDeath()
@@ -78,7 +70,8 @@ namespace Arenar.Character
                 characterTransform.gameObject.SetActive(false);
                 _levelsService.CompleteLevel();
             });
-            health = 0;
+            
+            HealthContainer.Health = 0;
             _levelsService.CurrentLevelContext.PlayerDeath++;
 
             OnCharacterDie?.Invoke(_playerEntity);
@@ -86,6 +79,12 @@ namespace Arenar.Character
 
         public void Initialize()
         {
+            HealthContainer = new HealthContainer()
+            {
+                HealthMax = playerCharacterParametersData.DefaultHealthMax,
+                Health = playerCharacterParametersData.DefaultHealthMax,
+            };
+            
             _deathTween?.Kill(false);
         }
 
@@ -97,8 +96,8 @@ namespace Arenar.Character
         public void OnActivate()
         {
             int playerLevel = preferenceManager.LoadValue<PlayerSaveDelegate>().playerCharacterLevel;
-            healthMax = playerCharacterParametersData.DefaultHealthMax + playerCharacterParametersData.LevelHealthAdded * playerLevel;
-            health = healthMax;
+            HealthContainer.HealthMax = playerCharacterParametersData.DefaultHealthMax + playerCharacterParametersData.LevelHealthAdded * playerLevel;
+            HealthContainer.Health = HealthContainer.HealthMax;
             SetAlive();
         }
 

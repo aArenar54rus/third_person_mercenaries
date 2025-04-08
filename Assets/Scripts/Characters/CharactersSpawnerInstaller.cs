@@ -14,8 +14,8 @@ namespace Arenar.Installers
         
         public override void InstallBindings()
         {
-            Container.Bind<ICharacterEntityFactory<ComponentCharacterController>>()
-                .To<PlayerCharacterFactory>()
+            Container.Bind<ICharacterEntityFactory<PhysicalHumanoidComponentCharacterController>>()
+                .To<PhysicsHumanoidCharacterFactory>()
                 .AsSingle().NonLazy();
 
             Container.Bind<ICharacterEntityFactory<ShootingGalleryTargetCharacterController>>()

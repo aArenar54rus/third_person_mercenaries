@@ -5,7 +5,6 @@ using Arenar.LocationService;
 using Arenar.Services.SaveAndLoad;
 using TakeTop.PreferenceSystem;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using Zenject;
 
 
@@ -101,6 +100,8 @@ namespace Arenar.Services.LevelsService
                 switch (gameMode)
                 {
                     case GameMode.Campaing:
+                        ClearLocationGameModeController clearCampaingLocationGameMode = new(_сharacterSpawnController, _cameraService);
+
                         return null;
                     
                     case GameMode.Survival:
