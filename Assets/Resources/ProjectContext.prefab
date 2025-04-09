@@ -721,12 +721,6 @@ MonoBehaviour:
       - Key: 2
         Value:
           characterPrefabResources: Prefabs/Characters/Enemy_Knight_Black
-    _npcCharacterDatas:
-      IsSingleLineView: 1
-      list:
-      - Key: 1
-        Value:
-          characterPrefabResources: Prefabs/Characters/ShootingGalleryTarget
   _playerCharacterLevelData: {fileID: 11400000, guid: 309b2cd50ecaa3b45a747da64732a7d8,
     type: 2}
   _shootingGalleryTargetParameters: {fileID: 11400000, guid: d0859fc89c0ac2b4c8691d3881b1066a,
@@ -1381,7 +1375,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c2f586f630852f4c9a581c019ea7983, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _shootingGalleryLevelInfoCollection: {fileID: 11400000, guid: c2fb7534daeb4904f8ae7cfbcd347307,
+  clearLocationLevelInfoCollection: {fileID: 11400000, guid: c2fb7534daeb4904f8ae7cfbcd347307,
+    type: 2}
+  survivalLevelInfoCollection: {fileID: 11400000, guid: b52167b5a0b6eec4799dbaa8848e0371,
     type: 2}
 --- !u!1001 &5340927575648329657
 PrefabInstance:

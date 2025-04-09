@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Zenject;
@@ -10,32 +12,24 @@ namespace Arenar.LocationService
     {
         private ZenjectSceneLoader _zenjectSceneLoader;
         
-        private List<LocationName> _loadedLocation = new List<LocationName>();
+        private List<LocationName> _loadedLocation = new();
         private LocationName _lastLoadedLocation;
 
         private LocationName _needToUnloadLocationName;
+        private ILocationService locationServiceImplementation;
 
 
         public LocationService(ZenjectSceneLoader zenjectSceneLoader,
-            TickableManager tickableManager)
+                               TickableManager tickableManager)
         {
             _zenjectSceneLoader = zenjectSceneLoader;
             tickableManager.Add(this);
         }
         
         
-        public void LoadLocation(LocationName locationName)
+        public void LoadLocation(LocationName locationName, Action<DiContainer> onComplete)
         {
-            if (_loadedLocation.Contains(locationName))
-            {
-                Debug.LogError($"Location {locationName} load early!");
-                return;
-            }
-
-            _loadedLocation.Add(locationName);
-            _lastLoadedLocation = locationName;
-            SceneManager.LoadScene(_lastLoadedLocation.ToString(), LoadSceneMode.Additive);
-            //_zenjectSceneLoader.LoadScene(_lastLoadedLocation.ToString(), LoadSceneMode.Additive);
+            LoadLocationAsync(locationName, onComplete);
         }
 
         public void UnloadLastLoadedLocation()
@@ -54,10 +48,10 @@ namespace Arenar.LocationService
             _needToUnloadLocationName = locationName;
         }
 
-        public void ChangeLoadedScene(LocationName newLocationName)
+        public void ChangeLoadedScene(LocationName newLocationName, Action<DiContainer> onComplete = null)
         {
             UnloadLastLoadedLocation();
-            LoadLocation(newLocationName);
+            LoadLocationAsync(newLocationName, onComplete);
         }
 
         public void Tick()
@@ -71,6 +65,41 @@ namespace Arenar.LocationService
 
             SceneManager.UnloadScene(_needToUnloadLocationName.ToString());
             _needToUnloadLocationName = LocationName.None;
+        }
+        
+        private void LoadLocationAsync(LocationName locationName, Action<DiContainer> onComplete)
+        {
+            if (_loadedLocation.Contains(locationName))
+            {
+                Debug.LogError($"Location {locationName} load early!");
+                return;
+            }
+            
+            _loadedLocation.Add(locationName);
+            _lastLoadedLocation = locationName;
+            
+            _zenjectSceneLoader.LoadSceneAsync(
+                    _lastLoadedLocation.ToString(), LoadSceneMode.Additive)
+                .completed += _ =>
+            {
+                var loadedScene = SceneManager.GetSceneByName(locationName.ToString());
+                if (!loadedScene.IsValid() || !loadedScene.isLoaded)
+                {
+                    Debug.LogError($"Scene {locationName} did not load correctly!");
+                    onComplete?.Invoke(null);
+                    return;
+                }
+
+                SceneContext sceneContext = null;
+                foreach (var rootObject in loadedScene.GetRootGameObjects())
+                {
+                    sceneContext = rootObject.GetComponentInChildren<SceneContext>();
+                    if (sceneContext != null)
+                        break;
+                }
+                
+                onComplete?.Invoke(sceneContext.Container);
+            };
         }
     }
 }

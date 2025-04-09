@@ -9,12 +9,18 @@ namespace Arenar
     [Serializable]
     public class LevelData
     {
-        [SerializeField] private int _levelIndex;
-        [SerializeField] private string _levelNameKey;
-        [SerializeField] private Sprite _levelPortrait;
-        [SerializeField] private LocationName _locationName;
-        [SerializeField] private SerializableDictionary<LevelDifficult, LevelDifficultData> _difficultData;
-        [SerializeField] private GameMode _gameMode;
+        [SerializeField]
+        private int _levelIndex;
+        [SerializeField]
+        private string _levelNameKey;
+        [SerializeField]
+        private Sprite _levelPortrait;
+        [SerializeField]
+        private LocationName _locationName;
+        [SerializeField]
+        private SerializableDictionary<LevelDifficult, LevelDifficultData> _difficultData;
+        [SerializeField]
+        private GameMode _gameMode;
 
 
         public int LevelIndex => _levelIndex;

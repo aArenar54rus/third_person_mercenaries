@@ -7,12 +7,9 @@ namespace Arenar.Character
     public class AddressablesCharacters
     {
         [SerializeField] private SerializableDictionary<CharacterTypeKeys, CharacterData> _resourcesPhysicalCharacterPrefabs;
-        [SerializeField] private SerializableDictionary<NpcType, CharacterData> _npcCharacterDatas;
 
 
         public SerializableDictionary<CharacterTypeKeys, CharacterData> ResourcesPhysicsHumanoidPrefab => _resourcesPhysicalCharacterPrefabs;
-        public SerializableDictionary<NpcType, CharacterData> NpcCharacterDatas => _npcCharacterDatas;
-
 
 
         [Serializable]

@@ -17,7 +17,7 @@ namespace Arenar.Character
         private FirearmWeapon _weapon;
         private WeaponInventoryItemData _weaponInventoryData;
         private EffectsSpawner _projectileSpawner;
-        private ShootingGalleryLevelInfoCollection _shootingGalleryLevelInfoCollection;
+        private ClearLocationLevelInfoCollection clearLocationLevelInfoCollection;
         
         
         private ICharacterMovementComponent CharacterMovementComponent
@@ -44,13 +44,13 @@ namespace Arenar.Character
         [Inject]
         private void Construct(ICharacterEntity character,
             ICharacterDataStorage<SGTargetWeaponDataStorage> weaponDataStorage,
-            ShootingGalleryLevelInfoCollection shootingGalleryLevelInfoCollection,
+            ClearLocationLevelInfoCollection clearLocationLevelInfoCollection,
             EffectsSpawner projectileSpawner)
         {
             _character = character;
             _weapon = weaponDataStorage.Data.Weapon;
             _weaponInventoryData = weaponDataStorage.Data.WeaponInventoryData;
-            _shootingGalleryLevelInfoCollection = shootingGalleryLevelInfoCollection;
+            this.clearLocationLevelInfoCollection = clearLocationLevelInfoCollection;
             _projectileSpawner = projectileSpawner;
         }
         

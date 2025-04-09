@@ -40,7 +40,7 @@ MonoBehaviour:
         Value:
           _minimalEnemyLevel: 50
           _maximumEnemyLevel: 55
-    _gameMode: 1
+    _gameMode: 2
   - _levelIndex: 2
     _levelNameKey: loc_key_level2
     _levelPortrait: {fileID: 21300000, guid: 3539eb04cbdb92747af6dfd92deaee74, type: 3}

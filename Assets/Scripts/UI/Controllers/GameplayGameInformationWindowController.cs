@@ -26,6 +26,8 @@ namespace Arenar.Services.UI
         {
             get
             {
+                if (_playerCharacter == null)
+                    return null;
                 _playerCharacter.TryGetCharacterComponent(out ICharacterRayCastComponent playerCharacterRaycastComponent);
                 return playerCharacterRaycastComponent;
             }
@@ -35,6 +37,8 @@ namespace Arenar.Services.UI
         {
             get
             {
+                if (_playerCharacter == null)
+                    return null;
                 _playerCharacter.TryGetCharacterComponent(out ICharacterAimComponent characterAimComponent);
                 return characterAimComponent;
             }
@@ -44,6 +48,8 @@ namespace Arenar.Services.UI
         {
             get
             {
+                if (_playerCharacter == null)
+                    return null;
                 _playerCharacter.TryGetCharacterComponent(out ICharacterAttackComponent characterAttackComponent);
                 return characterAttackComponent;
             }
@@ -86,6 +92,7 @@ namespace Arenar.Services.UI
         {
             DisableProgressSlider();
             
+            return;
             var playerAttackComponent = PlayerCharacterAttackComponent;
             playerAttackComponent.onReloadStart += EnableProgressSlider;
             playerAttackComponent.onReloadEnd += DisableProgressSlider;

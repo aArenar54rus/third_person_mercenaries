@@ -20,13 +20,11 @@ namespace Arenar.Character
 
         public ShootingGalleryTargetFactory(DiContainer container,
                                             TickableManager tickableManager,
-                                            InitializableManager initializableManager,
-                                            AddressablesCharacters addressablesCharacters)
+                                            InitializableManager initializableManager)
         {
             _container = container;
             _tickableManager = tickableManager;
             _initializableManager = initializableManager;
-            _characterResourcePath = addressablesCharacters.NpcCharacterDatas[NpcType.ShootingGalleryTarget].CharacterPrefabResources;
             
             _characterRoot = new GameObject("CharacterRoot").transform;
         }

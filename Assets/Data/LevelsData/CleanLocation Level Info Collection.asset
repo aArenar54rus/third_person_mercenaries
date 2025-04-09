@@ -1,0 +1,112 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09a53e6a1de76764e872637c96ac27e8, type: 3}
+  m_Name: CleanLocation Level Info Collection
+  m_EditorClassIdentifier: 
+  _shootingGalleriesInfos:
+    IsSingleLineView: 1
+    list:
+    - Key: 0
+      Value: []
+    - Key: 1
+      Value: []
+    - Key: 2
+      Value:
+      - activateTime: 0
+        _pathPointIndexes: 00000000100000001c000000
+      - activateTime: 0
+        _pathPointIndexes: 0d0000001900000020000000
+      - activateTime: 0
+        _pathPointIndexes: 07000000150000001e000000
+      - activateTime: 5
+        _pathPointIndexes: 03000000120000001f000000
+      - activateTime: 5
+        _pathPointIndexes: 09000000150000001e000000
+      - activateTime: 5
+        _pathPointIndexes: 0b000000180000001c000000
+      - activateTime: 11
+        _pathPointIndexes: 0a00000019000000
+      - activateTime: 11
+        _pathPointIndexes: 0800000016000000
+      - activateTime: 11
+        _pathPointIndexes: 0400000011000000
+      - activateTime: 17
+        _pathPointIndexes: 09000000160000001d000000
+      - activateTime: 17
+        _pathPointIndexes: 050000001300000020000000
+      - activateTime: 17
+        _pathPointIndexes: 0d0000001b000000
+    - Key: 3
+      Value:
+      - activateTime: 0
+        _pathPointIndexes: 0d0000001b000000
+      - activateTime: 0
+        _pathPointIndexes: 0a00000019000000
+      - activateTime: 0
+        _pathPointIndexes: 0800000017000000
+      - activateTime: 4
+        _pathPointIndexes: 0700000015000000
+      - activateTime: 4
+        _pathPointIndexes: 0500000010000000
+      - activateTime: 4
+        _pathPointIndexes: 030000000e000000
+      - activateTime: 6
+        _pathPointIndexes: 0100000013000000
+      - activateTime: 8
+        _pathPointIndexes: 020000001700000014000000
+      - activateTime: 10
+        _pathPointIndexes: 040000001000000011000000
+      - activateTime: 12
+        _pathPointIndexes: 0600000018000000
+      - activateTime: 15
+        _pathPointIndexes: 0700000015000000
+      - activateTime: 15
+        _pathPointIndexes: 0d0000001b000000
+      - activateTime: 15
+        _pathPointIndexes: 0800000016000000
+      - activateTime: 15
+        _pathPointIndexes: 030000000e000000
+      - activateTime: 0
+        _pathPointIndexes: 0500000018000000
+    - Key: 4
+      Value:
+      - activateTime: 0
+        _pathPointIndexes: 000000001600000011000000
+      - activateTime: 0
+        _pathPointIndexes: 06000000120000000f000000
+      - activateTime: 5
+        _pathPointIndexes: 01000000130000001d000000
+      - activateTime: 5
+        _pathPointIndexes: 05000000140000001e000000
+      - activateTime: 5
+        _pathPointIndexes: 070000000a0000000e000000
+      - activateTime: 9
+        _pathPointIndexes: 030000001a000000
+      - activateTime: 9
+        _pathPointIndexes: 0600000018000000
+      - activateTime: 12
+        _pathPointIndexes: 080000000a000000
+      - activateTime: 15
+        _pathPointIndexes: 0300000015000000120000000f000000
+      - activateTime: 15
+        _pathPointIndexes: 0b000000140000000a0000000d000000
+      - activateTime: 15
+        _pathPointIndexes: 090000000c0000000e000000
+      - activateTime: 20
+        _pathPointIndexes: 080000001b000000
+      - activateTime: 20
+        _pathPointIndexes: 090000001a000000
+      - activateTime: 23
+        _pathPointIndexes: 08000000120000000f000000
+      - activateTime: 23
+        _pathPointIndexes: 070000000a0000001e000000
+  _levelTime: 60

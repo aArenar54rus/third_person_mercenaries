@@ -1,11 +1,9 @@
 using System;
 using Arenar.Services.LevelsService;
 using Arenar.Services.SaveAndLoad;
-using DG.Tweening;
 using TakeTop.PreferenceSystem;
 using UnityEngine;
 using Zenject;
-
 
 namespace Arenar.Character
 {
@@ -22,8 +20,6 @@ namespace Arenar.Character
 
         private ICharacterEntity _playerEntity;
         private ILevelsService _levelsService;
-
-        private Tween _deathTween;
         
         
         public bool IsAlive => HealthContainer.Health > 0;
@@ -65,12 +61,6 @@ namespace Arenar.Character
 
         public void SetDeath()
         {
-            _deathTween = DOVirtual.DelayedCall(1.0f, () =>
-            {
-                characterTransform.gameObject.SetActive(false);
-                _levelsService.CompleteLevel();
-            });
-            
             HealthContainer.Health = 0;
             _levelsService.CurrentLevelContext.PlayerDeath++;
 
@@ -84,14 +74,9 @@ namespace Arenar.Character
                 HealthMax = playerCharacterParametersData.DefaultHealthMax,
                 Health = playerCharacterParametersData.DefaultHealthMax,
             };
-            
-            _deathTween?.Kill(false);
         }
 
-        public void DeInitialize()
-        {
-            _deathTween?.Kill(true);
-        }
+        public void DeInitialize() {}
 
         public void OnActivate()
         {
@@ -101,9 +86,6 @@ namespace Arenar.Character
             SetAlive();
         }
 
-        public void OnDeactivate()
-        {
-            _deathTween?.Kill(true);
-        }
+        public void OnDeactivate() {}
     }
 }

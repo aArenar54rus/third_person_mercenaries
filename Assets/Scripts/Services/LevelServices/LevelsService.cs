@@ -18,20 +18,22 @@ namespace Arenar.Services.LevelsService
         private int _lastCompleteLevel = 0;
         private LevelDifficult _lastCompleteDifficult;
 
-        private ILocationService _locationService;
-        private IPreferenceManager _preferenceManager;
-        private LevelData[] _levelDatas;
+        private ILocationService locationService;
+        private IPreferenceManager preferenceManager;
+        private LevelData[] levelDatas;
 
         private GameModeController _gameModeController;
 
-        private ICameraService _cameraService;
-        private CharacterSpawnController _сharacterSpawnController;
-        private ShootingGalleryLevelInfoCollection _shootingGalleryLevelInfoCollection;
+        private ICameraService cameraService;
+        private CharacterSpawnController сharacterSpawnController;
+        private ClearLocationLevelInfoCollection clearLocationLevelInfoCollection;
+        private SurvivalLevelInfoCollection survivalLevelInfoCollection;
+        private PlayerCharacterParametersUpgradeService playerCharacterParametersUpgradeService;
 
-        private TickableManager _tickableManager;
+        private TickableManager tickableManager;
 
         
-        public LevelData[] LevelDatas => _levelDatas;
+        public LevelData[] LevelDatas => levelDatas;
         public int LastCompleteLevel => _lastCompleteLevel;
         public LevelDifficult LastCompleteDifficult => _lastCompleteDifficult;
         public LevelContext CurrentLevelContext { get; private set; }
@@ -44,24 +46,29 @@ namespace Arenar.Services.LevelsService
                               CharacterSpawnController сharacterSpawnController,
                               TickableManager tickableManager,
                               ICameraService cameraService,
-                              ShootingGalleryLevelInfoCollection shootingGalleryLevelInfoCollection)
+                              ClearLocationLevelInfoCollection clearLocationLevelInfoCollection,
+                              SurvivalLevelInfoCollection survivalLevelInfoCollection,
+                              PlayerCharacterParametersUpgradeService playerCharacterParametersUpgradeService)
         {
-            _locationService = locationService;
-            _preferenceManager = preferenceManager;
-            _levelDatas = levelDatas;
-            _сharacterSpawnController = сharacterSpawnController;
-            _tickableManager = tickableManager;
-            _shootingGalleryLevelInfoCollection = shootingGalleryLevelInfoCollection;
-            _cameraService = cameraService;
+            this.locationService = locationService;
+            this.preferenceManager = preferenceManager;
+            this.levelDatas = levelDatas;
+            this.сharacterSpawnController = сharacterSpawnController;
+            this.tickableManager = tickableManager;
+            this.clearLocationLevelInfoCollection = clearLocationLevelInfoCollection;
+            this.survivalLevelInfoCollection = survivalLevelInfoCollection;
+            this.playerCharacterParametersUpgradeService = playerCharacterParametersUpgradeService;
             
-            var playerSaveData = _preferenceManager.LoadValue<LevelProgressionSaveDelegate>();
+            this.cameraService = cameraService;
+            
+            var playerSaveData = this.preferenceManager.LoadValue<LevelProgressionSaveDelegate>();
             _lastCompleteLevel = playerSaveData.completedLevel;
             _lastCompleteDifficult = playerSaveData.completeDifficult;
         }
         
         public bool TryGetLevelDataByIndex(int levelIndex, out LevelData levelData)
         {
-            foreach (var ld in _levelDatas)
+            foreach (var ld in levelDatas)
             {
                 if (ld.LevelIndex != levelIndex)
                     continue;
@@ -84,32 +91,47 @@ namespace Arenar.Services.LevelsService
             CurrentLevelContext = new LevelContext(levelData,
                 levelDifficult,
                 gameMode,
-                _shootingGalleryLevelInfoCollection.ShootingGalleriesInfos[levelIndex].Length,
-                _shootingGalleryLevelInfoCollection.LevelTime);
+                clearLocationLevelInfoCollection.ShootingGalleriesInfos[levelIndex].Length,
+                clearLocationLevelInfoCollection.LevelTime);
             
-            _locationService.ChangeLoadedScene(levelData.LocationName);
+            locationService.ChangeLoadedScene(levelData.LocationName,
+                (sceneContainer) =>
+                {
+                    _gameModeController = CreateGame(sceneContainer);
+                    _gameModeController.StartGame();
+                    _gameModeController.onGameComplete += CompleteLevel;
+                    tickableManager.Add(_gameModeController);
+                });
+            
 
-            _gameModeController = CreateGame();
-            _gameModeController.StartGame();
-            _gameModeController.onGameComplete += CompleteLevel;
-            _tickableManager.Add(_gameModeController);
-
-
-            GameModeController CreateGame()
+            GameModeController CreateGame(DiContainer sceneContainer)
             {
                 switch (gameMode)
                 {
                     case GameMode.Campaing:
-                        ClearLocationGameModeController clearCampaingLocationGameMode = new(_сharacterSpawnController, _cameraService);
+                        // ClearLocationGameModeController clearCampaingLocationGameMode = new(сharacterSpawnController, cameraService);
 
                         return null;
                     
                     case GameMode.Survival:
-                        return null;
+                        // PlayerSpawnPoint spawnPoint = container.Resolve<PlayerSpawnPoint>();
+                        // EnemySpawnPoints enemySpawnPoints = container.Resolve<EnemySpawnPoints>();
+                        SurvivalGameModeController survivalGameModeController = new SurvivalGameModeController(
+                            this,
+                            сharacterSpawnController,
+                            cameraService,
+                            survivalLevelInfoCollection,
+                            sceneContainer,
+                            playerCharacterParametersUpgradeService
+                        );
+
+                        survivalGameModeController.SetLevelContext(CurrentLevelContext);
+                        
+                        return survivalGameModeController;
                     
                     case GameMode.ShootingGallery:
-                        ClearLocationGameModeController clearLocationGameMode = new(_сharacterSpawnController, _cameraService);
-                        clearLocationGameMode.Initialize(_shootingGalleryLevelInfoCollection.ShootingGalleriesInfos[levelIndex]);
+                        ClearLocationGameModeController clearLocationGameMode = new(сharacterSpawnController, cameraService);
+                        clearLocationGameMode.Initialize(clearLocationLevelInfoCollection.ShootingGalleriesInfos[levelIndex]);
                         clearLocationGameMode.SetLevelContext(CurrentLevelContext);
                         return clearLocationGameMode;
                     
@@ -130,7 +152,7 @@ namespace Arenar.Services.LevelsService
                 return;
             }
 
-            if (!_сharacterSpawnController.PlayerCharacter
+            if (!сharacterSpawnController.PlayerCharacter
                     .TryGetCharacterComponent<ICharacterLiveComponent>(out ICharacterLiveComponent liveComponent))
             {
                 return;
@@ -143,8 +165,8 @@ namespace Arenar.Services.LevelsService
             if (CurrentLevelContext.GameResultStatus == LevelContext.GameResult.Victory)
             {
                 _lastCompleteLevel = CurrentLevelContext.LevelData.LevelIndex;
-                var playerSaveData = _preferenceManager.LoadValue<LevelProgressionSaveDelegate>();
-                if (_lastCompleteLevel >= _levelDatas.Length - 1)
+                var playerSaveData = preferenceManager.LoadValue<LevelProgressionSaveDelegate>();
+                if (_lastCompleteLevel >= levelDatas.Length - 1)
                 {
                     _lastCompleteLevel = -1;
                     if (_lastCompleteDifficult != LevelDifficult.Infinity)
@@ -155,10 +177,10 @@ namespace Arenar.Services.LevelsService
                 }
                 
                 playerSaveData.completedLevel = _lastCompleteLevel;
-                _preferenceManager.SaveValue(playerSaveData);
+                preferenceManager.SaveValue(playerSaveData);
             }
 
-            _tickableManager.Remove(_gameModeController);
+            tickableManager.Remove(_gameModeController);
             _gameModeController.EndGame();
             
             onCompleteLevel?.Invoke(CurrentLevelContext);
@@ -168,7 +190,7 @@ namespace Arenar.Services.LevelsService
         {
             if (CurrentLevelContext != null)
             {
-                _locationService.ChangeLoadedScene(LocationName.MainMenuLocation);
+                locationService.ChangeLoadedScene(LocationName.MainMenuLocation);
             }
         }
     }

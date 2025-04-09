@@ -11,7 +11,7 @@ namespace Arenar.Character
         private const float MINIMAL_DISTANCE_FOR_CHECK = 1.0f;
         
         
-        private ShootingGalleryLevelInfoCollection _shootingGalleryLevelInfoCollection;
+        private ClearLocationLevelInfoCollection clearLocationLevelInfoCollection;
         private ShootingGalleryTargetNode _currentCharacterPathNode;
         private List<ShootingGalleryTargetPoint> _pathPoints;
         private ILevelsService _levelsService;
@@ -41,12 +41,12 @@ namespace Arenar.Character
 
         [Inject]
         private void Construct(ILevelsService levelsService,
-            ShootingGalleryLevelInfoCollection shootingGalleryLevelInfoCollection,
+            ClearLocationLevelInfoCollection clearLocationLevelInfoCollection,
             List<ShootingGalleryTargetPoint> pathPoints)
         {
             _levelsService = levelsService;
             _pathPoints = pathPoints;
-            _shootingGalleryLevelInfoCollection = shootingGalleryLevelInfoCollection;
+            this.clearLocationLevelInfoCollection = clearLocationLevelInfoCollection;
         }
 
         public override void Initialize(ICharacterEntity character)
@@ -61,7 +61,7 @@ namespace Arenar.Character
                 int characterIndex = SGTargetController.TargetCharacterIndex;
 
                 _currentCharacterPathNode =
-                    _shootingGalleryLevelInfoCollection
+                    clearLocationLevelInfoCollection
                         .ShootingGalleriesInfos[_levelsService.CurrentLevelContext.LevelData.LevelIndex][characterIndex];
             }
 
@@ -84,7 +84,7 @@ namespace Arenar.Character
                 int characterIndex = SGTargetController.TargetCharacterIndex;
 
                 _currentCharacterPathNode =
-                    _shootingGalleryLevelInfoCollection
+                    clearLocationLevelInfoCollection
                         .ShootingGalleriesInfos[_levelsService.CurrentLevelContext.LevelData.LevelIndex][characterIndex];
             }
             
