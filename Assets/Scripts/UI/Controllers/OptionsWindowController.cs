@@ -38,7 +38,7 @@ namespace Arenar.Services.UI
         {
             base.Initialize(canvasService);
 
-            _optionsWindow = _canvasService.GetWindow<OptionsWindow>();
+            _optionsWindow = base.canvasService.GetWindow<OptionsWindow>();
             _optionsButtonsLayer = _optionsWindow.GetWindowLayer<OptionsButtonsLayer>();
             
             InitMainMenuOptionsLayer();
@@ -102,7 +102,7 @@ namespace Arenar.Services.UI
         private void OnBackButtonClick()
         {
             _uiSoundManager.PlaySound(UiSoundType.StandartButtonClick);
-            _canvasService.TransitionController
+            canvasService.TransitionController
                 .PlayTransition<TransitionCrossFadeCanvasWindowLayerController,
                         OptionsWindow,
                         MainMenuWindow>

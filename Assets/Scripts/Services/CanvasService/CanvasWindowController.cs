@@ -5,9 +5,9 @@ using Zenject;
 
 namespace Arenar.Services.UI
 {
-    public abstract class CanvasWindowController
+	public abstract class CanvasWindowController
 	{
-		protected ICanvasService _canvasService;
+		protected ICanvasService canvasService;
 		protected IPlayerInputService _playerInputService;
 		
 		
@@ -16,12 +16,12 @@ namespace Arenar.Services.UI
 		
 
 		public virtual void Initialize(ICanvasService canvasService) =>
-			_canvasService = canvasService;
+			this.canvasService = canvasService;
 
 		protected abstract void OnWindowShowEnd_SelectElements();
 		protected abstract void OnWindowHideBegin_DeselectElements();
 		
 		
 		public class Factory : PlaceholderFactory<Type, CanvasWindowController> {}
-    }
+	}
 }

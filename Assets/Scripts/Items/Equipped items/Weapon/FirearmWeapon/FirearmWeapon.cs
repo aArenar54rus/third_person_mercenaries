@@ -30,7 +30,7 @@ namespace Arenar.Items
             protected set;
         }
 
-        public IFirearmWeaponAttackItemComponent AttackComponent
+        public IFirearmWeaponAttackItemComponent FirearmWeaponAttackComponent
         {
             get;
             protected set;
@@ -105,7 +105,7 @@ namespace Arenar.Items
             WeaponInventoryItemData = weaponInventoryItemData;
             ItemInventoryData = itemInventoryData;
             
-            AttackComponent = GetEquippedComponent<IFirearmWeaponAttackItemComponent>(itemComponents);
+            FirearmWeaponAttackComponent = GetEquippedComponent<IFirearmWeaponAttackItemComponent>(itemComponents);
             ClipComponent = GetEquippedComponent<IClipComponent>(itemComponents);
             AimComponent = GetEquippedComponent<IEquippedItemAimComponent>(itemComponents);
             
@@ -125,7 +125,7 @@ namespace Arenar.Items
         public void SetItemLevel(int itemLevel) =>
             ItemLevel = itemLevel;
 
-        public virtual void MakeShot(Vector3 direction, bool isInfinityClip = false)
+        public virtual void MakeShot(Vector3 direction, int addedDamageByCharacter, bool isInfinityClip = false)
         {
             if (_isBetweenShotsLock)
             {
@@ -139,7 +139,7 @@ namespace Arenar.Items
             }
 
             SetAimStatus(false);
-            InitializeBullets(direction);
+            InitializeBullets(direction, addedDamageByCharacter);
 
             if (firearmWeaponCameraRecoilComponent != null)
                 firearmWeaponCameraRecoilComponent.ApplyShootRecoil(RecoilShakeDirection);
@@ -162,9 +162,9 @@ namespace Arenar.Items
                 AimComponent.OnUpdate(position);
         }
 
-        protected virtual void InitializeBullets(Vector3 direction)
+        protected virtual void InitializeBullets(Vector3 direction, int damageByCharacter = 0)
         {
-            CreateBullet(direction);
+            CreateBullet(direction, damageByCharacter);
         }
         
         protected virtual int GetClipSizeMax()
@@ -172,13 +172,12 @@ namespace Arenar.Items
             return (int) WeaponInventoryItemData.FirearmWeaponData.ClipSizeMax;
         }
         
-        protected void CreateBullet(Vector3 direction)
+        protected void CreateBullet(Vector3 direction, int damageByCharacter = 0)
         {
-            DamageData damageData = new DamageData(ItemOwner, (int)Damage, direction * BulletPhysicalMight);
-            AttackComponent.MakeShoot(gunMuzzleTransform, direction, damageData);
+            DamageData damageData = new DamageData(ItemOwner, (int)Damage, damageByCharacter,direction * BulletPhysicalMight);
+            FirearmWeaponAttackComponent.MakeShoot(gunMuzzleTransform, direction, damageData);
         }
-
-
+        
         protected T GetEquippedComponent<T>(Dictionary<System.Type, IEquippedItemComponent>  components)
             where T : IEquippedItemComponent
         {

@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 
 namespace Arenar.Character
@@ -11,15 +12,15 @@ namespace Arenar.Character
         private ParameterProgress[] parameterProgressesByLevel;
 
 
-        public ParameterProgress GetParameterProgressByType(CharacterParameterUpgradeType parameterUpgradeType)
+        public ParameterProgress GetParameterProgressByType(CharacterSkillUpgradeType skillUpgradeType)
         {
             foreach (var progress in parameterProgressesByLevel)
             {
-                if (progress.ParameterType == parameterUpgradeType)
+                if (progress.SkillType == skillUpgradeType)
                     return progress;
             }
             
-            Debug.LogError("Not found type: " + parameterUpgradeType);
+            Debug.LogError("Not found type: " + skillUpgradeType);
             return null;
         }
         
@@ -28,13 +29,13 @@ namespace Arenar.Character
         [Serializable]
         public class ParameterProgress
         {
-            [SerializeField]
-            private CharacterParameterUpgradeType parameterType;
+            [FormerlySerializedAs("parameterType"),SerializeField]
+            private CharacterSkillUpgradeType skillType;
             [SerializeField]
             private int[] parameterByLevel;
 
 
-            public CharacterParameterUpgradeType ParameterType => parameterType;
+            public CharacterSkillUpgradeType SkillType => skillType;
             public int[] ParameterByLevel => parameterByLevel;
         }
     }

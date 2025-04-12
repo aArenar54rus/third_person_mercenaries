@@ -1,6 +1,6 @@
 namespace Arenar.Character
 {
-    public enum CharacterParameterUpgradeType : byte
+    public enum CharacterSkillUpgradeType : byte
     {
         None = 0,
         HealthMax = 1,

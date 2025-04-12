@@ -4,12 +4,15 @@ namespace Arenar.Character
 {
     public interface ICharacterAttackComponent : ICharacterComponent
     {
-        public event Action onReloadStart; 
-        public event Action onReloadEnd; 
-        public event Action<float, float> onReloadProgress;
-        public event Action<int, int> onUpdateWeaponClipSize;
+        event Action onReloadStart; 
+        event Action onReloadEnd; 
+        event Action<float, float> onReloadProgress;
+        event Action<int, int> onUpdateWeaponClipSize;
+        
+        
+        int CharacterDamage { get; set; }
 
 
-        public void CompleteAction();
+        void CompleteAction();
     }
 }

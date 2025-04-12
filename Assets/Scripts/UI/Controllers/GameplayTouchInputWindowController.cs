@@ -22,9 +22,9 @@ namespace Arenar.Services.UI
         {
             base.Initialize(canvasService);
 
-            var gameplayWindow = _canvasService.GetWindow<GameplayCanvasWindow>();
+            var gameplayWindow = base.canvasService.GetWindow<GameplayCanvasWindow>();
             _playerTouchInputLayer = gameplayWindow.GetWindowLayer<TouchControlLayer>();
-            _canvasService.GetWindow<GameplayCanvasWindow>().OnShowEnd.AddListener(OnWindowShowEnd_SelectElements);
+            base.canvasService.GetWindow<GameplayCanvasWindow>().OnShowEnd.AddListener(OnWindowShowEnd_SelectElements);
         }
 
         protected override void OnWindowShowEnd_SelectElements()

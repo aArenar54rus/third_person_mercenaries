@@ -1,12 +1,7 @@
-using Arenar.Items;
 using System;
-using Arenar.Services.InventoryService;
-using Arenar.Services.SaveAndLoad;
 using DG.Tweening;
-using TakeTop.PreferenceSystem;
 using UnityEngine;
 using Zenject;
-
 
 namespace Arenar.Character
 {
@@ -35,7 +30,9 @@ namespace Arenar.Character
         private bool _lockAction = false;
 
         private Tween _progressActionTween;
-        
+
+
+        public int CharacterDamage { get; set; } = 0;
         
         public bool IsFirearmWeaponEquipped => InventoryComponent.EquippedFirearmWeapons != null;
 
@@ -92,6 +89,7 @@ namespace Arenar.Character
         
         public void Initialize()
         {
+            CharacterDamage = 0;
             character.TryGetCharacterComponent<ICharacterInputComponent>(out characterInputComponent);
 
             if (character.TryGetCharacterComponent<ICharacterAnimationComponent>(out ICharacterAnimationComponent animationComponent))
@@ -155,7 +153,7 @@ namespace Arenar.Character
                     - InventoryComponent.CurrentActiveWeapon.GunMuzzleTransform.position;
                 direction = direction.normalized;
                 
-                inventoryComponent.CurrentActiveWeapon.MakeShot(direction, false);
+                inventoryComponent.CurrentActiveWeapon.MakeShot(direction, CharacterDamage, false);
                 onUpdateWeaponClipSize?.Invoke(InventoryComponent.CurrentActiveWeapon.ClipSize, InventoryComponent.CurrentActiveWeapon.ClipSizeMax);
                 characterAnimationComponent.PlayAnimation(CharacterAnimationComponent.Animation.Shoot);
                 

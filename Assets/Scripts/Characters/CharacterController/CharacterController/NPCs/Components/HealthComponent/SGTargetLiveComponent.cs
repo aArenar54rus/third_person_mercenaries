@@ -80,15 +80,15 @@ namespace Arenar.Character
             if (!IsAlive)
                 return;
             
-            if (damageData.BulletMight != Vector3.zero)
-                _characterRigidbody.AddForce(damageData.BulletMight, ForceMode.Impulse);
+            if (damageData.BulletPhysicalMight != Vector3.zero)
+                _characterRigidbody.AddForce(damageData.BulletPhysicalMight, ForceMode.Impulse);
 
-            _levelsService.CurrentLevelContext.SettedDamage += damageData.Damage;
-            HealthContainer.Health -= damageData.Damage;
+            _levelsService.CurrentLevelContext.SettedDamage += damageData.WeaponDamageWithUpgrades;
+            HealthContainer.Health -= damageData.WeaponDamageWithUpgrades;
             OnCharacterChangeHealthValue?.Invoke(HealthContainer.Health, HealthContainer.HealthMax);
             
             if (damageData.DamageSetterCharacter != null)
-                _damageNumbersService.PlayDamageNumber(damageData.Damage, _characterRigidbody.transform, damageData.DamageSetterCharacter.CharacterTransform);
+                _damageNumbersService.PlayDamageNumber(damageData.WeaponDamageWithUpgrades, _characterRigidbody.transform, damageData.DamageSetterCharacter.CharacterTransform);
             OnCharacterGetDamageBy?.Invoke(damageData.DamageSetterCharacter);
             
             if (HealthContainer.Health <= 0)

@@ -45,8 +45,8 @@ namespace Arenar.Character
             if (!IsAlive)
                 return;
             
-            _levelsService.CurrentLevelContext.GettedDamage += damageData.Damage;
-            HealthContainer.Health -= damageData.Damage;
+            _levelsService.CurrentLevelContext.GettedDamage += damageData.WeaponDamageWithUpgrades;
+            HealthContainer.Health -= damageData.WeaponDamageWithUpgrades;
             
             OnCharacterChangeHealthValue?.Invoke(HealthContainer.Health, HealthContainer.HealthMax);
             if (HealthContainer.Health <= 0)

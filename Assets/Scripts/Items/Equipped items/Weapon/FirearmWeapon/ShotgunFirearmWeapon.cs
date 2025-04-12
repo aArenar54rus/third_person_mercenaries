@@ -13,10 +13,10 @@ namespace Arenar.Items
         public override FirearmWeaponClass FirearmWeaponClass => FirearmWeaponClass.Shotgun;
 
 
-        protected override void InitializeBullets(Vector3 direction)
+        protected override void InitializeBullets(Vector3 direction, int damageByCharacter = 0)
         {
             for(int i = 0; i < _bulletsPerShot; i++)
-                CreateBullet(BulletDirectionSpread(direction));
+                CreateBullet(BulletDirectionSpread(direction), damageByCharacter);
         }
 
         private Vector3 BulletDirectionSpread(Vector3 direction)

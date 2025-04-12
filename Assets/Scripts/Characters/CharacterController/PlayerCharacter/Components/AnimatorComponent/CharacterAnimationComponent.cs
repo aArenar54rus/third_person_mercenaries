@@ -23,8 +23,9 @@ namespace Arenar.Character
             MotionSpeedX = 5,
             MotionSpeedY = 6,
             Aim = 7,
-            OneHanded = 8,
-            TwoHanded = 9,
+            PistolHands = 8,
+            ShotgunHands = 9,
+            RifleHands = 10,
         }
 
 
@@ -47,7 +48,9 @@ namespace Arenar.Character
         private int animIDMotionSpeedX;
         private int animIDMotionSpeedY;
         private int animIDAim;
-        private int animIDHandPistol;
+        private int animIDHandPistolWeapon;
+        private int animIDHandShotgunWeapon;
+        private int animIDHandRifleWeapon;
         
         private float _aimAnimationProcess = 0.0f;
 
@@ -146,8 +149,16 @@ namespace Arenar.Character
                     SetAnimationBool(animIDAim, value > 0);
                     break;
                 
-                case AnimationValue.OneHanded:
-                    SetAnimationBool(animIDHandPistol, value > 0);
+                case AnimationValue.PistolHands:
+                    SetAnimationBool(animIDHandPistolWeapon, value > 0);
+                    break;
+                
+                case AnimationValue.ShotgunHands:
+                    SetAnimationBool(animIDHandShotgunWeapon, value > 0);
+                    break;
+                
+                case AnimationValue.RifleHands:
+                    SetAnimationBool(animIDHandPistolWeapon, value > 0);
                     break;
 
                 default:
@@ -221,7 +232,9 @@ namespace Arenar.Character
             animIDMotionSpeedX = Animator.StringToHash(characterAnimatorDataStorage.MotionSpeedAnimationXName);
             animIDMotionSpeedY = Animator.StringToHash(characterAnimatorDataStorage.MotionSpeedAnimationYName);
             animIDAim = Animator.StringToHash(characterAnimatorDataStorage.AimAnimationName);
-            animIDHandPistol = Animator.StringToHash(characterAnimatorDataStorage.HandPistolAnimationNam);
+            animIDHandPistolWeapon = Animator.StringToHash(characterAnimatorDataStorage.HandPistolAnimationNam);
+            animIDHandShotgunWeapon = Animator.StringToHash(characterAnimatorDataStorage.IsHandShotgunAnimationKey);
+            animIDHandRifleWeapon = Animator.StringToHash(characterAnimatorDataStorage.IsHandRifleAnimationKey);
         }
     }
 }

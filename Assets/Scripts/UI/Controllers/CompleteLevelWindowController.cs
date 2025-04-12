@@ -66,7 +66,7 @@ namespace Arenar.Services.UI
         {
             base.Initialize(canvasService);
             
-            _completeLevelCanvasWindow = _canvasService.GetWindow<CompleteLevelCanvasWindow>();
+            _completeLevelCanvasWindow = base.canvasService.GetWindow<CompleteLevelCanvasWindow>();
             _completeLevelLayer = _completeLevelCanvasWindow.GetWindowLayer<CompleteLevelLayer>();
             _failedLevelLayer = _completeLevelCanvasWindow.GetWindowLayer<FailedLevelLayer>();
             
@@ -153,7 +153,7 @@ namespace Arenar.Services.UI
 
         private void ReturnInMainMenu()
         {
-            _canvasService.TransitionController
+            canvasService.TransitionController
                 .PlayTransition<TransitionOverlayCanvasWindowController,
                         CompleteLevelCanvasWindow,
                         MainMenuWindow>
@@ -196,7 +196,7 @@ namespace Arenar.Services.UI
                 _failedLevelLayer.CompleteLevelItemRewardsVisualControl.SetXpValue(_lastLevelContext.XpPoints);
             }
             
-            _canvasService.TransitionController
+            canvasService.TransitionController
                 .PlayTransition<TransitionCrossFadeCanvasWindowLayerController,
                         GameplayCanvasWindow,
                         CompleteLevelCanvasWindow>

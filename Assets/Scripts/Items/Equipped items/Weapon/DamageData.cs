@@ -1,26 +1,28 @@
 using Arenar.Character;
 using UnityEngine;
 
-
 namespace Arenar
 {
     public class DamageData
     {
-        private ICharacterEntity _damageSetterCharacter;
-        private int _damage;
-        private Vector3 _bulletMight;
+        private ICharacterEntity damageSetterCharacter;
+        private int weaponDamage;
+        private int addedDamageByCharacterUpgrades;
+        private Vector3 bulletPhysicalMight;
 
 
-        public ICharacterEntity DamageSetterCharacter => _damageSetterCharacter;
-        public int Damage => _damage;
-        public Vector3 BulletMight => _bulletMight;
+        public ICharacterEntity DamageSetterCharacter => damageSetterCharacter;
+        public int WeaponDamageWithUpgrades => weaponDamage + addedDamageByCharacterUpgrades;
+        public int AddedDamageByCharacterUpgrades => addedDamageByCharacterUpgrades;
+        public Vector3 BulletPhysicalMight => bulletPhysicalMight;
 
 
-        public DamageData(ICharacterEntity damageSetterCharacter, int damage, Vector3 bulletMight)
+        public DamageData(ICharacterEntity damageSetterCharacter, int weaponDamage, int addedDamageByCharacterUpgrades, Vector3 bulletPhysicalMight)
         {
-            _damageSetterCharacter = damageSetterCharacter;
-            _bulletMight = bulletMight;
-            _damage = damage;
+            this.damageSetterCharacter = damageSetterCharacter;
+            this.bulletPhysicalMight = bulletPhysicalMight;
+            this.weaponDamage = weaponDamage;
+            this.addedDamageByCharacterUpgrades = addedDamageByCharacterUpgrades;
         }
     }
 }

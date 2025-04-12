@@ -71,7 +71,7 @@ namespace Arenar.Services.UI
         {
             base.Initialize(canvasService);
 
-            _gameplayCanvasWindow = _canvasService
+            _gameplayCanvasWindow = base.canvasService
                 .GetWindow<GameplayCanvasWindow>();
             
             _gameplayInformationLayer = 
@@ -91,9 +91,9 @@ namespace Arenar.Services.UI
         protected override void OnWindowShowEnd_SelectElements()
         {
             DisableProgressSlider();
-            
-            return;
+
             var playerAttackComponent = PlayerCharacterAttackComponent;
+            return;
             playerAttackComponent.onReloadStart += EnableProgressSlider;
             playerAttackComponent.onReloadEnd += DisableProgressSlider;
             playerAttackComponent.onReloadProgress += UpdateProgressSlider;

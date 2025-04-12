@@ -28,7 +28,7 @@ namespace Arenar.Services.LevelsService
         private CharacterSpawnController сharacterSpawnController;
         private ClearLocationLevelInfoCollection clearLocationLevelInfoCollection;
         private SurvivalLevelInfoCollection survivalLevelInfoCollection;
-        private PlayerCharacterParametersUpgradeService playerCharacterParametersUpgradeService;
+        private PlayerCharacterSkillUpgradeService playerCharacterSkillUpgradeService;
 
         private TickableManager tickableManager;
 
@@ -48,7 +48,7 @@ namespace Arenar.Services.LevelsService
                               ICameraService cameraService,
                               ClearLocationLevelInfoCollection clearLocationLevelInfoCollection,
                               SurvivalLevelInfoCollection survivalLevelInfoCollection,
-                              PlayerCharacterParametersUpgradeService playerCharacterParametersUpgradeService)
+                              PlayerCharacterSkillUpgradeService playerCharacterSkillUpgradeService)
         {
             this.locationService = locationService;
             this.preferenceManager = preferenceManager;
@@ -57,7 +57,7 @@ namespace Arenar.Services.LevelsService
             this.tickableManager = tickableManager;
             this.clearLocationLevelInfoCollection = clearLocationLevelInfoCollection;
             this.survivalLevelInfoCollection = survivalLevelInfoCollection;
-            this.playerCharacterParametersUpgradeService = playerCharacterParametersUpgradeService;
+            this.playerCharacterSkillUpgradeService = playerCharacterSkillUpgradeService;
             
             this.cameraService = cameraService;
             
@@ -122,7 +122,7 @@ namespace Arenar.Services.LevelsService
                             cameraService,
                             survivalLevelInfoCollection,
                             sceneContainer,
-                            playerCharacterParametersUpgradeService
+                            playerCharacterSkillUpgradeService
                         );
 
                         survivalGameModeController.SetLevelContext(CurrentLevelContext);

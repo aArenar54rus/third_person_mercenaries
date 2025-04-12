@@ -52,8 +52,8 @@ namespace Arenar.Services.UI
         {
             base.Initialize(canvasService);
 
-            _mainMenuWindow = _canvasService.GetWindow<MainMenuWindow>();
-            _optionsWindow = _canvasService.GetWindow<OptionsWindow>();
+            _mainMenuWindow = base.canvasService.GetWindow<MainMenuWindow>();
+            _optionsWindow = base.canvasService.GetWindow<OptionsWindow>();
 
             InitMainMenuButtonsLayer();
             InitMainMenuPlayerInformationLayer();
@@ -95,7 +95,7 @@ namespace Arenar.Services.UI
         private void OnNewChallengeButtonClick()
         {
             _uiSoundManager.PlaySound(UiSoundType.StandartButtonClick);
-            _canvasService.TransitionController
+            canvasService.TransitionController
                 .PlayTransition<TransitionCrossFadeCanvasWindowLayerController,
                                 MainMenuWindow,
                                 LevelSelectionWindow>
@@ -105,7 +105,7 @@ namespace Arenar.Services.UI
         private void OnOutfitButtonClick()
         {
             _uiSoundManager.PlaySound(UiSoundType.StandartButtonClick);
-            _canvasService.TransitionController
+            canvasService.TransitionController
                 .PlayTransition<TransitionCrossFadeCanvasWindowLayerController,
                         MainMenuWindow,
                         InventoryCanvasWindow>
@@ -115,7 +115,7 @@ namespace Arenar.Services.UI
         private void OnOptionsButtonClick()
         {
             _uiSoundManager.PlaySound(UiSoundType.StandartButtonClick);
-            _canvasService.TransitionController
+            canvasService.TransitionController
                 .PlayTransition<TransitionCrossFadeCanvasWindowLayerController,
                         MainMenuWindow,
                         OptionsWindow>

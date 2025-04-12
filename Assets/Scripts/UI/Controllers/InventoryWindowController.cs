@@ -37,7 +37,7 @@ namespace Arenar.Services.UI
         {
             base.Initialize(canvasService);
             
-            _inventoryWindow = _canvasService.GetWindow<InventoryCanvasWindow>();
+            _inventoryWindow = base.canvasService.GetWindow<InventoryCanvasWindow>();
             _inventoryEquipCanvasLayer = _inventoryWindow.GetWindowLayer<InventoryEquipCanvasLayer>();
             _inventoryBagCanvasLayer = _inventoryWindow.GetWindowLayer<InventoryBagCanvasLayer>();
             _inventoryItemDescriptionCanvasLayer = _inventoryWindow.GetWindowLayer<InventoryItemDescriptionCanvasLayer>();
@@ -143,7 +143,7 @@ namespace Arenar.Services.UI
         private void OnReturnToMenuBtnClick()
         {
             _uiSoundManager.PlaySound(UiSoundType.StandartButtonClick);
-            _canvasService.TransitionController
+            canvasService.TransitionController
                 .PlayTransition<TransitionCrossFadeCanvasWindowLayerController,
                         InventoryCanvasWindow,
                         MainMenuWindow>

@@ -13,7 +13,7 @@ namespace Arenar.Installers
 		
         public override void InstallBindings()
         {
-            Container.Bind<PlayerCharacterParametersUpgradeService>()
+            Container.Bind<PlayerCharacterSkillUpgradeService>()
                 .AsSingle()
                 .NonLazy();
             

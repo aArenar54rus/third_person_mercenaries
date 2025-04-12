@@ -1,11 +1,12 @@
 using Arenar.Character;
 using Arenar.Services.PlayerInputService;
 using UnityEngine;
+using Arenar.Services.LevelsService;
 
 
 namespace Arenar.Services.UI
 {
-    public class PlayerHealthVisualGameplayController : CanvasWindowController
+    public class PlayerParametersLayerGameplayController : CanvasWindowController
     {
         private CharacterSpawnController _characterSpawnController;
         private ICharacterLiveComponent playerCharacterLiveComponent;
@@ -13,6 +14,8 @@ namespace Arenar.Services.UI
         
         private ICharacterEntity playerCharacterController;
         private GameplayPlayerParametersWindowLayer gameplayPlayerParametersWindowLayer;
+        private PlayerCharacterSkillUpgradeService playerCharacterSkillUpgradeService;
+        private LevelsService.LevelsService levelsService;
 
 
         private ICharacterEntity Character
@@ -61,11 +64,14 @@ namespace Arenar.Services.UI
         }
         
         
-        public PlayerHealthVisualGameplayController(CharacterSpawnController characterSpawnController,
-            IPlayerInputService playerInputService)
-            : base(playerInputService)
+        public PlayerParametersLayerGameplayController(CharacterSpawnController characterSpawnController,
+                                                    IPlayerInputService playerInputService,
+                                                    LevelsService.LevelsService levelsService,
+                                                    PlayerCharacterSkillUpgradeService playerCharacterSkillUpgradeService) : base(playerInputService)
         {
             this._characterSpawnController = characterSpawnController;
+            this.levelsService = levelsService;
+            this.playerCharacterSkillUpgradeService = playerCharacterSkillUpgradeService;
         }
 
         
@@ -73,23 +79,33 @@ namespace Arenar.Services.UI
         {
             base.Initialize(canvasService);
 
-            gameplayPlayerParametersWindowLayer = base._canvasService
+            gameplayPlayerParametersWindowLayer = base.canvasService
                 .GetWindow<GameplayCanvasWindow>()
                 .GetWindowLayer<GameplayPlayerParametersWindowLayer>();
 
             gameplayPlayerParametersWindowLayer.GetComponent<Canvas>().enabled = true;
 
             _characterSpawnController.OnCreatePlayerCharacter += OnInstallNewCharacter;
+            
+            gameplayPlayerParametersWindowLayer.OpenUpgradeSkillsMenuButton.onClick.AddListener(OpenUpgradeSkillsMenuButtonHandler);
         }
 
         protected override void OnWindowShowEnd_SelectElements()
         {
-            //throw new System.NotImplementedException();
+            if (levelsService.CurrentLevelContext.GameMode != GameMode.Survival)
+            {
+                gameplayPlayerParametersWindowLayer.OpenUpgradeSkillsMenuButton.gameObject.SetActive(false);
+                return;
+            }
+                
+            gameplayPlayerParametersWindowLayer.OpenUpgradeSkillsMenuButton.gameObject.SetActive(true);
+            OpenUpgradeSkillsMenuButtonHandler();
+            playerCharacterSkillUpgradeService.OnUpgradeScoreCountChange += UpdateScoreCountHandler;
         }
 
         protected override void OnWindowHideBegin_DeselectElements()
         {
-            //throw new System.NotImplementedException();
+            playerCharacterSkillUpgradeService.OnUpgradeScoreCountChange -= UpdateScoreCountHandler;
         }
 
         private void OnInstallNewCharacter(ICharacterEntity characterController)
@@ -100,6 +116,21 @@ namespace Arenar.Services.UI
             OnCharacterChangeHealthValue(
                 PlayerCharacterLiveComponent.HealthContainer.Health,
                 PlayerCharacterLiveComponent.HealthContainer.HealthMax);
+        }
+        
+        private void OpenUpgradeSkillsMenuButtonHandler()
+        {
+            gameplayPlayerParametersWindowLayer.UpgradeSkillsCountText.text = playerCharacterSkillUpgradeService.UpgradeScore.ToString();
+            gameplayPlayerParametersWindowLayer.OpenUpgradeSkillsMenuButton.interactable = playerCharacterSkillUpgradeService.UpgradeScore > 0;
+        }
+        
+        private void UpdateScoreCountHandler()
+        {
+            canvasService.TransitionController
+                .PlayTransition<TransitionCrossFadeCanvasWindowLayerController,
+                        GameplayCanvasWindow,
+                        UpgradeCharacterWindow>
+                    (false, false, null);
         }
 
         private void OnCharacterChangeHealthValue(int health, int healthMax) =>

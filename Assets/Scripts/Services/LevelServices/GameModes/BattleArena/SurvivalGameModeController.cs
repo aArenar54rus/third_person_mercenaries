@@ -11,7 +11,7 @@ namespace Arenar.Services.LevelsService
     {
         private CharacterSpawnController сharacterSpawnController;
         private SurvivalLevelInfoCollection survivalLevelInfoCollection;
-        private PlayerCharacterParametersUpgradeService playerParametersUpgradeService;
+        private PlayerCharacterSkillUpgradeService playerSkillUpgradeService;
         private ICameraService cameraService;
         
         private LevelsService levelsService;
@@ -38,7 +38,7 @@ namespace Arenar.Services.LevelsService
             ICameraService cameraService,
             SurvivalLevelInfoCollection survivalLevelInfoCollection,
             DiContainer container,
-            PlayerCharacterParametersUpgradeService playerParametersUpgradeService
+            PlayerCharacterSkillUpgradeService playerSkillUpgradeService
         )
         {
             this.levelsService = levelsService;
@@ -46,18 +46,14 @@ namespace Arenar.Services.LevelsService
             this.cameraService = cameraService;
             this.survivalLevelInfoCollection = survivalLevelInfoCollection;
             this.container = container;
-            this.playerParametersUpgradeService = playerParametersUpgradeService;
+            this.playerSkillUpgradeService = playerSkillUpgradeService;
         }
 
 
         public override void StartGame()
         {
             GetNextLevelSpawnTime();
-
-            if (!container.HasBinding<PlayerSpawnPoint>())
-            {
-                return;
-            }
+            
             spawnPoint = container.Resolve<PlayerSpawnPoint>();
             enemySpawnPoints = container.Resolve<EnemySpawnPoints>(); 
             
@@ -75,6 +71,9 @@ namespace Arenar.Services.LevelsService
             {
                 characterLiveComponent.OnCharacterDie += PlayerDieHandler;
             }
+            
+            playerCharacter.Activate();
+            playerSkillUpgradeService.InitializeCharacter(playerCharacter);
             
             //isGameActive = true;
         }
@@ -129,7 +128,7 @@ namespace Arenar.Services.LevelsService
         
         private void EnemyCharacterDieHandler(ICharacterEntity character)
         {
-            playerParametersUpgradeService.UpgradeScore++;
+            playerSkillUpgradeService.UpgradeScore++;
             enemyCounter--;
             if (character.TryGetCharacterComponent<ICharacterLiveComponent>(out var liveComponent))
                 liveComponent.OnCharacterDie -= EnemyCharacterDieHandler;
