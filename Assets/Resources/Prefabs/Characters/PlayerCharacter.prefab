@@ -14255,7 +14255,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Weight: 1
   m_Data:
-    m_ConstrainedObject: {fileID: 0}
+    m_ConstrainedObject: {fileID: 8638228180195277797}
     m_SourceObjects:
       m_Length: 1
       m_Item0:
@@ -19140,7 +19140,7 @@ GameObject:
   m_Layer: 0
   m_Name: BodyRigPoint
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: -1412012063857583412, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -19153,7 +19153,7 @@ Transform:
   m_GameObject: {fileID: 4357305719643087235}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.593, z: 0.599}
+  m_LocalPosition: {x: 0, y: 1.423, z: 0.599}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -19365,7 +19365,7 @@ MonoBehaviour:
   state: 0
   stateSettings:
     killDuration: 1
-    deadMuscleWeight: 10
+    deadMuscleWeight: 0.01
     deadMuscleDamper: 2
     maxFreezeSqrVelocity: 0.02
     freezePermanently: 0
@@ -25500,7 +25500,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Weight: 1
   m_Data:
-    m_ConstrainedObject: {fileID: 0}
+    m_ConstrainedObject: {fileID: 5830704958288404108}
     m_SourceObjects:
       m_Length: 1
       m_Item0:
@@ -27637,7 +27637,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Weight: 0
   m_Data:
-    m_ConstrainedObject: {fileID: 0}
+    m_ConstrainedObject: {fileID: 3596542231017151534}
     m_SourceObjects:
       m_Length: 1
       m_Item0:
@@ -30025,6 +30025,8 @@ MonoBehaviour:
     motionSpeedAnimationXName: MotionSpeedX
     motionSpeedAnimationYName: MotionSpeedY
     handPistolAnimationName: HandPistol
+    isHandShotgunAnimationKey: HandShotgun
+    isHandRilfeAnimationKey: HandRifle
     shootAnimationName: Shoot
     reloadAnimationTriggerName: Reload
     isReloadByAnimation: 0
@@ -38538,7 +38540,7 @@ GameObject:
   m_Layer: 0
   m_Name: HeadRigPoint
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 3936346786652291628, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1

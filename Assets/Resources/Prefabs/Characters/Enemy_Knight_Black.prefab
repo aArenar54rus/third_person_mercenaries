@@ -14142,6 +14142,7 @@ MonoBehaviour:
     characterTransform: {fileID: 2680806513136186521}
     cameraTransform: {fileID: 5890264159404365299}
     characterController: {fileID: 4394228811921439205}
+    navMeshAgent: {fileID: 3570681261623401213}
     puppetMaster: {fileID: 1940537443630780013}
     puppetBehaviours:
       IsSingleLineView: 1
