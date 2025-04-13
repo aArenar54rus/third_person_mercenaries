@@ -38,6 +38,8 @@ namespace Arenar.Character
         private string shootAnimationName = "Shoot";
         [SerializeField]
         private string reloadAnimationTriggerName = "Reload";
+        [SerializeField]
+        private string swordAttackTriggerName = "SwordAttack";
 
         [Space(10), Header("Parameters")]
         [SerializeField]
@@ -59,6 +61,7 @@ namespace Arenar.Character
         public string IsHandRifleAnimationKey => isHandRilfeAnimationKey;
         public string ShootAnimationName => shootAnimationName;
         public string ReloadAnimationTriggerName => reloadAnimationTriggerName;
+        public string SwordAttack => swordAttackTriggerName;
         public bool IsReloadByAnimation => isReloadByAnimation;
     }
 }

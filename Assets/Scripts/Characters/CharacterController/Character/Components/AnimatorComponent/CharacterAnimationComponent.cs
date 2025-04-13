@@ -27,6 +27,7 @@ namespace Arenar.Character
             PistolHands = 8,
             ShotgunHands = 9,
             RifleHands = 10,
+            SwordAttack = 11,
         }
 
         
@@ -43,6 +44,7 @@ namespace Arenar.Character
         private ICharacterAimComponent characterAimComponent;
 
         private PlayerCharacterParametersData playerCharacterParametersData;
+        private AnimationReactionsTriggerController animationReactionsTriggerController;
         
         private float _aimAnimationProcess = 0.0f;
 
@@ -70,6 +72,8 @@ namespace Arenar.Character
             this.characterEntity = characterEntity;
             this.tickableManager = tickableManager;
             this.playerCharacterParametersData = playerCharacterParametersData;
+            
+            animationReactionsTriggerController = characterAnimatorDataStorage.Data.AnimationReactionsTriggerController;
         }
 
         public void Initialize()
@@ -84,11 +88,14 @@ namespace Arenar.Character
         public void OnActivate()
         {
             tickableManager.Add(this);
+            animationReactionsTriggerController.onAnimationEventTriggered += AnimationEventTriggeredHandler;
         }
         
         public void OnDeactivate()
         {
             tickableManager.Remove(this);
+            animationReactionsTriggerController.onAnimationEventTriggered -= AnimationEventTriggeredHandler;
+
         }
 
         public void PlayAnimation(Animation animationType)
@@ -147,6 +154,10 @@ namespace Arenar.Character
                 
                 case AnimationValue.RifleHands:
                     SetAnimationBool(characterAnimatorDataStorage.IsHandRifleAnimationKey, value > 0);
+                    break;
+                
+                case AnimationValue.SwordAttack:
+                    SetAnimationTrigger(characterAnimatorDataStorage.SwordAttack);
                     break;
 
                 default:
@@ -209,6 +220,11 @@ namespace Arenar.Character
                 
                 // characterAimAnimationDataStorage.BodyAimPointObject.position = raycastPoint;
             }
+        }
+
+        private void AnimationEventTriggeredHandler(AnimationEvent animationEvent)
+        {
+            onAnimationEvent?.Invoke(animationEvent);
         }
     }
 }

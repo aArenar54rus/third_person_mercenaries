@@ -17,6 +17,7 @@ namespace Arenar.Character
 		private IInventoryService inventoryService;
 		
 		
+		public MeleeWeapon CurrentActiveMeleeWeapon { get; protected set; }
 		public FirearmWeapon CurrentActiveFirearmWeapon { get; protected set; }
 		public FirearmWeapon[] EquippedFirearmWeapons { get; protected set; }
 

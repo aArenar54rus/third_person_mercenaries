@@ -15,9 +15,6 @@ namespace Arenar.Character
         where TAnimationType : Enum
         where TAnimationValue : Enum
     {
-        
-        
-        
         void PlayAnimation(TAnimationType animationType);
 
         void SetAnimationValue(TAnimationValue animationValue, float value);

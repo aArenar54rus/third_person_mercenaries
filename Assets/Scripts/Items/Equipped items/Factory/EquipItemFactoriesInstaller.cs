@@ -8,6 +8,7 @@ namespace Arenar.Services.InventoryService
         public override void InstallBindings()
         {
             Container.Bind<FirearmWeaponFactory>().AsSingle().NonLazy();
+            Container.Bind<MeleeWeaponFactory>().AsSingle().NonLazy();
         }
     }
 }
