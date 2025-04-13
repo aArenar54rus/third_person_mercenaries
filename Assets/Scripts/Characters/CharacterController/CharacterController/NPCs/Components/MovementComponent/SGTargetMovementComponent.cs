@@ -66,19 +66,16 @@ namespace Arenar.Character
             _targetPhysicalData.CharacterModelRigidbody.velocity = Vector3.zero;
         }
 
-        public void Move(Vector3 direction)
+        public void Move(Vector2 direction, bool isRunning)
         {
-            if (direction == Vector3.zero)
+            if (direction == Vector2.zero)
             {
                 SpeedAcceleration -= _speedAccelerationMultiply * Time.deltaTime;
-                _targetPhysicalData.CharacterModelRigidbody.velocity = Vector3.zero;
+                _targetPhysicalData.CharacterModelRigidbody.velocity = Vector2.zero;
                 return;
             }
-            else
-            {
-                SpeedAcceleration += _speedAccelerationMultiply * Time.deltaTime;
-            }
-            
+
+            SpeedAcceleration += _speedAccelerationMultiply * Time.deltaTime;
             direction = direction.normalized;
             
             if (Vector3.Angle(direction, _lastDirection) > STOP_VELOCITY_VALUE)
@@ -87,8 +84,13 @@ namespace Arenar.Character
             _lastDirection = direction;
             _targetPhysicalData.CharacterModelRigidbody.AddForce(direction * MovementContainer.MovementSpeed * SpeedAcceleration, ForceMode.Impulse);
         }
-
-        public void Rotation(Vector3 direction)
+        
+        public void JumpAndGravity(bool isJumpAction)
+        {
+            return;
+        }
+        
+        public void Rotation(Vector2 direction)
         {
             Quaternion targetRotation = Quaternion.LookRotation(direction, Vector3.up);
             

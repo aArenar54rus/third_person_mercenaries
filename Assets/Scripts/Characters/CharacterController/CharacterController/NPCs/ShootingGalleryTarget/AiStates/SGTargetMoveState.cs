@@ -122,7 +122,7 @@ namespace Arenar.Character
             #endif
             
             Vector3 direction = CurrentPathPoint.Position - _character.CharacterTransform.position;
-            CharacterMovementComponent.Move(direction);
+            CharacterMovementComponent.Move(direction, false);
             CharacterMovementComponent.Rotation(direction);
         }
 

@@ -95,23 +95,23 @@ namespace Arenar.Character
         
         public void InteractWithInteractObject(InteractableElement element)
         {
-            if (element.InteractableElementType == "Item")
-            {
-                if (element is ItemInteractableElement itemElement)
-                {
-                    if (!inventorySystem.TryAddItems(itemElement.ItemInventoryData, itemElement.Count,
-                        out InventoryItemCellData inventoryItemData))
-                        return;
+            if (element.InteractableElementType != "Item")
+                return;
 
-                    if (inventoryItemData != null)
-                    {
-                        itemElement.SetItem(inventoryItemData.itemInventoryData, inventoryItemData.elementsCount);
-                    }
-                    else
-                    {
-                        element.gameObject.SetActive(false);
-                    }
-                }
+            if (element is not ItemInteractableElement itemElement)
+                return;
+
+            if (!inventorySystem.TryAddItems(itemElement.ItemInventoryData, itemElement.Count,
+                    out InventoryItemCellData inventoryItemData))
+                return;
+
+            if (inventoryItemData != null)
+            {
+                itemElement.SetItem(inventoryItemData.itemInventoryData, inventoryItemData.elementsCount);
+            }
+            else
+            {
+                element.gameObject.SetActive(false);
             }
         }
     }

@@ -31,6 +31,11 @@ namespace Arenar.Character
 			Container.BindInstance(characterLiveComponent).AsSingle();
 			Container.Inject(characterLiveComponent);
 			
+			ICharacterAimComponent characterAimComponent = new PlayerCharacterAimComponent();
+			characterComponentsPool.Add(typeof(ICharacterAimComponent), characterAimComponent);
+			Container.BindInstance(characterAimComponent).AsSingle();
+			Container.Inject(characterAimComponent);
+			
 			ICharacterRayCastComponent characterRayCastComponent = new CharacterRayCastComponent();
 			characterComponentsPool.Add(typeof(ICharacterRayCastComponent), characterRayCastComponent);
 			Container.BindInstance(characterRayCastComponent).AsSingle();

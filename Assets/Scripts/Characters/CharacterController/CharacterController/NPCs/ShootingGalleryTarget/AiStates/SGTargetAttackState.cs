@@ -74,7 +74,7 @@ namespace Arenar.Character
                 return;
             
             Vector3 direction = (_AggressionTargetCharacter.CharacterTransform.position + Vector3.up) - _character.CharacterTransform.position;
-            CharacterMovementComponent.Move(Vector3.zero);
+            CharacterMovementComponent.Move(Vector2.zero, false);
             CharacterMovementComponent.Rotation(direction);
             
             float angle = Vector3.Angle(direction, _character.CharacterTransform.forward);

@@ -12,18 +12,15 @@ namespace Arenar.Character
         
         private ICharacterEntity character;
         private TickableManager tickableManager;
-        private ICameraService cameraService;
-        
-        private ICharacterInputComponent _inputComponent;
 
-        private bool _isAim = false;
-        private bool _isAimContinue = false;
+        private bool isAim = false;
+        private bool isAimContinue = false;
 
 
         public bool IsAim
         {
-            get => _isAim || _isAimContinue;
-            private set => _isAim = value;
+            get => isAim || isAimContinue;
+            set => isAim = value;
         }
 
         public float AimProgress { get; private set; } = 0.0f;
@@ -39,13 +36,11 @@ namespace Arenar.Character
         {
             this.character = character;
             this.tickableManager = tickableManager;
-            this.cameraService = cameraService;
         }
         
         
         public void Initialize()
         {
-            character.TryGetCharacterComponent<ICharacterInputComponent>(out _inputComponent);
             if (character.TryGetCharacterComponent<ICharacterAnimationComponent>(out ICharacterAnimationComponent animationComponent))
             {
                 if (animationComponent is CharacterAnimationComponent characterAnimationComponent)
@@ -69,18 +64,6 @@ namespace Arenar.Character
         public void Tick()
         {
             AnimationAimProcess();
-            
-            if (_inputComponent.AimContinueAction)
-                _isAimContinue = !_isAimContinue;
-            
-            if (_inputComponent.AimAction == IsAim)
-                return;
-
-            IsAim = _inputComponent.AimAction;
-            
-            cameraService.SetCinemachineVirtualCamera(IsAim
-                ? CinemachineCameraType.AimTPS
-                : CinemachineCameraType.DefaultTPS);
         }
 
         private void AnimationAimProcess()

@@ -5,13 +5,15 @@ using Zenject;
 
 namespace Arenar.Character
 {
-    public class PlayerCharacterInputComponent : ICharacterInputComponent
+    public class PlayerCharacterInputComponent : ICharacterInputComponent, ITickable
     {
-        private IPlayerInputService _playerInputService;
+        private ICharacterEntity characterOwner;
+        private IPlayerInputService playerInputService;
+        private TickableManager tickableManager;
 
 
         private PlayerInput PlayerInput =>
-            (PlayerInput)_playerInputService.InputActionCollection;
+            (PlayerInput)playerInputService.InputActionCollection;
 
         public Vector2 MoveAction =>
             PlayerInput.Player.Move.ReadValue<Vector2>();
@@ -40,22 +42,42 @@ namespace Arenar.Character
         public bool AimContinueAction =>
             PlayerInput.Player.AimContinue.WasPressedThisFrame();
 
+        private ICharacterLiveComponent characterLiveComponent;
+        private ICharacterMovementComponent characterMovementComponent;
+        private ICharacterAimComponent characterAimComponent;
+        private ICharacterCameraComponent characterCameraComponent;
+
 
         [Inject]
-        public void Construct(IPlayerInputService playerInputService)
+        public void Construct(ICharacterEntity characterOwner,
+                              TickableManager tickableManager,
+                              IPlayerInputService playerInputService)
         {
-            _playerInputService = playerInputService;
+            this.characterOwner = characterOwner;
+            this.playerInputService = playerInputService;
+            this.tickableManager = tickableManager;
         }
 
         public void SetControlStatus(bool status)
         {
-            _playerInputService.SetInputControlType(InputActionMapType.UI, !status);
-            _playerInputService.SetInputControlType(InputActionMapType.Gameplay, status);
+            playerInputService.SetInputControlType(InputActionMapType.UI, !status);
+            playerInputService.SetInputControlType(InputActionMapType.Gameplay, status);
         }
-
-        public void Initialize() { }
-
-        public void DeInitialize() { }
+        
+        public void Initialize()
+        {
+            characterOwner.TryGetCharacterComponent<ICharacterMovementComponent>(out characterMovementComponent);
+            characterOwner.TryGetCharacterComponent<ICharacterAimComponent>(out characterAimComponent);
+            characterOwner.TryGetCharacterComponent<ICharacterLiveComponent>(out characterLiveComponent);
+            characterOwner.TryGetCharacterComponent<ICharacterCameraComponent>(out characterCameraComponent);
+            
+            tickableManager.Add(this);
+        }
+        
+        public void DeInitialize()
+        {
+            tickableManager.Remove(this);
+        }
 
         public void OnActivate()
         {
@@ -63,5 +85,21 @@ namespace Arenar.Character
         }
 
         public void OnDeactivate() { }
+
+        public void Tick()
+        {
+            if (!characterLiveComponent.IsAlive)
+            {
+                characterAimComponent.IsAim = false;
+                return;
+            }
+
+            characterMovementComponent.JumpAndGravity(JumpAction);
+            characterMovementComponent.Move(MoveAction, SprintAction);
+            characterMovementComponent.Rotation(MoveAction);
+            
+            characterAimComponent.IsAim = AimAction;
+            characterCameraComponent.CameraRotation(LookAction);
+        }
     }
 }
