@@ -1,9 +1,13 @@
+using UnityEngine;
+
+
 namespace Arenar.Character
 {
     public class AttackTargetAiState : AIState
     {
         private ICharacterAggressionComponent characterAggressionComponent;
         private ICharacterAttackComponent characterAttackComponent;
+        private ICharacterMovementComponent characterMovementComponent;
         
         private readonly float distanceToTarget = 1;
         
@@ -14,6 +18,7 @@ namespace Arenar.Character
             
             character.TryGetCharacterComponent(out characterAttackComponent);
             character.TryGetCharacterComponent(out characterAggressionComponent);
+            character.TryGetCharacterComponent(out characterMovementComponent);
         }
         
         public override void DeInitialize()
@@ -28,6 +33,14 @@ namespace Arenar.Character
         {
             if (characterAggressionComponent.MaxAggressionTarget != null)
             {
+                Vector3 direction = characterAggressionComponent.MaxAggressionTarget.CharacterTransform.position
+                    - character.CharacterTransform.position;
+                direction.y = 0;
+                direction.Normalize();
+            
+                characterMovementComponent.Move(Vector3.zero, false);
+                characterMovementComponent.Rotation(new Vector2(direction.x, direction.z));
+                
                 if (characterAttackComponent.HasProcess)
                     return;
                 

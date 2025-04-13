@@ -28,7 +28,8 @@ public class MeleeWeaponAttackComponent : IMeleeWeaponAttackComponent
         List<ICharacterLiveComponent> attacked = new List<ICharacterLiveComponent>();
         foreach (var hit in hitBox)
         {
-            if (!hit.TryGetComponent<ICharacterEntity>(out ICharacterEntity attackedComponentsOwner)
+            ICharacterEntity attackedComponentsOwner = hit.GetComponentInParent<ICharacterEntity>();
+            if ((attackedComponentsOwner == null)
                 || attackedComponentsOwner == entityOwner
                 || !attackedComponentsOwner.TryGetCharacterComponent(out ICharacterLiveComponent liveComponent)
                 || attacked.Contains(liveComponent))

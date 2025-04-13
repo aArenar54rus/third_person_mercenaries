@@ -6,7 +6,7 @@ namespace Arenar.Character
 {
     public interface ICharacterAnimationComponent : ICharacterComponent
     {
-        event Action<AnimationEvent> onAnimationEvent;
+        event Action<string> onAnimationEvent;
     }
     
     

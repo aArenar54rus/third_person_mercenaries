@@ -111,10 +111,8 @@ namespace Arenar.Items
             return default;
         }
         
-        private void AnimationEventHandler(AnimationEvent animationEvent)
+        private void AnimationEventHandler(string animationEventKey)
         {
-            string animationEventKey = animationEvent.stringParameter;
-            
             if (animationEventKey == AnimationEventKeys.BREAK_ANIM_TRIGGER)
             {
                 IsAttackProcess = false;

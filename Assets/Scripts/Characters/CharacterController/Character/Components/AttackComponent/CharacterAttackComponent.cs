@@ -199,9 +199,9 @@ namespace Arenar.Character
             _lockAction = false;
         }
         
-        public void AnimationEventTriggeredHandler(AnimationEvent animationEvent)
+        public void AnimationEventTriggeredHandler(string animationEvent)
         {
-            if (animationEvent.stringParameter == AnimationEventKeys.COMPLETE_MELEE_ATTACK_ANIM_TRIGGER)
+            if (animationEvent == AnimationEventKeys.COMPLETE_MELEE_ATTACK_ANIM_TRIGGER)
                 _lockAction = false;
         }
 
@@ -212,6 +212,7 @@ namespace Arenar.Character
                 return;
             }
             
+            characterAnimationComponent.SetAnimationValue(CharacterAnimationComponent.AnimationValue.SwordAttack, 1);
             InventoryComponent.CurrentActiveMeleeWeapon.MakeMeleeAttack();
             _lockAction = true;
         }

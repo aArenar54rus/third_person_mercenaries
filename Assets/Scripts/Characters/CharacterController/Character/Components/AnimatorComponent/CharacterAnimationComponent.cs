@@ -31,7 +31,7 @@ namespace Arenar.Character
         }
 
         
-        public event Action<AnimationEvent> onAnimationEvent;
+        public event Action<string> onAnimationEvent;
         
 
         private CharacterAnimatorDataStorage characterAnimatorDataStorage;
@@ -222,7 +222,7 @@ namespace Arenar.Character
             }
         }
 
-        private void AnimationEventTriggeredHandler(AnimationEvent animationEvent)
+        private void AnimationEventTriggeredHandler(string animationEvent)
         {
             onAnimationEvent?.Invoke(animationEvent);
         }

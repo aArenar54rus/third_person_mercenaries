@@ -80,8 +80,16 @@ namespace Arenar.Character
         
         public void Move(Vector3 targetPosition, bool isSprint)
         {
-            if (navMeshAgent == null)
+            if (targetPosition == Vector3.zero)
+            {
+                characterAnimationComponent?.SetAnimationValue(CharacterAnimationComponent.AnimationValue.Speed, 0);
                 return;
+            }
+            
+            if (navMeshAgent == null)
+            {
+                return;
+            }
 
             navMeshAgent.SetDestination(targetPosition);
             characterAnimationComponent?.SetAnimationValue(CharacterAnimationComponent.AnimationValue.Speed, 0.5f);
