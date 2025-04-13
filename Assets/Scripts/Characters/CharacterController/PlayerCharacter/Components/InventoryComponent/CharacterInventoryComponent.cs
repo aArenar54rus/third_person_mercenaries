@@ -17,7 +17,7 @@ namespace Arenar.Character
 		private IInventoryService inventoryService;
 		
 		
-		public FirearmWeapon CurrentActiveWeapon { get; protected set; }
+		public FirearmWeapon CurrentActiveFirearmWeapon { get; protected set; }
 		public FirearmWeapon[] EquippedFirearmWeapons { get; protected set; }
 
 
@@ -47,7 +47,6 @@ namespace Arenar.Character
 			LoadClothes();
 			
 			LoadWeaponFromInventory();
-			ChangeActiveWeapon(0);
 		}
 		
 		public void DeInitialize()
@@ -66,19 +65,19 @@ namespace Arenar.Character
 
 		public void OnDeactivate()
 		{
-			if (CurrentActiveWeapon != null)
+			if (CurrentActiveFirearmWeapon != null)
 			{
-				CurrentActiveWeapon.gameObject.SetActive(false);
-				CurrentActiveWeapon = null;
+				CurrentActiveFirearmWeapon.gameObject.SetActive(false);
+				CurrentActiveFirearmWeapon = null;
 			}
 		}
 		
 		public void ChangeActiveWeapon(int index)
 		{
-			if (CurrentActiveWeapon != null)
+			if (CurrentActiveFirearmWeapon != null)
 			{
-				CurrentActiveWeapon.gameObject.SetActive(false);
-				CurrentActiveWeapon = null;
+				CurrentActiveFirearmWeapon.gameObject.SetActive(false);
+				CurrentActiveFirearmWeapon = null;
 			}
 
 			if (index < 0 || EquippedFirearmWeapons.Length == 0)
@@ -91,12 +90,12 @@ namespace Arenar.Character
 				index = EquippedFirearmWeapons.Length - 1;
 			}
 			
-			CurrentActiveWeapon = EquippedFirearmWeapons[index];
+			CurrentActiveFirearmWeapon = EquippedFirearmWeapons[index];
 			
-			switch (CurrentActiveWeapon.FirearmWeaponClass)
+			switch (CurrentActiveFirearmWeapon.FirearmWeaponClass)
 			{
 				default: 
-					Debug.LogError($"Unknown weapon type class {CurrentActiveWeapon.FirearmWeaponClass}");
+					Debug.LogError($"Unknown weapon type class {CurrentActiveFirearmWeapon.FirearmWeaponClass}");
 					break;
 				
 				case FirearmWeaponClass.None:
@@ -124,7 +123,7 @@ namespace Arenar.Character
 					break;
 			}
 			
-			CurrentActiveWeapon.gameObject.SetActive(true);
+			CurrentActiveFirearmWeapon.gameObject.SetActive(true);
 		}
 		
 		public void AddEquippedFirearmWeapon(ItemInventoryData itemInventoryData, int orderIndex)

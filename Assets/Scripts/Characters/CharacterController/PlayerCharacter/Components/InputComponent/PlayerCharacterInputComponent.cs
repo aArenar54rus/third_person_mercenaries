@@ -5,11 +5,17 @@ using Zenject;
 
 namespace Arenar.Character
 {
-    public class PlayerCharacterInputComponent : ICharacterInputComponent, ITickable
+    public class PlayerCharacterInputComponent : ICharacterInputComponent, ITickable, ILateTickable
     {
         private ICharacterEntity characterOwner;
         private IPlayerInputService playerInputService;
         private TickableManager tickableManager;
+        
+        private ICharacterLiveComponent characterLiveComponent;
+        private ICharacterMovementComponent characterMovementComponent;
+        private ICharacterAimComponent characterAimComponent;
+        private ICharacterCameraComponent characterCameraComponent;
+        private ICharacterAttackComponent characterAttackComponent;
 
 
         private PlayerInput PlayerInput =>
@@ -42,10 +48,7 @@ namespace Arenar.Character
         public bool AimContinueAction =>
             PlayerInput.Player.AimContinue.WasPressedThisFrame();
 
-        private ICharacterLiveComponent characterLiveComponent;
-        private ICharacterMovementComponent characterMovementComponent;
-        private ICharacterAimComponent characterAimComponent;
-        private ICharacterCameraComponent characterCameraComponent;
+
 
 
         [Inject]
@@ -70,6 +73,7 @@ namespace Arenar.Character
             characterOwner.TryGetCharacterComponent<ICharacterAimComponent>(out characterAimComponent);
             characterOwner.TryGetCharacterComponent<ICharacterLiveComponent>(out characterLiveComponent);
             characterOwner.TryGetCharacterComponent<ICharacterCameraComponent>(out characterCameraComponent);
+            characterOwner.TryGetCharacterComponent<ICharacterAttackComponent>(out characterAttackComponent);
             
             tickableManager.Add(this);
         }
@@ -100,6 +104,25 @@ namespace Arenar.Character
             
             characterAimComponent.IsAim = AimAction;
             characterCameraComponent.CameraRotation(LookAction);
+
+            if (!characterAttackComponent.IsInProcess)
+            {
+                if (ReloadAction)
+                    characterAttackComponent.MakeReload();
+
+                if (AttackAction)
+                    characterAttackComponent.PlayAction();
+            }
+        }
+
+        public void LateTick()
+        {
+            if (!characterLiveComponent.IsAlive)
+            {
+                return;
+            }
+            
+            
         }
     }
 }

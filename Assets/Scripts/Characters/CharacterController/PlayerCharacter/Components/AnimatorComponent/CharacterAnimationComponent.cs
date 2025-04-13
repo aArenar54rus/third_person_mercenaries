@@ -40,18 +40,6 @@ namespace Arenar.Character
 
         private PlayerCharacterParametersData playerCharacterParametersData;
         
-        // animation IDs
-        private int animIDSpeed;
-        private int animIDGrounded;
-        private int animIDJump;
-        private int animIDFreeFall;
-        private int animIDMotionSpeedX;
-        private int animIDMotionSpeedY;
-        private int animIDAim;
-        private int animIDHandPistolWeapon;
-        private int animIDHandShotgunWeapon;
-        private int animIDHandRifleWeapon;
-        
         private float _aimAnimationProcess = 0.0f;
 
 
@@ -60,8 +48,6 @@ namespace Arenar.Character
         
         private bool IsFindObject =>
             (CharacterRayCastComponent.InteractableElementsOnCross != null);
-
-        private ICharacterLiveComponent LiveComponent => liveComponent;
 
         private ICharacterRayCastComponent CharacterRayCastComponent => rayCastComponent;
 
@@ -87,8 +73,6 @@ namespace Arenar.Character
             characterEntity.TryGetCharacterComponent<ICharacterLiveComponent>(out liveComponent);
             characterEntity.TryGetCharacterComponent<ICharacterRayCastComponent>(out rayCastComponent);
             characterEntity.TryGetCharacterComponent<ICharacterAimComponent>(out characterAimComponent);
-
-            InitIndexIDs();
         }
 
         public void DeInitialize() { }
@@ -122,43 +106,43 @@ namespace Arenar.Character
             switch (animationValue)
             {
                 case AnimationValue.Speed:
-                    SetAnimationFloat(animIDSpeed, value);
+                    SetAnimationFloat(characterAnimatorDataStorage.SpeedAnimationName, value);
                     break;
                 
                 case AnimationValue.MotionSpeedX:
-                    SetAnimationFloat(animIDMotionSpeedX, value);
+                    SetAnimationFloat(characterAnimatorDataStorage.MotionSpeedAnimationXName, value);
                     break;
                 
                 case AnimationValue.MotionSpeedY:
-                    SetAnimationFloat(animIDMotionSpeedY, value);
+                    SetAnimationFloat(characterAnimatorDataStorage.MotionSpeedAnimationYName, value);
                     break;
                 
                 case AnimationValue.Jump:
-                    SetAnimationBool(animIDJump, value > 0);
+                    SetAnimationBool(characterAnimatorDataStorage.JumpAnimationName, value > 0);
                     break;
                 
                 case AnimationValue.FreeFall:
-                    SetAnimationBool(animIDFreeFall, value > 0);
+                    SetAnimationBool(characterAnimatorDataStorage.FreeFallAnimationName, value > 0);
                     break;
                 
                 case AnimationValue.Grounded:
-                    SetAnimationBool(animIDGrounded, value > 0);
+                    SetAnimationBool(characterAnimatorDataStorage.GroundedAnimationName, value > 0);
                     break;
                 
                 case AnimationValue.Aim:
-                    SetAnimationBool(animIDAim, value > 0);
+                    SetAnimationBool(characterAnimatorDataStorage.AimAnimationName, value > 0);
                     break;
                 
                 case AnimationValue.PistolHands:
-                    SetAnimationBool(animIDHandPistolWeapon, value > 0);
+                    SetAnimationBool(characterAnimatorDataStorage.HandPistolAnimationName, value > 0);
                     break;
                 
                 case AnimationValue.ShotgunHands:
-                    SetAnimationBool(animIDHandShotgunWeapon, value > 0);
+                    SetAnimationBool(characterAnimatorDataStorage.IsHandShotgunAnimationKey, value > 0);
                     break;
                 
                 case AnimationValue.RifleHands:
-                    SetAnimationBool(animIDHandPistolWeapon, value > 0);
+                    SetAnimationBool(characterAnimatorDataStorage.IsHandRifleAnimationKey, value > 0);
                     break;
 
                 default:
@@ -179,11 +163,11 @@ namespace Arenar.Character
         private void SetAnimationTrigger(string triggerName) =>
             Animator.SetTrigger(triggerName);
 
-        private void SetAnimationBool(int animationIndex, bool value) =>
-            Animator.SetBool(animationIndex, value);
+        private void SetAnimationBool(string boolName, bool value) =>
+            Animator.SetBool(boolName, value);
         
-        private void SetAnimationFloat(int animationIndex, float value) =>
-            Animator.SetFloat(animationIndex, value);
+        private void SetAnimationFloat(string floatName, float value) =>
+            Animator.SetFloat(floatName, value);
 
         private void SetHeadAnimationRotation()
         {
@@ -221,20 +205,6 @@ namespace Arenar.Character
                 
                 // characterAimAnimationDataStorage.BodyAimPointObject.position = raycastPoint;
             }
-        }
-
-        private void InitIndexIDs()
-        {
-            animIDSpeed = Animator.StringToHash(characterAnimatorDataStorage.SpeedAnimationName);
-            animIDGrounded = Animator.StringToHash(characterAnimatorDataStorage.GroundedAnimationName);
-            animIDJump = Animator.StringToHash(characterAnimatorDataStorage.JumpAnimationName);
-            animIDFreeFall = Animator.StringToHash(characterAnimatorDataStorage.FreeFallAnimationName);
-            animIDMotionSpeedX = Animator.StringToHash(characterAnimatorDataStorage.MotionSpeedAnimationXName);
-            animIDMotionSpeedY = Animator.StringToHash(characterAnimatorDataStorage.MotionSpeedAnimationYName);
-            animIDAim = Animator.StringToHash(characterAnimatorDataStorage.AimAnimationName);
-            animIDHandPistolWeapon = Animator.StringToHash(characterAnimatorDataStorage.HandPistolAnimationNam);
-            animIDHandShotgunWeapon = Animator.StringToHash(characterAnimatorDataStorage.IsHandShotgunAnimationKey);
-            animIDHandRifleWeapon = Animator.StringToHash(characterAnimatorDataStorage.IsHandRifleAnimationKey);
         }
     }
 }

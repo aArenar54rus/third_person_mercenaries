@@ -89,8 +89,9 @@ namespace Arenar.Character
 
             InteractableElement element = _rayCastComponent.InteractableElementsOnCross;
 
+            /*
             if (element != null && _inputComponent.InteractAction)
-                InteractWithInteractObject(element);
+                InteractWithInteractObject(element);*/
         }
         
         public void InteractWithInteractObject(InteractableElement element)

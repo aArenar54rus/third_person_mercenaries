@@ -54,7 +54,7 @@ namespace Arenar.Character
         public string AimAnimationName => aimAnimationName;
         public string MotionSpeedAnimationXName => motionSpeedAnimationXName;
         public string MotionSpeedAnimationYName => motionSpeedAnimationYName;
-        public string HandPistolAnimationNam => handPistolAnimationName;
+        public string HandPistolAnimationName => handPistolAnimationName;
         public string IsHandShotgunAnimationKey => isHandShotgunAnimationKey;
         public string IsHandRifleAnimationKey => isHandRilfeAnimationKey;
         public string ShootAnimationName => shootAnimationName;

@@ -11,8 +11,14 @@ namespace Arenar.Character
         
         
         int CharacterDamage { get; set; }
+        
+        bool IsInProcess { get; }
 
 
+        void PlayAction();
+        
         void CompleteAction();
+        
+        void MakeReload();
     }
 }

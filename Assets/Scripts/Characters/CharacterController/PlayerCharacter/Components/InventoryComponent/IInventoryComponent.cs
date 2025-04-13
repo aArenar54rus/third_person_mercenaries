@@ -4,7 +4,7 @@ namespace Arenar.Character
 {
     public interface IInventoryComponent : ICharacterComponent
     {
-        public FirearmWeapon CurrentActiveWeapon { get; }
+        public FirearmWeapon CurrentActiveFirearmWeapon { get; }
         
         public FirearmWeapon[] EquippedFirearmWeapons { get; }
         
