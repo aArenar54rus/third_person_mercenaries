@@ -1,3 +1,4 @@
+using Arenar.Items;
 using System;
 using DG.Tweening;
 using UnityEngine;
@@ -94,31 +95,17 @@ namespace Arenar.Character
         public void OnActivate()
         {
             characterAnimatorData.AnimationReactionsTriggerController.onCompleteAction += CompleteAction;
+            characterAnimatorData.AnimationReactionsTriggerController.onAnimationEventTriggered += AnimationEventTriggeredHandler;
             tickableManager.Add(this);
             
             CharacterDamage = 0;
             _lockAction = false;
-
-            InitializeWeapons();
-        }
-
-
-        private void InitializeWeapons()
-        {
-            /*if (InventoryComponent.CurrentActiveFirearmWeapon != null)
-            {
-                var firearmWeaponClass = InventoryComponent.CurrentActiveFirearmWeapon.FirearmWeaponClass;
-                switch (firearmWeaponClass)
-                {
-                    case FirearmWeaponClass.Pistol:
-                        characterAnimationComponent.SetAnimationValue(CharacterAnimationComponent.AnimationValue.PistolHands, 1);
-                }
-            }*/
         }
 
         public void OnDeactivate()
         {
             characterAnimatorData.AnimationReactionsTriggerController.onCompleteAction -= CompleteAction;
+            characterAnimatorData.AnimationReactionsTriggerController.onAnimationEventTriggered -= AnimationEventTriggeredHandler;
             tickableManager.Remove(this);
         }
         
@@ -178,10 +165,13 @@ namespace Arenar.Character
             
             if (!CharacterAimComponent.IsAim)
             {
-                TryMakeMeleeAttack();
+                MakeMeleeAttack();
             }
             else
             {
+                if (InventoryComponent.CurrentActiveFirearmWeapon == null)
+                    return;
+                
                 if (!CanMakeDistanceAttack)
                     return;
                 
@@ -191,16 +181,8 @@ namespace Arenar.Character
                     
                     return;
                 }
-                    
-                Vector3 direction = characterAimAnimationData.BodyPistolAimPointObject.position
-                    - InventoryComponent.CurrentActiveFirearmWeapon.GunMuzzleTransform.position;
-                direction = direction.normalized;
-                
-                inventoryComponent.CurrentActiveFirearmWeapon.MakeShot(direction, CharacterDamage, false);
-                onUpdateWeaponClipSize?.Invoke(InventoryComponent.CurrentActiveFirearmWeapon.ClipSize, InventoryComponent.CurrentActiveFirearmWeapon.ClipSizeMax);
-                characterAnimationComponent.PlayAnimation(CharacterAnimationComponent.Animation.Shoot);
-                
-                _lockAction = true;
+
+                MakeFirearmAttack();
             }
         }
 
@@ -216,10 +198,35 @@ namespace Arenar.Character
         {
             _lockAction = false;
         }
-
-        private void TryMakeMeleeAttack()
+        
+        public void AnimationEventTriggeredHandler(AnimationEvent animationEvent)
         {
+            if (animationEvent.stringParameter == AnimationEventKeys.COMPLETE_MELEE_ATTACK_ANIM_TRIGGER)
+                _lockAction = false;
+        }
+
+        private void MakeMeleeAttack()
+        {
+            if (InventoryComponent.CurrentActiveMeleeWeapon == null)
+            {
+                return;
+            }
             
+            InventoryComponent.CurrentActiveMeleeWeapon.MakeMeleeAttack();
+            _lockAction = true;
+        }
+
+        private void MakeFirearmAttack()
+        {
+            Vector3 direction = characterAimAnimationData.BodyPistolAimPointObject.position
+                - InventoryComponent.CurrentActiveFirearmWeapon.GunMuzzleTransform.position;
+            direction = direction.normalized;
+                
+            inventoryComponent.CurrentActiveFirearmWeapon.MakeShot(direction, CharacterDamage, false);
+            onUpdateWeaponClipSize?.Invoke(InventoryComponent.CurrentActiveFirearmWeapon.ClipSize, InventoryComponent.CurrentActiveFirearmWeapon.ClipSizeMax);
+            characterAnimationComponent.PlayAnimation(CharacterAnimationComponent.Animation.Shoot);
+                
+            _lockAction = true;
         }
 
         private void PaintLaserBeam()

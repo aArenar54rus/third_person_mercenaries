@@ -30,3 +30,14 @@ MonoBehaviour:
         Value: {r: 0.745283, g: 0.54665047, b: 0, a: 1}
       - Key: 5
         Value: {r: 0.07475969, g: 0.4528302, b: 0.087031126, a: 1}
+  gameItems:
+    IsSingleLineView: 1
+    list:
+    - Key: 2
+      Value: {fileID: 11400000, guid: e008748b3806a984cbd9d74fecece2fd, type: 2}
+    - Key: 1
+      Value: {fileID: 11400000, guid: 0caa077d9fcbdd547befc9db60f16cc2, type: 2}
+    - Key: 3
+      Value: {fileID: 11400000, guid: ae94ce0ff5530174c9e931fd6390ebf5, type: 2}
+    - Key: 4
+      Value: {fileID: 11400000, guid: df8624631e1c4994a90edc3c0bf1f0b1, type: 2}

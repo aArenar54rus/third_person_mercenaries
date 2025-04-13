@@ -6,12 +6,13 @@ namespace Arenar.Character
     {
         public MeleeWeapon CurrentActiveMeleeWeapon { get; }
         public FirearmWeapon CurrentActiveFirearmWeapon { get; }
-        
         public FirearmWeapon[] EquippedFirearmWeapons { get; }
         
         
         void ChangeActiveWeapon(int index);
 
         void AddEquippedFirearmWeapon(ItemInventoryData itemInventoryData, int orderIndex);
+
+        void AddEquippedMeleeWeapon(ItemInventoryData itemInventoryData);
     }
 }

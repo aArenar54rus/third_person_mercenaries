@@ -84,13 +84,7 @@ namespace Arenar.Character
                 return;
 
             navMeshAgent.SetDestination(targetPosition);
-
-            float currentHorizontalSpeed = navMeshAgent.velocity.magnitude;
-
-            animationBlend = Mathf.Lerp(animationBlend, currentHorizontalSpeed / navMeshAgent.speed,
-                Time.deltaTime * navMeshAgent.speed);
-
-            characterAnimationComponent?.SetAnimationValue(CharacterAnimationComponent.AnimationValue.Speed, animationBlend);
+            characterAnimationComponent?.SetAnimationValue(CharacterAnimationComponent.AnimationValue.Speed, 0.5f);
         }
 
         public void Rotation(Vector2 direction)

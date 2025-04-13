@@ -12,6 +12,7 @@ namespace Arenar.Character
 		private ICharacterAnimationComponent<CharacterAnimationComponent.Animation, CharacterAnimationComponent.AnimationValue> characterAnimationComponent;
 		
 		private FirearmWeaponFactory firearmWeaponFactory;
+		private MeleeWeaponFactory meleeWeaponFactory;
 		private CharacterPhysicsDataStorage characterPhysicsData;
 		
 		private IInventoryService inventoryService;
@@ -25,11 +26,13 @@ namespace Arenar.Character
 		[Inject]
 		public void Construct(ICharacterEntity character,
 							FirearmWeaponFactory firearmWeaponFactory,
+							MeleeWeaponFactory meleeWeaponFactory,
 							IInventoryService inventoryService,
 							ICharacterDataStorage<CharacterPhysicsDataStorage> characterPhysicsDataStorage)
 		{
 			this.character = character;
 			this.firearmWeaponFactory = firearmWeaponFactory;
+			this.meleeWeaponFactory = meleeWeaponFactory;
 			this.inventoryService = inventoryService;
 			this.characterPhysicsData = characterPhysicsDataStorage.Data;
 		}
@@ -127,14 +130,27 @@ namespace Arenar.Character
 		
 		public void AddEquippedFirearmWeapon(ItemInventoryData itemInventoryData, int orderIndex)
 		{
-			var newWeapon = firearmWeaponFactory.Create(itemInventoryData);
-			characterPhysicsData.RightHandPoint.AddItemInHand(newWeapon, newWeapon.RotationInHands);
-			newWeapon.PickUpItem(character);
-			newWeapon.gameObject.SetActive(false);
+			var newWeapon = CreateWeapon(itemInventoryData) as FirearmWeapon;
 				
 			if (EquippedFirearmWeapons[orderIndex] != null)
 				GameObject.Destroy(EquippedFirearmWeapons[orderIndex].gameObject);
 			EquippedFirearmWeapons[orderIndex] = newWeapon;
+		}
+
+		public void AddEquippedMeleeWeapon(ItemInventoryData itemInventoryData)
+		{
+			var newMeleeWeapon = CreateWeapon(itemInventoryData) as MeleeWeapon;
+			CurrentActiveMeleeWeapon = newMeleeWeapon;
+		}
+
+		private IWeapon CreateWeapon(ItemInventoryData itemInventoryData)
+		{
+			var newWeapon = firearmWeaponFactory.Create(itemInventoryData);
+			characterPhysicsData.RightHandPoint.AddItemInHand(newWeapon, newWeapon.RotationInHands);
+			newWeapon.PickUpItem(character);
+			newWeapon.gameObject.SetActive(false);
+
+			return newWeapon;
 		}
 
 		private void LoadWeaponFromInventory()

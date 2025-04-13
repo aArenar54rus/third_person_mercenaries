@@ -57,8 +57,8 @@ namespace Arenar.Services.UI
         
         
         public GameplayGameInformationWindowController(TickableManager tickableManager,
-            CharacterSpawnController characterSpawnController,
-            IPlayerInputService playerInputService)
+                                                       CharacterSpawnController characterSpawnController,
+                                                       IPlayerInputService playerInputService)
             : base(playerInputService)
         {
             _characterSpawnController = characterSpawnController;
@@ -83,7 +83,7 @@ namespace Arenar.Services.UI
             _gameplayCanvasWindow.OnShowEnd.AddListener(OnWindowShowEnd_SelectElements);
             _gameplayCanvasWindow.OnHideBegin.AddListener(OnWindowHideBegin_DeselectElements);
 
-            _characterSpawnController.OnCreatePlayerCharacter += OnCreatePlayerCharacter;
+
 
             DisableProgressSlider();
         }
@@ -92,21 +92,32 @@ namespace Arenar.Services.UI
         {
             DisableProgressSlider();
 
-            var playerAttackComponent = PlayerCharacterAttackComponent;
-            return;
-            playerAttackComponent.onReloadStart += EnableProgressSlider;
-            playerAttackComponent.onReloadEnd += DisableProgressSlider;
-            playerAttackComponent.onReloadProgress += UpdateProgressSlider;
-            playerAttackComponent.onUpdateWeaponClipSize += OnUpdateWeaponClipSize;
+            if (_characterSpawnController.PlayerCharacter != null)
+            {
+                _playerCharacter = _characterSpawnController.PlayerCharacter;
+                
+                var playerAttackComponent = PlayerCharacterAttackComponent;
+                playerAttackComponent.onReloadStart += EnableProgressSlider;
+                playerAttackComponent.onReloadEnd += DisableProgressSlider;
+                playerAttackComponent.onReloadProgress += UpdateProgressSlider;
+                playerAttackComponent.onUpdateWeaponClipSize += OnUpdateWeaponClipSize;
+            }
+            else
+            {
+                _characterSpawnController.OnCreatePlayerCharacter += CreatePlayerCharacterHandler;
+            }
         }
 
         protected override void OnWindowHideBegin_DeselectElements()
         {
             var playerAttackComponent = PlayerCharacterAttackComponent;
-            playerAttackComponent.onReloadStart -= EnableProgressSlider;
-            playerAttackComponent.onReloadEnd -= DisableProgressSlider;
-            playerAttackComponent.onReloadProgress -= UpdateProgressSlider;
-            playerAttackComponent.onUpdateWeaponClipSize -= OnUpdateWeaponClipSize;
+            if (playerAttackComponent != null)
+            {
+                playerAttackComponent.onReloadStart -= EnableProgressSlider;
+                playerAttackComponent.onReloadEnd -= DisableProgressSlider;
+                playerAttackComponent.onReloadProgress -= UpdateProgressSlider;
+                playerAttackComponent.onUpdateWeaponClipSize -= OnUpdateWeaponClipSize;
+            }
         }
 
         public void Tick()
@@ -215,9 +226,16 @@ namespace Arenar.Services.UI
             _characterOnCross = null;
         }
 
-        private void OnCreatePlayerCharacter(ICharacterEntity playerCharacterController)
+        private void CreatePlayerCharacterHandler(ICharacterEntity playerCharacterController)
         {
+            _characterSpawnController.OnCreatePlayerCharacter -= CreatePlayerCharacterHandler;
             _playerCharacter = playerCharacterController;
+            
+            var playerAttackComponent = PlayerCharacterAttackComponent;
+            playerAttackComponent.onReloadStart += EnableProgressSlider;
+            playerAttackComponent.onReloadEnd += DisableProgressSlider;
+            playerAttackComponent.onReloadProgress += UpdateProgressSlider;
+            playerAttackComponent.onUpdateWeaponClipSize += OnUpdateWeaponClipSize;
         }
     }
 }

@@ -2,22 +2,52 @@ using Arenar.Items;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 
 namespace Arenar.Character
 {
     public class AiInventoryComponent : IInventoryComponent
     {
+        private const int SWORD_WEAPON_INDEX = 4;
+        
+        
+        private ICharacterEntity character;
+        
+        private ItemCollectionData itemCollectionData;
+        
+        private MeleeWeaponFactory meleeWeaponFactory;
+        private FirearmWeaponFactory firearmWeaponFactory;
+
+        private CharacterPhysicsDataStorage characterPhysicsData;
+        
 
         public MeleeWeapon CurrentActiveMeleeWeapon { get; private set; }
         public FirearmWeapon CurrentActiveFirearmWeapon => null;
         public FirearmWeapon[] EquippedFirearmWeapons => null;
-        
+
+
+        [Inject]
+        public void Construct(ICharacterEntity character,
+                              MeleeWeaponFactory meleeWeaponFactory,
+                              FirearmWeaponFactory firearmWeaponFactory,
+                              ItemCollectionData itemCollectionData,
+                              ICharacterDataStorage<CharacterPhysicsDataStorage> characterPhysicsDataStorage)
+        {
+            this.character = character;
+            this.meleeWeaponFactory = meleeWeaponFactory;
+            this.firearmWeaponFactory = firearmWeaponFactory;
+            this.itemCollectionData = itemCollectionData;
+            this.characterPhysicsData = characterPhysicsDataStorage.Data;
+        }
         
         
         public void Initialize()
         {
-            CurrentActiveMeleeWeapon
+            characterPhysicsData.RightHandPoint.Initialize(character);
+            characterPhysicsData.LeftHandPoint.Initialize(character);
+
+            LoadWeaponByIndex();
         }
 
         public void DeInitialize()
@@ -37,12 +67,35 @@ namespace Arenar.Character
         
         public void ChangeActiveWeapon(int index)
         {
-            
+            return;
         }
         
         public void AddEquippedFirearmWeapon(ItemInventoryData itemInventoryData, int orderIndex)
         {
-            throw new System.NotImplementedException();
+            return;
+            //throw new System.NotImplementedException();
+        }
+        
+        public void AddEquippedMeleeWeapon(ItemInventoryData itemInventoryData)
+        {
+            var newMeleeWeapon = CreateWeapon(itemInventoryData) as MeleeWeapon;
+            CurrentActiveMeleeWeapon = newMeleeWeapon;
+        }
+
+        private IWeapon CreateWeapon(ItemInventoryData itemInventoryData)
+        {
+            var newWeapon = meleeWeaponFactory.Create(itemInventoryData);
+            characterPhysicsData.RightHandPoint.AddItemInHand(newWeapon, newWeapon.RotationInHands);
+            newWeapon.PickUpItem(character);
+            newWeapon.gameObject.SetActive(true);
+
+            return newWeapon;
+        }
+
+        private void LoadWeaponByIndex()
+        {
+            var weaponData = itemCollectionData.GetItemByIndex(SWORD_WEAPON_INDEX);
+            AddEquippedMeleeWeapon(weaponData);
         }
     }
 }

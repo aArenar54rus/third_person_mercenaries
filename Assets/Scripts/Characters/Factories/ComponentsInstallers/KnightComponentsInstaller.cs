@@ -57,6 +57,11 @@ namespace Arenar.Character
 			Container.BindInstance(characterAttackComponent).AsSingle();
 			Container.Inject(characterAttackComponent);
 			
+			IInventoryComponent characterInventoryComponent = new AiInventoryComponent();
+			characterComponentsPool.Add(typeof(IInventoryComponent), characterInventoryComponent);
+			Container.BindInstance(characterInventoryComponent).AsSingle();
+			Container.Inject(characterInventoryComponent);
+			
 			Container.BindInstance(characterComponentsPool).AsSingle();
 		}
 		

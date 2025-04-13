@@ -20,7 +20,15 @@ namespace Arenar
         private Dictionary<CharacterTypeKeys, Queue<ICharacterEntity>> createdHumanoidCharacters = new();
 
 
-        public ICharacterEntity PlayerCharacter => _activeHumanoidCharacters[CharacterTypeKeys.Player][0];
+        public ICharacterEntity PlayerCharacter {
+            get
+            {
+                if (_activeHumanoidCharacters.ContainsKey(CharacterTypeKeys.Player))
+                    return _activeHumanoidCharacters[CharacterTypeKeys.Player][0];
+
+                return null;
+            }
+        }
         
         private Transform CharactersContainer
         {
