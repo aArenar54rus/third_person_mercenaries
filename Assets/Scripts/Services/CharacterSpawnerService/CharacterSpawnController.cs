@@ -49,7 +49,11 @@ namespace Arenar
         public ICharacterEntity GetCharacter(CharacterTypeKeys characterType)
         {
             ICharacterEntity componentCharacter = GetHumanoidCharacter(characterType);
-            OnCreatePlayerCharacter?.Invoke(componentCharacter);
+            
+            if (characterType == CharacterTypeKeys.Player)
+                OnCreatePlayerCharacter?.Invoke(componentCharacter);
+            else OnCreateEnemyCharacter?.Invoke(componentCharacter);
+            
             return componentCharacter;
         }
         
@@ -70,7 +74,7 @@ namespace Arenar
                 componentCharacter = _physicsHumanoidCharacterFactory.Create(characterType);
                 _createdHumanoidCharacters[characterType].Enqueue(componentCharacter);
 
-                componentCharacter.CharacterTransform.SetParent(CharactersContainer);
+                componentCharacter.EntityObjectTransform.SetParent(CharactersContainer);
                 componentCharacter.Initialize();
             }
 

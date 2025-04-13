@@ -58,7 +58,7 @@ namespace Arenar.Services.LevelsService
             enemySpawnPoints = container.Resolve<EnemySpawnPoints>(); 
             
             var playerCharacter = сharacterSpawnController.GetCharacter(CharacterTypeKeys.Player);
-            playerCharacter.CharacterTransform.position = spawnPoint.Position;
+            playerCharacter.EntityObjectTransform.position = spawnPoint.Position;
             playerCharacter.CharacterTransform.rotation = spawnPoint.Rotation;
 
             if (playerCharacter is PhysicalHumanoidComponentCharacterController player)
@@ -103,6 +103,9 @@ namespace Arenar.Services.LevelsService
 
                 if (enemy.TryGetCharacterComponent<ICharacterLiveComponent>(out var liveComponent))
                     liveComponent.OnCharacterDie += EnemyCharacterDieHandler;
+
+                var position = enemySpawnPoints.GetRandomPointPosition();
+                enemy.EntityObjectTransform.position = position;
 
                 enemyCounter++;
                 if (CanSpawnEnemy)

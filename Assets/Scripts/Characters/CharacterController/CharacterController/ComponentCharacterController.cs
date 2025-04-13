@@ -9,8 +9,7 @@ namespace Arenar.Character
     public abstract class ComponentCharacterController : MonoBehaviour, ICharacterEntity
     {
         private Dictionary<Type, ICharacterComponent> characterComponentsPool;
-
-
+        public Transform EntityObjectTransform => this.transform;
         public abstract Transform CharacterTransform { get; }
 
 

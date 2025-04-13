@@ -54,6 +54,8 @@ namespace Arenar.Character
         public void OnActivate()
         {
             tickableManager.Add(this);
+            isAiming = false;
+            cameraService.SetCinemachineVirtualCamera(CinemachineCameraType.DefaultTPS);
         }
         
         public void OnDeactivate()

@@ -5,6 +5,7 @@ namespace Arenar.Character
 {
     public interface ICharacterEntity
     {
+        Transform EntityObjectTransform { get; }
         Transform CharacterTransform { get; }
 
 

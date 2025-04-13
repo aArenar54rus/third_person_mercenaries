@@ -822,10 +822,11 @@ MonoBehaviour:
           characterPrefabResources: Prefabs/Characters/Enemy_Knight_Grey
       - Key: 2
         Value:
+          characterPrefabResources: Prefabs/Characters/Enemy_Knight_Grey
+      - Key: 3
+        Value:
           characterPrefabResources: Prefabs/Characters/Enemy_Knight_Black
   _playerCharacterLevelData: {fileID: 11400000, guid: 309b2cd50ecaa3b45a747da64732a7d8,
-    type: 2}
-  _shootingGalleryTargetParameters: {fileID: 11400000, guid: d0859fc89c0ac2b4c8691d3881b1066a,
     type: 2}
 --- !u!1 &5512701310286655075
 GameObject:
@@ -1493,7 +1494,7 @@ PrefabInstance:
     - target: {fileID: 8944336655422409496, guid: f6d148d888ffbf54b9afe9936dfaec1f,
         type: 3}
       propertyPath: field of view
-      value: 35
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 8944336655422409496, guid: f6d148d888ffbf54b9afe9936dfaec1f,
         type: 3}
@@ -1518,37 +1519,37 @@ PrefabInstance:
     - target: {fileID: 8944336655422409503, guid: f6d148d888ffbf54b9afe9936dfaec1f,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3.5458753
+      value: 0.09038785
       objectReference: {fileID: 0}
     - target: {fileID: 8944336655422409503, guid: f6d148d888ffbf54b9afe9936dfaec1f,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.4998313
+      value: -18.705263
       objectReference: {fileID: 0}
     - target: {fileID: 8944336655422409503, guid: f6d148d888ffbf54b9afe9936dfaec1f,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1.4227005
+      value: 1.000797
       objectReference: {fileID: 0}
     - target: {fileID: 8944336655422409503, guid: f6d148d888ffbf54b9afe9936dfaec1f,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.9941466
+      value: 0.98807424
       objectReference: {fileID: 0}
     - target: {fileID: 8944336655422409503, guid: f6d148d888ffbf54b9afe9936dfaec1f,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.04136014
+      value: 0.04112728
       objectReference: {fileID: 0}
     - target: {fileID: 8944336655422409503, guid: f6d148d888ffbf54b9afe9936dfaec1f,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.099731855
+      value: 0.14825748
       objectReference: {fileID: 0}
     - target: {fileID: 8944336655422409503, guid: f6d148d888ffbf54b9afe9936dfaec1f,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.0039323363
+      value: -0.0061247586
       objectReference: {fileID: 0}
     - target: {fileID: 8944336655422409503, guid: f6d148d888ffbf54b9afe9936dfaec1f,
         type: 3}
