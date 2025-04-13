@@ -456,6 +456,7 @@ GameObject:
   - component: {fileID: 2009154156989343524}
   - component: {fileID: 5834161856062466166}
   - component: {fileID: 4394228811921439205}
+  - component: {fileID: 3570681261623401213}
   m_Layer: 8
   m_Name: F02_AllOutfits
   m_TagString: Player
@@ -541,13 +542,35 @@ CharacterController:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Height: 1.8
+  m_Height: 1.6
   m_Radius: 0.2
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0.9, z: 0}
+  m_Center: {x: 0, y: 0.8, z: 0}
+--- !u!195 &3570681261623401213
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 354954420078919265}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.2
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 1.6
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 3
 --- !u!1 &403485637409186507
 GameObject:
   m_ObjectHideFlags: 0
@@ -9329,7 +9352,7 @@ MonoBehaviour:
   state: 0
   stateSettings:
     killDuration: 1
-    deadMuscleWeight: 10
+    deadMuscleWeight: 0.01
     deadMuscleDamper: 2
     maxFreezeSqrVelocity: 0.02
     freezePermanently: 0
@@ -14054,7 +14077,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 86962050847851156}
-  - component: {fileID: 1100535803088907104}
+  - component: {fileID: 3542953654279791168}
   - component: {fileID: 5314063536815717514}
   - component: {fileID: 5703663104753995033}
   m_Layer: 0
@@ -14082,7 +14105,7 @@ Transform:
   - {fileID: 2680806513136186521}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1100535803088907104
+--- !u!114 &3542953654279791168
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -14091,7 +14114,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7061726252722479305}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7ffa786abdf0c42409da20f80e4bf1ee, type: 3}
+  m_Script: {fileID: 11500000, guid: 2418ed577100c144b90daff2a7e33c11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   characterAudioDataStorage:
@@ -14110,6 +14133,8 @@ MonoBehaviour:
     motionSpeedAnimationXName: MotionSpeedX
     motionSpeedAnimationYName: MotionSpeedY
     handPistolAnimationName: HandPistol
+    isHandShotgunAnimationKey: HandShotgun
+    isHandRilfeAnimationKey: HandRifle
     shootAnimationName: Shoot
     reloadAnimationTriggerName: Reload
     isReloadByAnimation: 0
@@ -14130,6 +14155,8 @@ MonoBehaviour:
     headAimPointObject: {fileID: 2794384547833271766}
     bodyPistolAimPointObject: {fileID: 1215883348535707988}
     bodyTwoHandedAimPointObject: {fileID: 0}
+  enemyCharacterDataStorage:
+    parameters: {fileID: 11400000, guid: b8759d72e47c41f4cbd0e1a074dafca6, type: 2}
 --- !u!114 &5314063536815717514
 MonoBehaviour:
   m_ObjectHideFlags: 0

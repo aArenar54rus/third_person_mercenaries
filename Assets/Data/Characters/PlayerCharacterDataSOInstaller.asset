@@ -12,12 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 149b39322b90cc04695386aee09b5629, type: 3}
   m_Name: PlayerCharacterDataSOInstaller
   m_EditorClassIdentifier: 
-  componentCharacterPrefab: {fileID: 3594676180851512963, guid: 1d321af736df10f4a901a9520948c692,
-    type: 3}
-  puppetComponentCharacterPrefab: {fileID: 2352429939940656434, guid: 9efe808d6941e8f41a1872ba7e99cf58,
-    type: 3}
   playerCharacterParametersData:
     defaultHealthMax: 100
+    levelHealthAdded: 10
     moveSpeed: 2.3
     sprintSpeed: 4
     rotationSmoothTime: 0.12
@@ -27,6 +24,7 @@ MonoBehaviour:
     lockCameraPosition: 0
     topClamp: 70
     bottomClamp: -30
+    canJump: 0
     jumpHeight: 1.5
     gravity: -15
     jumpTimeout: 0.5
@@ -40,8 +38,3 @@ MonoBehaviour:
     interactElementDistance: 2.5
     headRotationDistance: 5
     _aimProcessSpeed: 3
-  kittyColorRangeData:
-    defaultColorsByLevel:
-      IsSingleLineView: 1
-      list: []
-    colorsList: []

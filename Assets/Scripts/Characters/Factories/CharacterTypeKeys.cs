@@ -3,7 +3,8 @@ namespace Arenar.Character
     public enum CharacterTypeKeys : byte
     {
         Player = 0,
-        DefaultKnight = 1,
-        BlackKnight = 2,
+        TrainingKnight = 1,
+        DefaultKnight = 2,
+        BlackKnight = 3,
     }
 }

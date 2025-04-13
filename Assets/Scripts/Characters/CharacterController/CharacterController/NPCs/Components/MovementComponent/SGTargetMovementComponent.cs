@@ -14,7 +14,7 @@ namespace Arenar.Character
         private ILevelsService _levelsService;
         private ClearLocationLevelInfoCollection clearLocationLevelInfoCollection;
 
-        private ShootingGalleryTargetParameters _parameters;
+        private EnemyCharacterParameters _parameters;
         private SGTargetPhysicalDataStorage _targetPhysicalData;
         private float _speedAcceleration;
         private float _speedAccelerationMultiply;
@@ -33,13 +33,13 @@ namespace Arenar.Character
 
         [Inject]
         public void Construct(ICharacterEntity character,
-            ILevelsService levelsService,
-            ShootingGalleryTargetParameters parameters,
-            ICharacterDataStorage<SGTargetPhysicalDataStorage> characterPhysicsDataStorage)
+                              ILevelsService levelsService,
+                              ICharacterDataStorage<EnemyCharacterDataStorage> enemyCharacterDataStorage,
+                              ICharacterDataStorage<SGTargetPhysicalDataStorage> characterPhysicsDataStorage)
         {
             _character = character;
             _levelsService = levelsService;
-            _parameters = parameters;
+            _parameters = enemyCharacterDataStorage.Data.EnemyCharacterParameters;;
             _targetPhysicalData = characterPhysicsDataStorage.Data;
         }
 

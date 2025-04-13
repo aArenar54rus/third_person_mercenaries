@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -9,20 +7,22 @@ namespace Arenar.Character
 	public class CharacterDamageContainer : MonoBehaviour
 	{
 		[SerializeField] private Collider collider;
-		private ICharacterEntity _characterEntity;
+		[SerializeField] private CharacterDamageContainerBodyType bodyType;
+		
+		private ICharacterEntity characterEntity;
+		private ICharacterLiveComponent characterLiveComponent;
+		
 		
 		public void Initialize(ICharacterEntity characterEntity)
 		{
 			collider ??= GetComponent<Collider>();
 			
-			_characterEntity = characterEntity;
+			this.characterEntity = characterEntity;
 		}
-
-
-		/*
-		public void (Collider other)
+		
+		public void GetDamage(DamageData damageData)
 		{
 			
-		}*/
+		}
 	}
 }

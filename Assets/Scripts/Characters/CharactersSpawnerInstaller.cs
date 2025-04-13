@@ -9,7 +9,6 @@ namespace Arenar.Installers
     {
         [SerializeField] private AddressablesCharacters _addressablesCharacters;
         [SerializeField] private PlayerCharacterLevelData _playerCharacterLevelData;
-        [SerializeField] private ShootingGalleryTargetParameters _shootingGalleryTargetParameters;
 
         
         public override void InstallBindings()
@@ -28,15 +27,7 @@ namespace Arenar.Installers
             Container.BindInstance(_playerCharacterLevelData)
                 .AsSingle().NonLazy();
 
-            BindNpcBaseParameters();
-
             Container.Bind<CharacterSpawnController>()
-                .AsSingle().NonLazy();
-        }
-        
-        private void BindNpcBaseParameters()
-        {
-            Container.BindInstance(_shootingGalleryTargetParameters)
                 .AsSingle().NonLazy();
         }
     }

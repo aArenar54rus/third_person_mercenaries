@@ -66,6 +66,14 @@ namespace Arenar.Character
                 .FromInstance(characterControl)
                 .AsSingle();
 
+            if (characterControl is EnemyCharacterController enemy)
+            {
+                subContainer.Bind<ICharacterDataStorage<EnemyCharacterDataStorage>>()
+                    .To<EnemyCharacterController>()
+                    .FromInstance(enemy)
+                    .AsSingle();
+            }
+
             switch (characterEntityType)
             {
                 case CharacterTypeKeys.Player:
@@ -73,7 +81,8 @@ namespace Arenar.Character
                     break;
                 
                 case CharacterTypeKeys.DefaultKnight:
-                    subContainer.Install<DefaultKnightComponentsInstaller>();
+                case CharacterTypeKeys.BlackKnight:
+                    subContainer.Install<KnightComponentsInstaller>();
                     break;
             }
         }

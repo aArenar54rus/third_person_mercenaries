@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2f6084beea61f845be5583a979d69e3, type: 3}
   m_Name: Survival Level Info Collection
   m_EditorClassIdentifier: 
-  minSpawnInterval: 0
-  maxSpawnInterval: 0
-  maxEnemyCountOnScene: 0
-  spawnPatterns: []
+  minSpawnInterval: 5
+  maxSpawnInterval: 10
+  maxEnemyCountOnScene: 10
+  spawnPatterns:
+  - spawnNpcs: 03

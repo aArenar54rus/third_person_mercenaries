@@ -81,7 +81,7 @@ namespace Arenar.Character
 
             if (angle < 5.0f)
             {
-                _weapon.MakeShot(_character.CharacterTransform.forward, true);
+                _weapon.MakeShot(_character.CharacterTransform.forward, 0,true);
             }
         }
 

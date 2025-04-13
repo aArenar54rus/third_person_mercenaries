@@ -11,16 +11,16 @@ namespace Arenar.Services.UI
 
 
         public CanvasWindowControllerFactory(DiContainer container) =>
-			this.container = container;
+            this.container = container;
 
 
-		public CanvasWindowController Create(Type type)
+        public CanvasWindowController Create(Type type)
         {
             CanvasWindowController windowController = (CanvasWindowController)container.Instantiate(type);
 
             container.Bind(type)
-                     .FromInstance(windowController)
-                     .AsSingle();
+                .FromInstance(windowController)
+                .AsSingle();
 
             return windowController;
         }

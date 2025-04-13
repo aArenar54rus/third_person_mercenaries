@@ -15,7 +15,7 @@ namespace Arenar.Character
         public event Action<int, int> OnCharacterChangeHealthValue;
         
         private ShootingGalleryTargetCharacterController _character;
-        private ShootingGalleryTargetParameters _shootingGalleryTargetParameters;
+        private EnemyCharacterParameters enemyCharacterParameters;
         
         private Transform _characterTransform;
         private Rigidbody _characterRigidbody;
@@ -34,7 +34,7 @@ namespace Arenar.Character
         [Inject]
         public void Construct(ICharacterEntity characterEntity,
             ICharacterDataStorage<SGTargetPhysicalDataStorage> characterPhysicsDataStorage,
-            ShootingGalleryTargetParameters shootingGalleryTargetParameters,
+            ICharacterDataStorage<EnemyCharacterDataStorage> enemyCharacterDataStorage,
             ILevelsService levelsService,
             EffectsSpawner effectsSpawner,
             IDamageNumbersService damageNumbersService)
@@ -43,7 +43,7 @@ namespace Arenar.Character
             _characterTransform = characterPhysicsDataStorage.Data.CharacterTransform;
             _characterRigidbody = characterPhysicsDataStorage.Data.CharacterModelRigidbody;
             _levelsService = levelsService;
-            _shootingGalleryTargetParameters = shootingGalleryTargetParameters;
+            enemyCharacterParameters = enemyCharacterDataStorage.Data.EnemyCharacterParameters;
             _effectsSpawner = effectsSpawner;
             _damageNumbersService = damageNumbersService;
         }
@@ -63,8 +63,8 @@ namespace Arenar.Character
             _deathTween?.Kill(false);
 
             HealthContainer = new HealthContainer();
-            HealthContainer.HealthMax = _shootingGalleryTargetParameters.BaseHealth
-                + _shootingGalleryTargetParameters.AddedHealthByLvl
+            HealthContainer.HealthMax = enemyCharacterParameters.BaseHealth
+                + enemyCharacterParameters.AddedHealthByLvl
                 * (_character.CharacterLevel - 1);
             HealthContainer.Health = HealthContainer.HealthMax;
             SetAlive();

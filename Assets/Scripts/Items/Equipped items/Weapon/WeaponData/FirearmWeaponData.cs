@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 
 namespace Arenar
@@ -8,16 +9,30 @@ namespace Arenar
     public class FirearmWeaponData : WeaponData
     {
         [Space(5)]
-        [SerializeField] private FirearmWeaponClass firearmWeaponClass;
-        [SerializeField] private FirearmWeaponAttackType firearmWeaponAttackType;
-        [SerializeField] private EffectType effectType;
-        [SerializeField] private bool isAutomaticShoot;
-        [SerializeField] private int clipSizeMax;
-        [SerializeField] private float defaultReloadSpeed;
-        [SerializeField] private float timeBetweenShots = 1.0f;
-        [SerializeField] private bool isFullClipReload;
-        [SerializeField] private float projectileSpeed;
-        [SerializeField] private float recoilShakeDefaultValue;
+        [SerializeField]
+        private FirearmWeaponClass firearmWeaponClass;
+        [SerializeField]
+        private FirearmWeaponAttackType firearmWeaponAttackType;
+        [SerializeField]
+        private EffectType effectType;
+        [SerializeField]
+        private bool isAutomaticShoot;
+        [SerializeField]
+        private int clipSizeMax;
+        [SerializeField]
+        private float defaultReloadSpeed;
+        [SerializeField]
+        private float timeBetweenShots = 1.0f;
+        [SerializeField]
+        private bool isFullClipReload;
+        [SerializeField]
+        private float projectileSpeed;
+        [SerializeField]
+        private float recoilShakeDefaultValue;
+        [SerializeField]
+        private int stunPointMin;
+        [SerializeField]
+        private int stunPointMax;
 
 
         public FirearmWeaponClass FirearmWeaponClass =>
@@ -43,5 +58,11 @@ namespace Arenar
         public float ProjectileSpeed => projectileSpeed;
 
         public float RecoilShakeDefaultValue => recoilShakeDefaultValue;
+
+
+        public int GetStunPoints()
+        {
+            return Random.Range(stunPointMin, stunPointMax);
+        }
     }
 }

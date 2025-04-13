@@ -8,14 +8,14 @@ namespace Arenar.Services.UI
 {
     public class PlayerParametersLayerGameplayController : CanvasWindowController
     {
-        private CharacterSpawnController _characterSpawnController;
+        private CharacterSpawnController characterSpawnController;
         private ICharacterLiveComponent playerCharacterLiveComponent;
         private ICharacterProgressionComponent playerCharacterProgressionComponent;
         
         private ICharacterEntity playerCharacterController;
         private GameplayPlayerParametersWindowLayer gameplayPlayerParametersWindowLayer;
         private PlayerCharacterSkillUpgradeService playerCharacterSkillUpgradeService;
-        private LevelsService.LevelsService levelsService;
+        private ILevelsService levelsService;
 
 
         private ICharacterEntity Character
@@ -24,7 +24,7 @@ namespace Arenar.Services.UI
             {
                 if (playerCharacterController == null)
                 {
-                    playerCharacterController = _characterSpawnController.PlayerCharacter;
+                    playerCharacterController = characterSpawnController.PlayerCharacter;
                     if (playerCharacterController == null)
                         return null;
                 }
@@ -65,11 +65,11 @@ namespace Arenar.Services.UI
         
         
         public PlayerParametersLayerGameplayController(CharacterSpawnController characterSpawnController,
-                                                    IPlayerInputService playerInputService,
-                                                    LevelsService.LevelsService levelsService,
-                                                    PlayerCharacterSkillUpgradeService playerCharacterSkillUpgradeService) : base(playerInputService)
+                                                       IPlayerInputService playerInputService,
+                                                       ILevelsService levelsService,
+                                                       PlayerCharacterSkillUpgradeService playerCharacterSkillUpgradeService) : base(playerInputService)
         {
-            this._characterSpawnController = characterSpawnController;
+            this.characterSpawnController = characterSpawnController;
             this.levelsService = levelsService;
             this.playerCharacterSkillUpgradeService = playerCharacterSkillUpgradeService;
         }
@@ -85,7 +85,7 @@ namespace Arenar.Services.UI
 
             gameplayPlayerParametersWindowLayer.GetComponent<Canvas>().enabled = true;
 
-            _characterSpawnController.OnCreatePlayerCharacter += OnInstallNewCharacter;
+            characterSpawnController.OnCreatePlayerCharacter += OnInstallNewCharacter;
             
             gameplayPlayerParametersWindowLayer.OpenUpgradeSkillsMenuButton.onClick.AddListener(OpenUpgradeSkillsMenuButtonHandler);
         }

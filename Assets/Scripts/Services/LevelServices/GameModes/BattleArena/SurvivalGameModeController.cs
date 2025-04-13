@@ -14,7 +14,7 @@ namespace Arenar.Services.LevelsService
         private PlayerCharacterSkillUpgradeService playerSkillUpgradeService;
         private ICameraService cameraService;
         
-        private LevelsService levelsService;
+        private ILevelsService levelsService;
         
         private DiContainer container;
         private PlayerSpawnPoint spawnPoint;
@@ -33,7 +33,7 @@ namespace Arenar.Services.LevelsService
 
 
         public SurvivalGameModeController(
-            LevelsService levelsService,
+            ILevelsService levelsService,
             CharacterSpawnController сharacterSpawnController,
             ICameraService cameraService,
             SurvivalLevelInfoCollection survivalLevelInfoCollection,
@@ -75,7 +75,7 @@ namespace Arenar.Services.LevelsService
             playerCharacter.Activate();
             playerSkillUpgradeService.InitializeCharacter(playerCharacter);
             
-            //isGameActive = true;
+            isGameActive = true;
         }
         
         public override void EndGame() {}
@@ -108,6 +108,8 @@ namespace Arenar.Services.LevelsService
                 if (CanSpawnEnemy)
                     return;
             }
+
+            isGameActive = false;
         }
         
         private void GetNextLevelSpawnTime()

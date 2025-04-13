@@ -5,7 +5,7 @@ using Zenject;
 
 namespace Arenar.Character
 {
-	public class DefaultKnightComponentsInstaller : Installer
+	public class KnightComponentsInstaller : Installer
 	{
 		public override void InstallBindings()
 		{
