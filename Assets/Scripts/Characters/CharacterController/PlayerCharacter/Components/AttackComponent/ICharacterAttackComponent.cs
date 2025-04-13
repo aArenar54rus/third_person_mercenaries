@@ -12,7 +12,7 @@ namespace Arenar.Character
         
         int CharacterDamage { get; set; }
         
-        bool IsInProcess { get; }
+        bool HasProcess { get; }
 
 
         void PlayAction();

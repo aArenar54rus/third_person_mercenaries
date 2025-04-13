@@ -98,14 +98,14 @@ namespace Arenar.Character
                 return;
             }
 
-            characterMovementComponent.JumpAndGravity(JumpAction);
-            characterMovementComponent.Move(MoveAction, SprintAction);
-            characterMovementComponent.Rotation(MoveAction);
-            
             characterAimComponent.IsAim = AimAction;
             characterCameraComponent.CameraRotation(LookAction);
-
-            if (!characterAttackComponent.IsInProcess)
+            
+            characterMovementComponent.JumpAndGravity(JumpAction);
+            characterMovementComponent.Move(MoveAction, (characterAimComponent.IsAim == false) && SprintAction);
+            characterMovementComponent.Rotation(MoveAction);
+            
+            if (!characterAttackComponent.HasProcess)
             {
                 if (ReloadAction)
                     characterAttackComponent.MakeReload();

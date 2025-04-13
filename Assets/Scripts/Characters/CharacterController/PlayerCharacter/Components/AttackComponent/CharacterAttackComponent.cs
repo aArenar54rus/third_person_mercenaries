@@ -33,7 +33,7 @@ namespace Arenar.Character
 
         public int CharacterDamage { get; set; } = 0;
 
-        public bool IsInProcess => _lockAction;
+        public bool HasProcess => _lockAction;
         
         private bool IsFirearmWeaponEquipped => InventoryComponent.EquippedFirearmWeapons != null;
 
