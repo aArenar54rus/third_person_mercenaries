@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Arenar.AudioSystem;
+using Arenar.Items;
 using Arenar.Services.InventoryService;
 using Arenar.Services.PlayerInputService;
 using UnityEngine.InputSystem;
@@ -23,8 +24,8 @@ namespace Arenar.Services.UI
         
         [Inject]
         public InventoryWindowController(IInventoryService inventoryService,
-            IPlayerInputService playerInputService,
-            IUiSoundManager uiSoundManager)
+                                         IPlayerInputService playerInputService,
+                                         IUiSoundManager uiSoundManager)
             : base(playerInputService)
         {
             _inventoryService = inventoryService;
@@ -147,7 +148,7 @@ namespace Arenar.Services.UI
                 .PlayTransition<TransitionCrossFadeCanvasWindowLayerController,
                         InventoryCanvasWindow,
                         MainMenuWindow>
-                            (false, false, null);
+                    (false, false, null);
         }
 
         private void OnCellSelected_InventoryCellBag(int cellIndex)
@@ -163,14 +164,14 @@ namespace Arenar.Services.UI
                 .ShowInfoPanel(_inventoryBagCanvasLayer.InventoryCells[cellIndex].transform.position, itemData, false);
 
             bool isFindWeaponForCheck = false;
-            if (itemData.itemInventoryData is WeaponInventoryItemData weaponData)
+            if (itemData.itemInventoryData is FirearmWeaponInventoryItemData weaponData)
             {
                 var equippedWeapons = _inventoryService.GetEquippedWeapons();
                 
                 for (int i = 0; i < equippedWeapons.Length; i++)
                 {
                     if (equippedWeapons[i].itemInventoryData != null
-                        && equippedWeapons[i].itemInventoryData is WeaponInventoryItemData equippedWeaponData
+                        && equippedWeapons[i].itemInventoryData is FirearmWeaponInventoryItemData equippedWeaponData
                         && weaponData.WeaponType == equippedWeaponData.WeaponType)
                     {
                         _inventoryItemDescriptionCanvasLayer.SecondItemInformationPanelControl

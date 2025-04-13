@@ -8,6 +8,6 @@ namespace Arenar.Items
         public Vector3 RotationInHands { get; }
         float Damage { get; }
         WeaponType WeaponType { get; }
-        float TimeBetweenShots { get; }
+        float TimeBetweenAttacks { get; }
     }
 }

@@ -23,7 +23,7 @@ namespace Arenar.Items
         
         public FirearmWeapon Create(ItemInventoryData itemInventoryData)
         {
-            if (itemInventoryData is not WeaponInventoryItemData weaponInventoryItemData)
+            if (itemInventoryData is not FirearmWeaponInventoryItemData weaponInventoryItemData)
             {
                 Debug.LogError("Send wrong inventory Item Data");
                 return null;
@@ -58,15 +58,15 @@ namespace Arenar.Items
             return weapon;
         }
 
-        private IFirearmWeaponAttackItemComponent GetAttackMechanism(WeaponInventoryItemData weaponInventoryItemData)
+        private IFirearmWeaponAttackItemComponent GetAttackMechanism(FirearmWeaponInventoryItemData firearmWeaponInventoryItemData)
         {
-            switch (weaponInventoryItemData.FirearmWeaponData.FirearmWeaponAttackType)
+            switch (firearmWeaponInventoryItemData.FirearmWeaponData.FirearmWeaponAttackType)
             {
                 case FirearmWeaponAttackType.Projectile:
                     return new ProjectileFirearmWeaponAttackItemComponent(
                         projectileSpawner,
-                        weaponInventoryItemData.FirearmWeaponData.EffectType,
-                        weaponInventoryItemData.FirearmWeaponData.ProjectileSpeed
+                        firearmWeaponInventoryItemData.FirearmWeaponData.EffectType,
+                        firearmWeaponInventoryItemData.FirearmWeaponData.ProjectileSpeed
                     );
                     break;
                 
@@ -78,9 +78,9 @@ namespace Arenar.Items
             return null;
         }
         
-        private IClipComponent GetClipComponent(WeaponInventoryItemData weaponInventoryItemData)
+        private IClipComponent GetClipComponent(FirearmWeaponInventoryItemData firearmWeaponInventoryItemData)
         {
-            var weaponData = weaponInventoryItemData.FirearmWeaponData;
+            var weaponData = firearmWeaponInventoryItemData.FirearmWeaponData;
             if (weaponData.IsFullClipReload) 
                 return new FirearmWeaponClipComponent(false, weaponData.ClipSizeMax, weaponData.ClipSizeMax, weaponData.DefaultReloadSpeed);
             else

@@ -80,8 +80,8 @@ namespace Arenar.Character
             if (!IsAlive)
                 return;
             
-            if (damageData.BulletPhysicalMight != Vector3.zero)
-                _characterRigidbody.AddForce(damageData.BulletPhysicalMight, ForceMode.Impulse);
+            if (damageData.PhysicalMight != Vector3.zero)
+                _characterRigidbody.AddForce(damageData.PhysicalMight, ForceMode.Impulse);
 
             _levelsService.CurrentLevelContext.SettedDamage += damageData.WeaponDamageWithUpgrades;
             HealthContainer.Health -= damageData.WeaponDamageWithUpgrades;

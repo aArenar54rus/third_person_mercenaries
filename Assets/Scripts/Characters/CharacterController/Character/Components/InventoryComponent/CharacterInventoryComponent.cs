@@ -44,8 +44,6 @@ namespace Arenar.Character
 					characterAnimationComponent = neededAnimationComponent;
 			}
 			
-			LoadClothes();
-			
 			LoadWeaponFromInventory();
 		}
 		

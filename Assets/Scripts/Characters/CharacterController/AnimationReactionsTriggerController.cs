@@ -8,6 +8,7 @@ namespace Arenar.Character
     {
         public event Action onFootStep;
         public event Action onCompleteAction;
+        public event Action<AnimationEvent> onAnimationEventTriggered;
 
 
         private void OnFootstep(AnimationEvent animationEvent)
@@ -22,6 +23,11 @@ namespace Arenar.Character
         private void CompleteAction()
         {
             onCompleteAction?.Invoke();
+        }
+        
+        private void OnAnimationEventTriggered(AnimationEvent animationEvent)
+        {
+            onAnimationEventTriggered?.Invoke(animationEvent);
         }
     }
 }

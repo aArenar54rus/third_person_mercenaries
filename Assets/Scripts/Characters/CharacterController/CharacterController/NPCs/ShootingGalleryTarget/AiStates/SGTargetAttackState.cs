@@ -15,7 +15,7 @@ namespace Arenar.Character
 
         private ICharacterEntity _character;
         private FirearmWeapon _weapon;
-        private WeaponInventoryItemData _weaponInventoryData;
+        private FirearmWeaponInventoryItemData firearmWeaponInventoryData;
         private EffectsSpawner _projectileSpawner;
         private ClearLocationLevelInfoCollection clearLocationLevelInfoCollection;
         
@@ -49,7 +49,7 @@ namespace Arenar.Character
         {
             _character = character;
             _weapon = weaponDataStorage.Data.Weapon;
-            _weaponInventoryData = weaponDataStorage.Data.WeaponInventoryData;
+            firearmWeaponInventoryData = weaponDataStorage.Data.FirearmWeaponInventoryData;
             this.clearLocationLevelInfoCollection = clearLocationLevelInfoCollection;
             _projectileSpawner = projectileSpawner;
         }

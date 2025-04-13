@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using Zenject;
 
@@ -28,6 +29,9 @@ namespace Arenar.Character
             RifleHands = 10,
         }
 
+        
+        public event Action<AnimationEvent> onAnimationEvent;
+        
 
         private CharacterAnimatorDataStorage characterAnimatorDataStorage;
         private CharacterAimAnimationDataStorage characterAimAnimationDataStorage;
