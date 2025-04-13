@@ -17,6 +17,8 @@ namespace Arenar.Character
         private ICharacterCameraComponent characterCameraComponent;
         private ICharacterAttackComponent characterAttackComponent;
 
+        private Vector2 lookActionForLateUpdate;
+
 
         private PlayerInput PlayerInput =>
             (PlayerInput)playerInputService.InputActionCollection;
@@ -99,10 +101,10 @@ namespace Arenar.Character
             }
 
             characterAimComponent.IsAim = AimAction;
-            characterCameraComponent.CameraRotation(LookAction);
+            lookActionForLateUpdate = LookAction;
             
             characterMovementComponent.JumpAndGravity(JumpAction);
-            characterMovementComponent.Move(MoveAction, (characterAimComponent.IsAim == false) && SprintAction);
+            characterMovementComponent.Move(new Vector3(MoveAction.x, 0, MoveAction.y), (characterAimComponent.IsAim == false) && SprintAction);
             characterMovementComponent.Rotation(MoveAction);
             
             if (!characterAttackComponent.HasProcess)
@@ -113,6 +115,9 @@ namespace Arenar.Character
                 if (AttackAction)
                     characterAttackComponent.PlayAction();
             }
+            
+            // TODO: later move in late update
+            characterCameraComponent.CameraRotation(lookActionForLateUpdate);
         }
 
         public void LateTick()
@@ -121,8 +126,6 @@ namespace Arenar.Character
             {
                 return;
             }
-            
-            
         }
     }
 }

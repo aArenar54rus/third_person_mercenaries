@@ -17,7 +17,7 @@ namespace Arenar
         private ICharacterEntityFactory<ShootingGalleryTargetCharacterController> _shootingGalleryTargetFactory;
         
         private Dictionary<CharacterTypeKeys, List<ICharacterEntity>> _activeHumanoidCharacters = new();
-        private Dictionary<CharacterTypeKeys, Queue<ICharacterEntity>> _createdHumanoidCharacters = new();
+        private Dictionary<CharacterTypeKeys, Queue<ICharacterEntity>> createdHumanoidCharacters = new();
 
 
         public ICharacterEntity PlayerCharacter => _activeHumanoidCharacters[CharacterTypeKeys.Player][0];
@@ -42,42 +42,56 @@ namespace Arenar
         {
             _physicsHumanoidCharacterFactory = physicsHumanoidCharacterFactory;
             _shootingGalleryTargetFactory = shootingGalleryTargetFactory;
-            _createdHumanoidCharacters = new Dictionary<CharacterTypeKeys, Queue<ICharacterEntity>>();
+            createdHumanoidCharacters = new Dictionary<CharacterTypeKeys, Queue<ICharacterEntity>>();
         }
         
         
         public ICharacterEntity GetCharacter(CharacterTypeKeys characterType)
         {
-            ICharacterEntity componentCharacter = GetHumanoidCharacter(characterType);
+            ICharacterEntity characterEntity = GetHumanoidCharacter(characterType);
+            
+            if (!_activeHumanoidCharacters.ContainsKey(characterType))
+                _activeHumanoidCharacters.Add(characterType, new List<ICharacterEntity>());
+            _activeHumanoidCharacters[characterType].Add(characterEntity);
             
             if (characterType == CharacterTypeKeys.Player)
-                OnCreatePlayerCharacter?.Invoke(componentCharacter);
-            else OnCreateEnemyCharacter?.Invoke(componentCharacter);
+                OnCreatePlayerCharacter?.Invoke(characterEntity);
+            else OnCreateEnemyCharacter?.Invoke(characterEntity);
             
-            return componentCharacter;
+            characterEntity.EntityObjectTransform.gameObject.SetActive(true);
+            return characterEntity;
+        }
+        
+        public void ReturnHumanoidCharacter(ICharacterEntity characterEntity)
+        {
+            if (!createdHumanoidCharacters.ContainsKey(characterEntity.CharacterType))
+                createdHumanoidCharacters.Add(characterEntity.CharacterType, new Queue<ICharacterEntity>());
+            createdHumanoidCharacters[characterEntity.CharacterType].Enqueue(characterEntity);
+
+            if (_activeHumanoidCharacters.ContainsKey(characterEntity.CharacterType))
+                _activeHumanoidCharacters[characterEntity.CharacterType].Remove(characterEntity);
+            
+            characterEntity.DeActivate();
+            characterEntity.DeInitialize();
+            characterEntity.EntityObjectTransform.gameObject.SetActive(false);
         }
         
         private ICharacterEntity GetHumanoidCharacter(CharacterTypeKeys characterType)
         {
             ICharacterEntity componentCharacter = null;
 
-            if (_createdHumanoidCharacters.ContainsKey(characterType)
-                && _createdHumanoidCharacters[CharacterTypeKeys.DefaultKnight].Count > 0)
+            if (createdHumanoidCharacters.ContainsKey(characterType)
+                && createdHumanoidCharacters[characterType].Count > 0)
             {
-                componentCharacter = _createdHumanoidCharacters[characterType].Dequeue();
+                componentCharacter = createdHumanoidCharacters[characterType].Dequeue();
             }
             else
             {
-                if (!_createdHumanoidCharacters.ContainsKey(characterType))
-                    _createdHumanoidCharacters.Add(characterType, new Queue<ICharacterEntity>());
-                
                 componentCharacter = _physicsHumanoidCharacterFactory.Create(characterType);
-                _createdHumanoidCharacters[characterType].Enqueue(componentCharacter);
-
                 componentCharacter.EntityObjectTransform.SetParent(CharactersContainer);
-                componentCharacter.Initialize();
             }
-
+            
+            componentCharacter.Initialize();
             return componentCharacter;
         }
 
@@ -105,7 +119,9 @@ namespace Arenar
 
         public void DisableAllCharacters()
         {
-            foreach (var characters in _createdHumanoidCharacters)
+            return;
+            
+            foreach (var characters in createdHumanoidCharacters)
             {
                 foreach (var character in characters.Value)
                 {

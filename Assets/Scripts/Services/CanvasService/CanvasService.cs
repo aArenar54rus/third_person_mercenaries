@@ -129,9 +129,9 @@ namespace Arenar.Services.UI
 				rootObject = new GameObject(canvasWindowsSettings.SceneRootName);
 
 			Canvas canvas = new GameObject($"{nameof(Canvas)}", typeof(Canvas), typeof(CanvasScaler)).GetComponent<Canvas>();
-			canvas.transform.parent = rootObject.transform;
+			canvas.transform.SetParent(rootObject.transform);
 			canvas.renderMode = canvasWindowsSettings.RenderMode;
-            canvas.planeDistance = canvasWindowsSettings.PlaneDistance;
+			canvas.planeDistance = canvasWindowsSettings.PlaneDistance;
 			canvas.worldCamera = Camera.main;
 
 			var canvasScaler = canvas.GetComponent<CanvasScaler>();

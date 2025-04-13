@@ -78,12 +78,10 @@ namespace Arenar.Character
                 cinemachineTargetYaw += direction.x * sensitivity;// * deltaTimeMultiplier;
                 cinemachineTargetPitch += direction.y * sensitivity;// * deltaTimeMultiplier;
             }
-
-            // clamp our rotations so our values are limited 360 degrees
+            
             cinemachineTargetYaw = ClampAngle(cinemachineTargetYaw, float.MinValue, float.MaxValue);
             cinemachineTargetPitch = ClampAngle(cinemachineTargetPitch, playerCharacterParametersData.BottomClamp, playerCharacterParametersData.TopClamp);
-
-            // Cinemachine will follow this target
+            
             characterPhysicsDataStorage.CameraTransform.transform.rotation = Quaternion.Euler(cinemachineTargetPitch + playerCharacterParametersData.CameraAngleOverride,
                 cinemachineTargetYaw, 0.0f);
         }

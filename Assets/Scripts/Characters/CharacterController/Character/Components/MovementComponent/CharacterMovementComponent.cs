@@ -25,7 +25,7 @@ namespace Arenar.Character
         
         // animation
         private float animationBlendX = 0.0f;
-        private float animationBlendY = 0.0f;
+        private float animationBlendZ = 0.0f;
 
         // timeout deltatime
         private float jumpTimeoutDelta;
@@ -92,7 +92,7 @@ namespace Arenar.Character
         
         public void OnDeactivate() {}
         
-        public void Move(Vector2 direction, bool isSprint)
+        public void Move(Vector3 direction, bool isSprint)
         {
             // set target speed based on move speed, sprint speed and if sprint is pressed
             float targetSpeed = isSprint
@@ -103,9 +103,11 @@ namespace Arenar.Character
 
             // note: Vector2's == operator uses approximation so is not floating point error prone, and is cheaper than magnitude
             // if there is no input, set the target speed to 0
-            if (direction == Vector2.zero)
+            if (direction == Vector3.zero)
                 targetSpeed = 0.0f;
 
+            direction.y = 0;
+            
             // a reference to the players current horizontal velocity
             float currentHorizontalSpeed = new Vector3(characterPhysicsDataStorage.CharacterController.velocity.x, 0.0f,
                 characterPhysicsDataStorage.CharacterController.velocity.z).magnitude;
@@ -143,7 +145,7 @@ namespace Arenar.Character
             else
             {
                 targetDirection = Quaternion.Euler(0.0f,
-                    Mathf.Atan2(direction.x, direction.y) * Mathf.Rad2Deg + mainCamera.transform.eulerAngles.y,
+                    Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + mainCamera.transform.eulerAngles.y,
                     0.0f) * Vector3.forward;
             }
 
@@ -153,11 +155,11 @@ namespace Arenar.Character
             
             float runningAnimMultiplier = isSprint ? 1.0f : 0.5f;
             float runningAnimMultiplierX = runningAnimMultiplier * direction.x;
-            float runningAnimMultiplierY = runningAnimMultiplier * direction.y;
+            float runningAnimMultiplierZ = runningAnimMultiplier * direction.z;
 
             animationBlendX = Mathf.Lerp(animationBlendX, runningAnimMultiplierX,
                 Time.deltaTime * playerCharacterParametersData.SpeedChangeRate);
-            animationBlendY = Mathf.Lerp(animationBlendY, runningAnimMultiplierY,
+            animationBlendZ = Mathf.Lerp(animationBlendZ, runningAnimMultiplierZ,
                 Time.deltaTime * playerCharacterParametersData.SpeedChangeRate);
 
             float animationSpeedBlend = 0;
@@ -166,14 +168,11 @@ namespace Arenar.Character
 
             characterAnimationComponent.SetAnimationValue(Character.CharacterAnimationComponent.AnimationValue.Speed, animationSpeedBlend);
             characterAnimationComponent.SetAnimationValue(Character.CharacterAnimationComponent.AnimationValue.MotionSpeedX, animationBlendX);
-            characterAnimationComponent.SetAnimationValue(Character.CharacterAnimationComponent.AnimationValue.MotionSpeedY, animationBlendY);
+            characterAnimationComponent.SetAnimationValue(Character.CharacterAnimationComponent.AnimationValue.MotionSpeedY, animationBlendZ);
         }
 
         public void Rotation(Vector2 direction)
         {
-            // note: Vector2's != operator uses approximation so is not floating point error prone, and is cheaper than magnitude
-            // if there is a move input rotate player when the player is moving
-
             if (IsRotateOnMove)
             {
                 if (direction == Vector2.zero)
@@ -185,7 +184,6 @@ namespace Arenar.Character
                     ref rotationVelocity,
                     playerCharacterParametersData.RotationSmoothTime);
 
-                // rotate to face input direction relative to camera position
                 CharacterTransform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
             }
             else
@@ -204,37 +202,29 @@ namespace Arenar.Character
         {
             if (characterRayCastComponent.IsGrounded)
             {
-                // reset the fall timeout timer
                 fallTimeoutDelta = playerCharacterParametersData.FallTimeout;
 
-                // update animator if using character
                 characterAnimationComponent.SetAnimationValue(CharacterAnimationComponent.AnimationValue.Grounded, 1); 
                 characterAnimationComponent.SetAnimationValue(CharacterAnimationComponent.AnimationValue.Jump, 0);
                 characterAnimationComponent.SetAnimationValue(CharacterAnimationComponent.AnimationValue.FreeFall, 0);
 
-                // stop our velocity dropping infinitely when grounded
                 if (verticalVelocity < 0.0f)
                     verticalVelocity = -2f;
                 
-                // Jump
                 if (playerCharacterParametersData.CanJump && jumpAction && jumpTimeoutDelta <= 0.0f)
                 {
-                    // the square root of H * -2 * G = how much velocity needed to reach desired height
                     verticalVelocity = Mathf.Sqrt(playerCharacterParametersData.JumpHeight * -2f * playerCharacterParametersData.Gravity);
                     characterAnimationComponent.SetAnimationValue(Character.CharacterAnimationComponent.AnimationValue.Jump, 1);
                 }
 
-                // jump timeout
                 if (jumpTimeoutDelta >= 0.0f)
                     jumpTimeoutDelta -= Time.deltaTime;
             }
             else
             {
                 characterAnimationComponent.SetAnimationValue(CharacterAnimationComponent.AnimationValue.Grounded, 0); 
-                // reset the jump timeout timer
                 jumpTimeoutDelta = playerCharacterParametersData.JumpTimeout;
 
-                // fall timeout
                 if (fallTimeoutDelta >= 0.0f)
                 {
                     fallTimeoutDelta -= Time.deltaTime;
@@ -245,7 +235,6 @@ namespace Arenar.Character
                 }
             }
 
-            // apply gravity over time if under terminal (multiply by delta time twice to linearly speed up over time)
             if (verticalVelocity < terminalVelocity)
             {
                 verticalVelocity += playerCharacterParametersData.Gravity * Time.deltaTime;

@@ -1,23 +1,22 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 
 namespace Arenar.Character
 {
-    public class SearchEnemyState : AIState
+    public class SearchTargetAiState : AIState
     {
-        private ICharacterAnimationComponent<CharacterAnimationComponent.Animation, CharacterAnimationComponent.AnimationValue>
-            characterAnimationComponent;
-
         private ICharacterLiveComponent characterLiveComponent;
+        private ICharacterMovementComponent characterMovementComponent;
+        private ICharacterAggressionComponent characterAggressionComponent;
         
         
         public override void Initialize(ICharacterEntity character)
         {
             base.Initialize(character);
-            character.TryGetCharacterComponent(out characterAnimationComponent);
+            
             character.TryGetCharacterComponent(out characterLiveComponent);
+            character.TryGetCharacterComponent(out characterMovementComponent);
+            character.TryGetCharacterComponent(out characterAggressionComponent);
         }
 
         public override void DeInitialize()
@@ -27,12 +26,16 @@ namespace Arenar.Character
         
         public override void OnStateSyncUpdate()
         {
-            throw new System.NotImplementedException();
+            characterMovementComponent.Move(Vector2.zero, false);
+            
+            if (characterAggressionComponent.MaxAggressionTarget == null)
+                return;
+
+            aiStateMachineController.SwitchState<MoveToTargetByNavMeshAiState>();
         }
 
         public override void OnStateAsyncUpdate()
         {
-            throw new System.NotImplementedException();
         }
         
         public override void OnStateBegin()
@@ -47,7 +50,8 @@ namespace Arenar.Character
 
         private void OnCharacterGetDamageBy(ICharacterEntity aggressor)
         {
-            
+            if (characterLiveComponent.IsAlive)
+                characterAggressionComponent.AddAggressionScore(aggressor, 10);
         }
     }
 }

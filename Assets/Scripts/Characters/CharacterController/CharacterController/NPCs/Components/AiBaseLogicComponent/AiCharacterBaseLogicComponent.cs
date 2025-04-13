@@ -1,16 +1,14 @@
-using Arenar.Services.LevelsService;
 using Zenject;
-
 
 namespace Arenar.Character
 {
-    public abstract class AiCharacterBaseLogicComponent : IAiCharacterBaseLogicComponent, IFixedTickable
+    public class AiCharacterBaseLogicComponent : IAiCharacterBaseLogicComponent, IFixedTickable
     {
-        private ICharacterEntity _characterEntity;
-        private AIState[] _aiStates;
-        private ILevelsService _levelsService;
-        private TickableManager _tickableManager;
-        private AiStateMachineController _aiStateMachine;
+        private ICharacterEntity characterEntity;
+        private AIState[] aiStates;
+        
+        private TickableManager tickableManager;
+        private AiStateMachineController aiStateMachine;
 
 
         public bool IsControlBlocked { get; set; } = true;
@@ -18,62 +16,60 @@ namespace Arenar.Character
 
         [Inject]
         public void Construct(
-            ILevelsService levelsService,
             ICharacterEntity characterEntity,
             TickableManager tickableManager,
             AIState[] aiStates)
         {
-            _aiStates = aiStates;
-            _characterEntity = characterEntity;
-            _tickableManager = tickableManager;
-            _levelsService = levelsService;
+            this.aiStates = aiStates;
+            this.characterEntity = characterEntity;
+            this.tickableManager = tickableManager;
         }
         
         public void Initialize()
         {
-            _aiStateMachine = new AiStateMachineController(_characterEntity, _aiStates);
+            aiStateMachine = new AiStateMachineController(characterEntity, aiStates);
         }
 
         public void DeInitialize()
         {
-            _aiStateMachine = null;
+            aiStateMachine = null;
         }
 
         public void OnActivate()
         {
             if (IsControlBlocked)
-                _tickableManager.AddFixed(this);
-            _aiStateMachine.Initialize();
-            _aiStateMachine.OnStart();
+                tickableManager.AddFixed(this);
+            aiStateMachine.Initialize();
+            aiStateMachine.OnStart();
             IsControlBlocked = false;
         }
 
         public void OnDeactivate()
         {
             IsControlBlocked = true;
-            _tickableManager.RemoveFixed(this);
-            _aiStateMachine.DeInitialize();
+            tickableManager.RemoveFixed(this);
+            aiStateMachine.DeInitialize();
         }
 
         public void SwitchState<T>() where T : IAIState 
         {
-            _aiStateMachine.SwitchState<T>();
+            aiStateMachine.SwitchState<T>();
         }
 
         public void SwitchStateAsync<T>() where T : IAIState
         {
-            _aiStateMachine.SwitchStateAsync<T>();
+            aiStateMachine.SwitchStateAsync<T>();
         }
 
         public T GetStateInstance<T>() where T : IAIState
         {
-            return _aiStateMachine.GetStateInstance<T>();
+            return aiStateMachine.GetStateInstance<T>();
         }
 
         public void FixedTick()
         {
             if (!IsControlBlocked)
-                _aiStateMachine.OnFixedTick();
+                aiStateMachine.OnFixedTick();
         }
     }
 }

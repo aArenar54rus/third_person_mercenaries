@@ -1,6 +1,8 @@
 using RootMotion.Dynamics;
 using System;
 using UnityEngine;
+using UnityEngine.AI;
+
 
 namespace Arenar.Character
 {
@@ -10,6 +12,7 @@ namespace Arenar.Character
         [SerializeField] private Transform characterTransform = default;
         [SerializeField] private Transform cameraTransform = default;
         [SerializeField] private CharacterController characterController = default;
+        [SerializeField] private NavMeshAgent navMeshAgent = default;
         
         [Space(10), Header("Puppet Master")]
         [SerializeField] private PuppetMaster puppetMaster = default;
@@ -25,6 +28,7 @@ namespace Arenar.Character
 
         public Transform CharacterTransform => characterTransform;
         public Transform CameraTransform => cameraTransform;
+        public NavMeshAgent NavMeshAgent => navMeshAgent;
         public CharacterController CharacterController => characterController;
         public PuppetMaster PuppetMaster => puppetMaster;
         public SerializableDictionary<string, BehaviourBase> PuppetBehaviours => puppetBehaviours;

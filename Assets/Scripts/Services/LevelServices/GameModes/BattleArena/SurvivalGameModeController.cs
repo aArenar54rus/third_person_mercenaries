@@ -106,7 +106,9 @@ namespace Arenar.Services.LevelsService
 
                 var position = enemySpawnPoints.GetRandomPointPosition();
                 enemy.EntityObjectTransform.position = position;
-
+                
+                enemy.Activate();
+                
                 enemyCounter++;
                 if (CanSpawnEnemy)
                     return;

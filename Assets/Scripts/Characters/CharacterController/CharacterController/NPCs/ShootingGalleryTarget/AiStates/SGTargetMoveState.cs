@@ -33,7 +33,7 @@ namespace Arenar.Character
             get
             {
                 if (_characterMovementComponent == null)
-                    _character.TryGetCharacterComponent(out _characterMovementComponent);
+                    character.TryGetCharacterComponent(out _characterMovementComponent);
                 return _characterMovementComponent;
             }
         }
@@ -56,7 +56,7 @@ namespace Arenar.Character
                 _pathPoints = GameObject.FindObjectOfType<ShootingGalleryTargetPointsCollection>().TargetPoints;
             
             _progressPointIndex = 0;
-            if (_character is ShootingGalleryTargetCharacterController SGTargetController)
+            if (base.character is ShootingGalleryTargetCharacterController SGTargetController)
             {
                 int characterIndex = SGTargetController.TargetCharacterIndex;
 
@@ -65,7 +65,7 @@ namespace Arenar.Character
                         .ShootingGalleriesInfos[_levelsService.CurrentLevelContext.LevelData.LevelIndex][characterIndex];
             }
 
-            _character.CharacterTransform.position = CurrentPathPoint.Position;
+            base.character.CharacterTransform.position = CurrentPathPoint.Position;
         }
 
         public override void DeInitialize()
@@ -79,7 +79,7 @@ namespace Arenar.Character
         public override void OnStateBegin()
         {
             _progressPointIndex = 0;
-            if (_character is ShootingGalleryTargetCharacterController SGTargetController)
+            if (character is ShootingGalleryTargetCharacterController SGTargetController)
             {
                 int characterIndex = SGTargetController.TargetCharacterIndex;
 
@@ -88,7 +88,7 @@ namespace Arenar.Character
                         .ShootingGalleriesInfos[_levelsService.CurrentLevelContext.LevelData.LevelIndex][characterIndex];
             }
             
-            _character.CharacterTransform.position = CurrentPathPoint.Position;
+            character.CharacterTransform.position = CurrentPathPoint.Position;
             
             #if UNITY_EDITOR
             if (_testLine == null)
@@ -104,11 +104,11 @@ namespace Arenar.Character
         {
             if (_progressPointIndex >= _currentCharacterPathNode.PathPointIndexes.Length)
             {
-                _aiStateMachineController.SwitchState<SGTargetSearchTargetState>();
+                aiStateMachineController.SwitchState<SGTargetSearchTargetState>();
                 return;
             }
 
-            if (Vector3.Distance(_character.CharacterTransform.position, CurrentPathPoint.Position) < MINIMAL_DISTANCE_FOR_CHECK)
+            if (Vector3.Distance(character.CharacterTransform.position, CurrentPathPoint.Position) < MINIMAL_DISTANCE_FOR_CHECK)
             {
                 _progressPointIndex++;
                 return;
@@ -117,11 +117,11 @@ namespace Arenar.Character
             #if UNITY_EDITOR
             if (_testLine != null)
             {
-                _testLine.UpdateData(_character.CharacterTransform.position, CurrentPathPoint.Position);
+                _testLine.UpdateData(character.CharacterTransform.position, CurrentPathPoint.Position);
             }
             #endif
             
-            Vector3 direction = CurrentPathPoint.Position - _character.CharacterTransform.position;
+            Vector3 direction = CurrentPathPoint.Position - character.CharacterTransform.position;
             CharacterMovementComponent.Move(direction, false);
             CharacterMovementComponent.Rotation(direction);
         }

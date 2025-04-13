@@ -66,9 +66,9 @@ namespace Arenar.Character
             _targetPhysicalData.CharacterModelRigidbody.velocity = Vector3.zero;
         }
 
-        public void Move(Vector2 direction, bool isRunning)
+        public void Move(Vector3 direction, bool isRunning)
         {
-            if (direction == Vector2.zero)
+            if (direction == Vector3.zero)
             {
                 SpeedAcceleration -= _speedAccelerationMultiply * Time.deltaTime;
                 _targetPhysicalData.CharacterModelRigidbody.velocity = Vector2.zero;

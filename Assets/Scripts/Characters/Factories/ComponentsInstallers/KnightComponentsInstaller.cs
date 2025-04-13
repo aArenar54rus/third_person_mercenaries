@@ -9,6 +9,7 @@ namespace Arenar.Character
 	{
 		public override void InstallBindings()
 		{
+			InstallAiBaseLogicStates();
 			InstallCharactersComponents();
 		}
 		
@@ -16,12 +17,17 @@ namespace Arenar.Character
 		{
 			Dictionary<Type, ICharacterComponent> characterComponentsPool = new Dictionary<Type, ICharacterComponent>();
 			
+			IAiCharacterBaseLogicComponent aiLogicComponent = new AiCharacterBaseLogicComponent();
+			characterComponentsPool.Add(typeof(IAiCharacterBaseLogicComponent), aiLogicComponent);
+			Container.BindInstance(aiLogicComponent).AsSingle();
+			Container.Inject(aiLogicComponent);
+			
 			ICharacterAnimationComponent<CharacterAnimationComponent.Animation, CharacterAnimationComponent.AnimationValue> animationComponent = new CharacterAnimationComponent();
 			characterComponentsPool.Add(typeof(ICharacterAnimationComponent), animationComponent);
 			Container.BindInstance(animationComponent).AsSingle();
 			Container.Inject(animationComponent);
 			
-			ICharacterMovementComponent movementComponent = new CharacterMovementComponent();
+			ICharacterMovementComponent movementComponent = new CharacterNavMeshMovementComponent();
 			characterComponentsPool.Add(typeof(ICharacterMovementComponent), movementComponent);
 			Container.BindInstance(movementComponent).AsSingle();
 			Container.Inject(movementComponent);
@@ -41,7 +47,29 @@ namespace Arenar.Character
 			Container.BindInstance(characterRayCastComponent).AsSingle();
 			Container.Inject(characterRayCastComponent);
 			
+			ICharacterAggressionComponent characterAggressionComponent = new AiCharacterAggressionWithPlayerReactionComponent();
+			characterComponentsPool.Add(typeof(ICharacterAggressionComponent), characterAggressionComponent);
+			Container.BindInstance(characterAggressionComponent).AsSingle();
+			Container.Inject(characterAggressionComponent);
+			
+			ICharacterAttackComponent characterAttackComponent = new CharacterAttackComponent();
+			characterComponentsPool.Add(typeof(ICharacterAttackComponent), characterAttackComponent);
+			Container.BindInstance(characterAttackComponent).AsSingle();
+			Container.Inject(characterAttackComponent);
+			
 			Container.BindInstance(characterComponentsPool).AsSingle();
+		}
+		
+		private void InstallAiBaseLogicStates()
+		{
+			AIState[] characterBaseLogicStates =
+			{
+				Container.Instantiate<SearchTargetAiState>(),
+				Container.Instantiate<MoveToTargetByNavMeshAiState>(),
+				Container.Instantiate<AttackTargetAiState>(),
+			};
+
+			Container.BindInstance(characterBaseLogicStates).AsSingle();
 		}
 	}
 }

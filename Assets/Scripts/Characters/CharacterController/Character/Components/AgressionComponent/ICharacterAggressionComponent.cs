@@ -1,6 +1,6 @@
 namespace Arenar.Character
 {
-    public interface ICharacterAggressionComponent : ICharacterComponent
+    public partial interface ICharacterAggressionComponent : ICharacterComponent
     {
         ICharacterEntity MaxAggressionTarget { get; }
 

@@ -37,7 +37,7 @@ namespace Arenar.Character
             Container.BindInstance(characterMovementComponent).AsSingle();
             Container.Inject(characterMovementComponent);
 
-            ICharacterAggressionComponent characterAggressionComponent = new AiCharacterAggressionComponent();
+            ICharacterAggressionComponent characterAggressionComponent = new AiCharacterAggressionWithPlayerReactionComponent();
             characterComponentsPool.Add(typeof(ICharacterAggressionComponent), characterAggressionComponent);
             Container.BindInstance(characterAggressionComponent).AsSingle();
             Container.Inject(characterAggressionComponent);

@@ -153,10 +153,5 @@ namespace Arenar.Character
 				AddEquippedFirearmWeapon(equippedWeaponInventoryData.itemInventoryData, i);
 			}
 		}
-		
-		private void LoadClothes()
-		{
-			// TODO; wardrobe system
-		}
 	}
 }

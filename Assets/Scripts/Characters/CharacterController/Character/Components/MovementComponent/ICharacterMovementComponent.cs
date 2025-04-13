@@ -7,7 +7,7 @@ namespace Arenar.Character
         MovementContainer MovementContainer { get; set; }
         
         
-        void Move(Vector2 direction, bool isSprint);
+        void Move(Vector3 direction, bool isSprint);
         
         void JumpAndGravity(bool isJumpAction);
 

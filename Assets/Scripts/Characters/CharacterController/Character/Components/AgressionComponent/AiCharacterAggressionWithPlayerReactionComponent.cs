@@ -1,15 +1,27 @@
 using System.Collections.Generic;
+using Zenject;
 
 
 namespace Arenar.Character
 {
-    public class AiCharacterAggressionComponent : ICharacterAggressionComponent
+    public class AiCharacterAggressionWithPlayerReactionComponent : ICharacterAggressionComponent
     {
+        private const int ONE_HUNDRED = 100;
+        
+        
+        private CharacterSpawnController characterSpawnController;
         private List<AggressionTarget> _characterTargetsData;
         
         
         public ICharacterEntity MaxAggressionTarget { get; private set; }
-        
+
+
+
+        [Inject]
+        private void Construct(CharacterSpawnController characterSpawnController)
+        {
+            this.characterSpawnController = characterSpawnController;
+        }
         
         public void Initialize()
         {
@@ -24,13 +36,24 @@ namespace Arenar.Character
 
         public void OnActivate()
         {
+            MaxAggressionTarget = null;
             _characterTargetsData.Clear();
-            UpdateAggressionTargets();
+            
+            if (characterSpawnController.PlayerCharacter != null)
+            {
+                AddAggressionScore(characterSpawnController.PlayerCharacter, ONE_HUNDRED);
+            }
+            else
+            {
+                characterSpawnController.OnCreatePlayerCharacter += AddPlayerAggressionHandler;
+                UpdateAggressionTargets();
+            }
         }
 
         public void OnDeactivate()
         {
             _characterTargetsData.Clear();
+            characterSpawnController.OnCreatePlayerCharacter -= AddPlayerAggressionHandler;
         }
 
         public void AddAggressionScore(ICharacterEntity aggressor, int aggrScore)
@@ -87,8 +110,15 @@ namespace Arenar.Character
                 _characterTargetsData.Remove(lostTarget);
         }
         
+        private void AddPlayerAggressionHandler(ICharacterEntity aggressor)
+        {
+            characterSpawnController.OnCreatePlayerCharacter -= AddPlayerAggressionHandler;
+
+            AddAggressionScore(aggressor, ONE_HUNDRED);
+        }
         
-        
+
+
         class AggressionTarget
         {
             public int aggression;

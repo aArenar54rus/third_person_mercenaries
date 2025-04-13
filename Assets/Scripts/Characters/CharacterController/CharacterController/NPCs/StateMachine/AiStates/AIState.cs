@@ -5,8 +5,8 @@ namespace Arenar.Character
 {
     public abstract class AIState : IAIState
     {
-        protected ICharacterEntity _character;
-        protected AiStateMachineController _aiStateMachineController;
+        protected ICharacterEntity character;
+        protected AiStateMachineController aiStateMachineController;
         
         
         public Vector3 MoveDirection { get; protected set; }
@@ -15,10 +15,10 @@ namespace Arenar.Character
         
         
         public void SetupAiStateMachineBehaviour(AiStateMachineController aiStateMachineController) =>
-            this._aiStateMachineController = aiStateMachineController;
+            this.aiStateMachineController = aiStateMachineController;
 
         public virtual void Initialize(ICharacterEntity character) =>
-            this._character = character;
+            this.character = character;
 
         public abstract void DeInitialize();
         

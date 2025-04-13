@@ -14,7 +14,7 @@ namespace Arenar.Character
             get
             {
                 if (_aggressionComponent == null)
-                    _character.TryGetCharacterComponent(out _aggressionComponent);
+                    character.TryGetCharacterComponent(out _aggressionComponent);
                 return _aggressionComponent;
             }
         }
@@ -22,9 +22,9 @@ namespace Arenar.Character
         
         [Inject]
         private void Construct(ICharacterEntity character,
-            CharacterSpawnController characterSpawnController)
+                               CharacterSpawnController characterSpawnController)
         {
-            _character = character;
+            base.character = character;
             _playerCharacter = characterSpawnController.PlayerCharacter;
         }
         
@@ -47,13 +47,13 @@ namespace Arenar.Character
                     && characterLiveComponent.IsAlive)
                 {
                     AggressionComponent.AddAggressionScore(_playerCharacter, 1000);
-                    _aiStateMachineController.SwitchState<SGTargetAttackState>();
+                    aiStateMachineController.SwitchState<SGTargetAttackState>();
                     return;
                 }
             }
             else
             {
-                _aiStateMachineController.SwitchState<SGTargetAttackState>();
+                aiStateMachineController.SwitchState<SGTargetAttackState>();
                 return;
             }
         }

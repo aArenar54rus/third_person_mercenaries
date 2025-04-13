@@ -155,16 +155,16 @@ namespace Arenar.Services.UI
         {
             canvasService.TransitionController
                 .PlayTransition<TransitionOverlayCanvasWindowController,
-                        CompleteLevelCanvasWindow,
-                        MainMenuWindow>
-                    (true, true, () =>
-                    {
-                        _сharacterSpawnController.DisableAllCharacters();
-                        _locationService.UnloadLastLoadedLocation();
-                        _locationService.LoadLocation(LocationName.MainMenuLocation);
+                    CompleteLevelCanvasWindow,
+                    MainMenuWindow>
+                (true, true, () =>
+                {
+                    _сharacterSpawnController.DisableAllCharacters();
+                    _locationService.UnloadLastLoadedLocation();
+                    _locationService.LoadLocation(LocationName.MainMenuLocation);
                         
-                        _cameraService.SetCameraState<CameraStateMainMenu>(null, null);
-                    });
+                    _cameraService.SetCameraState<CameraStateMainMenu>(null, null);
+                });
         }
         
         private void UpdateMarkSuccessStatus(LevelMarkType type) =>
