@@ -15,7 +15,6 @@ namespace Arenar
             _effectsSpawner = effectsSpawner;
         }
         
-        
         public void MakeShoot(Transform muzzle, Vector3 direction, DamageData damageData)
         {
             PlayMuzzleFlashEffect(muzzle);
@@ -23,14 +22,18 @@ namespace Arenar
             Ray ray = new(muzzle.position, direction);
             if (!Physics.Raycast(ray, out RaycastHit hit))
                 return;
-                    
-            if (hit.transform.TryGetComponent<CharacterController>(
-                    out CharacterController characterController)
-                && characterController.TryGetComponent<ICharacterLiveComponent>(
-                    out ICharacterLiveComponent characterLiveComponent))
+
+            ICharacterLiveComponent characterLiveComponent = null;
+            
+            if (hit.transform.TryGetComponent<ICharacterEntity>(out ICharacterEntity characterController)
+                && characterController.TryGetCharacterComponent<ICharacterLiveComponent>(out characterLiveComponent))
             {
                 characterLiveComponent.SetDamage(damageData);
-
+            }
+            else if (hit.transform.TryGetComponent<CharacterDamageContainer>(out CharacterDamageContainer damageContainer)
+                     && damageContainer.CharacterEntity.TryGetCharacterComponent<ICharacterLiveComponent>(out characterLiveComponent))
+            {
+                characterLiveComponent.SetDamage(damageData);
             }
                     
             ParticleSystem effect = _effectsSpawner.GetEffect(EffectType.BulletCollision);

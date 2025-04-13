@@ -10,6 +10,8 @@ namespace Arenar.Character
         private ILevelsService levelsService;
         
         private ICharacterEntity characterOwner;
+        private ICharacterLiveComponent characterLiveComponent;
+        
         private NavMeshAgent navMeshAgent;
         
         private EnemyCharacterDataStorage enemyCharacterDataStorage;
@@ -54,6 +56,11 @@ namespace Arenar.Character
 
         public void OnActivate()
         {
+            if (characterOwner.TryGetCharacterComponent(out characterLiveComponent))
+            {
+                characterLiveComponent.OnCharacterDie += CharacterDieHandler;
+            }
+            
             MovementContainer = new MovementContainer();
 
             MovementContainer.MovementSpeed = MovementContainer.SprintSpeed =
@@ -111,6 +118,12 @@ namespace Arenar.Character
         public void JumpAndGravity(bool jumpAction)
         {
             
+        }
+
+        private void CharacterDieHandler(ICharacterEntity character)
+        {
+            characterLiveComponent.OnCharacterDie -= CharacterDieHandler;
+            navMeshAgent.ResetPath();
         }
     }
 }

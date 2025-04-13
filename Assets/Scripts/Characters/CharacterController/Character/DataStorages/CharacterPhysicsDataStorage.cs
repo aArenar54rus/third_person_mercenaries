@@ -24,6 +24,10 @@ namespace Arenar.Character
         [Space(5), Header("Hands")]
         [SerializeField] private CharacterHandPoint handRight = default;
         [SerializeField] private CharacterHandPoint handLeft = default;
+        
+        [Space(5), Header("Damage containers")]
+        [SerializeField]
+        private CharacterDamageContainer[] damageContainers;
 
 
         public Transform CharacterTransform => characterTransform;
@@ -35,5 +39,6 @@ namespace Arenar.Character
         public Transform CharacterCenterPoint => characterCenterPoint;
         public CharacterHandPoint RightHandPoint => handRight;
         public CharacterHandPoint LeftHandPoint => handLeft;
+        public CharacterDamageContainer[] DamageContainers => damageContainers;
     }
 }

@@ -15,7 +15,7 @@ namespace Arenar.Services.UI
         private GameplayInformationLayer _gameplayInformationLayer;
         private ICharacterRayCastComponent _playerCharacterRaycastComponent;
 
-        private ComponentCharacterController _characterOnCross;
+        private ICharacterEntity _characterOnCross;
         private ICharacterDescriptionComponent _descriptionComponent = null;
         private ICharacterEntity _playerCharacter;
         
@@ -137,6 +137,14 @@ namespace Arenar.Services.UI
         private void DisableProgressSlider()
         {
             _gameplayInformationLayer.ProgressBarController.SetProgressBarActive(false);
+            
+            if (_playerCharacter.TryGetCharacterComponent<IInventoryComponent>(out IInventoryComponent inventoryComponent))
+            {
+                OnUpdateWeaponClipSize(
+                    inventoryComponent.CurrentActiveFirearmWeapon.ClipSize,
+                    inventoryComponent.CurrentActiveFirearmWeapon.ClipSizeMax
+                );
+            }
         }
 
         private void UpdateProgressSlider(float value, float valueMax)
@@ -167,7 +175,7 @@ namespace Arenar.Services.UI
                 return;
             }
 
-            ComponentCharacterController enemyCharacterController = PlayerCharacterRaycastComponent.CharacterControllerOnCross;
+            ICharacterEntity enemyCharacterController = PlayerCharacterRaycastComponent.CharacterControllerOnCross;
             if (_characterOnCross == enemyCharacterController)
                 return;
 

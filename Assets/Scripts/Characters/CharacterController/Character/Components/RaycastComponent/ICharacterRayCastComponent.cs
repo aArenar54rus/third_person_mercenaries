@@ -13,6 +13,6 @@ namespace Arenar.Character
         
         InteractableElement InteractableElementsOnCross { get; }
         
-        ComponentCharacterController CharacterControllerOnCross { get; }
+        ICharacterEntity CharacterControllerOnCross { get; }
     }
 }

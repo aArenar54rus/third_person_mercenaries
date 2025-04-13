@@ -9,20 +9,26 @@ namespace Arenar.Character
 		[SerializeField] private Collider collider;
 		[SerializeField] private CharacterDamageContainerBodyType bodyType;
 		
-		private ICharacterEntity characterEntity;
 		private ICharacterLiveComponent characterLiveComponent;
+		
+		
+		public ICharacterEntity CharacterEntity { get; private set; }
 		
 		
 		public void Initialize(ICharacterEntity characterEntity)
 		{
 			collider ??= GetComponent<Collider>();
 			
-			this.characterEntity = characterEntity;
+			CharacterEntity = characterEntity;
+			CharacterEntity.TryGetCharacterComponent<ICharacterLiveComponent>(out characterLiveComponent);
 		}
 		
 		public void GetDamage(DamageData damageData)
 		{
+			if (characterLiveComponent == null)
+				return;
 			
+			characterLiveComponent.SetDamage(damageData);
 		}
 	}
 }

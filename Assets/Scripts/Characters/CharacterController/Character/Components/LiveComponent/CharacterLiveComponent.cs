@@ -1,6 +1,7 @@
 using System;
 using Arenar.Services.LevelsService;
 using Arenar.Services.SaveAndLoad;
+using RootMotion.Dynamics;
 using TakeTop.PreferenceSystem;
 using UnityEngine;
 using Zenject;
@@ -13,13 +14,16 @@ namespace Arenar.Character
         public event Action<ICharacterEntity> OnCharacterGetDamageBy;
         public event Action<int, int> OnCharacterChangeHealthValue;
 
-        
+
+        private CharacterDamageContainer[] damageContainers;
         private PlayerCharacterParametersData playerCharacterParametersData;
+        private PuppetMaster puppetMaster;
+        
         private IPreferenceManager preferenceManager;
         private Transform characterTransform;
 
-        private ICharacterEntity _playerEntity;
-        private ILevelsService _levelsService;
+        private ICharacterEntity characterEntity;
+        private ILevelsService levelsService;
         
         
         public bool IsAlive => HealthContainer.Health > 0;
@@ -27,17 +31,20 @@ namespace Arenar.Character
 
 
         [Inject]
-        public void Construct(ICharacterEntity playerEntity,
+        public void Construct(ICharacterEntity characterEntity,
                               ICharacterDataStorage<CharacterPhysicsDataStorage> characterPhysicsDataStorage,
                               ILevelsService levelsService,
                               IPreferenceManager preferenceManager,
                               PlayerCharacterParametersData playerCharacterParametersData)
         {
+            damageContainers = characterPhysicsDataStorage.Data.DamageContainers;
             characterTransform = characterPhysicsDataStorage.Data.CharacterTransform;
+            puppetMaster = characterPhysicsDataStorage.Data.PuppetMaster;
+            
             this.playerCharacterParametersData = playerCharacterParametersData;
             this.preferenceManager = preferenceManager;
-            _levelsService = levelsService;
-            _playerEntity = playerEntity;
+            this.levelsService = levelsService;
+            this.characterEntity = characterEntity;
         }
 
         public void SetDamage(DamageData damageData)
@@ -45,7 +52,7 @@ namespace Arenar.Character
             if (!IsAlive)
                 return;
             
-            _levelsService.CurrentLevelContext.GettedDamage += damageData.WeaponDamageWithUpgrades;
+            //levelsService.CurrentLevelContext.GettedDamage += damageData.WeaponDamageWithUpgrades;
             HealthContainer.Health -= damageData.WeaponDamageWithUpgrades;
             
             OnCharacterChangeHealthValue?.Invoke(HealthContainer.Health, HealthContainer.HealthMax);
@@ -61,19 +68,17 @@ namespace Arenar.Character
 
         public void SetDeath()
         {
+            puppetMaster.state = PuppetMaster.State.Dead;
             HealthContainer.Health = 0;
-            _levelsService.CurrentLevelContext.PlayerDeath++;
+            //levelsService.CurrentLevelContext.PlayerDeath++;
 
-            OnCharacterDie?.Invoke(_playerEntity);
+            OnCharacterDie?.Invoke(characterEntity);
         }
 
         public void Initialize()
         {
-            HealthContainer = new HealthContainer()
-            {
-                HealthMax = playerCharacterParametersData.DefaultHealthMax,
-                Health = playerCharacterParametersData.DefaultHealthMax,
-            };
+            foreach (var damageContainer in damageContainers)
+                damageContainer.Initialize(characterEntity);
         }
 
         public void DeInitialize() {}
@@ -81,9 +86,13 @@ namespace Arenar.Character
         public void OnActivate()
         {
             int playerLevel = preferenceManager.LoadValue<PlayerSaveDelegate>().playerCharacterLevel;
-            HealthContainer.HealthMax = playerCharacterParametersData.DefaultHealthMax + playerCharacterParametersData.LevelHealthAdded * playerLevel;
-            HealthContainer.Health = HealthContainer.HealthMax;
+            
+            HealthContainer = new HealthContainer();
+            HealthContainer.HealthMax = playerCharacterParametersData.DefaultHealthMax /*+ playerCharacterParametersData.LevelHealthAdded * playerLevel*/;
+            
             SetAlive();
+
+            puppetMaster.state = PuppetMaster.State.Alive;
         }
 
         public void OnDeactivate() {}

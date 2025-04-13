@@ -26,23 +26,23 @@ namespace Arenar.Character
         
         public InteractableElement InteractableElementsOnCross { get; private set; }
         
-        public ComponentCharacterController CharacterControllerOnCross { get; private set; }
+        public ICharacterEntity CharacterControllerOnCross { get; private set; }
 
         private Transform characterTransform => _characterEntity.CharacterTransform;
 
 
         [Inject]
         public void Construct(ICharacterEntity characterEntity,
-            ICharacterDataStorage<CharacterPhysicsDataStorage> characterPhysicsDataStorage,
-            PlayerCharacterParametersData playerCharacterParametersData,
-            ICameraService cameraService,
-            TickableManager tickableManager)
+                              ICharacterDataStorage<CharacterPhysicsDataStorage> characterPhysicsDataStorage,
+                              PlayerCharacterParametersData playerCharacterParametersData,
+                              ICameraService cameraService,
+                              TickableManager tickableManager)
         {
             _characterEntity = characterEntity;
             _playerCharacterParametersData = playerCharacterParametersData;
             _characterCenterPoint = characterPhysicsDataStorage.Data.CharacterCenterPoint;
             _maxSqrDistance = playerCharacterParametersData.InteractElementDistance
-                              * playerCharacterParametersData.InteractElementDistance;
+                * playerCharacterParametersData.InteractElementDistance;
             _camera = cameraService.GameCamera;
             _tickableManager = tickableManager;
         }
@@ -154,15 +154,18 @@ namespace Arenar.Character
             return element;
         }
 
-        private ComponentCharacterController GetComponentCharacterController()
+        private ICharacterEntity GetComponentCharacterController()
         {
             if (!TryGetObjectOnCross(out Transform objectHit))
                 return null;
-            
-            if (!objectHit.gameObject.TryGetComponent<ComponentCharacterController>(out ComponentCharacterController element))
-                return null;
 
-            return element;
+            if (objectHit.gameObject.TryGetComponent<CharacterDamageContainer>(out CharacterDamageContainer damageContainer))
+                return damageContainer.CharacterEntity;
+            
+            if (objectHit.gameObject.TryGetComponent<ComponentCharacterController>(out ComponentCharacterController element))
+                return element;
+
+            return null;
         }
     }
 }

@@ -111,11 +111,15 @@ namespace Arenar.Services.UI
         private void OnInstallNewCharacter(ICharacterEntity characterController)
         {
             playerCharacterController = characterController;
-            PlayerCharacterLiveComponent.OnCharacterChangeHealthValue += OnCharacterChangeHealthValue;
+            PlayerCharacterLiveComponent.OnCharacterChangeHealthValue += CharacterChangeHealthValueHandler;
 
-            OnCharacterChangeHealthValue(
-                PlayerCharacterLiveComponent.HealthContainer.Health,
-                PlayerCharacterLiveComponent.HealthContainer.HealthMax);
+            if (PlayerCharacterLiveComponent.HealthContainer != null)
+            {
+                CharacterChangeHealthValueHandler(
+                    PlayerCharacterLiveComponent.HealthContainer.Health,
+                    PlayerCharacterLiveComponent.HealthContainer.HealthMax
+                );
+            }
         }
         
         private void OpenUpgradeSkillsMenuButtonHandler()
@@ -133,7 +137,7 @@ namespace Arenar.Services.UI
                     (false, false, null);
         }
 
-        private void OnCharacterChangeHealthValue(int health, int healthMax) =>
+        private void CharacterChangeHealthValueHandler(int health, int healthMax) =>
             gameplayPlayerParametersWindowLayer.UpdatePlayerHealth(health, healthMax);
     }
 }
