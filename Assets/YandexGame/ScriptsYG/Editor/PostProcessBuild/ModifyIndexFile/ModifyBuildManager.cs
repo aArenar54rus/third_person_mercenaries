@@ -11,6 +11,7 @@ namespace YG.EditorScr.BuildModify
 {
     public partial class ModifyBuildManager
     {
+        
         private static string BUILD_PATCH;
         private static InfoYG infoYG;
         private static string indexFile;
@@ -18,6 +19,7 @@ namespace YG.EditorScr.BuildModify
 
         public static void ModifyIndex(string buildPatch)
         {
+            #if UNITY_WEBGL
             infoYG = ConfigYG.GetInfoYG();
             BUILD_PATCH = buildPatch;
             string filePath = Path.Combine(buildPatch, "index.html");
@@ -37,11 +39,14 @@ namespace YG.EditorScr.BuildModify
 
             File.WriteAllText(filePath, indexFile);
             Debug.Log("Modify build complete");
+
+            #endif
         }
 
         [MenuItem("Tools/PluginYG/Modify Index", false)]
         public static void ModifyIndex()
         {
+            #if UNITY_WEBGL
             string buildPatch = BuildLog.ReadProperty("Build path");
 
             if (buildPatch != null)
@@ -53,10 +58,12 @@ namespace YG.EditorScr.BuildModify
             {
                 Debug.LogError("Path not found:\n" + buildPatch);
             }
+            #endif
         }
 
         static void AddIndexCode(string code, CodeType addCodeType)
         {
+            #if UNITY_WEBGL
             string commentHelper = "// Additional script modules:";
 
             if (addCodeType == CodeType.head)
@@ -76,6 +83,7 @@ namespace YG.EditorScr.BuildModify
                 sb.Insert(insertIndex, "\n" + code + "\n");
                 indexFile = sb.ToString();
             }
+            #endif
         }
     }
 }
