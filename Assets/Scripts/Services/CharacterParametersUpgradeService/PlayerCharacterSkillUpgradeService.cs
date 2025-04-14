@@ -99,23 +99,22 @@ namespace Arenar.Character
                 return false;
             
             int levelMax = characterParametersUpgradeData
-                .GetParameterProgressByType(CharacterSkillUpgradeType.HealthMax)
+                .GetParameterProgressByType(skillUpgradeType)
                 .ParameterByLevel.Length;
             
-            return (level >= levelMax);
+            return (level >= levelMax - 1);
         }
 
         public bool TryUpgradeSkill(CharacterSkillUpgradeType skillUpgradeType)
         {
             if (!CanUpgradeSkill(skillUpgradeType))
                 return false;
-            
-            int parameterLevel = characterUpgradeParametersLevels[skillUpgradeType];
-            parameterLevel++;
+
+            characterUpgradeParametersLevels[skillUpgradeType]++;
             
             float addedValue = characterParametersUpgradeData
                 .GetParameterProgressByType(skillUpgradeType)
-                .ParameterByLevel[parameterLevel];
+                .ParameterByLevel[characterUpgradeParametersLevels[skillUpgradeType]];
 
             switch (skillUpgradeType)
             {

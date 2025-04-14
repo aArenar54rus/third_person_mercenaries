@@ -8,14 +8,14 @@ using UnityEngine.InputSystem.OnScreen;
 public class SwipeOnScreenControl : OnScreenControl, IPointerDownHandler, IPointerUpHandler, IDragHandler
 {
     [SerializeField]
-    private string _controlPath = "Look"; // Путь к Input Action (например, "Look")
-    [SerializeField]
-    private float sensitivity = 1.0f; // Чувствительность
+    private float sensitivity = 1.0f;
+    
+    private string _controlPath = "<Touchscreen>/primaryTouch/delta";
 
     private Vector2 startPointerPosition; // Начальная позиция касания
     private bool isDragging = false; // Флаг активности взаимодействия
 
-    // Обязательное переопределение controlPathInternal
+
     protected override string controlPathInternal
     {
         get => _controlPath;

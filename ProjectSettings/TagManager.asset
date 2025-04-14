@@ -6,6 +6,7 @@ TagManager:
   tags:
   - CinemachineTarget
   - Explosion
+  - Item
   layers:
   - Default
   - TransparentFX
@@ -20,7 +21,7 @@ TagManager:
   - Ground
   - GroundMetal
   - NotWalkable
-  - 
+  - Item
   - 
   - 
   - 

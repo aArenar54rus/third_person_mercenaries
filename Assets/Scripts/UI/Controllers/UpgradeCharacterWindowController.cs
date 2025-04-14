@@ -194,8 +194,10 @@ namespace Arenar.Services.UI
 		{
 			foreach (var visual in upgradeParameterPanelVisuals)
 			{
+				CharacterSkillUpgradeType upgradeSkillType = visual.Key;
 				visual.Value.SetButtonInteractable(
-					playerCharacterSkillUpgradeService.CanUpgradeSkill(visual.Key));
+					playerCharacterSkillUpgradeService.CanUpgradeSkill(upgradeSkillType,
+						(playerCharacterSkillUpgradeService.GetUpgradeSkillLevel(upgradeSkillType) + addedScores[upgradeSkillType])));
 			}
 		}
 		
@@ -243,7 +245,7 @@ namespace Arenar.Services.UI
 
 			upgradeParameterPanelVisuals[upgradeType].SetUpgradeProgress(
 				levelWithUpgrades,
-				playerCharacterSkillUpgradeService.CanUpgradeSkill(upgradeType, levelWithUpgrades),
+				playerCharacterSkillUpgradeService.IsMaxLevel(upgradeType, levelWithUpgrades),
 				addedScores[upgradeType] > 0,
 				playerCharacterSkillUpgradeService.GetUpgradeSkillValueByLevel(upgradeType, levelWithUpgrades));
 		}

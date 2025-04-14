@@ -3,8 +3,7 @@ namespace Arenar.Character
 	public class HealthContainer_Decorator : HealthContainer
 	{
 		public readonly HealthContainer healthContainer;
-		
-		private int addedHealth;
+		private readonly int addedHealth;
 
 
 		public override int HealthMax
@@ -24,6 +23,9 @@ namespace Arenar.Character
 		{
 			this.healthContainer = healthContainer;
 			this.addedHealth = addedHealth;
+			
+			float percent = (float)healthContainer.Health / healthContainer.HealthMax;
+			Health = (int)(HealthMax * percent);
 		}
 	}
 }
