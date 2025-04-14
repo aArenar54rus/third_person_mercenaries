@@ -10,6 +10,7 @@ namespace Arenar
         private int addedDamageByCharacterUpgrades;
         private int addedStunPoint;
         private Vector3 physicalMight;
+        public bool isCritical;
 
 
         public ICharacterEntity DamageSetterCharacter => damageSetterCharacter;
@@ -27,6 +28,7 @@ namespace Arenar
             this.weaponDamage = weaponDamage;
             this.addedStunPoint = addedStunPoint;
             this.addedDamageByCharacterUpgrades = addedDamageByCharacterUpgrades;
+            isCritical = false;
         }
     }
 }

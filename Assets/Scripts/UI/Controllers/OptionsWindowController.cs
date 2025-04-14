@@ -29,7 +29,7 @@ namespace Arenar.Services.UI
             _optionsController = optionsController;
             _audioSystemManager = audioSystemManager;
             _localizationService = localizationService;
-            _playerInputService = playerInputService;
+            base.playerInputService = playerInputService;
             _uiSoundManager = uiSoundManager;
         }
 
@@ -56,7 +56,7 @@ namespace Arenar.Services.UI
             _optionsButtonsLayer.SoundLockIcon.gameObject.SetActive(soundOption.Volume == 0);
 
             _optionsButtonsLayer.MusicButton.Select();
-            if (_playerInputService.InputActionCollection is PlayerInput playerInput)
+            if (playerInputService.InputActionCollection is PlayerInput playerInput)
                 playerInput.UI.Decline.performed += OnInputAction_Decline;
 
             SetButtonsStatus(true);
@@ -64,7 +64,7 @@ namespace Arenar.Services.UI
 
         protected override void OnWindowHideBegin_DeselectElements()
         {
-            if (_playerInputService.InputActionCollection is PlayerInput playerInput)
+            if (playerInputService.InputActionCollection is PlayerInput playerInput)
                 playerInput.UI.Decline.performed -= OnInputAction_Decline;
             
             SetButtonsStatus(false);

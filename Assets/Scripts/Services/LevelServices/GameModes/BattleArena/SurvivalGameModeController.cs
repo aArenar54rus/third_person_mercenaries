@@ -13,6 +13,7 @@ namespace Arenar.Services.LevelsService
         private SurvivalLevelInfoCollection survivalLevelInfoCollection;
         private PlayerCharacterSkillUpgradeService playerSkillUpgradeService;
         private ICameraService cameraService;
+        private EffectsSpawner effectsSpawner;
         
         private ILevelsService levelsService;
         
@@ -38,7 +39,8 @@ namespace Arenar.Services.LevelsService
             ICameraService cameraService,
             SurvivalLevelInfoCollection survivalLevelInfoCollection,
             DiContainer container,
-            PlayerCharacterSkillUpgradeService playerSkillUpgradeService
+            PlayerCharacterSkillUpgradeService playerSkillUpgradeService,
+            EffectsSpawner effectsSpawner
         )
         {
             this.levelsService = levelsService;
@@ -47,6 +49,7 @@ namespace Arenar.Services.LevelsService
             this.survivalLevelInfoCollection = survivalLevelInfoCollection;
             this.container = container;
             this.playerSkillUpgradeService = playerSkillUpgradeService;
+            this.effectsSpawner = effectsSpawner;
         }
 
 
@@ -113,8 +116,6 @@ namespace Arenar.Services.LevelsService
                 if (CanSpawnEnemy)
                     return;
             }
-
-            isGameActive = false;
         }
         
         private void GetNextLevelSpawnTime()
@@ -128,9 +129,10 @@ namespace Arenar.Services.LevelsService
         {
             playerDeathTween = DOVirtual.DelayedCall(1.0f, () =>
             {
-                character.CharacterTransform.gameObject.SetActive(false);
                 CompleteLevel();
             });
+            
+            isGameActive = false;
         }
         
         private void EnemyCharacterDieHandler(ICharacterEntity character)
@@ -139,11 +141,22 @@ namespace Arenar.Services.LevelsService
             enemyCounter--;
             if (character.TryGetCharacterComponent<ICharacterLiveComponent>(out var liveComponent))
                 liveComponent.OnCharacterDie -= EnemyCharacterDieHandler;
+            
+            playerDeathTween = DOVirtual.DelayedCall(1.0f, () =>
+            {
+                var effect = effectsSpawner.GetEffect(EffectType.RobotBlow);
+                effect.transform.position = character.CharacterTransform.position;
+                effect.gameObject.SetActive(true);
+                effect.Play();
+                
+                сharacterSpawnController.ReturnCharacter(character);
+            });
         }
 
         private void CompleteLevel()
         {
             levelsService.CompleteLevel();
+            сharacterSpawnController.ReturnAllCharacters();
         }
     }
 }

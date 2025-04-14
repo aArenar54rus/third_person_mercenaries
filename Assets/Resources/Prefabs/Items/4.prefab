@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 3067138886011780483}
   - component: {fileID: 8760788330365976773}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: 4
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -58,6 +58,14 @@ PrefabInstance:
     - target: {fileID: 1540267643872684, guid: 0e2c93b26f53b644ab3b9fbeb0bbbbce, type: 3}
       propertyPath: m_Name
       value: SM_Wep_Sword_12
+      objectReference: {fileID: 0}
+    - target: {fileID: 1540267643872684, guid: 0e2c93b26f53b644ab3b9fbeb0bbbbce, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 1540267643872684, guid: 0e2c93b26f53b644ab3b9fbeb0bbbbce, type: 3}
+      propertyPath: m_TagString
+      value: Item
       objectReference: {fileID: 0}
     - target: {fileID: 4083083598227818, guid: 0e2c93b26f53b644ab3b9fbeb0bbbbce, type: 3}
       propertyPath: m_LocalScale.x

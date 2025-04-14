@@ -3,7 +3,7 @@ using UnityEngine.EventSystems;
 using ETouch = UnityEngine.InputSystem.EnhancedTouch;
 
 
-namespace TakeTop
+namespace Arenar
 {
     public class StickMover : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {

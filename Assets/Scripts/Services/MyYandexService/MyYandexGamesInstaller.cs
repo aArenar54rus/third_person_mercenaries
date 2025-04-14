@@ -2,7 +2,7 @@ using Arenar;
 using UnityEngine;
 using Zenject;
 
-namespace TakeTop.Web
+namespace Arenar.Web
 {
     public class MyYandexGamesInstaller : MonoInstaller
     {

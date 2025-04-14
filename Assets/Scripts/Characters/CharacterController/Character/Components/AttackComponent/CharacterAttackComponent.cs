@@ -139,7 +139,7 @@ namespace Arenar.Character
                             InventoryComponent.CurrentActiveFirearmWeapon.ReloadSpeed);
                     }).OnComplete(() =>
                     {
-                        InventoryComponent.CurrentActiveFirearmWeapon.ReloadClip();
+                        InventoryComponent.CurrentActiveFirearmWeapon.CompleteReloadClip();
                         
                         onReloadEnd?.Invoke();
                         onUpdateWeaponClipSize?.Invoke(InventoryComponent.CurrentActiveFirearmWeapon.ClipSize,

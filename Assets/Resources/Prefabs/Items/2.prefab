@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 3991283542547095868}
   - component: {fileID: 3970689914573071958}
   - component: {fileID: 3979137679293184662}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Clip SM_Wep_Ammo_Battery_01
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -95,9 +95,9 @@ GameObject:
   - component: {fileID: 6709851739619227628}
   - component: {fileID: 2346721481962678467}
   - component: {fileID: 4605846618062712382}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: 2
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -213,9 +213,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6709851740006551552}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Muzzle
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -246,9 +246,9 @@ GameObject:
   - component: {fileID: 9061414574477712595}
   - component: {fileID: 9058863904868656317}
   - component: {fileID: 9051195153942583519}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_Pistol_01
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -332,9 +332,9 @@ GameObject:
   - component: {fileID: 9061797385023330123}
   - component: {fileID: 9059799029404489965}
   - component: {fileID: 9050750670915206275}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_Pistol_Slide_01
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -415,9 +415,9 @@ GameObject:
   - component: {fileID: 9070219017304083347}
   - component: {fileID: 9059147383459848485}
   - component: {fileID: 9051133128848020233}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SM_Wep_Pistol_Trigger_01
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -498,6 +498,10 @@ PrefabInstance:
     - target: {fileID: 113598, guid: 662c9a292b84cf54c8a9cab863559576, type: 3}
       propertyPath: m_Name
       value: BeamLaserRed
+      objectReference: {fileID: 0}
+    - target: {fileID: 113598, guid: 662c9a292b84cf54c8a9cab863559576, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 113598, guid: 662c9a292b84cf54c8a9cab863559576, type: 3}
       propertyPath: m_IsActive

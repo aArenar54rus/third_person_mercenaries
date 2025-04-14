@@ -40,10 +40,10 @@ namespace Arenar.Services.UI
             float progress
         )
         {
-            levelText.text = isMaxLevel ? "MAX" : level.ToString();
+            levelText.text = "LVL: " + (isMaxLevel ? "MAX" : (level + 1).ToString());
             levelText.color = isUpgraded ? upgradedTextColor : defaultTextColor;
             
-            addedParameterText.text = progress.ToString();
+            addedParameterText.text = "ADDED: " + progress.ToString();
             addedParameterText.color = isUpgraded ? upgradedTextColor : defaultTextColor;
         }
         

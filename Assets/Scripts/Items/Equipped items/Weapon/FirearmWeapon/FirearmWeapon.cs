@@ -87,7 +87,7 @@ namespace Arenar.Items
             set;
         } = 0;
 
-        public void ReloadClip()
+        public void CompleteReloadClip()
         {
             ClipComponent.Reload();
         }

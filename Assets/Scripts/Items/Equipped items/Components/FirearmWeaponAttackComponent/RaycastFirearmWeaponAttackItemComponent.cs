@@ -30,10 +30,9 @@ namespace Arenar
             {
                 characterLiveComponent.SetDamage(damageData);
             }
-            else if (hit.transform.TryGetComponent<CharacterDamageContainer>(out CharacterDamageContainer damageContainer)
-                     && damageContainer.CharacterEntity.TryGetCharacterComponent<ICharacterLiveComponent>(out characterLiveComponent))
+            else if (hit.transform.TryGetComponent<CharacterDamageContainer>(out CharacterDamageContainer damageContainer))
             {
-                characterLiveComponent.SetDamage(damageData);
+                damageContainer.SetDamage(damageData);
             }
                     
             ParticleSystem effect = _effectsSpawner.GetEffect(EffectType.BulletCollision);

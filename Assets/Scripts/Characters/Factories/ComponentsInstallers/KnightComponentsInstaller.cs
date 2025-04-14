@@ -32,7 +32,7 @@ namespace Arenar.Character
 			Container.BindInstance(movementComponent).AsSingle();
 			Container.Inject(movementComponent);
 			
-			ICharacterLiveComponent characterLiveComponent = new CharacterLiveComponent();
+			ICharacterLiveComponent characterLiveComponent = new EnemyCharacterLiveComponent();
 			characterComponentsPool.Add(typeof(ICharacterLiveComponent), characterLiveComponent);
 			Container.BindInstance(characterLiveComponent).AsSingle();
 			Container.Inject(characterLiveComponent);

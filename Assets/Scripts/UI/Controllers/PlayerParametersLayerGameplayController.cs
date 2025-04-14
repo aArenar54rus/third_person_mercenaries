@@ -86,8 +86,6 @@ namespace Arenar.Services.UI
             gameplayPlayerParametersWindowLayer.GetComponent<Canvas>().enabled = true;
 
             characterSpawnController.OnCreatePlayerCharacter += OnInstallNewCharacter;
-            
-            gameplayPlayerParametersWindowLayer.OpenUpgradeSkillsMenuButton.onClick.AddListener(OpenUpgradeSkillsMenuButtonHandler);
         }
 
         protected override void OnWindowShowEnd_SelectElements()

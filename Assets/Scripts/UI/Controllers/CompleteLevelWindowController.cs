@@ -5,6 +5,7 @@ using Arenar.LocationService;
 using Arenar.Services.LevelsService;
 using Arenar.Services.PlayerInputService;
 using Arenar.Services.SaveAndLoad;
+using Arenar.PreferenceSystem;
 using TakeTop.PreferenceSystem;
 using UnityEngine.InputSystem;
 using YG;
@@ -50,7 +51,7 @@ namespace Arenar.Services.UI
             YandexGamesAdsService yandexGamesAdsService)
             : base(playerInputService)
         {
-            _playerInputService = playerInputService;
+            base.playerInputService = playerInputService;
             _levelsService = levelsService;
             _playerCharacterLevelData = playerCharacterLevelData;
             _preferenceManager = preferenceManager;
@@ -86,10 +87,10 @@ namespace Arenar.Services.UI
             else
                 _failedLevelLayer.ReturnInMainMenuButton.Select();
 
-            if (_playerInputService.InputActionCollection is PlayerInput playerInput)
+            if (playerInputService.InputActionCollection is PlayerInput playerInput)
             {
-                _playerInputService.SetInputControlType(InputActionMapType.UI, true);        
-                _playerInputService.SetInputControlType(InputActionMapType.Gameplay, false);        
+                playerInputService.SetInputControlType(InputActionMapType.UI, true);        
+                playerInputService.SetInputControlType(InputActionMapType.Gameplay, false);        
                 playerInput.UI.Decline.performed += OnInputAction_Decline;
             }
 
@@ -98,7 +99,7 @@ namespace Arenar.Services.UI
 
         protected override void OnWindowHideBegin_DeselectElements()
         {
-            if (_playerInputService.InputActionCollection is PlayerInput playerInput)
+            if (playerInputService.InputActionCollection is PlayerInput playerInput)
                 playerInput.UI.Decline.performed -= OnInputAction_Decline;
 
             SetButtonsStatus(false);
@@ -113,7 +114,9 @@ namespace Arenar.Services.UI
             if (!_isPlayerLevelMax)
                 UpdateReward(1);
             
+            #if UNITY_WEBGL
             _yandexGamesAdsService.ShowInterstitial();
+            #endif
             ReturnInMainMenu();
         }
 

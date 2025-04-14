@@ -3,6 +3,7 @@ using Arenar.CameraService;
 using Arenar.Character;
 using Arenar.LocationService;
 using Arenar.Services.SaveAndLoad;
+using Arenar.PreferenceSystem;
 using TakeTop.PreferenceSystem;
 using UnityEngine;
 using Zenject;
@@ -29,6 +30,7 @@ namespace Arenar.Services.LevelsService
         private ClearLocationLevelInfoCollection clearLocationLevelInfoCollection;
         private SurvivalLevelInfoCollection survivalLevelInfoCollection;
         private PlayerCharacterSkillUpgradeService playerCharacterSkillUpgradeService;
+        private EffectsSpawner effectsSpawner;
 
         private TickableManager tickableManager;
 
@@ -46,6 +48,7 @@ namespace Arenar.Services.LevelsService
                               CharacterSpawnController сharacterSpawnController,
                               TickableManager tickableManager,
                               ICameraService cameraService,
+                              EffectsSpawner effectsSpawner,
                               ClearLocationLevelInfoCollection clearLocationLevelInfoCollection,
                               SurvivalLevelInfoCollection survivalLevelInfoCollection,
                               PlayerCharacterSkillUpgradeService playerCharacterSkillUpgradeService)
@@ -58,6 +61,7 @@ namespace Arenar.Services.LevelsService
             this.clearLocationLevelInfoCollection = clearLocationLevelInfoCollection;
             this.survivalLevelInfoCollection = survivalLevelInfoCollection;
             this.playerCharacterSkillUpgradeService = playerCharacterSkillUpgradeService;
+            this.effectsSpawner = effectsSpawner;
             
             this.cameraService = cameraService;
             
@@ -122,7 +126,8 @@ namespace Arenar.Services.LevelsService
                             cameraService,
                             survivalLevelInfoCollection,
                             sceneContainer,
-                            playerCharacterSkillUpgradeService
+                            playerCharacterSkillUpgradeService,
+                            effectsSpawner
                         );
 
                         survivalGameModeController.SetLevelContext(CurrentLevelContext);
@@ -158,9 +163,18 @@ namespace Arenar.Services.LevelsService
                 return;
             }
 
-            CurrentLevelContext.CompleteLevel(liveComponent.IsAlive
-                ? LevelContext.GameResult.Victory
-                : LevelContext.GameResult.Defeat);
+            switch (CurrentLevelContext.GameMode)
+            {
+                case GameMode.Survival:
+                    CurrentLevelContext.CompleteLevel(LevelContext.GameResult.Victory);
+                    break;
+                
+                case GameMode.Campaing:
+                    CurrentLevelContext.CompleteLevel(liveComponent.IsAlive
+                        ? LevelContext.GameResult.Victory
+                        : LevelContext.GameResult.Defeat);
+                    break;
+            }
             
             if (CurrentLevelContext.GameResultStatus == LevelContext.GameResult.Victory)
             {

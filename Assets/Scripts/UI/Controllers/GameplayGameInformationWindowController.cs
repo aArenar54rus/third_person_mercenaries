@@ -62,7 +62,7 @@ namespace Arenar.Services.UI
             : base(playerInputService)
         {
             _characterSpawnController = characterSpawnController;
-            _playerInputService = playerInputService;
+            base.playerInputService = playerInputService;
             
             tickableManager.Add(this);
         }
@@ -137,6 +137,9 @@ namespace Arenar.Services.UI
         private void DisableProgressSlider()
         {
             _gameplayInformationLayer.ProgressBarController.SetProgressBarActive(false);
+
+            if (_playerCharacter == null)
+                return;
             
             if (_playerCharacter.TryGetCharacterComponent<IInventoryComponent>(out IInventoryComponent inventoryComponent))
             {

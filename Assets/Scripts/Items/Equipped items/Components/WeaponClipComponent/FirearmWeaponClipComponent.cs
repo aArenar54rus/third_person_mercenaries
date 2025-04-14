@@ -46,14 +46,8 @@ namespace Arenar
             if (IsReloadProcess)
                 return;
 
-            IsReloadProcess = true;
-
-            _reloadTween = DOVirtual.DelayedCall(_reloadProcessTime,() =>
-                {
-                    ClipSize = ClipSizeMax;
-                    IsReloadProcess = false;
-                }
-            );
+            ClipSize = ClipSizeMax;
+            IsReloadProcess = false;
         }
     }
 }

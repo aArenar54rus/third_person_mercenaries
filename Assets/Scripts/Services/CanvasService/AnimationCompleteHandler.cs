@@ -2,7 +2,7 @@ using Arenar.Services.UI;
 using UnityEngine;
 
 
-namespace TakeTop.Helpers
+namespace Arenar.Helpers
 {
     public class AnimationCompleteHandler : StateMachineBehaviour
     {

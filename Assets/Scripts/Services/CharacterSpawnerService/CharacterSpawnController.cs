@@ -70,7 +70,7 @@ namespace Arenar
             return characterEntity;
         }
         
-        public void ReturnHumanoidCharacter(ICharacterEntity characterEntity)
+        public void ReturnCharacter(ICharacterEntity characterEntity)
         {
             if (!createdHumanoidCharacters.ContainsKey(characterEntity.CharacterType))
                 createdHumanoidCharacters.Add(characterEntity.CharacterType, new Queue<ICharacterEntity>());
@@ -82,6 +82,16 @@ namespace Arenar
             characterEntity.DeActivate();
             characterEntity.DeInitialize();
             characterEntity.EntityObjectTransform.gameObject.SetActive(false);
+        }
+        
+        public void ReturnAllCharacters()
+        {
+            var activeCharacters = new Dictionary<CharacterTypeKeys, List<ICharacterEntity>>(_activeHumanoidCharacters);
+            foreach (var activeCharacter in activeCharacters)
+            {
+                foreach (var character in activeCharacter.Value)
+                    ReturnCharacter(character);
+            }
         }
         
         private ICharacterEntity GetHumanoidCharacter(CharacterTypeKeys characterType)

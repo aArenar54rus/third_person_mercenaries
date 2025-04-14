@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d3f9bfd258db9348a55150cfd5e6bd1, type: 3}
   m_Name: Black Knight Parameters
   m_EditorClassIdentifier: 
-  _baseHealth: 10
-  _addedHealthByLvl: 5
+  baseMinHealth: 10
+  baseMaxHealth: 100
+  addedHealthByLvl: 0
   _baseSpeed:
     IsSingleLineView: 1
     list:
@@ -53,5 +54,6 @@ MonoBehaviour:
       Value: 120
     - Key: 5
       Value: 150
-  _baseDamage: 2
-  _addedDamageByLvl: 1
+  baseDamage: 20
+  addedDamageByLvl: 5
+  stunPartDatas: []

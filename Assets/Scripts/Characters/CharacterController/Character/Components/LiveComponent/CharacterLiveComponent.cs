@@ -2,6 +2,7 @@ using System;
 using Arenar.Services.LevelsService;
 using Arenar.Services.SaveAndLoad;
 using RootMotion.Dynamics;
+using Arenar.PreferenceSystem;
 using TakeTop.PreferenceSystem;
 using UnityEngine;
 using Zenject;
@@ -24,10 +25,20 @@ namespace Arenar.Character
 
         private ICharacterEntity characterEntity;
         private ILevelsService levelsService;
+
+        private HealthContainer healthContainer;
         
         
         public bool IsAlive => HealthContainer.Health > 0;
-        public HealthContainer HealthContainer { get; set; }
+        public HealthContainer HealthContainer
+        {
+            get => healthContainer;
+            set
+            {
+                healthContainer = value;
+                OnCharacterChangeHealthValue?.Invoke(HealthContainer.Health, HealthContainer.HealthMax);
+            }
+        }
 
 
         [Inject]
@@ -51,9 +62,9 @@ namespace Arenar.Character
         {
             if (!IsAlive)
                 return;
-            
-            //levelsService.CurrentLevelContext.GettedDamage += damageData.WeaponDamageWithUpgrades;
-            HealthContainer.Health -= damageData.WeaponDamageWithUpgrades;
+
+            var damage = damageData.isCritical ? damageData.WeaponDamageWithUpgrades * 2 : damageData.WeaponDamageWithUpgrades;
+            HealthContainer.Health -= damage;
             
             OnCharacterChangeHealthValue?.Invoke(HealthContainer.Health, HealthContainer.HealthMax);
             if (HealthContainer.Health <= 0)

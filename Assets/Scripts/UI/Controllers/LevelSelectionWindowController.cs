@@ -40,7 +40,7 @@ namespace Arenar.Services.UI
             ICanvasService canvasService)
             : base(playerInputService)
         {
-            _playerInputService = playerInputService;
+            base.playerInputService = playerInputService;
             _levelsService = levelsService;
             _uiSoundManager = uiSoundManager;
             _ambientManager = ambientManager;
@@ -69,7 +69,7 @@ namespace Arenar.Services.UI
             if (_levelSelectionButtonVisuals.Length > 0)
                 _levelSelectionButtonVisuals[0].Select();
             
-            if (_playerInputService.InputActionCollection is PlayerInput playerInput)
+            if (playerInputService.InputActionCollection is PlayerInput playerInput)
                 playerInput.UI.Decline.performed += OnInputAction_Decline;
 
             SetButtonsStatus(true);
@@ -77,7 +77,7 @@ namespace Arenar.Services.UI
 
         protected override void OnWindowHideBegin_DeselectElements()
         {
-            if (_playerInputService.InputActionCollection is PlayerInput playerInput)
+            if (playerInputService.InputActionCollection is PlayerInput playerInput)
                 playerInput.UI.Decline.performed -= OnInputAction_Decline;
             
             SetButtonsStatus(false);

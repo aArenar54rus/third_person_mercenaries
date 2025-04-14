@@ -1217,6 +1217,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   collider: {fileID: 6831761792917588016}
   bodyType: 2
+  alwaysCriticalDamage: 0
 --- !u!65 &6831761792917588016
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1252,6 +1253,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   collider: {fileID: 0}
   bodyType: 0
+  alwaysCriticalDamage: 0
 --- !u!1 &697880648487071484
 GameObject:
   m_ObjectHideFlags: 0
@@ -1487,6 +1489,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   collider: {fileID: 1632346631653714370}
   bodyType: 3
+  alwaysCriticalDamage: 0
 --- !u!54 &6701102734775865508
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1751,6 +1754,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   collider: {fileID: 340139976496988564}
   bodyType: 4
+  alwaysCriticalDamage: 0
 --- !u!54 &6413347182569308670
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2704,6 +2708,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   collider: {fileID: 2661018716476642174}
   bodyType: 4
+  alwaysCriticalDamage: 0
 --- !u!54 &5911842381107213340
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -3123,6 +3128,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   collider: {fileID: 428489060232111771}
   bodyType: 4
+  alwaysCriticalDamage: 0
 --- !u!54 &4292973844732867547
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -4469,7 +4475,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7620424222757279550
 Transform:
   m_ObjectHideFlags: 0
@@ -4605,6 +4611,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   collider: {fileID: 933009781472186271}
   bodyType: 1
+  alwaysCriticalDamage: 0
 --- !u!54 &7873242375966176644
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -6063,6 +6070,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   collider: {fileID: 6113467983671019611}
   bodyType: 2
+  alwaysCriticalDamage: 0
 --- !u!54 &8927304980103479039
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -7214,6 +7222,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   collider: {fileID: 1564809782385971775}
   bodyType: 3
+  alwaysCriticalDamage: 0
 --- !u!1 &3493242156263750940
 GameObject:
   m_ObjectHideFlags: 0
@@ -7287,6 +7296,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   collider: {fileID: 7301617080468864392}
   bodyType: 6
+  alwaysCriticalDamage: 1
 --- !u!54 &8912167569189031579
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -8307,6 +8317,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   collider: {fileID: 45955956104286037}
   bodyType: 4
+  alwaysCriticalDamage: 0
 --- !u!54 &1826555121907603600
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -13190,6 +13201,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   collider: {fileID: 7004261978894478064}
   bodyType: 3
+  alwaysCriticalDamage: 0
 --- !u!54 &5971277054560641807
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -15094,6 +15106,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   collider: {fileID: 4624297702664148081}
   bodyType: 4
+  alwaysCriticalDamage: 0
 --- !u!54 &1147240137948999791
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -17307,6 +17320,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   collider: {fileID: 5954732642375767584}
   bodyType: 4
+  alwaysCriticalDamage: 0
 --- !u!54 &5065219712035544425
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -17791,6 +17805,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   collider: {fileID: 3472810450681276666}
   bodyType: 2
+  alwaysCriticalDamage: 0
 --- !u!54 &3101965790757239692
 Rigidbody:
   m_ObjectHideFlags: 0

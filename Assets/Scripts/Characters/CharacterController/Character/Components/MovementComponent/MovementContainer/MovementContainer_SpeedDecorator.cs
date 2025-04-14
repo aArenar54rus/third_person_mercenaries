@@ -12,7 +12,19 @@ namespace Arenar.Character
 			set => originalMovementContainer.MovementSpeed = value;
 		}
 		
-
+		public override float SprintSpeed
+		{
+			get => originalMovementContainer.SprintSpeed + addedSpeed;
+			set => originalMovementContainer.SprintSpeed = value;
+		}
+		
+		public override float RotationSpeed
+		{
+			get => originalMovementContainer.SprintSpeed;
+			set => originalMovementContainer.SprintSpeed = value;
+		}
+		
+		
 		public MovementContainer_SpeedDecorator(MovementContainer originalContainer, float addedSpeed)
 		{
 			originalMovementContainer = originalContainer;

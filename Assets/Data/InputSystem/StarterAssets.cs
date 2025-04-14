@@ -187,7 +187,7 @@ namespace Arenar
                     ""name"": ""CharacterInformationMenu"",
                     ""type"": ""Button"",
                     ""id"": ""97b5cd7f-a46a-493a-bd32-1b65310d0789"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -331,6 +331,17 @@ namespace Arenar
                     ""interactions"": """",
                     ""processors"": ""InvertVector2(invertX=false),StickDeadzone,ScaleVector2(x=300,y=300)"",
                     ""groups"": ""Gamepad;Xbox Controller;PS4 Controller"",
+                    ""action"": ""Look"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c714d3e6-fbed-46bd-9a5c-ec4b0e209d67"",
+                    ""path"": ""<Touchscreen>/primaryTouch/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
                     ""action"": ""Look"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false

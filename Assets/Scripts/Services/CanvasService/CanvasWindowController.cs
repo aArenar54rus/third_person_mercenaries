@@ -8,11 +8,11 @@ namespace Arenar.Services.UI
 	public abstract class CanvasWindowController
 	{
 		protected ICanvasService canvasService;
-		protected IPlayerInputService _playerInputService;
+		protected IPlayerInputService playerInputService;
 		
 		
 		public CanvasWindowController(IPlayerInputService playerInputService) =>
-			_playerInputService = playerInputService;
+			this.playerInputService = playerInputService;
 		
 
 		public virtual void Initialize(ICanvasService canvasService) =>

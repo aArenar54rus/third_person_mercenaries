@@ -29,7 +29,7 @@ namespace Arenar.Services.UI
             : base(playerInputService)
         {
             _inventoryService = inventoryService;
-            _playerInputService = playerInputService;
+            base.playerInputService = playerInputService;
             _uiSoundManager = uiSoundManager;
         }
         
@@ -58,7 +58,7 @@ namespace Arenar.Services.UI
         protected override void OnWindowShowEnd_SelectElements()
         {
             _inventoryBagCanvasLayer.InventoryCells[0].Select();
-            if (_playerInputService.InputActionCollection is PlayerInput playerInput)
+            if (playerInputService.InputActionCollection is PlayerInput playerInput)
                 playerInput.UI.Decline.performed += OnInputAction_Decline;
         }
 
@@ -67,7 +67,7 @@ namespace Arenar.Services.UI
             _inventoryItemDescriptionCanvasLayer.MainItemInformationPanelControl.HideInfoPanel();
             _inventoryItemDescriptionCanvasLayer.SecondItemInformationPanelControl.HideInfoPanel();
             
-            if (_playerInputService.InputActionCollection is PlayerInput playerInput)
+            if (playerInputService.InputActionCollection is PlayerInput playerInput)
                 playerInput.UI.Decline.performed -= OnInputAction_Decline;
         }
 

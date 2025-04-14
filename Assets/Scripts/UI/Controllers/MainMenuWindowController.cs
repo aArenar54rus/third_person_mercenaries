@@ -5,6 +5,7 @@ using Arenar.LocationService;
 using Arenar.Services.PlayerInputService;
 using Arenar.Services.SaveAndLoad;
 using I2.Loc;
+using Arenar.PreferenceSystem;
 using TakeTop.PreferenceSystem;
 using YG;
 
@@ -40,7 +41,7 @@ namespace Arenar.Services.UI
         {
             _preferenceManager = preferenceManager;
             _playerCharacterLevelData = playerCharacterLevelData;
-            _playerInputService = playerInputService;
+            base.playerInputService = playerInputService;
             _ambientManager = ambientManager;
             _uiSoundManager = uiSoundManager;
             _cameraService = cameraService;
@@ -58,7 +59,7 @@ namespace Arenar.Services.UI
             InitMainMenuButtonsLayer();
             InitMainMenuPlayerInformationLayer();
             
-            _playerInputService.SetInputControlType(InputActionMapType.UI, true);
+            playerInputService.SetInputControlType(InputActionMapType.UI, true);
             
             _mainMenuWindow.OnHideBegin.AddListener(OnWindowHideBegin_DeselectElements);
 

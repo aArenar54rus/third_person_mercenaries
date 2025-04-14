@@ -1,18 +1,20 @@
 using Arenar.AudioSystem;
 using Arenar.Character;
+using Arenar.Services.LevelsService;
 using Arenar.Services.PlayerInputService;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.InputSystem;
 
 namespace Arenar.Services.UI
 {
 	public class UpgradeCharacterWindowController : CanvasWindowController
 	{
 		private UpgradeCharacterWindow upgradeCharacterWindow;
+		private PlayerInput playerInputs;
 		
-		private IPlayerInputService playerInputService;
+		private ILevelsService levelsService;
 		private PlayerCharacterSkillUpgradeService playerCharacterSkillUpgradeService;
 		private IUiSoundManager uiSoundManager;
 
@@ -20,15 +22,29 @@ namespace Arenar.Services.UI
 		
 		private Dictionary<CharacterSkillUpgradeType, UpgradeParameterPanelVisual> upgradeParameterPanelVisuals;
 		private Dictionary<CharacterSkillUpgradeType, int> addedScores;
+
+		
+		private bool IsClosed
+		{
+			get
+			{
+				if (canvasService.GetWindow<GameplayCanvasWindow>().gameObject.activeSelf
+					&& !canvasService.GetWindow<UpgradeCharacterWindow>().gameObject.activeSelf)
+					return true;
+
+				return false;
+			}
+		}
 		
 
 		public UpgradeCharacterWindowController(IPlayerInputService playerInputService,
+												ILevelsService levelsService,
 												PlayerCharacterSkillUpgradeService playerCharacterSkillUpgradeService,
 												IUiSoundManager uiSoundManager)
 			: base(playerInputService)
 		{
-			this.playerInputService = playerInputService;
 			this.playerCharacterSkillUpgradeService = playerCharacterSkillUpgradeService;
+			this.levelsService = levelsService;
 			this.uiSoundManager = uiSoundManager;
 		}
 
@@ -44,7 +60,7 @@ namespace Arenar.Services.UI
 			
 			upgradeParameterPanelVisuals = new(values.Length - 1);
 			addedScores = new(values.Length - 1);
-			
+
 			foreach (CharacterSkillUpgradeType parameter in values)
 			{
 				if (parameter == CharacterSkillUpgradeType.None)
@@ -58,18 +74,50 @@ namespace Arenar.Services.UI
 				
 				upgradeParameterPanelVisuals.Add(parameter, skillVisual);
 				addedScores.Add(parameter, 0);
+				
+				UpdateSkillVisual(parameter);
 			}
 			
 			upgradeCharacterWindowLayer.ReturnUpgradeButton.onClick.AddListener(ReturnUpgradeScoresButtonHandler);
-			upgradeCharacterWindowLayer.CloseButton.onClick.AddListener(CloseUpgradeMenuButtonHandler);
+			upgradeCharacterWindowLayer.CloseButton.onClick.AddListener(CloseMenuHandler);
+			upgradeCharacterWindowLayer.AcceptButton.onClick.AddListener(CloseUpgradeMenuButtonHandler);
+			
+			playerCharacterSkillUpgradeService.OnUpgradeScoreCountChange += UpdateScoreVisualHandler;
+			UpdateScoreVisualHandler();
+
+			playerInputs = (PlayerInput) playerInputService.InputActionCollection;
+			if (playerInputs != null)
+				playerInputs.Player.CharacterInformationMenu.canceled += InteractionMenuHandler;
+			
+			var gameplayPlayerParametersWindowLayer = canvasService.GetWindow<GameplayCanvasWindow>()
+				.GetWindowLayer<GameplayPlayerParametersWindowLayer>();
+			gameplayPlayerParametersWindowLayer.OpenUpgradeSkillsMenuButton.onClick.AddListener(() => InteractionMenuHandler(default));
+		}
+		
+		private void UpdateScoreVisualHandler()
+		{
+			upgradeCharacterWindowLayer.ScoreText.text = playerCharacterSkillUpgradeService.UpgradeScore.ToString();
 		}
 		
 		private void CloseUpgradeMenuButtonHandler()
 		{
-			uiSoundManager.PlaySound(UiSoundType.StandartButtonClick);
-			SetButtonsStatus(false);
 			AcceptUpgrades();
-			
+			CloseWindow();
+		}
+		
+		private void CloseMenuHandler()
+		{
+			ReturnUpgradeScoresButtonHandler();
+			CloseWindow();
+		}
+		
+		private void CloseWindow()
+		{
+			SetButtonsStatus(false);
+			uiSoundManager.PlaySound(UiSoundType.StandartButtonClick);
+			playerInputService.SetInputControlType(InputActionMapType.UI, false);
+			playerInputService.SetInputControlType(InputActionMapType.Gameplay, true);
+			Time.timeScale = 1;
 			canvasService.TransitionController
 				.PlayTransition<TransitionCrossFadeCanvasWindowLayerController,
 						UpgradeCharacterWindow,
@@ -82,7 +130,10 @@ namespace Arenar.Services.UI
 			playerInputService.SetInputControlType(InputActionMapType.UI, true);
 			playerInputService.SetInputControlType(InputActionMapType.Gameplay, false);
 			Time.timeScale = 0.0f;
-			SetButtonsStatus(true);
+			SetButtonsStatus(true);/*
+			
+			if (playerInputService.InputActionCollection is PlayerInput playerInput)
+				playerInput.UI.Decline.performed += OnInputAction_Decline;*/
 		}
 		
 		protected override void OnWindowHideBegin_DeselectElements()
@@ -90,14 +141,26 @@ namespace Arenar.Services.UI
 			playerInputService.SetInputControlType(InputActionMapType.UI, false);
 			playerInputService.SetInputControlType(InputActionMapType.Gameplay, true);
 			Time.timeScale = 1.0f;
-			SetButtonsStatus(false);
+			SetButtonsStatus(false);/*
+			
+			if (playerInputService.InputActionCollection is PlayerInput playerInput)
+				playerInput.UI.Decline.performed -= OnInputAction_Decline;*/
 		}
 		
 		private void AcceptUpgrades()
 		{
-			foreach (var addedScoresKey in addedScores.Keys)
+			var keys = new List<CharacterSkillUpgradeType>(addedScores.Keys);
+			
+			foreach (var addedScoresKey in keys)
 			{
 				int scoresToAdd = addedScores[addedScoresKey];
+				playerCharacterSkillUpgradeService.UpgradeScore += scoresToAdd;
+				if (scoresToAdd <= 0)
+				{
+					addedScores[addedScoresKey] = 0;
+					continue;
+				}
+
 				while (scoresToAdd > 0)
 				{
 					playerCharacterSkillUpgradeService.TryUpgradeSkill(addedScoresKey);
@@ -107,6 +170,8 @@ namespace Arenar.Services.UI
 				addedScores[addedScoresKey] = 0;
 				UpdateSkillVisual(addedScoresKey);
 			}
+			
+			CheckUpgradeButtonStatus();
 		}
 		
 		private void SetButtonsStatus(bool status)
@@ -142,7 +207,9 @@ namespace Arenar.Services.UI
 			uiSoundManager.PlaySound(UiSoundType.StandartButtonClick);
 
 			addedScores[upgradeType]++;
+			
 			playerCharacterSkillUpgradeService.UpgradeScore--;
+			UpdateScoreVisualHandler();
 			
 			UpdateSkillVisual(upgradeType);
 			CheckUpgradeButtonStatus();
@@ -154,15 +221,20 @@ namespace Arenar.Services.UI
 			
 			int returnedScores = 0;
 
-			foreach (var addedScoresKey in addedScores.Keys)
+			var keys = new List<CharacterSkillUpgradeType>(addedScores.Keys);
+			foreach (var addedScoresKey in keys)
 			{
 				returnedScores += addedScores[addedScoresKey];
 				addedScores[addedScoresKey] = 0;
 				UpdateSkillVisual(addedScoresKey);
 			}
 
-			playerCharacterSkillUpgradeService.UpgradeScore += returnedScores;
-			CheckUpgradeButtonStatus();
+			if (returnedScores > 0)
+			{
+				playerCharacterSkillUpgradeService.UpgradeScore += returnedScores;
+				UpdateScoreVisualHandler();
+				CheckUpgradeButtonStatus();
+			}
 		}
 		
 		private void UpdateSkillVisual(CharacterSkillUpgradeType upgradeType)
@@ -180,6 +252,38 @@ namespace Arenar.Services.UI
 		{
 			return playerCharacterSkillUpgradeService.GetUpgradeSkillLevel(upgradeType)
 				+ addedScores[upgradeType];
+		}
+		
+		private void InteractionMenuHandler(InputAction.CallbackContext context)
+		{
+			if (levelsService == null || levelsService.CurrentLevelContext == null || levelsService.CurrentLevelContext.GameMode != GameMode.Survival)
+				return;
+			
+			if (IsClosed)
+			{
+				foreach (CharacterSkillUpgradeType parameter in addedScores.Keys)
+				{
+					UpdateSkillVisual(parameter);
+				}
+				
+				uiSoundManager.PlaySound(UiSoundType.StandartButtonClick);
+				
+				playerInputService.SetInputControlType(InputActionMapType.UI, true);
+				playerInputService.SetInputControlType(InputActionMapType.Gameplay, false);
+				Time.timeScale = 0.0f;
+				
+				canvasService.TransitionController
+					.PlayTransition<TransitionCrossFadeCanvasWindowLayerController,
+							GameplayCanvasWindow,
+							UpgradeCharacterWindow>
+						(false, false, null);
+				
+				SetButtonsStatus(true);
+			}
+			else
+			{
+				CloseMenuHandler();
+			}
 		}
 	}
 }

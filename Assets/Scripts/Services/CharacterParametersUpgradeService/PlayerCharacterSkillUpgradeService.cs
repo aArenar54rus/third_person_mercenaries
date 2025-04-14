@@ -1,6 +1,8 @@
+using Arenar.PreferenceSystem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TakeTop.PreferenceSystem;
 using UnityEngine;
 using Zenject;
 
@@ -8,15 +10,16 @@ namespace Arenar.Character
 {
     public class PlayerCharacterSkillUpgradeService : ICharacterSkillUpgradeService
     {
-        private const string PLAYER_NAME = "Player";
-        
-        
         public event Action OnUpgradeScoreCountChange;
         
+        
+        private IPreferenceManager preferenceManager;
         
         private CharacterParametersUpgradeData characterParametersUpgradeData;
         private ICharacterEntity playerCharacterEntity;
         private Dictionary<CharacterSkillUpgradeType, int> characterUpgradeParametersLevels;
+        
+        private CharacterSkillUpgradePreferenceData characterSkillUpgradePreferenceData;
         
         private int upgradeScore;
         
@@ -33,14 +36,23 @@ namespace Arenar.Character
 
 
         [Inject]
-        public void Construct(CharacterParametersUpgradeData characterParametersUpgradeData)
+        public void Construct(IPreferenceManager preferenceManager, CharacterParametersUpgradeData characterParametersUpgradeData)
         {
             this.characterParametersUpgradeData = characterParametersUpgradeData;
+            this.preferenceManager = preferenceManager;
         }
         
         public void InitializeCharacter(ICharacterEntity characterEntity)
         {
-            UpgradeScore = 0;
+            playerCharacterEntity = characterEntity;
+            characterSkillUpgradePreferenceData = preferenceManager.LoadValue<CharacterSkillUpgradePreferenceData>();
+            if (characterSkillUpgradePreferenceData == null)
+            {
+                characterSkillUpgradePreferenceData = new CharacterSkillUpgradePreferenceData();
+                preferenceManager.SaveValue(characterSkillUpgradePreferenceData);
+            }
+            
+            UpgradeScore = characterSkillUpgradePreferenceData.upgradeScore;
 
             characterUpgradeParametersLevels = new Dictionary<CharacterSkillUpgradeType, int>();
             foreach (CharacterSkillUpgradeType skill in Enum.GetValues(typeof(CharacterSkillUpgradeType)))
@@ -48,8 +60,7 @@ namespace Arenar.Character
                 if (skill == CharacterSkillUpgradeType.None)
                     continue;
 
-                string parameterKey = PLAYER_NAME + "_" + skill.ToString();
-                int parameterLevel =  PlayerPrefs.GetInt(parameterKey, 0);
+                int parameterLevel = characterSkillUpgradePreferenceData.characterSkillUpgradeData[skill];
                 characterUpgradeParametersLevels.Add(skill, parameterLevel);
                 
                 LoadCharacterParameters(skill, parameterLevel);
@@ -58,17 +69,20 @@ namespace Arenar.Character
         
         public int GetUpgradeSkillLevel(CharacterSkillUpgradeType skillUpgradeType)
         {
+            if (characterUpgradeParametersLevels == null || characterUpgradeParametersLevels.Count == 0)
+                return -1;
+            
             return characterUpgradeParametersLevels[skillUpgradeType];
         }
         
         public float GetUpgradeSkillValueByLevel(CharacterSkillUpgradeType skillUpgradeType, int level = -1)
         {
             if (level < 0)
-                level = characterUpgradeParametersLevels[skillUpgradeType];
+                return 0;
             
             return characterParametersUpgradeData
                 .GetParameterProgressByType(CharacterSkillUpgradeType.HealthMax)
-                .ParameterByLevel.Take(level - 1).Sum();
+                .ParameterByLevel.Take(level).Sum();
         }
         
         public bool CanUpgradeSkill(CharacterSkillUpgradeType skillUpgradeType, int level = - 1)
@@ -81,12 +95,12 @@ namespace Arenar.Character
         
         public bool IsMaxLevel(CharacterSkillUpgradeType skillUpgradeType, int level = -1)
         {
+            if (level < 0)
+                return false;
+            
             int levelMax = characterParametersUpgradeData
                 .GetParameterProgressByType(CharacterSkillUpgradeType.HealthMax)
                 .ParameterByLevel.Length;
-
-            if (level < 0)
-                level = characterUpgradeParametersLevels[skillUpgradeType];
             
             return (level >= levelMax);
         }
@@ -96,8 +110,9 @@ namespace Arenar.Character
             if (!CanUpgradeSkill(skillUpgradeType))
                 return false;
             
-            string parameterKey = PLAYER_NAME + "_" + skillUpgradeType.ToString();
-            int parameterLevel =  PlayerPrefs.GetInt(parameterKey, 0);
+            int parameterLevel = characterUpgradeParametersLevels[skillUpgradeType];
+            parameterLevel++;
+            
             float addedValue = characterParametersUpgradeData
                 .GetParameterProgressByType(skillUpgradeType)
                 .ParameterByLevel[parameterLevel];
@@ -106,7 +121,8 @@ namespace Arenar.Character
             {
                 case CharacterSkillUpgradeType.DamageMax:
                     if (playerCharacterEntity.TryGetCharacterComponent<ICharacterAttackComponent>(out var attackComponentComponent))
-                        attackComponentComponent.CharacterDamage += (int)addedValue;
+                        attackComponentComponent.CharacterDamage += (int) addedValue;
+
                     break;
                 
                 case CharacterSkillUpgradeType.HealthMax:
@@ -123,14 +139,19 @@ namespace Arenar.Character
                     Debug.LogError("Unknown character upgrade type: " + skillUpgradeType);
                     return false;
             }
+
+            upgradeScore--;
+            characterSkillUpgradePreferenceData.upgradeScore = upgradeScore;
+            characterSkillUpgradePreferenceData.characterSkillUpgradeData[skillUpgradeType] = characterUpgradeParametersLevels[skillUpgradeType];
             
-            PlayerPrefs.SetInt(parameterKey, ++parameterLevel);
+            preferenceManager.SaveValue(characterSkillUpgradePreferenceData);
+
             return true;
         }
         
         private void LoadCharacterParameters(CharacterSkillUpgradeType skillUpgradeType, int parameterLevel)
         {
-            if (parameterLevel == 0)
+            if (parameterLevel < 0)
                 return;
             
             switch (skillUpgradeType)
@@ -141,7 +162,7 @@ namespace Arenar.Character
                     
                     int addedDamage = characterParametersUpgradeData
                         .GetParameterProgressByType(CharacterSkillUpgradeType.DamageMax)
-                        .ParameterByLevel.Take(parameterLevel - 1).Sum();
+                        .ParameterByLevel.Take(parameterLevel).Sum();
                     attackComponentComponent.CharacterDamage += (int)addedDamage;
                     return;
                 
@@ -151,7 +172,7 @@ namespace Arenar.Character
 
                     int addedHealth = characterParametersUpgradeData
                         .GetParameterProgressByType(CharacterSkillUpgradeType.HealthMax)
-                        .ParameterByLevel.Take(parameterLevel - 1).Sum();
+                        .ParameterByLevel.Take(parameterLevel).Sum();
                     
                     liveComponent.HealthContainer = new HealthContainer_Decorator(liveComponent.HealthContainer, addedHealth);
                     return;
@@ -162,7 +183,7 @@ namespace Arenar.Character
                     
                     int addedSpeed = characterParametersUpgradeData
                         .GetParameterProgressByType(CharacterSkillUpgradeType.MovementSpeedMax)
-                        .ParameterByLevel.Take(parameterLevel - 1).Sum();
+                        .ParameterByLevel.Take(parameterLevel).Sum();
                     movementComponent.MovementContainer = new MovementContainer_SpeedDecorator(movementComponent.MovementContainer, addedSpeed);
                     return;
                 
