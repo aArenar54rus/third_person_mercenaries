@@ -5,34 +5,37 @@ namespace Arenar.Services.InventoryService
     [Serializable]
     public class InventoryItemCellData
     {
-        public ItemInventoryData itemInventoryData;
-        public int elementsCount;
-
-
+        public ItemData itemData;
+        private int elementsCount;
+        
+        
+        public int ElementsCount
+        {
+            get => (itemData == null) ? 0 : elementsCount;
+            set => elementsCount = value;
+        }
+        
         public bool IsLocked { get; private set; } = false;
-
-
+        
         public bool StackIsFull
         {
             get
             {
-                if (itemInventoryData == null)
+                if (itemData == null)
                     return false;
 
-                if (!itemInventoryData.CanStack)
+                if (!itemData.CanStack)
                     return true;
 
-                return elementsCount >= itemInventoryData.StackCountMax;
+                return ElementsCount >= itemData.StackCountMax;
             }
         }
         
-        
-        public InventoryItemCellData(ItemInventoryData itemInventoryData = null, int elementsCount = 0)
+        public InventoryItemCellData(ItemData itemData = null, int elementsCount = 0)
         {
-            this.itemInventoryData = itemInventoryData;
-            this.elementsCount = elementsCount;
+            this.itemData = itemData;
+            this.ElementsCount = elementsCount;
         }
-        
         
         public void SetLock() =>
             IsLocked = true;

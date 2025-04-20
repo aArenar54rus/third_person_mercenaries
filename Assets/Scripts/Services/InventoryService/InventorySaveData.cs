@@ -1,6 +1,7 @@
 using System;
 using Arenar.Services.InventoryService;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 
 namespace Arenar
@@ -8,47 +9,61 @@ namespace Arenar
     [Serializable]
     public class InventorySaveData
     {
-        [JsonProperty] private bool _isAddedContentEarly = false;
-        [JsonProperty] private InventoryItemCellData[] _equippedWeaponsCells;
-        [JsonProperty] private InventoryItemCellData[] _inventoryCells;
+        [JsonProperty]
+        private bool isAddedContentEarly = false;
+        [JsonProperty]
+        private InventoryItemCellData equippedMeleeWeaponsCell;
+        [JsonProperty]
+        private InventoryItemCellData[] equippedFirearmWeaponsCells;
+        [JsonProperty]
+        private InventoryItemCellData[] inventoryBagCells;
 
 
         [JsonIgnore]
-        public InventoryItemCellData[] EquippedWeaponCells
+        public InventoryItemCellData EquippedMeleeWeaponsCell
         {
-            get => _equippedWeaponsCells;
-            set => _equippedWeaponsCells = value;
+            get => equippedMeleeWeaponsCell;
+            set => equippedMeleeWeaponsCell = value;
+        }
+
+        [JsonIgnore]
+        public InventoryItemCellData[] EquippedFirearmWeaponCells
+        {
+            get => equippedFirearmWeaponsCells;
+            set => equippedFirearmWeaponsCells = value;
         }
         
         [JsonIgnore]
-        public InventoryItemCellData[] InventoryCells
+        public InventoryItemCellData[] InventoryBagCells
         {
-            get => _inventoryCells;
-            set => _inventoryCells = value;
+            get => inventoryBagCells;
+            set => inventoryBagCells = value;
         }
         
         [JsonIgnore]
         public bool IsAddedContentEarly
         {
-            get => _isAddedContentEarly;
-            set => _isAddedContentEarly = value;
+            get => isAddedContentEarly;
+            set => isAddedContentEarly = value;
         }
         
 
-        public void DataReInitialize(int inventoryCellsCount, int equippedWeaponCellsCount)
+        public void DataReInitialize(int inventoryBagCellsCount, int equippedWeaponCellsCount)
         {
-            if (_equippedWeaponsCells == null)
+            equippedMeleeWeaponsCell = new InventoryItemCellData(null, 0);
+            
+            if (equippedFirearmWeaponsCells == null)
             {
-                _equippedWeaponsCells = new InventoryItemCellData[equippedWeaponCellsCount];
-                for (int i = 0; i < _equippedWeaponsCells.Length; i++)
-                    _equippedWeaponsCells[i] = new InventoryItemCellData(null, 0);
+                equippedFirearmWeaponsCells = new InventoryItemCellData[equippedWeaponCellsCount];
+                for (int i = 0; i < equippedFirearmWeaponsCells.Length; i++)
+                    equippedFirearmWeaponsCells[i] = new InventoryItemCellData(null, 0);
             }
             
-            if (_inventoryCells == null)
+            if (inventoryBagCells == null)
             {
-                _inventoryCells = new InventoryItemCellData[inventoryCellsCount];
-                for (int i = 0; i < _inventoryCells.Length; i++)
-                    _inventoryCells[i] = new InventoryItemCellData(null, 0);
+                inventoryBagCells = new InventoryItemCellData[inventoryBagCellsCount];
+                for (int i = 0; i < inventoryBagCells.Length; i++)
+                    inventoryBagCells[i] = new InventoryItemCellData(null, 0);
             }
         }
     }

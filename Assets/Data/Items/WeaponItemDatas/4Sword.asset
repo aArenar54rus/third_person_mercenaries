@@ -16,7 +16,7 @@ MonoBehaviour:
   _nameKey: Sword
   _descKey: 
   _itemType: 2
-  _itemRarity: 0
+  _itemRarity: 2
   _stackCountMax: 1
   _itemMass: 2.5
   _worldVisual:
@@ -24,7 +24,6 @@ MonoBehaviour:
     mass: 0
     materials: []
   meleeWeaponData:
-    damageMultiplierByItemLevel: 0.2
     itemDamageMultiplierByRarity:
       IsSingleLineView: 1
       list:

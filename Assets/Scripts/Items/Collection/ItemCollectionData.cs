@@ -12,7 +12,7 @@ namespace Arenar
         [SerializeField]
         private ItemRarityColorData itemRarityColorData = default;
         [SerializeField]
-        private SerializableDictionary<int, ItemInventoryData> gameItems;
+        private SerializableDictionary<int, ItemData> gameItems;
 
         
         public InteractableElement ItemWorldObjectControlPrefab =>
@@ -21,8 +21,10 @@ namespace Arenar
         public ItemRarityColorData ItemRarityColorData =>
             itemRarityColorData;
 
+        public SerializableDictionary<int, ItemData> GameItems => gameItems;
 
-        public ItemInventoryData GetItemByIndex(int index)
+
+        public ItemData GetItemByIndex(int index)
         {
             return gameItems[index];
         }

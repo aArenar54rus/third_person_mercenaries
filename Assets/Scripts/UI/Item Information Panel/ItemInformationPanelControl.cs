@@ -3,64 +3,77 @@ using Arenar.Services.InventoryService;
 using UnityEngine;
 
 
-namespace Arenar
+namespace Arenar.UI
 {
     public class ItemInformationPanelControl : MonoBehaviour
     {
-        [SerializeField] private RectTransform informationPanel;
-        [SerializeField] private RectTransform content;
-        [SerializeField] private float maxHeightPanel;
-        [SerializeField] private float addedHeight;
+        [SerializeField]
+        private RectTransform informationPanel;
+        [SerializeField]
+        private RectTransform content;
+        [SerializeField]
+        private float maxHeightPanel;
+        [SerializeField]
+        private float addedHeight;
 
         [Space(10), Header("Sub Panels")]
-        [SerializeField] private EquippedSubPanel equippedSubPanel;
-        [SerializeField] private SerializableDictionary<ItemType, SubPanel> mainSubPanels;
-        [SerializeField] private ItemParametersSubPanel _itemParametersSubPanel;
+        [SerializeField]
+        private EquippedSubPanel equippedSubPanel;
+        [SerializeField]
+        private SerializableDictionary<ItemType, SubPanel> mainSubPanels;
+        [SerializeField]
+        private ItemParametersSubPanel _itemParametersSubPanel;
 
         private List<SubPanel> _spawnedSubPanels;
 
 
-        public void ShowInfoPanel(Vector3 itemCellPosition, InventoryItemCellData invItemCellData, bool isEquipped = false)
+        public virtual void ShowInfoPanel(Vector3 itemCellPosition, InventoryItemCellData invItemCellData, bool isEquipped = false)
         {
             List<SubPanel> newSpawnedSubPanels = new List<SubPanel>();
             if (isEquipped)
             {
-                newSpawnedSubPanels.Add(GetSubPanel(invItemCellData.itemInventoryData, (EquippedSubPanel)equippedSubPanel));
+                newSpawnedSubPanels.Add(GetSubPanel(invItemCellData.itemData, (EquippedSubPanel)equippedSubPanel));
             }
 
-            ItemType itemType = invItemCellData.itemInventoryData.ItemType;
+            ItemType itemType = invItemCellData.itemData.ItemType;
             SubPanel mainSubPanel = mainSubPanels[itemType];
 
-            switch (invItemCellData.itemInventoryData.ItemType)
+            switch (invItemCellData.itemData.ItemType)
             {
+                case ItemType.Money:
+                    newSpawnedSubPanels.Add(GetSubPanel<MoneyItemDescriptionSubPanel>(invItemCellData.itemData,
+                        (MoneyItemDescriptionSubPanel)mainSubPanel));
+                    break;
+                
                 case ItemType.Material:
-                    newSpawnedSubPanels.Add(GetSubPanel<MaterialItemDescriptionSubPanel>(invItemCellData.itemInventoryData,
+                    newSpawnedSubPanels.Add(GetSubPanel<MaterialItemDescriptionSubPanel>(invItemCellData.itemData,
                         (MaterialItemDescriptionSubPanel)mainSubPanel));
                     break;
                 
-                case ItemType.Weapon:
-                    newSpawnedSubPanels.Add(GetSubPanel<WeaponItemDescriptionSubPanel>(invItemCellData.itemInventoryData,
+                case ItemType.MeleeWeapon:
+                case ItemType.FirearmWeapon:
+                    newSpawnedSubPanels.Add(GetSubPanel<WeaponItemDescriptionSubPanel>(invItemCellData.itemData,
                         (WeaponItemDescriptionSubPanel)mainSubPanel));
                     break;
                 
                 case ItemType.Cloth:
-                    newSpawnedSubPanels.Add(GetSubPanel<ClothItemDescriptionSubPanel>(invItemCellData.itemInventoryData,
+                    newSpawnedSubPanels.Add(GetSubPanel<ClothItemDescriptionSubPanel>(invItemCellData.itemData,
                         (ClothItemDescriptionSubPanel)mainSubPanel));
                     break;
                 
                 case ItemType.Quest:
-                    newSpawnedSubPanels.Add(GetSubPanel<QuestItemDescriptionSubPanel>(invItemCellData.itemInventoryData,
+                    newSpawnedSubPanels.Add(GetSubPanel<QuestItemDescriptionSubPanel>(invItemCellData.itemData,
                         (QuestItemDescriptionSubPanel)mainSubPanel));
                     break;
                 
                 default:
-                    Debug.LogError($"Unknown type {invItemCellData.itemInventoryData.ItemType} for info panel.");
+                    Debug.LogError($"Unknown type {invItemCellData.itemData.ItemType} for info panel.");
                     break;
             }
 
-            if (itemType == ItemType.Weapon || itemType == ItemType.Cloth)
+            if (itemType == ItemType.FirearmWeapon || itemType == ItemType.Cloth)
             {
-                newSpawnedSubPanels.Add(GetSubPanel<ItemParametersSubPanel>(invItemCellData.itemInventoryData,
+                newSpawnedSubPanels.Add(GetSubPanel<ItemParametersSubPanel>(invItemCellData.itemData,
                     (ItemParametersSubPanel)_itemParametersSubPanel));
             }
             
@@ -98,13 +111,13 @@ namespace Arenar
             informationPanel.position = elementPosition;
         }
 
-        private SubPanel GetSubPanel<T>(ItemInventoryData itemInventoryData, T subPanel)
+        private SubPanel GetSubPanel<T>(ItemData itemData, T subPanel)
             where T : SubPanel
         {
             SubPanel instance = GetSubPanelInstance<T>();
             if (instance == null)
                 instance = GameObject.Instantiate(subPanel, content);
-            instance.Initialize(itemInventoryData);
+            instance.Initialize(itemData);
             return instance;
         }
 

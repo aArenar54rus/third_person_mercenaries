@@ -10,10 +10,10 @@ namespace Arenar.Character
     public class SGTargetWeaponDataStorage
     {
         [SerializeField] private FirearmWeapon _weapon;
-        [FormerlySerializedAs("_weaponInventoryData"),SerializeField] private FirearmWeaponInventoryItemData firearmWeaponInventoryData;
+        [FormerlySerializedAs("firearmWeaponInventoryData"),FormerlySerializedAs("_weaponInventoryData"),SerializeField] private FirearmWeaponItemData firearmWeaponData;
         
 
         public FirearmWeapon Weapon => _weapon;
-        public FirearmWeaponInventoryItemData FirearmWeaponInventoryData => firearmWeaponInventoryData;
+        public FirearmWeaponItemData FirearmWeaponData => firearmWeaponData;
     }
 }

@@ -3,6 +3,7 @@ using Arenar.AudioSystem;
 using Arenar.Items;
 using Arenar.Services.InventoryService;
 using Arenar.Services.PlayerInputService;
+using UnityEngine;
 using UnityEngine.InputSystem;
 using Zenject;
 
@@ -11,15 +12,17 @@ namespace Arenar.Services.UI
 {
     public class InventoryWindowController : CanvasWindowController
     {
-        private IInventoryService _inventoryService;
-
-        private InventoryCanvasWindow _inventoryWindow;
-        private InventoryEquipCanvasLayer _inventoryEquipCanvasLayer;
-        private InventoryBagCanvasLayer _inventoryBagCanvasLayer;
-        private InventoryItemDescriptionCanvasLayer _inventoryItemDescriptionCanvasLayer;
-        private InventoryControlButtonsCanvasLayer _inventoryControlButtonsCanvasLayer;
-        
+        private IInventoryService inventoryService;
         private IUiSoundManager _uiSoundManager;
+
+        private InventoryCanvasWindow inventoryWindow;
+        private InventoryEquipCanvasLayer inventoryEquipCanvasLayer;
+        private InventoryBagCanvasLayer inventoryBagCanvasLayer;
+        private InventoryItemDescriptionCanvasLayer inventoryItemDescriptionCanvasLayer;
+        private InventoryControlButtonsCanvasLayer inventoryControlButtonsCanvasLayer;
+
+        private List<InventoryCellVisual> activeInventoryBagCells = new();
+        private Queue<InventoryCellVisual> deactiveInventoryCells = new();
         
         
         [Inject]
@@ -28,7 +31,7 @@ namespace Arenar.Services.UI
                                          IUiSoundManager uiSoundManager)
             : base(playerInputService)
         {
-            _inventoryService = inventoryService;
+            this.inventoryService = inventoryService;
             base.playerInputService = playerInputService;
             _uiSoundManager = uiSoundManager;
         }
@@ -38,34 +41,40 @@ namespace Arenar.Services.UI
         {
             base.Initialize(canvasService);
             
-            _inventoryWindow = base.canvasService.GetWindow<InventoryCanvasWindow>();
-            _inventoryEquipCanvasLayer = _inventoryWindow.GetWindowLayer<InventoryEquipCanvasLayer>();
-            _inventoryBagCanvasLayer = _inventoryWindow.GetWindowLayer<InventoryBagCanvasLayer>();
-            _inventoryItemDescriptionCanvasLayer = _inventoryWindow.GetWindowLayer<InventoryItemDescriptionCanvasLayer>();
-            _inventoryControlButtonsCanvasLayer = _inventoryWindow.GetWindowLayer<InventoryControlButtonsCanvasLayer>();
+            inventoryWindow = base.canvasService.GetWindow<InventoryCanvasWindow>();
+            inventoryEquipCanvasLayer = inventoryWindow.GetWindowLayer<InventoryEquipCanvasLayer>();
+            inventoryBagCanvasLayer = inventoryWindow.GetWindowLayer<InventoryBagCanvasLayer>();
+            inventoryItemDescriptionCanvasLayer = inventoryWindow.GetWindowLayer<InventoryItemDescriptionCanvasLayer>();
+            inventoryControlButtonsCanvasLayer = inventoryWindow.GetWindowLayer<InventoryControlButtonsCanvasLayer>();
             
-            _inventoryControlButtonsCanvasLayer.BackButton.onClick.AddListener(OnReturnToMenuBtnClick);
+            inventoryControlButtonsCanvasLayer.BackButton.onClick.AddListener(OnReturnToMenuBtnClick);
 
             InitializeInventoryBag();
             InitializeInventoryEquip();
             
             UpdateInventoryMassVisual();
             
-            _inventoryWindow.OnShowEnd.AddListener(OnWindowShowEnd_SelectElements);
-            _inventoryWindow.OnHideBegin.AddListener(OnWindowHideBegin_DeselectElements);
+            inventoryWindow.OnShowEnd.AddListener(OnWindowShowEnd_SelectElements);
+            inventoryWindow.OnHideBegin.AddListener(OnWindowHideBegin_DeselectElements);
         }
 
         protected override void OnWindowShowEnd_SelectElements()
         {
-            _inventoryBagCanvasLayer.InventoryCells[0].Select();
+            if (activeInventoryBagCells.Count > 0)
+                activeInventoryBagCells[0].Select();
+            else
+                inventoryControlButtonsCanvasLayer.BackButton.Select();
+            
+            inventoryControlButtonsCanvasLayer.MoneyWallet.UpdateText(inventoryService.CurrencyMoney);
+            
             if (playerInputService.InputActionCollection is PlayerInput playerInput)
                 playerInput.UI.Decline.performed += OnInputAction_Decline;
         }
 
         protected override void OnWindowHideBegin_DeselectElements()
         {
-            _inventoryItemDescriptionCanvasLayer.MainItemInformationPanelControl.HideInfoPanel();
-            _inventoryItemDescriptionCanvasLayer.SecondItemInformationPanelControl.HideInfoPanel();
+            inventoryItemDescriptionCanvasLayer.MainItemInformationPanelControl.HideInfoPanel();
+            inventoryItemDescriptionCanvasLayer.SecondItemInformationPanelControl.HideInfoPanel();
             
             if (playerInputService.InputActionCollection is PlayerInput playerInput)
                 playerInput.UI.Decline.performed -= OnInputAction_Decline;
@@ -73,72 +82,134 @@ namespace Arenar.Services.UI
 
         private void OnInputAction_Decline(InputAction.CallbackContext context)
         {
+            if (inventoryItemDescriptionCanvasLayer.MainItemInformationPanelControl.enabled)
+            {
+                inventoryItemDescriptionCanvasLayer.MainItemInformationPanelControl.HideInfoPanel();
+                inventoryItemDescriptionCanvasLayer.SecondItemInformationPanelControl.HideInfoPanel();
+                return;
+            }
+            
             OnReturnToMenuBtnClick();
         }
 
         private void InitializeInventoryBag()
         {
-            for (int i = 0; i < _inventoryBagCanvasLayer.InventoryCells.Length; i++)
+            var bagItems = inventoryService.GetAllBagItems();
+            for (int i = 0; i <  bagItems.Length; i++)
+                AddCellBagVisual(i, bagItems[i]);
+            
+            inventoryService.OnUpdateInventoryCells += OnUpdateInventoryCells;
+        }
+
+        private void AddCellBagVisual(int cellIndex, InventoryItemCellData inventoryCellData)
+        {
+            if (inventoryCellData.itemData == null)
+                return;
+            
+            InventoryCellVisual newBagCell;
+            if (deactiveInventoryCells.Count > 0)
             {
-                _inventoryBagCanvasLayer.InventoryCells[i].Initialize(i);
-                _inventoryBagCanvasLayer.InventoryCells[i].onCellSelected += OnCellSelected_InventoryCellBag;
-                _inventoryBagCanvasLayer.InventoryCells[i].onCellDeselected += OnCellDeselected_InventoryCellBag;
-                _inventoryBagCanvasLayer.InventoryCells[i].onCellClicked += OnCellClicked_InventoryCellBag;
-                UpdateInventoryCellData(i);
+                newBagCell = deactiveInventoryCells.Dequeue();
+            }
+            else
+            {
+                newBagCell = GameObject.Instantiate(inventoryBagCanvasLayer.InventoryBagCellPrefab,
+                    inventoryBagCanvasLayer.InventoryBagCellParent).GetComponent<InventoryCellVisual>();
             }
 
-            _inventoryService.OnUpdateInventoryCells += OnUpdateInventoryCells;
+            newBagCell.gameObject.SetActive(true);
+            
+            newBagCell.Initialize(cellIndex, inventoryCellData);
+            
+            newBagCell.onCellSelected += OnCellSelected_InventoryCellBag;
+            newBagCell.onCellDeselected += OnCellDeselected_InventoryCellBag;
+            newBagCell.onCellClicked += OnCellClicked_InventoryCellBag;
+            
+            activeInventoryBagCells.Add(newBagCell);
+        }
+        
+        private void RemoveBagCellVisual(int cellIndex)
+        {
+            if (inventoryService.GetInventoryItemDataByCellIndex(cellIndex) == null)
+                return;
+            
+            if (!TryGetVisualByCellIndex(cellIndex, out InventoryCellVisual neededCellVisual))
+                return;
+            
+            deactiveInventoryCells.Enqueue(neededCellVisual);
+            activeInventoryBagCells.Remove(neededCellVisual);
+            
+            neededCellVisual.onCellSelected -= OnCellSelected_InventoryCellBag;
+            neededCellVisual.onCellDeselected -= OnCellDeselected_InventoryCellBag;
+            neededCellVisual.onCellClicked -= OnCellClicked_InventoryCellBag;
+            
+            neededCellVisual.gameObject.SetActive(false);
         }
 
         private void InitializeInventoryEquip()
         {
-            foreach (var clothItemCell in _inventoryEquipCanvasLayer.ClothItemCells)
+            /*
+             foreach (var clothItemCell in _inventoryEquipCanvasLayer.ClothItemCells)
             {
                 clothItemCell.Value.Initialize(0);
-                InventoryItemCellData invItemCellData = _inventoryService.GetEquippedCloth(clothItemCell.Key);
+                InventoryItemCellData invItemCellData = inventoryService.GetEquippedCloth(clothItemCell.Key);
                 if (invItemCellData == null || invItemCellData.itemInventoryData == null)
                     clothItemCell.Value.SetEmpty();
                 else
                     clothItemCell.Value.SetItem(invItemCellData);
             }
+            */
             
-            InventoryItemCellData[] weaponInvItemCellData = _inventoryService.GetEquippedWeapons();
-            for (int i = 0; i < _inventoryEquipCanvasLayer.WeaponCells.Length; i++)
+            InventoryItemCellData[] weaponInvItemCellData = inventoryService.GetEquippedFirearmWeapons();
+            for (int i = 0; i < inventoryEquipCanvasLayer.WeaponCells.Length; i++)
             {
-                _inventoryEquipCanvasLayer.WeaponCells[i].Initialize(0);
-                if (weaponInvItemCellData[i] == null || weaponInvItemCellData[i].itemInventoryData == null)
-                    _inventoryEquipCanvasLayer.WeaponCells[i].SetEmpty();
+                if (weaponInvItemCellData[i] == null || weaponInvItemCellData[i].itemData == null)
+                    inventoryEquipCanvasLayer.WeaponCells[i].SetEmpty();
                 else
-                    _inventoryEquipCanvasLayer.WeaponCells[i].SetItem(weaponInvItemCellData[i]);
+                    inventoryEquipCanvasLayer.WeaponCells[i].Initialize(i, weaponInvItemCellData[i]);
             }
         }
 
         private void UpdateInventoryMassVisual()
         {
-            var massSlider = _inventoryBagCanvasLayer.MassSlider;
-            massSlider.maxValue = _inventoryService.InventoryMassMax;
-            massSlider.value = _inventoryService.InventoryMass;
+            var massSlider = inventoryBagCanvasLayer.MassSlider;
+            massSlider.maxValue = inventoryService.InventoryMassMax;
+            massSlider.value = inventoryService.InventoryMass;
         }
 
         private void OnUpdateInventoryCells(List<int> cellsIndexes)
         {
-            foreach (int cellIndex in cellsIndexes)
-                UpdateInventoryCellData(cellIndex);
+            foreach (var cellIndex in cellsIndexes)
+            {
+                var inventoryCellData = inventoryService.GetInventoryItemDataByCellIndex(cellIndex);
+
+                if (inventoryCellData == null)
+                    continue;
+                
+                if (inventoryCellData.ElementsCount <= 0)
+                {
+                    RemoveBagCellVisual(cellIndex);
+                }
+                else
+                {
+                    bool isFound = false;
+                    foreach (var activeVisual in activeInventoryBagCells)
+                    {
+                        if (activeVisual.CellIndex != cellIndex)
+                            continue;
+                        
+                        activeVisual.Initialize(cellIndex, inventoryCellData);
+                        isFound = true;
+                    }
+
+                    if (!isFound)
+                    {
+                        AddCellBagVisual(cellIndex, inventoryCellData);
+                    }
+                }
+            }
 
             UpdateInventoryMassVisual();
-        }
-
-        private void UpdateInventoryCellData(int cellIndex)
-        {
-            var itemData = _inventoryService.GetInventoryItemData(cellIndex);
-            if (itemData.itemInventoryData == null)
-            {
-                _inventoryBagCanvasLayer.InventoryCells[cellIndex].SetEmpty();
-            }
-            else
-            {
-                _inventoryBagCanvasLayer.InventoryCells[cellIndex].SetItem(itemData);
-            }
         }
 
         private void OnReturnToMenuBtnClick()
@@ -153,29 +224,26 @@ namespace Arenar.Services.UI
 
         private void OnCellSelected_InventoryCellBag(int cellIndex)
         {
-            InventoryItemCellData itemData = _inventoryService.GetInventoryItemData(cellIndex);
-            if (itemData.itemInventoryData == null)
+            InventoryItemCellData inventoryItemCellData = inventoryService.GetInventoryItemDataByCellIndex(cellIndex);
+            if (inventoryItemCellData.itemData == null)
             {
-                _inventoryItemDescriptionCanvasLayer.MainItemInformationPanelControl.HideInfoPanel();
+                inventoryItemDescriptionCanvasLayer.MainItemInformationPanelControl.HideInfoPanel();
                 return;
             }
 
-            _inventoryItemDescriptionCanvasLayer.MainItemInformationPanelControl
-                .ShowInfoPanel(_inventoryBagCanvasLayer.InventoryCells[cellIndex].transform.position, itemData, false);
-
             bool isFindWeaponForCheck = false;
-            if (itemData.itemInventoryData is FirearmWeaponInventoryItemData weaponData)
+            if (inventoryItemCellData.itemData is FirearmWeaponItemData weaponData)
             {
-                var equippedWeapons = _inventoryService.GetEquippedWeapons();
+                var equippedWeapons = inventoryService.GetEquippedFirearmWeapons();
                 
                 for (int i = 0; i < equippedWeapons.Length; i++)
                 {
-                    if (equippedWeapons[i].itemInventoryData != null
-                        && equippedWeapons[i].itemInventoryData is FirearmWeaponInventoryItemData equippedWeaponData
+                    if (equippedWeapons[i].itemData != null
+                        && equippedWeapons[i].itemData is FirearmWeaponItemData equippedWeaponData
                         && weaponData.WeaponType == equippedWeaponData.WeaponType)
                     {
-                        _inventoryItemDescriptionCanvasLayer.SecondItemInformationPanelControl
-                            .ShowInfoPanel(_inventoryEquipCanvasLayer.WeaponCells[i].transform.position,
+                        inventoryItemDescriptionCanvasLayer.SecondItemInformationPanelControl
+                            .ShowInfoPanel(inventoryEquipCanvasLayer.WeaponCells[i].transform.position,
                                 equippedWeapons[i],
                                 true);
                         isFindWeaponForCheck = true;
@@ -185,20 +253,74 @@ namespace Arenar.Services.UI
             }
 
             if (!isFindWeaponForCheck)
-                _inventoryItemDescriptionCanvasLayer.SecondItemInformationPanelControl.HideInfoPanel();
+                inventoryItemDescriptionCanvasLayer.SecondItemInformationPanelControl.HideInfoPanel();
         }
 
         private void OnCellDeselected_InventoryCellBag(int cellIndex)
         {
-            _inventoryItemDescriptionCanvasLayer.MainItemInformationPanelControl.HideInfoPanel();
-            _inventoryItemDescriptionCanvasLayer.SecondItemInformationPanelControl.HideInfoPanel();
+            // inventoryItemDescriptionCanvasLayer.MainItemInformationPanelControl.HideInfoPanel();
+            // inventoryItemDescriptionCanvasLayer.SecondItemInformationPanelControl.HideInfoPanel();
         }
 
         private void OnCellClicked_InventoryCellBag(int cellIndex)
         {
-            InventoryItemCellData itemData = _inventoryService.GetInventoryItemData(cellIndex);
-            if (itemData.itemInventoryData == null)
+            InventoryItemCellData inventoryItemCellData = inventoryService.GetInventoryItemDataByCellIndex(cellIndex);
+            if (inventoryItemCellData.itemData == null)
                 return;
+
+            if (!TryGetVisualByCellIndex(cellIndex, out InventoryCellVisual cellVisual))
+                return;
+            
+            inventoryItemDescriptionCanvasLayer.MainItemInformationPanelControl
+                .ShowInfoPanel(cellVisual.transform.position, inventoryItemCellData, false);
+
+            switch (inventoryItemCellData.itemData.ItemType)
+            {
+                case ItemType.MeleeWeapon:
+                    inventoryItemDescriptionCanvasLayer.MainItemInformationPanelControl.AddButton("Equip", EquipMeleeWeaponButton);
+                    break;
+                
+                case ItemType.Money:
+                    inventoryItemDescriptionCanvasLayer.MainItemInformationPanelControl.AddButton("Use", UseMoneyPackageButton);
+                    break;
+            }
+            
+            
+            void EquipMeleeWeaponButton()
+            {
+                inventoryService.EquipMeleeWeaponFromBag(cellIndex);
+                inventoryService.RemoveItemFromCell(cellIndex, 1, out InventoryItemCellData _);
+                
+                RemoveBagCellVisual(cellIndex);
+                
+                inventoryItemDescriptionCanvasLayer.MainItemInformationPanelControl.HideInfoPanel();
+                inventoryItemDescriptionCanvasLayer.SecondItemInformationPanelControl.HideInfoPanel();
+            }
+            
+            void UseMoneyPackageButton()
+            {
+                if (inventoryItemCellData.itemData is MaterialItemData materialItemData)
+                    inventoryService.CurrencyMoney += materialItemData.MaterialMight;
+                
+                inventoryService.RemoveItemFromCell(cellIndex, 1, out InventoryItemCellData _);
+                
+                inventoryControlButtonsCanvasLayer.MoneyWallet.UpdateText(inventoryService.CurrencyMoney);
+            }
+        }
+
+        private bool TryGetVisualByCellIndex(int cellIndex, out InventoryCellVisual inventoryItemCellData)
+        {
+            inventoryItemCellData = null;
+            foreach (var activeVisual in activeInventoryBagCells)
+            {
+                if (activeVisual.CellIndex != cellIndex)
+                    continue;
+
+                inventoryItemCellData = activeVisual;
+                break;
+            }
+            
+            return inventoryItemCellData != null;
         }
     }
 }

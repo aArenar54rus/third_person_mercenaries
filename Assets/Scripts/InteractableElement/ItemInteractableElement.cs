@@ -11,12 +11,12 @@ namespace Arenar
       [SerializeField] private MeshFilter meshFilter = default;
       [SerializeField] private MeshRenderer meshRenderer = default;
 
-      [FormerlySerializedAs("itemData")] [SerializeField] private ItemInventoryData itemInventoryData;
+      [FormerlySerializedAs("itemInventoryData"),SerializeField] private ItemData itemData;
       [SerializeField] private int _count;
       private bool isInitialized = false;
 
 
-      public ItemInventoryData ItemInventoryData => itemInventoryData;
+      public ItemData ItemData => itemData;
       public int Count => _count;
 
 
@@ -34,9 +34,9 @@ namespace Arenar
 
       private void Start()
       {
-         if (itemInventoryData != null)
+         if (itemData != null)
          {
-            SetItem(itemInventoryData, _count);
+            SetItem(itemData, _count);
          }
          else
          {
@@ -44,9 +44,9 @@ namespace Arenar
          }
       }
 
-      public void SetItem(ItemInventoryData itemInventoryData, int count)
+      public void SetItem(ItemData itemData, int count)
       {
-         this.itemInventoryData = itemInventoryData;
+         this.itemData = itemData;
          this._count = count;
 
          UpdateItemObjectVisual();
@@ -56,9 +56,9 @@ namespace Arenar
 
       private void UpdateItemObjectVisual()
       {
-         rigidbody.mass = itemInventoryData.WorldVisual.Mass;
-         meshRenderer.materials = itemInventoryData.WorldVisual.Materials;
-         meshFilter.mesh = itemInventoryData.WorldVisual.Mesh;
+         rigidbody.mass = itemData.WorldVisual.Mass;
+         meshRenderer.materials = itemData.WorldVisual.Materials;
+         meshFilter.mesh = itemData.WorldVisual.Mesh;
          // boxCollider.size = meshFilter.mesh.bounds.size;
       }
    }

@@ -24,7 +24,7 @@ namespace Arenar.Items
         public LineRenderer LineRendererEffect => lineRendererEffect;
         public int ItemLevel { get; protected set; }
         public ICharacterEntity ItemOwner { get; protected set; }
-        public FirearmWeaponInventoryItemData FirearmWeaponInventoryItemData
+        public FirearmWeaponItemData FirearmWeaponItemData
         {
             get;
             protected set;
@@ -52,34 +52,34 @@ namespace Arenar.Items
         { 
             get
             {
-                int damage = (int) FirearmWeaponInventoryItemData.FirearmWeaponData.DefaultDamage;
+                int damage = (int) FirearmWeaponItemData.FirearmWeaponData.DefaultDamage;
                 for (int i = 0; i < ItemLevel; i++)
                     damage += Random.Range(
-                        (int)FirearmWeaponInventoryItemData.FirearmWeaponData.BulletLevelMinDamage, (int)FirearmWeaponInventoryItemData.FirearmWeaponData.BulletLevelMaxDamage);
+                        (int)FirearmWeaponItemData.FirearmWeaponData.BulletLevelMinDamage, (int)FirearmWeaponItemData.FirearmWeaponData.BulletLevelMaxDamage);
 
                 return damage;
             } 
         }
 
-        public float ReloadSpeed => FirearmWeaponInventoryItemData.FirearmWeaponData.DefaultReloadSpeed;
+        public float ReloadSpeed => FirearmWeaponItemData.FirearmWeaponData.DefaultReloadSpeed;
         public int ClipSizeMax => ClipComponent.ClipSizeMax;
 
         public int ClipSize => ClipComponent.ClipSize;
 
-        public float TimeBetweenAttacks => FirearmWeaponInventoryItemData.FirearmWeaponData.TimeBetweenShots;
+        public float TimeBetweenAttacks => FirearmWeaponItemData.FirearmWeaponData.TimeBetweenShots;
         
-        public ItemInventoryData ItemInventoryData { get; private set; }
+        public ItemData ItemData { get; private set; }
 
         public WeaponType WeaponType => WeaponType.Firearm;
 
-        public bool IsAutomaticAction => FirearmWeaponInventoryItemData.FirearmWeaponData.IsAutomaticShoot;
+        public bool IsAutomaticAction => FirearmWeaponItemData.FirearmWeaponData.IsAutomaticShoot;
         
         public Transform SecondHandPoint => secondHandPoint;
         
         public bool IsShootLock => _isBetweenShotsLock;
 
         private Vector3 RecoilShakeDirection =>
-            new Vector3(Random.Range(-1.0f, 1.0f), 1.0f, 0.0f) / 100.0f * FirearmWeaponInventoryItemData.FirearmWeaponData.RecoilShakeDefaultValue;
+            new Vector3(Random.Range(-1.0f, 1.0f), 1.0f, 0.0f) / 100.0f * FirearmWeaponItemData.FirearmWeaponData.RecoilShakeDefaultValue;
 
         private float BulletPhysicalMight
         {
@@ -92,18 +92,18 @@ namespace Arenar.Items
             ClipComponent.Reload();
         }
 
-        public void InitializeItem(ItemInventoryData itemInventoryData,
+        public void InitializeItem(ItemData itemData,
                                    Dictionary<System.Type, IEquippedItemComponent> itemComponents)
         {
-            if (itemInventoryData is not FirearmWeaponInventoryItemData weaponInventoryItemData
-                || itemInventoryData.ItemType != ItemType.Weapon)
+            if (itemData is not FirearmWeaponItemData weaponInventoryItemData
+                || itemData.ItemType != ItemType.FirearmWeapon)
             {
-                Debug.LogError($"You try initialize weapon as {itemInventoryData.ItemType}. Check your code!");
+                Debug.LogError($"You try initialize weapon as {itemData.ItemType}. Check your code!");
                 return;
             }
 
-            FirearmWeaponInventoryItemData = weaponInventoryItemData;
-            ItemInventoryData = itemInventoryData;
+            FirearmWeaponItemData = weaponInventoryItemData;
+            ItemData = itemData;
             
             FirearmWeaponAttackComponent = GetEquippedComponent<IFirearmWeaponAttackItemComponent>(itemComponents);
             ClipComponent = GetEquippedComponent<IClipComponent>(itemComponents);
@@ -169,13 +169,13 @@ namespace Arenar.Items
         
         protected virtual int GetClipSizeMax()
         {
-            return (int) FirearmWeaponInventoryItemData.FirearmWeaponData.ClipSizeMax;
+            return (int) FirearmWeaponItemData.FirearmWeaponData.ClipSizeMax;
         }
         
         protected void CreateBullet(Vector3 direction, int damageByCharacter = 0)
         {
             DamageData damageData = new DamageData(ItemOwner, (int)Damage,
-                damageByCharacter, FirearmWeaponInventoryItemData.FirearmWeaponData.GetStunPoints(),
+                damageByCharacter, FirearmWeaponItemData.FirearmWeaponData.GetStunPoints(),
                 direction * BulletPhysicalMight);
             
             FirearmWeaponAttackComponent.MakeShoot(gunMuzzleTransform, direction, damageData);

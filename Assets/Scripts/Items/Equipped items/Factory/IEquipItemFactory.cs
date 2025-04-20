@@ -6,6 +6,6 @@ namespace Arenar.Items
 {
     public interface IEquipItemFactory<TItem>
     {
-        TItem Create(ItemInventoryData itemInventoryData);
+        TItem Create(ItemData itemData);
     }
 }

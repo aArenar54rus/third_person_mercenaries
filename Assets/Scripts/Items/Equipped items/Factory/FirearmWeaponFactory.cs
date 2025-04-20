@@ -21,9 +21,9 @@ namespace Arenar.Items
         }
         
         
-        public FirearmWeapon Create(ItemInventoryData itemInventoryData)
+        public FirearmWeapon Create(ItemData itemData)
         {
-            if (itemInventoryData is not FirearmWeaponInventoryItemData weaponInventoryItemData)
+            if (itemData is not FirearmWeaponItemData weaponInventoryItemData)
             {
                 Debug.LogError("Send wrong inventory Item Data");
                 return null;
@@ -31,7 +31,7 @@ namespace Arenar.Items
             
             DiContainer subContainer = container.CreateSubContainer();
             FirearmWeapon weapon = GameObject.Instantiate(
-                    Resources.Load<GameObject>("Prefabs/Items/" + itemInventoryData.Id), null)
+                    Resources.Load<GameObject>("Prefabs/Items/" + itemData.Id), null)
                 .GetComponent<FirearmWeapon>();
 
             weapon.transform.localPosition = Vector3.zero;
@@ -53,20 +53,20 @@ namespace Arenar.Items
             components.Add(typeof(IClipComponent), GetClipComponent(weaponInventoryItemData));
             components.Add(typeof(IEquippedItemAimComponent), new LaserAimComponent(weapon.LineRendererEffect) as IEquippedItemComponent);
             
-            weapon.InitializeItem(itemInventoryData, components);
+            weapon.InitializeItem(itemData, components);
             
             return weapon;
         }
 
-        private IFirearmWeaponAttackItemComponent GetAttackMechanism(FirearmWeaponInventoryItemData firearmWeaponInventoryItemData)
+        private IFirearmWeaponAttackItemComponent GetAttackMechanism(FirearmWeaponItemData firearmWeaponItemData)
         {
-            switch (firearmWeaponInventoryItemData.FirearmWeaponData.FirearmWeaponAttackType)
+            switch (firearmWeaponItemData.FirearmWeaponData.FirearmWeaponAttackType)
             {
                 case FirearmWeaponAttackType.Projectile:
                     return new ProjectileFirearmWeaponAttackItemComponent(
                         projectileSpawner,
-                        firearmWeaponInventoryItemData.FirearmWeaponData.EffectType,
-                        firearmWeaponInventoryItemData.FirearmWeaponData.ProjectileSpeed
+                        firearmWeaponItemData.FirearmWeaponData.EffectType,
+                        firearmWeaponItemData.FirearmWeaponData.ProjectileSpeed
                     );
                     break;
                 
@@ -78,9 +78,9 @@ namespace Arenar.Items
             return null;
         }
         
-        private IClipComponent GetClipComponent(FirearmWeaponInventoryItemData firearmWeaponInventoryItemData)
+        private IClipComponent GetClipComponent(FirearmWeaponItemData firearmWeaponItemData)
         {
-            var weaponData = firearmWeaponInventoryItemData.FirearmWeaponData;
+            var weaponData = firearmWeaponItemData.FirearmWeaponData;
             if (weaponData.IsFullClipReload) 
                 return new FirearmWeaponClipComponent(false, weaponData.ClipSizeMax, weaponData.ClipSizeMax, weaponData.DefaultReloadSpeed);
             else

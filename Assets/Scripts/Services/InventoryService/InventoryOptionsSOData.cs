@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Zenject;
 
 
@@ -21,11 +20,16 @@ namespace Arenar.Services.InventoryService
         [Serializable]
         public class Parameters
         {
-            [SerializeField] private int defaultMassMax = default;
-            [SerializeField] private int defaultInventoryCellsCount = default;
-            [SerializeField] private int equippedWeaponsCount = 4;
-            [SerializeField] private ConstantWeaponCellParameters[] _constantWeaponCellParametersArray;
-            [SerializeField] private StarterBagItemCellParameters[] _bagCellParametersArray;
+            [SerializeField]
+            private int defaultMassMax = default;
+            [SerializeField]
+            private int defaultInventoryCellsCount = default;
+            [SerializeField]
+            private int equippedWeaponsCount = 4;
+            [SerializeField]
+            private ConstantWeaponCellParameters[] _constantWeaponCellParametersArray;
+            [SerializeField]
+            private StarterBagItemCellParameters[] _bagCellParametersArray;
 
 
             public int DefaultMassMax => defaultMassMax;
@@ -40,25 +44,33 @@ namespace Arenar.Services.InventoryService
             [Serializable]
             public class ConstantWeaponCellParameters
             {
-                [SerializeField] private int _weaponCellIndex;
-                [SerializeField] private bool _isLockWeapon;
-                [SerializeField] private ItemInventoryData constantWeaponInventoryData;
+                [SerializeField]
+                private int _weaponCellIndex;
+                [SerializeField]
+                private bool _isLockWeapon;
+                [SerializeField]
+                private ItemData constantWeaponData;
 
 
                 public int WeaponCellIndex => _weaponCellIndex;
                 public bool IsLockWeaponCell => _isLockWeapon;
-                public ItemInventoryData  ConstantWeaponInventoryData => constantWeaponInventoryData;
+                public ItemData  ConstantWeaponData => constantWeaponData;
             }
 
             [Serializable]
             public class StarterBagItemCellParameters
             {
-                [FormerlySerializedAs("_weaponCellIndex")] [SerializeField] private int bagCellIndex;
-                [FormerlySerializedAs("constantWeaponInventoryData")] [SerializeField] private ItemInventoryData bagInventoryData;
+                [SerializeField]
+                private int itemBagCellIndex;
+                [SerializeField]
+                private int itemCount = 1;
+                [SerializeField]
+                private ItemData bagData;
 
 
-                public int BagCellIndex => bagCellIndex;
-                public ItemInventoryData  BagInventoryData => bagInventoryData;
+                public int ItemBagCellIndex => itemBagCellIndex;
+                public int ItemCount => itemCount;
+                public ItemData  BagData => bagData;
             }
         }
     }

@@ -9,7 +9,7 @@ using UnityEngine.InputSystem.Users;
 
 namespace Arenar.Services.UI
 {
-    public class InventoryCellController : MonoBehaviour, ISelectHandler, IDeselectHandler, IPointerEnterHandler, IPointerExitHandler
+    public abstract class InventoryCellVisual : MonoBehaviour, ISelectHandler, IDeselectHandler, IPointerEnterHandler, IPointerExitHandler
     {
         public Action<int> onCellSelected;
         public Action<int> onCellDeselected;
@@ -29,7 +29,7 @@ namespace Arenar.Services.UI
         [SerializeField] protected ItemRarityColorData _colorsData;
         
         protected PlayerInput _playerInput;
-        private bool _isCellEmpty;
+        private bool isCellEmpty;
 
         
         public int CellIndex { get; private set; }
@@ -44,11 +44,22 @@ namespace Arenar.Services.UI
         }
         
         
-        public void Initialize(int cellIndex)
+        public virtual void Initialize(int cellIndex, InventoryItemCellData inventoryCellData)
         {
             rectTransform ??= gameObject.GetComponent<RectTransform>();
             PlayerInput.Player.Enable();
             CellIndex = cellIndex;
+            
+            isCellEmpty = false;
+            _iconImage.enabled = true;
+            
+            if (inventoryCellData.itemData != null)
+            {
+                _iconImage.sprite = inventoryCellData.itemData.Icon;
+                _lightImage.color = _colorsData.ItemRarityColors[inventoryCellData.itemData.ItemRarity];
+            }
+            
+            _lockIconTransform.gameObject.SetActive(inventoryCellData.IsLocked);
             
             /*
             var devices =  InputSystem.devices;
@@ -69,24 +80,19 @@ namespace Arenar.Services.UI
             _cellButton.onClick.AddListener(() => onCellClicked?.Invoke(CellIndex));
         }
 
-        public virtual void SetItem(InventoryItemCellData inventoryItemCellData)
-        {
-            _isCellEmpty = false;
-            _iconImage.enabled = true;
-            _iconImage.sprite = inventoryItemCellData.itemInventoryData.Icon;
-            _lightImage.color = _colorsData.ItemRarityColors[inventoryItemCellData.itemInventoryData.ItemRarity];
-            _lockIconTransform.gameObject.SetActive(inventoryItemCellData.IsLocked);
-        }
-
         public virtual void SetEmpty()
         {
-            _isCellEmpty = true;
+            isCellEmpty = true;
             _iconImage.enabled = false;
             _lightImage.color = Color.clear;
+            _cellButton.onClick.RemoveAllListeners();
             _lockIconTransform.gameObject.SetActive(false);
         }
-
-        public void Select() => _cellButton.Select();
+        
+        public void Select()
+        {
+            _cellButton.Select();
+        }
         
         private void Update()
         {
@@ -102,29 +108,27 @@ namespace Arenar.Services.UI
 
         public void OnSelect(BaseEventData eventData)
         {
-            if (_isCellEmpty)
+            if (isCellEmpty)
                 return;
-            Debug.LogError($"ON SELECT - ITEM INDEX {CellIndex}");
+
             onCellSelected?.Invoke(CellIndex);
         }
 
         public void OnDeselect(BaseEventData eventData)
         {
-            Debug.LogError($"ON DESELECT - ITEM INDEX {CellIndex}");
             onCellDeselected?.Invoke(CellIndex);
         }
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            if (_isCellEmpty)
+            if (isCellEmpty)
                 return;
-            Debug.LogError($"ON POINTER INTER - ITEM INDEX {CellIndex}");
+
             onCellSelected?.Invoke(CellIndex);
         }
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            Debug.LogError($"ON POINTER EXIT - ITEM INDEX {CellIndex}");
             onCellDeselected?.Invoke(CellIndex);
         }
     }

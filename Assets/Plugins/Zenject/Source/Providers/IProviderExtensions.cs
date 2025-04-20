@@ -29,11 +29,8 @@ namespace Zenject
 
             Action injectAction;
             creator.GetAllInstancesWithInjectSplit(context, args, out injectAction, buffer);
-
-            if (injectAction != null)
-            {
-                injectAction.Invoke();
-            }
+            
+            injectAction?.Invoke();
         }
 
         public static object TryGetInstance(

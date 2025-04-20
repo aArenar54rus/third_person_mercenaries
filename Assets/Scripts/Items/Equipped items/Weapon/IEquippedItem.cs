@@ -13,10 +13,10 @@ namespace Arenar.Items
 
 		ICharacterEntity ItemOwner { get; }
 
-		ItemInventoryData ItemInventoryData { get; }
+		ItemData ItemData { get; }
 
 		
-		void InitializeItem(ItemInventoryData itemInventoryData, Dictionary<System.Type, IEquippedItemComponent> components);
+		void InitializeItem(ItemData itemData, Dictionary<System.Type, IEquippedItemComponent> components);
 		
 		void PickUpItem(ICharacterEntity characterOwner);
 

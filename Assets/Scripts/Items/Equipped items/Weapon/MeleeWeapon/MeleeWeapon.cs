@@ -22,7 +22,7 @@ namespace Arenar.Items
         
         public float TimeBetweenAttacks { get; }
         
-        public MeleeWeaponInventoryItemData MeleeWeaponInventoryItemData
+        public MeleeWeaponItemData MeleeWeaponItemData
         {
             get;
             protected set;
@@ -38,10 +38,10 @@ namespace Arenar.Items
         { 
             get
             {
-                int damage = (int) MeleeWeaponInventoryItemData.MeleeWeaponData.DefaultDamage;
+                int damage = (int) MeleeWeaponItemData.MeleeWeaponData.DefaultDamage;
                 for (int i = 0; i < ItemLevel; i++)
                     damage += Random.Range(
-                        (int)MeleeWeaponInventoryItemData.MeleeWeaponData.BulletLevelMinDamage, (int)MeleeWeaponInventoryItemData.MeleeWeaponData.BulletLevelMaxDamage);
+                        (int)MeleeWeaponItemData.MeleeWeaponData.BulletLevelMinDamage, (int)MeleeWeaponItemData.MeleeWeaponData.BulletLevelMaxDamage);
 
                 return damage;
             } 
@@ -49,7 +49,7 @@ namespace Arenar.Items
         
         public ICharacterEntity ItemOwner { get; protected set; }
         
-        public ItemInventoryData ItemInventoryData { get; protected set; }
+        public ItemData ItemData { get; protected set; }
         
         public bool IsAttackProcess { get; private set; }
         
@@ -59,18 +59,18 @@ namespace Arenar.Items
             ItemLevel = itemLevel;
         }
 
-        public void InitializeItem(ItemInventoryData itemInventoryData,
+        public void InitializeItem(ItemData itemData,
                                    Dictionary<System.Type, IEquippedItemComponent> itemComponents)
         {
-            if (itemInventoryData is not MeleeWeaponInventoryItemData weaponInventoryItemData
-                || itemInventoryData.ItemType != ItemType.Weapon)
+            if (itemData is not MeleeWeaponItemData weaponInventoryItemData
+                || itemData.ItemType != ItemType.FirearmWeapon)
             {
-                Debug.LogError($"You try initialize weapon as {itemInventoryData.ItemType}. Check your code!");
+                Debug.LogError($"You try initialize weapon as {itemData.ItemType}. Check your code!");
                 return;
             }
 
-            MeleeWeaponInventoryItemData = weaponInventoryItemData;
-            ItemInventoryData = itemInventoryData;
+            MeleeWeaponItemData = weaponInventoryItemData;
+            ItemData = itemData;
             
             MeleeWeaponAttackComponent = GetEquippedComponent<IMeleeWeaponAttackComponent>(itemComponents);
         }
@@ -128,8 +128,8 @@ namespace Arenar.Items
                     ItemOwner,
                     (int)Damage,
                     0,
-                    MeleeWeaponInventoryItemData.MeleeWeaponData.GetStunPoints(),
-                    ItemOwner.CharacterTransform.forward * MeleeWeaponInventoryItemData.MeleeWeaponData.PhysicalMight
+                    MeleeWeaponItemData.MeleeWeaponData.GetStunPoints(),
+                    ItemOwner.CharacterTransform.forward * MeleeWeaponItemData.MeleeWeaponData.PhysicalMight
                 );
                 MeleeWeaponAttackComponent.MakeMeleeAttack(damageData);
             }

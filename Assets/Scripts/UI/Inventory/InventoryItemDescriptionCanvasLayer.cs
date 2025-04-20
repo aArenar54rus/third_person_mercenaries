@@ -1,3 +1,4 @@
+using Arenar.UI;
 using UnityEngine;
 
 
@@ -5,11 +6,13 @@ namespace Arenar.Services.UI
 {
     public class InventoryItemDescriptionCanvasLayer : CanvasWindowLayer
     {
-        [SerializeField] private ItemInformationPanelControl mainItemInformationPanelControl;
-        [SerializeField] private ItemInformationPanelControl secondItemInformationPanelControl;
+        [SerializeField]
+        private ItemInformationPanelControlWithButtons mainItemInformationPanelControl;
+        [SerializeField]
+        private ItemInformationPanelControl secondItemInformationPanelControl;
 
 
-        public ItemInformationPanelControl MainItemInformationPanelControl =>
+        public ItemInformationPanelControlWithButtons MainItemInformationPanelControl =>
             mainItemInformationPanelControl;
         
         public ItemInformationPanelControl SecondItemInformationPanelControl =>

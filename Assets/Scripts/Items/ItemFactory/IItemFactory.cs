@@ -5,6 +5,6 @@ namespace Arenar
 {
     public interface IItemFactory<TItem>
     {
-         TItem Create(ItemInventoryData prototypePrefab, int count, Transform parent, Vector3 instancePosition);
+         TItem Create(ItemData prototypePrefab, int count, Transform parent, Vector3 instancePosition);
      }
 }

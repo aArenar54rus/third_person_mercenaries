@@ -102,13 +102,13 @@ namespace Arenar.Character
             if (element is not ItemInteractableElement itemElement)
                 return;
 
-            if (!inventorySystem.TryAddItems(itemElement.ItemInventoryData, itemElement.Count,
+            if (!inventorySystem.TryAddItemsInBag(itemElement.ItemData, itemElement.Count,
                     out InventoryItemCellData inventoryItemData))
                 return;
 
             if (inventoryItemData != null)
             {
-                itemElement.SetItem(inventoryItemData.itemInventoryData, inventoryItemData.elementsCount);
+                itemElement.SetItem(inventoryItemData.itemData, inventoryItemData.ElementsCount);
             }
             else
             {

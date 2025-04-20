@@ -3,7 +3,7 @@ using UnityEngine;
 namespace Arenar.Items
 {
     [CreateAssetMenu(menuName = "Items/MeleeWeaponInventoryItemData")]
-    public class MeleeWeaponInventoryItemData : ItemInventoryData
+    public class MeleeWeaponItemData : ItemData
     {
         [SerializeField]
         private MeleeWeaponData meleeWeaponData;

@@ -11,5 +11,5 @@ public abstract class SubPanel : MonoBehaviour
         _rectTransform ??= GetComponent<RectTransform>();
     
     
-    public abstract void Initialize(ItemInventoryData itemInventoryData);
+    public abstract void Initialize(ItemData itemData);
 }

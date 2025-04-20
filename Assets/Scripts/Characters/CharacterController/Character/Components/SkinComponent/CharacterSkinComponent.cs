@@ -45,7 +45,7 @@ namespace Arenar.Character
 
         }
 
-        public void SetWeapon(ItemInventoryData itemInventoryData)
+        public void SetWeapon(ItemData itemData)
         {
             /*if (itemData.ItemType != ItemType.Weapon)
                 return;

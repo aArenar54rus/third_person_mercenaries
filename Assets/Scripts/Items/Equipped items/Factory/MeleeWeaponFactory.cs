@@ -21,16 +21,16 @@ namespace Arenar.Items
         }
         
 
-        public MeleeWeapon Create(ItemInventoryData itemInventoryData)
+        public MeleeWeapon Create(ItemData itemData)
         {
-            if (itemInventoryData is not MeleeWeaponInventoryItemData weaponInventoryItemData)
+            if (itemData is not MeleeWeaponItemData weaponInventoryItemData)
             {
                 Debug.LogError("Send wrong inventory Item Data");
                 return null;
             }
             
             MeleeWeapon weapon = GameObject.Instantiate(
-                    Resources.Load<GameObject>("Prefabs/Items/" + itemInventoryData.Id), null)
+                    Resources.Load<GameObject>("Prefabs/Items/" + itemData.Id), null)
                 .GetComponent<MeleeWeapon>();
             
             DiContainer subContainer = container.CreateSubContainer();
@@ -45,11 +45,11 @@ namespace Arenar.Items
             Dictionary<Type, IEquippedItemComponent> components = new Dictionary<Type, IEquippedItemComponent> ();
             components.Add(typeof(IMeleeWeaponAttackComponent), GetMeleeAttackComponent(weaponInventoryItemData));
             
-            weapon.InitializeItem(itemInventoryData, components);
+            weapon.InitializeItem(itemData, components);
             return weapon;
         }
         
-        private IMeleeWeaponAttackComponent GetMeleeAttackComponent(MeleeWeaponInventoryItemData weaponInventoryItemData)
+        private IMeleeWeaponAttackComponent GetMeleeAttackComponent(MeleeWeaponItemData weaponItemData)
         {
             return new MeleeWeaponAttackComponent();
         }

@@ -19,6 +19,15 @@ MonoBehaviour:
     _constantWeaponCellParametersArray:
     - _weaponCellIndex: 0
       _isLockWeapon: 1
-      constantWeaponInventoryData: {fileID: 11400000, guid: e008748b3806a984cbd9d74fecece2fd,
+      constantWeaponData: {fileID: 11400000, guid: e008748b3806a984cbd9d74fecece2fd,
         type: 2}
-    _bagCellParametersArray: []
+    _bagCellParametersArray:
+    - itemBagCellIndex: 0
+      itemCount: 1
+      bagData: {fileID: 11400000, guid: df8624631e1c4994a90edc3c0bf1f0b1, type: 2}
+    - itemBagCellIndex: 1
+      itemCount: 1
+      bagData: {fileID: 11400000, guid: ae94ce0ff5530174c9e931fd6390ebf5, type: 2}
+    - itemBagCellIndex: 2
+      itemCount: 10
+      bagData: {fileID: 11400000, guid: c21d0de02d1adfd42b3945f72a425b3d, type: 2}

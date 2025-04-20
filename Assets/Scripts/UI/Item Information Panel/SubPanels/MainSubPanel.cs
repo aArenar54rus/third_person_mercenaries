@@ -13,11 +13,11 @@ namespace Arenar
         [SerializeField] private Image icon = default;
         
         
-        public override void Initialize(ItemInventoryData itemInventoryData)
+        public override void Initialize(ItemData itemData)
         {
-            itemNameText.text = itemInventoryData.NameKey;
-            itemDescriptionText.text = itemInventoryData.DescKey;
-            icon.sprite = itemInventoryData.Icon;
+            itemNameText.text = itemData.NameKey;
+            itemDescriptionText.text = itemData.DescKey;
+            icon.sprite = itemData.Icon;
         }
     }
 }

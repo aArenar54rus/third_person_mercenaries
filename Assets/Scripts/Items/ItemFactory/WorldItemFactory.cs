@@ -16,7 +16,7 @@ namespace Arenar
         }
 
 
-        public ItemInteractableElement Create(ItemInventoryData prototypePrefab, int count, Transform parent, Vector3 instancePosition)
+        public ItemInteractableElement Create(ItemData prototypePrefab, int count, Transform parent, Vector3 instancePosition)
         {
             ItemInteractableElement itemObject = CreateObject(parent);
             itemObject.SetItem(prototypePrefab, count);

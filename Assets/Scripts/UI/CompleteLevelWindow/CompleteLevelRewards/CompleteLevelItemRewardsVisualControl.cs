@@ -3,16 +3,15 @@ using Arenar.Services.InventoryService;
 using TMPro;
 using UnityEngine;
 
-
 namespace Arenar.Services.UI
 {
     public class CompleteLevelItemRewardsVisualControl : MonoBehaviour
     {
         [SerializeField] private RectTransform _itemsContainer;
         [SerializeField] private TMP_Text _xpRewardText;
-        [SerializeField] private InventoryBagCellController _inventoryBagCellPrefab;
+        [SerializeField] private InventoryBagCellVisual _inventoryBagCellPrefab;
 
-        private List<InventoryBagCellController> _inventoryBags = new List<InventoryBagCellController>();
+        private List<InventoryBagCellVisual> _inventoryBags = new List<InventoryBagCellVisual>();
 
 
         public void ClearItemRewards()
@@ -24,9 +23,9 @@ namespace Arenar.Services.UI
             }
         }
 
-        public void AddItem(InventoryItemCellData invItemCellData)
+        public void AddItem(int cellIndex, InventoryItemCellData invItemCellData)
         {
-            InventoryBagCellController bag = null;
+            InventoryBagCellVisual bag = null;
             foreach (var invBag in _inventoryBags)
             {
                 if (invBag.gameObject.activeSelf)
@@ -43,7 +42,7 @@ namespace Arenar.Services.UI
             }
 
             bag.gameObject.SetActive(true);
-            bag.SetItem(invItemCellData);
+            bag.Initialize(cellIndex, invItemCellData);
         }
 
         public void SetXpValue(int xpValue)

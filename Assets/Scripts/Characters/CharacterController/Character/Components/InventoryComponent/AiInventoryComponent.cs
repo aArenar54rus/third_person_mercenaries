@@ -70,21 +70,21 @@ namespace Arenar.Character
             return;
         }
         
-        public void AddEquippedFirearmWeapon(ItemInventoryData itemInventoryData, int orderIndex)
+        public void AddEquippedFirearmWeapon(ItemData itemData, int orderIndex)
         {
             return;
             //throw new System.NotImplementedException();
         }
         
-        public void AddEquippedMeleeWeapon(ItemInventoryData itemInventoryData)
+        public void AddEquippedMeleeWeapon(ItemData itemData)
         {
-            var newMeleeWeapon = CreateWeapon(itemInventoryData) as MeleeWeapon;
+            var newMeleeWeapon = CreateWeapon(itemData) as MeleeWeapon;
             CurrentActiveMeleeWeapon = newMeleeWeapon;
         }
 
-        private IWeapon CreateWeapon(ItemInventoryData itemInventoryData)
+        private IWeapon CreateWeapon(ItemData itemData)
         {
-            var newWeapon = meleeWeaponFactory.Create(itemInventoryData);
+            var newWeapon = meleeWeaponFactory.Create(itemData);
             characterPhysicsData.RightHandPoint.AddItemInHand(newWeapon, newWeapon.RotationInHands);
             newWeapon.PickUpItem(character);
             newWeapon.gameObject.SetActive(true);

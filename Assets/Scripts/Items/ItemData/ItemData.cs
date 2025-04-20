@@ -3,16 +3,23 @@ using UnityEngine;
 
 namespace Arenar
 {
-    [CreateAssetMenu(menuName = "Items/ItemInventoryData")]
-    public class ItemInventoryData : ScriptableObject
+    // [CreateAssetMenu(menuName = "Items/ItemInventoryData")]
+    public abstract class ItemData : ScriptableObject
     {
-        [SerializeField] protected int _id = default;
-        [SerializeField] protected string _nameKey = default;
-        [SerializeField] protected string _descKey = default;
-        [SerializeField] protected ItemType _itemType = default;
-        [SerializeField] protected ItemRarity _itemRarity = default;
-        [SerializeField] private int _stackCountMax = default;
-        [SerializeField] private float _itemMass = default;
+        [SerializeField]
+        protected int _id = default;
+        [SerializeField]
+        protected string _nameKey = default;
+        [SerializeField]
+        protected string _descKey = default;
+        [SerializeField]
+        protected ItemType _itemType = default;
+        [SerializeField]
+        protected ItemRarity _itemRarity = default;
+        [SerializeField]
+        private int _stackCountMax = default;
+        [SerializeField]
+        private float _itemMass = default;
 
         
         [Space(10)]

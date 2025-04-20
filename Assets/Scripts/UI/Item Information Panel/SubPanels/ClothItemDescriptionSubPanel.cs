@@ -11,9 +11,9 @@ namespace Arenar
         [SerializeField] private TMP_Text defenceCountText = default;
         
         
-        public override void Initialize(ItemInventoryData itemInventoryData)
+        public override void Initialize(ItemData itemData)
         {
-            base.Initialize(itemInventoryData);
+            base.Initialize(itemData);
             MathDefenceTextValue();
         }
 

@@ -6,11 +6,16 @@ namespace Arenar.Services.UI
 {
     public class InventoryBagCanvasLayer : CanvasWindowLayer
     {
-        [SerializeField] private InventoryBagCellController[] inventoryCells;
-        [SerializeField] private Slider massSlider;
+        [SerializeField]
+        private RectTransform inventoryBagCellParent = null;
+        [SerializeField]
+        private InventoryBagCellVisual inventoryBagCellPrefab;
+        [SerializeField]
+        private Slider massSlider;
 
 
-        public InventoryBagCellController[] InventoryCells => inventoryCells;
+        public RectTransform InventoryBagCellParent => inventoryBagCellParent;
+        public InventoryBagCellVisual InventoryBagCellPrefab => inventoryBagCellPrefab;
         public Slider MassSlider => massSlider;
     }
 }

@@ -128,24 +128,24 @@ namespace Arenar.Character
 			CurrentActiveFirearmWeapon.gameObject.SetActive(true);
 		}
 		
-		public void AddEquippedFirearmWeapon(ItemInventoryData itemInventoryData, int orderIndex)
+		public void AddEquippedFirearmWeapon(ItemData itemData, int orderIndex)
 		{
-			var newWeapon = CreateWeapon(itemInventoryData) as FirearmWeapon;
+			var newWeapon = CreateWeapon(itemData) as FirearmWeapon;
 				
 			if (EquippedFirearmWeapons[orderIndex] != null)
 				GameObject.Destroy(EquippedFirearmWeapons[orderIndex].gameObject);
 			EquippedFirearmWeapons[orderIndex] = newWeapon;
 		}
 
-		public void AddEquippedMeleeWeapon(ItemInventoryData itemInventoryData)
+		public void AddEquippedMeleeWeapon(ItemData itemData)
 		{
-			var newMeleeWeapon = CreateWeapon(itemInventoryData) as MeleeWeapon;
+			var newMeleeWeapon = CreateWeapon(itemData) as MeleeWeapon;
 			CurrentActiveMeleeWeapon = newMeleeWeapon;
 		}
 
-		private IWeapon CreateWeapon(ItemInventoryData itemInventoryData)
+		private IWeapon CreateWeapon(ItemData itemData)
 		{
-			var newWeapon = firearmWeaponFactory.Create(itemInventoryData);
+			var newWeapon = firearmWeaponFactory.Create(itemData);
 			characterPhysicsData.RightHandPoint.AddItemInHand(newWeapon, newWeapon.RotationInHands);
 			newWeapon.PickUpItem(character);
 			newWeapon.gameObject.SetActive(false);
@@ -155,17 +155,17 @@ namespace Arenar.Character
 
 		private void LoadWeaponFromInventory()
 		{
-			InventoryItemCellData[] equippedWeaponDatas = inventoryService.GetEquippedWeapons();
+			InventoryItemCellData[] equippedWeaponDatas = inventoryService.GetEquippedFirearmWeapons();
 			EquippedFirearmWeapons = new FirearmWeapon[equippedWeaponDatas.Length];
 
 			for (int i = 0; i < equippedWeaponDatas.Length; i++)
 			{
 				var equippedWeaponInventoryData = equippedWeaponDatas[i];
 				if (equippedWeaponInventoryData == null
-					|| equippedWeaponInventoryData.itemInventoryData == null)
+					|| equippedWeaponInventoryData.itemData == null)
 					continue;
 
-				AddEquippedFirearmWeapon(equippedWeaponInventoryData.itemInventoryData, i);
+				AddEquippedFirearmWeapon(equippedWeaponInventoryData.itemData, i);
 			}
 		}
 	}

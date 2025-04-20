@@ -11,8 +11,8 @@ namespace Arenar.Character
         
         void ChangeActiveWeapon(int index);
 
-        void AddEquippedFirearmWeapon(ItemInventoryData itemInventoryData, int orderIndex);
+        void AddEquippedFirearmWeapon(ItemData itemData, int orderIndex);
 
-        void AddEquippedMeleeWeapon(ItemInventoryData itemInventoryData);
+        void AddEquippedMeleeWeapon(ItemData itemData);
     }
 }
