@@ -19,10 +19,18 @@ namespace Arenar.Character
 
         private Vector2 lookActionForLateUpdate;
 
+        private PlayerInput playerInput;
 
-        private PlayerInput PlayerInput =>
-            (PlayerInput)playerInputService.InputActionCollection;
 
+        private PlayerInput PlayerInput
+        {
+            get
+            {
+                playerInput ??= (PlayerInput)playerInputService.InputActionCollection;
+                return playerInput;
+            }
+        }
+        
         public Vector2 MoveAction =>
             PlayerInput.Player.Move.ReadValue<Vector2>();
         
