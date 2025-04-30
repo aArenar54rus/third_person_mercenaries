@@ -1,7 +1,7 @@
 using UnityEngine;
 using Zenject;
 
-namespace TakeTop.PreferenceSystem
+namespace Arenar.PreferenceSystem
 {
 	public class PreferenceInstaller : MonoInstaller
 	{

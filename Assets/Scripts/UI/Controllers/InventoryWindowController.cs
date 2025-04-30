@@ -13,7 +13,8 @@ namespace Arenar.Services.UI
     public class InventoryWindowController : CanvasWindowController
     {
         private IInventoryService inventoryService;
-        private IUiSoundManager _uiSoundManager;
+        private ICurrencyService currencyService;
+        private IUiSoundManager uiSoundManager;
 
         private InventoryCanvasWindow inventoryWindow;
         private InventoryEquipCanvasLayer inventoryEquipCanvasLayer;
@@ -27,13 +28,14 @@ namespace Arenar.Services.UI
         
         [Inject]
         public InventoryWindowController(IInventoryService inventoryService,
+                                         ICurrencyService currencyService,
                                          IPlayerInputService playerInputService,
                                          IUiSoundManager uiSoundManager)
             : base(playerInputService)
         {
             this.inventoryService = inventoryService;
             base.playerInputService = playerInputService;
-            _uiSoundManager = uiSoundManager;
+            this.uiSoundManager = uiSoundManager;
         }
         
         
@@ -65,7 +67,7 @@ namespace Arenar.Services.UI
             else
                 inventoryControlButtonsCanvasLayer.BackButton.Select();
             
-            inventoryControlButtonsCanvasLayer.MoneyWallet.UpdateText(inventoryService.CurrencyMoney);
+            inventoryControlButtonsCanvasLayer.MoneyWallet.UpdateText((int)currencyService.GetCurrencyValue(CurrencyType.Money));
             
             if (playerInputService.InputActionCollection is PlayerInput playerInput)
                 playerInput.UI.Decline.performed += OnInputAction_Decline;
@@ -214,7 +216,7 @@ namespace Arenar.Services.UI
 
         private void OnReturnToMenuBtnClick()
         {
-            _uiSoundManager.PlaySound(UiSoundType.StandartButtonClick);
+            uiSoundManager.PlaySound(UiSoundType.StandartButtonClick);
             canvasService.TransitionController
                 .PlayTransition<TransitionCrossFadeCanvasWindowLayerController,
                         InventoryCanvasWindow,
@@ -299,12 +301,11 @@ namespace Arenar.Services.UI
             
             void UseMoneyPackageButton()
             {
-                if (inventoryItemCellData.itemData is MaterialItemData materialItemData)
-                    inventoryService.CurrencyMoney += materialItemData.MaterialMight;
-                
+                if (inventoryItemCellData.itemData is CurrencyItemData materialItemData)
+                    currencyService.AddCurrencyValue((CurrencyType.Money, materialItemData.MaterialMight));
+
                 inventoryService.RemoveItemFromCell(cellIndex, 1, out InventoryItemCellData _);
-                
-                inventoryControlButtonsCanvasLayer.MoneyWallet.UpdateText(inventoryService.CurrencyMoney);
+                inventoryControlButtonsCanvasLayer.MoneyWallet.UpdateText((int)currencyService.GetCurrencyValue(CurrencyType.Money));
             }
         }
 

@@ -4,7 +4,6 @@ using Arenar.Character;
 using Arenar.LocationService;
 using Arenar.Services.SaveAndLoad;
 using Arenar.PreferenceSystem;
-using TakeTop.PreferenceSystem;
 using UnityEngine;
 using Zenject;
 

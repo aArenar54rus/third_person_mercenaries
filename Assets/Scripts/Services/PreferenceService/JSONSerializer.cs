@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 
-namespace TakeTop.JSON
+namespace Arenar.JSON
 {
 	public abstract class JSONSerializer : MonoBehaviour
 	{

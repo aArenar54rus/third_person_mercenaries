@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace TakeTop.PreferenceSystem
+namespace Arenar.PreferenceSystem
 {
 	public class SerializationKeyBuilder : MonoBehaviour
 	{

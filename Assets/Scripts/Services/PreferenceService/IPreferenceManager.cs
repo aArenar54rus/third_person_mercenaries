@@ -1,7 +1,7 @@
 ﻿using System;
 using Zenject;
 
-namespace TakeTop.PreferenceSystem
+namespace Arenar.PreferenceSystem
 {
 	public interface IPreferenceManager : ITickable
 	{

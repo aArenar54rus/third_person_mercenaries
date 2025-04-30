@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 
 
-namespace TakeTop.JSON
+namespace Arenar.JSON
 {
 	public class NewtonsoftJSONSerializer : JSONSerializer
 	{

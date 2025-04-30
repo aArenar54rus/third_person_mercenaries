@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace TakeTop
+namespace Arenar
 {
 	public class SlowUpdateProc
 	{

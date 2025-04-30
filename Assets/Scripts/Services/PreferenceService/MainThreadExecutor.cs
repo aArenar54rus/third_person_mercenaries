@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 using Module.General;
 using UnityEngine;
 
-namespace TakeTop.MainThread
+namespace Arenar.MainThread
 {
 	public class MainThreadExecutor : UpdatableObject
 	{

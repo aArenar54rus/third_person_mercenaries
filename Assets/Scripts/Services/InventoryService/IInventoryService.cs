@@ -18,8 +18,6 @@ namespace Arenar.Services.InventoryService
         
 		int InventoryMassMax { get; }
 		
-		int CurrencyMoney { get; set; }
-
 
 		InventoryItemCellData GetInventoryItemDataByCellIndex(int cellIndex);
 

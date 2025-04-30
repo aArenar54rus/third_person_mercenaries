@@ -1,13 +1,13 @@
-﻿using System;
+﻿using Arenar.JSON;
+using Arenar.MainThread;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using Module.General;
-using TakeTop.JSON;
-using TakeTop.MainThread;
 using UnityEngine;
 using Zenject;
 
-namespace TakeTop.PreferenceSystem
+namespace Arenar.PreferenceSystem
 {
 	public class PreferenceManager : MonoBehaviour, IPreferenceManager
 	{

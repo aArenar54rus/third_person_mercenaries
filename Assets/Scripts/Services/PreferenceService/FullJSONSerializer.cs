@@ -1,7 +1,7 @@
 ﻿using FullSerializer;
 using UnityEngine;
 
-namespace TakeTop.JSON
+namespace Arenar.JSON
 {
 	public class FullJSONSerializer : JSONSerializer
 	{
