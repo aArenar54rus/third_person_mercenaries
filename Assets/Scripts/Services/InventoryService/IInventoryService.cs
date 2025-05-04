@@ -19,31 +19,31 @@ namespace Arenar.Services.InventoryService
 		int InventoryMassMax { get; }
 		
 
-		InventoryItemCellData GetInventoryItemDataByCellIndex(int cellIndex);
+		InventoryCellData GetInventoryItemDataByCellIndex(int cellIndex);
 
-		InventoryItemCellData[] GetAllBagItems();
+		List<InventoryCellData> GetAllBagItems();
 
 		bool TryAddItemsInBag(ItemData itemInventoryData,
 						int count,
-						out InventoryItemCellData restOfItemsCell);
+						out InventoryCellData restOfCell);
         
-		bool TryAddItemInCurrentCell(int cellIndex, ItemData itemInventoryData, int count, out InventoryItemCellData restOfItemsCell);
+		bool TryAddItemInCurrentCell(int cellIndex, ItemData itemInventoryData, int count, out InventoryCellData restOfCell);
 
-		void RemoveItemFromCell(int cellIndex, int count, out InventoryItemCellData restOfItemsCell);
+		void RemoveItemFromCell(int cellIndex, int count, out InventoryCellData restOfCell);
 
 		bool IsEnoughItems(ItemData itemInventoryData, int neededCount);
         
 		bool IsEnoughItems(int itemIndex, int neededCount);
 
-		bool TryRemoveItems(ItemData itemInventoryData, int neededCount, out InventoryItemCellData restOfItemsCell);
+		bool TryRemoveItems(ItemData itemInventoryData, int neededCount, out InventoryCellData restOfCell);
         
-		bool TryRemoveItems(int itemIndex, int neededCount, out InventoryItemCellData restOfItemsCell);
+		bool TryRemoveItems(int itemIndex, int neededCount, out InventoryCellData restOfCell);
 
-		InventoryItemCellData GetEquippedMeleeWeapon();
+		InventoryCellData GetEquippedMeleeWeapon();
 		
-		InventoryItemCellData[] GetEquippedFirearmWeapons();
+		InventoryCellData[] GetEquippedFirearmWeapons();
 
-		InventoryItemCellData GetEquippedCloth(ItemClothType itemClothType);
+		InventoryCellData GetEquippedCloth(ItemClothType itemClothType);
 
 		void EquipMeleeWeaponFromBag(int bagItemIndex);
 	}

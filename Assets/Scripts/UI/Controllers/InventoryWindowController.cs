@@ -97,13 +97,13 @@ namespace Arenar.Services.UI
         private void InitializeInventoryBag()
         {
             var bagItems = inventoryService.GetAllBagItems();
-            for (int i = 0; i <  bagItems.Length; i++)
+            for (int i = 0; i <  bagItems.Count; i++)
                 AddCellBagVisual(i, bagItems[i]);
             
             inventoryService.OnUpdateInventoryCells += OnUpdateInventoryCells;
         }
 
-        private void AddCellBagVisual(int cellIndex, InventoryItemCellData inventoryCellData)
+        private void AddCellBagVisual(int cellIndex, InventoryCellData inventoryCellData)
         {
             if (inventoryCellData.itemData == null)
                 return;
@@ -162,7 +162,7 @@ namespace Arenar.Services.UI
             }
             */
             
-            InventoryItemCellData[] weaponInvItemCellData = inventoryService.GetEquippedFirearmWeapons();
+            InventoryCellData[] weaponInvItemCellData = inventoryService.GetEquippedFirearmWeapons();
             for (int i = 0; i < inventoryEquipCanvasLayer.WeaponCells.Length; i++)
             {
                 if (weaponInvItemCellData[i] == null || weaponInvItemCellData[i].itemData == null)
@@ -226,15 +226,15 @@ namespace Arenar.Services.UI
 
         private void OnCellSelected_InventoryCellBag(int cellIndex)
         {
-            InventoryItemCellData inventoryItemCellData = inventoryService.GetInventoryItemDataByCellIndex(cellIndex);
-            if (inventoryItemCellData.itemData == null)
+            InventoryCellData inventoryCellData = inventoryService.GetInventoryItemDataByCellIndex(cellIndex);
+            if (inventoryCellData.itemData == null)
             {
                 inventoryItemDescriptionCanvasLayer.MainItemInformationPanelControl.HideInfoPanel();
                 return;
             }
 
             bool isFindWeaponForCheck = false;
-            if (inventoryItemCellData.itemData is FirearmWeaponItemData weaponData)
+            if (inventoryCellData.itemData is FirearmWeaponItemData weaponData)
             {
                 var equippedWeapons = inventoryService.GetEquippedFirearmWeapons();
                 
@@ -266,17 +266,17 @@ namespace Arenar.Services.UI
 
         private void OnCellClicked_InventoryCellBag(int cellIndex)
         {
-            InventoryItemCellData inventoryItemCellData = inventoryService.GetInventoryItemDataByCellIndex(cellIndex);
-            if (inventoryItemCellData.itemData == null)
+            InventoryCellData inventoryCellData = inventoryService.GetInventoryItemDataByCellIndex(cellIndex);
+            if (inventoryCellData.itemData == null)
                 return;
 
             if (!TryGetVisualByCellIndex(cellIndex, out InventoryCellVisual cellVisual))
                 return;
             
             inventoryItemDescriptionCanvasLayer.MainItemInformationPanelControl
-                .ShowInfoPanel(cellVisual.transform.position, inventoryItemCellData, false);
+                .ShowInfoPanel(cellVisual.transform.position, inventoryCellData, false);
 
-            switch (inventoryItemCellData.itemData.ItemType)
+            switch (inventoryCellData.itemData.ItemType)
             {
                 case ItemType.MeleeWeapon:
                     inventoryItemDescriptionCanvasLayer.MainItemInformationPanelControl.AddButton("Equip", EquipMeleeWeaponButton);
@@ -291,7 +291,7 @@ namespace Arenar.Services.UI
             void EquipMeleeWeaponButton()
             {
                 inventoryService.EquipMeleeWeaponFromBag(cellIndex);
-                inventoryService.RemoveItemFromCell(cellIndex, 1, out InventoryItemCellData _);
+                inventoryService.RemoveItemFromCell(cellIndex, 1, out InventoryCellData _);
                 
                 RemoveBagCellVisual(cellIndex);
                 
@@ -301,10 +301,10 @@ namespace Arenar.Services.UI
             
             void UseMoneyPackageButton()
             {
-                if (inventoryItemCellData.itemData is CurrencyItemData materialItemData)
+                if (inventoryCellData.itemData is CurrencyItemData materialItemData)
                     currencyService.AddCurrencyValue((CurrencyType.Money, materialItemData.MaterialMight));
 
-                inventoryService.RemoveItemFromCell(cellIndex, 1, out InventoryItemCellData _);
+                inventoryService.RemoveItemFromCell(cellIndex, 1, out InventoryCellData _);
                 inventoryControlButtonsCanvasLayer.MoneyWallet.UpdateText((int)currencyService.GetCurrencyValue(CurrencyType.Money));
             }
         }

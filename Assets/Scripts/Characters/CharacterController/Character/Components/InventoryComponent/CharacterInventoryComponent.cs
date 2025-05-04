@@ -155,7 +155,7 @@ namespace Arenar.Character
 
 		private void LoadWeaponFromInventory()
 		{
-			InventoryItemCellData[] equippedWeaponDatas = inventoryService.GetEquippedFirearmWeapons();
+			InventoryCellData[] equippedWeaponDatas = inventoryService.GetEquippedFirearmWeapons();
 			EquippedFirearmWeapons = new FirearmWeapon[equippedWeaponDatas.Length];
 
 			for (int i = 0; i < equippedWeaponDatas.Length; i++)

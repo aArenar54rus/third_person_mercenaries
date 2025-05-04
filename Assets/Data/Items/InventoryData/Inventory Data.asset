@@ -16,11 +16,7 @@ MonoBehaviour:
     defaultMassMax: 200
     defaultInventoryCellsCount: 32
     equippedWeaponsCount: 4
-    _constantWeaponCellParametersArray:
-    - _weaponCellIndex: 0
-      _isLockWeapon: 1
-      constantWeaponData: {fileID: 11400000, guid: e008748b3806a984cbd9d74fecece2fd,
-        type: 2}
+    _constantWeaponCellParametersArray: []
     _bagCellParametersArray:
     - itemBagCellIndex: 0
       itemCount: 1

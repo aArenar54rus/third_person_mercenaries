@@ -70,9 +70,9 @@ namespace Arenar.Services.UI
 
         private void FormItemsForRemove()
         {
-            InventoryItemCellData[] bagItems = inventoryService.GetAllBagItems();
-            List<InventoryItemCellData> itemsToRemove = new List<InventoryItemCellData>(bagItems.Length);
-            foreach (InventoryItemCellData item in bagItems)
+            InventoryCellData[] bagItems = inventoryService.GetAllBagItems();
+            List<InventoryCellData> itemsToRemove = new List<InventoryCellData>(bagItems.Length);
+            foreach (InventoryCellData item in bagItems)
             {
                 if (item.itemData != null)
                     itemsToRemove.Add(item);
@@ -116,7 +116,7 @@ namespace Arenar.Services.UI
 
                 if (inventoryBagItemData.itemData.NameKey.Equals(itemName))
                 {
-                    inventoryService.TryRemoveItems(inventoryBagItemData.itemData, count, out InventoryItemCellData _);
+                    inventoryService.TryRemoveItems(inventoryBagItemData.itemData, count, out InventoryCellData _);
                     break;
                 }
             }
@@ -138,7 +138,7 @@ namespace Arenar.Services.UI
                     if (!itemData.CanStack)
                         inventoryDebugCanvasLayer.RemoveItemCountField.text = "1";
                     int count = int.Parse(inventoryDebugCanvasLayer.AddItemCountField.text);
-                    inventoryService.TryAddItemsInBag(itemData, count, out InventoryItemCellData _);
+                    inventoryService.TryAddItemsInBag(itemData, count, out InventoryCellData _);
                     break;
                 }
             }

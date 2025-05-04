@@ -17,9 +17,9 @@ namespace Arenar.UI
         private Queue<Button> deactiveButtonQueue = new Queue<Button>();
 
 
-        public override void ShowInfoPanel(Vector3 itemCellPosition, InventoryItemCellData invItemCellData, bool isEquipped = false)
+        public override void ShowInfoPanel(Vector3 itemCellPosition, InventoryCellData invCellData, bool isEquipped = false)
         {
-            base.ShowInfoPanel(itemCellPosition, invItemCellData, isEquipped);
+            base.ShowInfoPanel(itemCellPosition, invCellData, isEquipped);
             ClearButtons();
         }
 

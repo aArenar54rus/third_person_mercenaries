@@ -9,6 +9,6 @@ namespace Arenar.Services.SaveAndLoad
     [Serializable]
     public class InventorySaveDelegate
     {
-        [JsonProperty] public Dictionary<int, InventoryItemCellData> equippedWeapons;
+        [JsonProperty] public Dictionary<int, InventoryCellData> equippedWeapons;
     }
 }

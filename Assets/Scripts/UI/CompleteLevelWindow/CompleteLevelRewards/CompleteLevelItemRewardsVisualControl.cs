@@ -23,7 +23,7 @@ namespace Arenar.Services.UI
             }
         }
 
-        public void AddItem(int cellIndex, InventoryItemCellData invItemCellData)
+        public void AddItem(int cellIndex, InventoryCellData invCellData)
         {
             InventoryBagCellVisual bag = null;
             foreach (var invBag in _inventoryBags)
@@ -42,7 +42,7 @@ namespace Arenar.Services.UI
             }
 
             bag.gameObject.SetActive(true);
-            bag.Initialize(cellIndex, invItemCellData);
+            bag.Initialize(cellIndex, invCellData);
         }
 
         public void SetXpValue(int xpValue)

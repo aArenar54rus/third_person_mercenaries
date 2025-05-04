@@ -44,7 +44,7 @@ namespace Arenar.Services.UI
         }
         
         
-        public virtual void Initialize(int cellIndex, InventoryItemCellData inventoryCellData)
+        public virtual void Initialize(int cellIndex, InventoryCellData inventoryCellData)
         {
             rectTransform ??= gameObject.GetComponent<RectTransform>();
             PlayerInput.Player.Enable();

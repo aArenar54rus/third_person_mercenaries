@@ -27,53 +27,53 @@ namespace Arenar.UI
         private List<SubPanel> _spawnedSubPanels;
 
 
-        public virtual void ShowInfoPanel(Vector3 itemCellPosition, InventoryItemCellData invItemCellData, bool isEquipped = false)
+        public virtual void ShowInfoPanel(Vector3 itemCellPosition, InventoryCellData invCellData, bool isEquipped = false)
         {
             List<SubPanel> newSpawnedSubPanels = new List<SubPanel>();
             if (isEquipped)
             {
-                newSpawnedSubPanels.Add(GetSubPanel(invItemCellData.itemData, (EquippedSubPanel)equippedSubPanel));
+                newSpawnedSubPanels.Add(GetSubPanel(invCellData.itemData, (EquippedSubPanel)equippedSubPanel));
             }
 
-            ItemType itemType = invItemCellData.itemData.ItemType;
+            ItemType itemType = invCellData.itemData.ItemType;
             SubPanel mainSubPanel = mainSubPanels[itemType];
 
-            switch (invItemCellData.itemData.ItemType)
+            switch (invCellData.itemData.ItemType)
             {
                 case ItemType.Money:
-                    newSpawnedSubPanels.Add(GetSubPanel<MoneyItemDescriptionSubPanel>(invItemCellData.itemData,
+                    newSpawnedSubPanels.Add(GetSubPanel<MoneyItemDescriptionSubPanel>(invCellData.itemData,
                         (MoneyItemDescriptionSubPanel)mainSubPanel));
                     break;
                 
                 case ItemType.Material:
-                    newSpawnedSubPanels.Add(GetSubPanel<MaterialItemDescriptionSubPanel>(invItemCellData.itemData,
+                    newSpawnedSubPanels.Add(GetSubPanel<MaterialItemDescriptionSubPanel>(invCellData.itemData,
                         (MaterialItemDescriptionSubPanel)mainSubPanel));
                     break;
                 
                 case ItemType.MeleeWeapon:
                 case ItemType.FirearmWeapon:
-                    newSpawnedSubPanels.Add(GetSubPanel<WeaponItemDescriptionSubPanel>(invItemCellData.itemData,
+                    newSpawnedSubPanels.Add(GetSubPanel<WeaponItemDescriptionSubPanel>(invCellData.itemData,
                         (WeaponItemDescriptionSubPanel)mainSubPanel));
                     break;
                 
                 case ItemType.Cloth:
-                    newSpawnedSubPanels.Add(GetSubPanel<ClothItemDescriptionSubPanel>(invItemCellData.itemData,
+                    newSpawnedSubPanels.Add(GetSubPanel<ClothItemDescriptionSubPanel>(invCellData.itemData,
                         (ClothItemDescriptionSubPanel)mainSubPanel));
                     break;
                 
                 case ItemType.Quest:
-                    newSpawnedSubPanels.Add(GetSubPanel<QuestItemDescriptionSubPanel>(invItemCellData.itemData,
+                    newSpawnedSubPanels.Add(GetSubPanel<QuestItemDescriptionSubPanel>(invCellData.itemData,
                         (QuestItemDescriptionSubPanel)mainSubPanel));
                     break;
                 
                 default:
-                    Debug.LogError($"Unknown type {invItemCellData.itemData.ItemType} for info panel.");
+                    Debug.LogError($"Unknown type {invCellData.itemData.ItemType} for info panel.");
                     break;
             }
 
             if (itemType == ItemType.FirearmWeapon || itemType == ItemType.Cloth)
             {
-                newSpawnedSubPanels.Add(GetSubPanel<ItemParametersSubPanel>(invItemCellData.itemData,
+                newSpawnedSubPanels.Add(GetSubPanel<ItemParametersSubPanel>(invCellData.itemData,
                     (ItemParametersSubPanel)_itemParametersSubPanel));
             }
             

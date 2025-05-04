@@ -14,21 +14,21 @@ namespace Arenar.Services.UI
         private TMP_Text countText = default;
         
         
-        public override void Initialize(int cellIndex, InventoryItemCellData inventoryItemCellData)
+        public override void Initialize(int cellIndex, InventoryCellData inventoryCellData)
         {
-            base.Initialize(cellIndex, inventoryItemCellData);
+            base.Initialize(cellIndex, inventoryCellData);
 
-            if (inventoryItemCellData.itemData == null)
+            if (inventoryCellData.itemData == null)
             {
                 Debug.LogError("Emptiness cell data could not be initialized.");
                 return;
             }
 
-            itemNameText.text = inventoryItemCellData.itemData.NameKey;
-            itemTypeText.text = inventoryItemCellData.itemData.ItemType.ToString();
+            itemNameText.text = inventoryCellData.itemData.NameKey;
+            itemTypeText.text = inventoryCellData.itemData.ItemType.ToString();
 
-            countText.enabled = inventoryItemCellData.itemData.CanStack;
-            countText.text = $"{inventoryItemCellData.ElementsCount}/{inventoryItemCellData.itemData.StackCountMax}";
+            countText.enabled = inventoryCellData.itemData.CanStack;
+            countText.text = $"{inventoryCellData.ElementsCount}/{inventoryCellData.itemData.StackCountMax}";
         }
         
         public virtual void SetEmpty()

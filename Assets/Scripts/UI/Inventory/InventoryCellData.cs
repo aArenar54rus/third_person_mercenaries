@@ -3,9 +3,10 @@ using System;
 namespace Arenar.Services.InventoryService
 {
     [Serializable]
-    public class InventoryItemCellData
+    public class InventoryCellData
     {
         public ItemData itemData;
+        public int itemLevel = 0;
         private int elementsCount;
         
         
@@ -31,7 +32,7 @@ namespace Arenar.Services.InventoryService
             }
         }
         
-        public InventoryItemCellData(ItemData itemData = null, int elementsCount = 0)
+        public InventoryCellData(ItemData itemData = null, int elementsCount = 0)
         {
             this.itemData = itemData;
             this.ElementsCount = elementsCount;

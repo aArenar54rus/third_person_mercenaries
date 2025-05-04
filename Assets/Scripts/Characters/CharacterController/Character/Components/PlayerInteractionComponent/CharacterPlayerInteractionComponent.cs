@@ -103,7 +103,7 @@ namespace Arenar.Character
                 return;
 
             if (!inventorySystem.TryAddItemsInBag(itemElement.ItemData, itemElement.Count,
-                    out InventoryItemCellData inventoryItemData))
+                    out InventoryCellData inventoryItemData))
                 return;
 
             if (inventoryItemData != null)

@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Zenject;
 
 
@@ -27,18 +28,31 @@ namespace Arenar.Services.InventoryService
             [SerializeField]
             private int equippedWeaponsCount = 4;
             [SerializeField]
-            private ConstantWeaponCellParameters[] _constantWeaponCellParametersArray;
+            private ConstantWeaponCellParameters constantMeleeWeaponCellParameters;
+            [SerializeField]
+            private ConstantWeaponCellParameters[] constantWeaponCellParametersArray;
             [SerializeField]
             private StarterBagItemCellParameters[] _bagCellParametersArray;
+
+            [Space(5), Header("Mass")]
+            [SerializeField]
+            private bool isMathMass = false;
+            [SerializeField]
+            private bool isMathMassOfEquipped = false;
+            
 
 
             public int DefaultMassMax => defaultMassMax;
             public int DefaultInventoryCellsCount => defaultInventoryCellsCount;
             public int EquippedWeaponsCount => equippedWeaponsCount;
+            public ConstantWeaponCellParameters ConstantMeleeWeaponCellParameters =>
+                constantMeleeWeaponCellParameters;
             public ConstantWeaponCellParameters[] ConstantWeaponCellParametersArray =>
-                _constantWeaponCellParametersArray;
+                constantWeaponCellParametersArray;
             public StarterBagItemCellParameters[] BagCellParametersArray =>
                 _bagCellParametersArray;
+            public bool IsMathMass => isMathMass;
+            public bool IsMathMassEquipped => isMathMassOfEquipped;
 
 
             [Serializable]
@@ -46,15 +60,12 @@ namespace Arenar.Services.InventoryService
             {
                 [SerializeField]
                 private int _weaponCellIndex;
-                [SerializeField]
-                private bool _isLockWeapon;
-                [SerializeField]
-                private ItemData constantWeaponData;
+                [FormerlySerializedAs("constantWeaponDataIndex"),SerializeField]
+                private int constantWeaponId;
 
 
                 public int WeaponCellIndex => _weaponCellIndex;
-                public bool IsLockWeaponCell => _isLockWeapon;
-                public ItemData  ConstantWeaponData => constantWeaponData;
+                public int ConstantWeaponId => constantWeaponId;
             }
 
             [Serializable]
