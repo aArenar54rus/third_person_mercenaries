@@ -16,7 +16,12 @@ MonoBehaviour:
     defaultMassMax: 200
     defaultInventoryCellsCount: 32
     equippedWeaponsCount: 4
-    _constantWeaponCellParametersArray: []
+    constantMeleeWeaponCellParameters:
+      _weaponCellIndex: 0
+      _constantWeaponId: 4
+    constantWeaponCellParametersArray:
+    - _weaponCellIndex: 0
+      _constantWeaponId: 2
     _bagCellParametersArray:
     - itemBagCellIndex: 0
       itemCount: 1
@@ -27,3 +32,5 @@ MonoBehaviour:
     - itemBagCellIndex: 2
       itemCount: 10
       bagData: {fileID: 11400000, guid: c21d0de02d1adfd42b3945f72a425b3d, type: 2}
+    isMathMass: 0
+    isMathMassOfEquipped: 0

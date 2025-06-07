@@ -60,12 +60,12 @@ namespace Arenar.Services.InventoryService
             {
                 [SerializeField]
                 private int _weaponCellIndex;
-                [FormerlySerializedAs("constantWeaponDataIndex"),SerializeField]
-                private int constantWeaponId;
+                [SerializeField]
+                private int _constantWeaponId;
 
 
                 public int WeaponCellIndex => _weaponCellIndex;
-                public int ConstantWeaponId => constantWeaponId;
+                public int ConstantWeaponId => _constantWeaponId;
             }
 
             [Serializable]

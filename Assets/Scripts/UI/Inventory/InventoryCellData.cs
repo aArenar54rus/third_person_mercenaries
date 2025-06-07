@@ -6,14 +6,24 @@ namespace Arenar.Services.InventoryService
     public class InventoryCellData
     {
         public ItemData itemData;
-        public int itemLevel = 0;
-        private int elementsCount;
+        private int _itemLevel = 0;
+        private int _elementsCount;
         
         
         public int ElementsCount
         {
-            get => (itemData == null) ? 0 : elementsCount;
-            set => elementsCount = value;
+            get => (itemData == null) ? 0 : _elementsCount;
+            set => _elementsCount = value;
+        }
+
+        public int ItemLevel {
+            get => _itemLevel;
+            set
+            {
+                _itemLevel = value;
+                if (_itemLevel < 1)
+                    _itemLevel = 1;
+            }
         }
         
         public bool IsLocked { get; private set; } = false;

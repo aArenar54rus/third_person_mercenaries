@@ -18,10 +18,10 @@ namespace Arenar.Services.InventoryService
         
 		int InventoryMassMax { get; }
 		
+		Dictionary<int, InventoryCellData> InventoryCells { get; }
+		
 
 		InventoryCellData GetInventoryItemDataByCellIndex(int cellIndex);
-
-		List<InventoryCellData> GetAllBagItems();
 
 		bool TryAddItemsInBag(ItemData itemInventoryData,
 						int count,

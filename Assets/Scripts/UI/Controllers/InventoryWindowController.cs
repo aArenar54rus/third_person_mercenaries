@@ -12,9 +12,9 @@ namespace Arenar.Services.UI
 {
     public class InventoryWindowController : CanvasWindowController
     {
-        private IInventoryService inventoryService;
-        private ICurrencyService currencyService;
-        private IUiSoundManager uiSoundManager;
+        private readonly IInventoryService _inventoryService;
+        private readonly ICurrencyService _currencyService;
+        private readonly IUiSoundManager _uiSoundManager;
 
         private InventoryCanvasWindow inventoryWindow;
         private InventoryEquipCanvasLayer inventoryEquipCanvasLayer;
@@ -26,16 +26,15 @@ namespace Arenar.Services.UI
         private Queue<InventoryCellVisual> deactiveInventoryCells = new();
         
         
-        [Inject]
         public InventoryWindowController(IInventoryService inventoryService,
                                          ICurrencyService currencyService,
                                          IPlayerInputService playerInputService,
                                          IUiSoundManager uiSoundManager)
             : base(playerInputService)
         {
-            this.inventoryService = inventoryService;
-            base.playerInputService = playerInputService;
-            this.uiSoundManager = uiSoundManager;
+            _inventoryService = inventoryService;
+            _uiSoundManager = uiSoundManager;
+            _currencyService = currencyService;
         }
         
         
@@ -67,7 +66,7 @@ namespace Arenar.Services.UI
             else
                 inventoryControlButtonsCanvasLayer.BackButton.Select();
             
-            inventoryControlButtonsCanvasLayer.MoneyWallet.UpdateText((int)currencyService.GetCurrencyValue(CurrencyType.Money));
+            inventoryControlButtonsCanvasLayer.MoneyWallet.UpdateText((int)_currencyService.GetCurrencyValue(CurrencyType.Money));
             
             if (playerInputService.InputActionCollection is PlayerInput playerInput)
                 playerInput.UI.Decline.performed += OnInputAction_Decline;
@@ -96,11 +95,11 @@ namespace Arenar.Services.UI
 
         private void InitializeInventoryBag()
         {
-            var bagItems = inventoryService.GetAllBagItems();
+            var bagItems = _inventoryService.InventoryCells;
             for (int i = 0; i <  bagItems.Count; i++)
                 AddCellBagVisual(i, bagItems[i]);
             
-            inventoryService.OnUpdateInventoryCells += OnUpdateInventoryCells;
+            _inventoryService.OnUpdateInventoryCells += OnUpdateInventoryCells;
         }
 
         private void AddCellBagVisual(int cellIndex, InventoryCellData inventoryCellData)
@@ -132,7 +131,7 @@ namespace Arenar.Services.UI
         
         private void RemoveBagCellVisual(int cellIndex)
         {
-            if (inventoryService.GetInventoryItemDataByCellIndex(cellIndex) == null)
+            if (_inventoryService.GetInventoryItemDataByCellIndex(cellIndex) == null)
                 return;
             
             if (!TryGetVisualByCellIndex(cellIndex, out InventoryCellVisual neededCellVisual))
@@ -162,7 +161,7 @@ namespace Arenar.Services.UI
             }
             */
             
-            InventoryCellData[] weaponInvItemCellData = inventoryService.GetEquippedFirearmWeapons();
+            InventoryCellData[] weaponInvItemCellData = _inventoryService.GetEquippedFirearmWeapons();
             for (int i = 0; i < inventoryEquipCanvasLayer.WeaponCells.Length; i++)
             {
                 if (weaponInvItemCellData[i] == null || weaponInvItemCellData[i].itemData == null)
@@ -175,15 +174,15 @@ namespace Arenar.Services.UI
         private void UpdateInventoryMassVisual()
         {
             var massSlider = inventoryBagCanvasLayer.MassSlider;
-            massSlider.maxValue = inventoryService.InventoryMassMax;
-            massSlider.value = inventoryService.InventoryMass;
+            massSlider.maxValue = _inventoryService.InventoryMassMax;
+            massSlider.value = _inventoryService.InventoryMass;
         }
 
         private void OnUpdateInventoryCells(List<int> cellsIndexes)
         {
             foreach (var cellIndex in cellsIndexes)
             {
-                var inventoryCellData = inventoryService.GetInventoryItemDataByCellIndex(cellIndex);
+                var inventoryCellData = _inventoryService.GetInventoryItemDataByCellIndex(cellIndex);
 
                 if (inventoryCellData == null)
                     continue;
@@ -216,7 +215,7 @@ namespace Arenar.Services.UI
 
         private void OnReturnToMenuBtnClick()
         {
-            uiSoundManager.PlaySound(UiSoundType.StandartButtonClick);
+            _uiSoundManager.PlaySound(UiSoundType.StandartButtonClick);
             canvasService.TransitionController
                 .PlayTransition<TransitionCrossFadeCanvasWindowLayerController,
                         InventoryCanvasWindow,
@@ -226,7 +225,7 @@ namespace Arenar.Services.UI
 
         private void OnCellSelected_InventoryCellBag(int cellIndex)
         {
-            InventoryCellData inventoryCellData = inventoryService.GetInventoryItemDataByCellIndex(cellIndex);
+            InventoryCellData inventoryCellData = _inventoryService.GetInventoryItemDataByCellIndex(cellIndex);
             if (inventoryCellData.itemData == null)
             {
                 inventoryItemDescriptionCanvasLayer.MainItemInformationPanelControl.HideInfoPanel();
@@ -236,7 +235,7 @@ namespace Arenar.Services.UI
             bool isFindWeaponForCheck = false;
             if (inventoryCellData.itemData is FirearmWeaponItemData weaponData)
             {
-                var equippedWeapons = inventoryService.GetEquippedFirearmWeapons();
+                var equippedWeapons = _inventoryService.GetEquippedFirearmWeapons();
                 
                 for (int i = 0; i < equippedWeapons.Length; i++)
                 {
@@ -266,7 +265,7 @@ namespace Arenar.Services.UI
 
         private void OnCellClicked_InventoryCellBag(int cellIndex)
         {
-            InventoryCellData inventoryCellData = inventoryService.GetInventoryItemDataByCellIndex(cellIndex);
+            InventoryCellData inventoryCellData = _inventoryService.GetInventoryItemDataByCellIndex(cellIndex);
             if (inventoryCellData.itemData == null)
                 return;
 
@@ -290,8 +289,8 @@ namespace Arenar.Services.UI
             
             void EquipMeleeWeaponButton()
             {
-                inventoryService.EquipMeleeWeaponFromBag(cellIndex);
-                inventoryService.RemoveItemFromCell(cellIndex, 1, out InventoryCellData _);
+                _inventoryService.EquipMeleeWeaponFromBag(cellIndex);
+                _inventoryService.RemoveItemFromCell(cellIndex, 1, out InventoryCellData _);
                 
                 RemoveBagCellVisual(cellIndex);
                 
@@ -302,10 +301,10 @@ namespace Arenar.Services.UI
             void UseMoneyPackageButton()
             {
                 if (inventoryCellData.itemData is CurrencyItemData materialItemData)
-                    currencyService.AddCurrencyValue((CurrencyType.Money, materialItemData.MaterialMight));
+                    _currencyService.AddCurrencyValue((CurrencyType.Money, materialItemData.MaterialMight));
 
-                inventoryService.RemoveItemFromCell(cellIndex, 1, out InventoryCellData _);
-                inventoryControlButtonsCanvasLayer.MoneyWallet.UpdateText((int)currencyService.GetCurrencyValue(CurrencyType.Money));
+                _inventoryService.RemoveItemFromCell(cellIndex, 1, out InventoryCellData _);
+                inventoryControlButtonsCanvasLayer.MoneyWallet.UpdateText((int)_currencyService.GetCurrencyValue(CurrencyType.Money));
             }
         }
 

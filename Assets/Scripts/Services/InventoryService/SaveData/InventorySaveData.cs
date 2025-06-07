@@ -18,7 +18,7 @@ namespace Arenar
         [JsonProperty]
         private InventoryCellSaveData[] inventoryBagCells;
 
-
+        
         [JsonIgnore]
         public InventoryCellSaveData EquippedMeleeWeaponsCell
         {

@@ -70,9 +70,9 @@ namespace Arenar.Services.UI
 
         private void FormItemsForRemove()
         {
-            InventoryCellData[] bagItems = inventoryService.GetAllBagItems();
-            List<InventoryCellData> itemsToRemove = new List<InventoryCellData>(bagItems.Length);
-            foreach (InventoryCellData item in bagItems)
+            var bagItems = inventoryService.InventoryCells;
+            List<InventoryCellData> itemsToRemove = new List<InventoryCellData>(bagItems.Count);
+            foreach ((int cellIndex, InventoryCellData item) in bagItems)
             {
                 if (item.itemData != null)
                     itemsToRemove.Add(item);
@@ -103,20 +103,17 @@ namespace Arenar.Services.UI
         
         private void RemoveItemsButtonHandler()
         {
-            foreach (var inventoryBagItemData in inventoryService.GetAllBagItems())
+            foreach (var inventoryBagItemData in inventoryService.InventoryCells)
             {
-                if (inventoryBagItemData.itemData == null)
-                    continue;
-
                 string itemName = activeItemsList[inventoryDebugCanvasLayer.RemoveItemDropdown.value];
-                if (!inventoryBagItemData.itemData.CanStack)
+                if (!inventoryBagItemData.Value.itemData.CanStack)
                     inventoryDebugCanvasLayer.RemoveItemCountField.text = "1";
 
                 int count = int.Parse(inventoryDebugCanvasLayer.RemoveItemCountField.text);
 
-                if (inventoryBagItemData.itemData.NameKey.Equals(itemName))
+                if (inventoryBagItemData.Value.itemData.NameKey.Equals(itemName))
                 {
-                    inventoryService.TryRemoveItems(inventoryBagItemData.itemData, count, out InventoryCellData _);
+                    inventoryService.TryRemoveItems(inventoryBagItemData.Value.itemData, count, out InventoryCellData _);
                     break;
                 }
             }
@@ -149,12 +146,13 @@ namespace Arenar.Services.UI
         
         private void LogAllItemsButtonHandler()
         {
-            var items = inventoryService.GetAllBagItems();
+            var items = inventoryService.InventoryCells;
             
             Debug.LogError("Выводим список всех предметов:");
-            foreach (var itemData in items)
-            {
-                Debug.LogError($"item {itemData.itemData.NameKey}; count = {itemData.ElementsCount}");
+            foreach (var itemData in items) {
+                if (itemData.Value.itemData == null)
+                    continue;
+                Debug.LogError($"item {itemData.Value.itemData.NameKey}; count = {itemData.Value.ElementsCount}");
                 Debug.LogError("===========");
             }
             Debug.LogError("Конец");
