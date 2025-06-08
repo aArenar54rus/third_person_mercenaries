@@ -19,8 +19,8 @@ namespace Arenar.Services.InventoryService
         private IPreferenceManager _preferenceManager;
         private InventorySaveData _inventorySaveData;
         
-        private InventoryCellData equippedMeleeWeapon;
-        private InventoryCellData[] equippedFirearmWeapons;
+        private InventoryCellData _equippedMeleeWeapon;
+        private InventoryCellData[] _equippedFirearmWeapons;
         private Dictionary<ItemClothType, InventoryCellData> equippedClothItems;
         private Dictionary<int, InventoryCellData> _inventoryCells;
         
@@ -46,9 +46,9 @@ namespace Arenar.Services.InventoryService
                                 ItemCollectionData itemCollectionData,
                                 IPreferenceManager preferenceManager)
         {
-            this._parameters = parameters;
-            this._preferenceManager = preferenceManager;
-            this._itemCollectionData = itemCollectionData;
+            _parameters = parameters;
+            _preferenceManager = preferenceManager;
+            _itemCollectionData = itemCollectionData;
             
             Initialize();
         }
@@ -58,10 +58,10 @@ namespace Arenar.Services.InventoryService
             => _inventoryCells[cellIndex];
         
         public InventoryCellData GetEquippedMeleeWeapon()
-            => equippedMeleeWeapon;
+            => _equippedMeleeWeapon;
 
         public InventoryCellData[] GetEquippedFirearmWeapons()
-            => equippedFirearmWeapons;
+            => _equippedFirearmWeapons;
 
         public InventoryCellData GetEquippedCloth(ItemClothType itemClothType)
         {
@@ -82,7 +82,7 @@ namespace Arenar.Services.InventoryService
                 return;
             }
 
-            (equippedMeleeWeapon, _inventoryCells[bagItemIndex]) = (_inventoryCells[bagItemIndex], equippedMeleeWeapon);
+            (_equippedMeleeWeapon, _inventoryCells[bagItemIndex]) = (_inventoryCells[bagItemIndex], _equippedMeleeWeapon);
             
             CalculateMass();
             SaveData();
@@ -101,23 +101,6 @@ namespace Arenar.Services.InventoryService
                 restOfCell = new InventoryCellData(itemInventoryData, count);
                 return false;
             }
-
-            /*if (itemInventoryData.ItemType == ItemType.FirearmWeapon)
-            {
-                for (int i = 0; i < _inventorySaveData.EquippedFirearmWeaponCells.Length; i++)
-                {
-                    _inventorySaveData.EquippedFirearmWeaponCells[i] ??= new InventoryItemCellData();
-                    if (_inventorySaveData.EquippedFirearmWeaponCells[i].itemData != null)
-                        continue;
-                    
-                    _inventorySaveData.EquippedFirearmWeaponCells[i].itemData = itemInventoryData;
-                    _inventorySaveData.EquippedFirearmWeaponCells[i].ElementsCount = 1;
-                    restOfItemsCell = null;
-                    CalculateMass();
-                    OnUpdateEquippedWeaponItem?.Invoke();
-                    return true;
-                }
-            }*/
 
             if (!itemInventoryData.CanStack)
                 return TryAddInFreeCell(itemInventoryData, count, out restOfCell);
@@ -408,7 +391,7 @@ namespace Arenar.Services.InventoryService
                     currentInventoryMass += equippedClothItem.itemData.ItemMass;
                 }
 
-                foreach (var equippedWeapon in equippedFirearmWeapons)
+                foreach (var equippedWeapon in _equippedFirearmWeapons)
                 {
                     if (equippedWeapon == null || equippedWeapon.itemData == null)
                         continue;
@@ -416,8 +399,8 @@ namespace Arenar.Services.InventoryService
                     currentInventoryMass += equippedWeapon.itemData.ItemMass;
                 }
                 
-                if (equippedMeleeWeapon != null && equippedMeleeWeapon.itemData != null)
-                    currentInventoryMass += equippedMeleeWeapon.itemData.ItemMass;
+                if (_equippedMeleeWeapon != null && _equippedMeleeWeapon.itemData != null)
+                    currentInventoryMass += _equippedMeleeWeapon.itemData.ItemMass;
             }
         }
 
@@ -431,29 +414,24 @@ namespace Arenar.Services.InventoryService
                     _inventorySaveData.EquippedMeleeWeaponsCell.itemId
                 );
 
-                equippedMeleeWeapon = new InventoryCellData(meleeWeaponData, _inventorySaveData.EquippedMeleeWeaponsCell.itemCount);
+                _equippedMeleeWeapon = new InventoryCellData(meleeWeaponData, _inventorySaveData.EquippedMeleeWeaponsCell.itemCount);
             }
             else
             {
-                equippedMeleeWeapon = new InventoryCellData(null, 0);
+                _equippedMeleeWeapon = new InventoryCellData(null, 0);
             }
 
-            equippedFirearmWeapons = new InventoryCellData[_parameters.EquippedWeaponsCount];
+            _equippedFirearmWeapons = new InventoryCellData[_parameters.EquippedWeaponsCount];
             for (int i = 0; i < _parameters.EquippedWeaponsCount; i++)
             {
-                if (_inventorySaveData.EquippedFirearmWeaponCells.Length <= i
-                    || _inventorySaveData.EquippedFirearmWeaponCells[i] == null
-                    || _inventorySaveData.EquippedFirearmWeaponCells[i].itemId < 0)
+                if (_inventorySaveData.FirearmWeapons[i].itemId < 0)
                 {
-                    equippedFirearmWeapons[i] = new InventoryCellData(null, 0);
+                    _equippedFirearmWeapons[i] = new InventoryCellData(null, 0);
                     continue;
                 }
 
-                ItemData weaponData = _itemCollectionData.GetItemByIndex(
-                    _inventorySaveData.EquippedMeleeWeaponsCell.itemId
-                );
-
-                equippedFirearmWeapons[i] = new InventoryCellData(weaponData, 1);
+                ItemData weaponData = _itemCollectionData.GetItemByIndex(_inventorySaveData.FirearmWeapons[i].itemId);
+                _equippedFirearmWeapons[i] = new InventoryCellData(weaponData, 1);
             }
 
             _inventoryCells = new Dictionary<int, InventoryCellData>(_parameters.DefaultInventoryCellsCount);
@@ -478,40 +456,32 @@ namespace Arenar.Services.InventoryService
             InitializeNewInventorySaveData();
             
             // load melee weapon
-            var meleeWeapon = _parameters.ConstantMeleeWeaponCellParameters;
-            if (meleeWeapon != null)
+            var meleeWeaponId = _parameters.StarterMeleeWeaponId;
+            if (meleeWeaponId >= 0
+                && _itemCollectionData.IsCurrectItemType(meleeWeaponId, ItemType.MeleeWeapon))
             {
-                if (meleeWeapon.ConstantWeaponId < 0)
-                {
-                    _inventorySaveData.EquippedMeleeWeaponsCell = CreateSaveData(null);
-                }
-                else
-                {
-                    ItemData itemData = _itemCollectionData.GetItemByIndex(meleeWeapon.ConstantWeaponId);
-                    _inventorySaveData.EquippedMeleeWeaponsCell = CreateSaveData(itemData.ItemType != ItemType.MeleeWeapon ? null : itemData);
-                }
+                ItemData itemData = _itemCollectionData.GetItemByIndex(meleeWeaponId);
+                var data = CreateInventoryCellData(itemData, 1, 1);
+                _inventorySaveData.EquippedMeleeWeaponsCell.UpdateData(data);
             }
                 
             // load firearm weapon data
-            foreach (var firearmWeaponParameters in _parameters.ConstantWeaponCellParametersArray)
-            {
-                if (firearmWeaponParameters.ConstantWeaponId < 0)
+            foreach (var firearmWeaponParameters in _parameters.ConstantWeaponCellParametersArray) {
+                int itemId = firearmWeaponParameters.ConstantWeaponId;
+                if (itemId < 0 || !_itemCollectionData.IsCurrectItemType(itemId, ItemType.FirearmWeapon))
                 {
-                    _inventorySaveData.EquippedFirearmWeaponCells[firearmWeaponParameters.WeaponCellIndex] = CreateSaveData(null);
                     continue;
                 }
-                    
+
                 ItemData itemData = _itemCollectionData.GetItemByIndex(firearmWeaponParameters.ConstantWeaponId);
-                _inventorySaveData.EquippedFirearmWeaponCells[firearmWeaponParameters.WeaponCellIndex] =
-                    CreateSaveData(itemData.ItemType != ItemType.FirearmWeapon ? null : itemData);
+                var data = CreateInventoryCellData(itemData, 1, 1);
+                
+                _inventorySaveData.FirearmWeapons[firearmWeaponParameters.WeaponCellIndex].UpdateData(data);
             }
 
             foreach (var bagCellData in _parameters.BagCellParametersArray) {
-                InventoryCellData data = new InventoryCellData() {
-                        itemData = bagCellData.BagData,
-                        ItemLevel = 1,
-                        ElementsCount = bagCellData.ItemCount,
-                };
+                ItemData itemData = _itemCollectionData.GetItemByIndex(bagCellData.ItemId);
+                var data = CreateInventoryCellData(itemData, bagCellData.ItemCount, 1);
                 _inventorySaveData.InventoryBagCells[bagCellData.ItemBagCellIndex].UpdateData(data);
             }
 
@@ -524,38 +494,36 @@ namespace Arenar.Services.InventoryService
             {
                 _inventorySaveData.EquippedMeleeWeaponsCell = new InventoryCellSaveData();
             
-                _inventorySaveData.EquippedFirearmWeaponCells = new InventoryCellSaveData[_parameters.EquippedWeaponsCount];
+                _inventorySaveData.FirearmWeapons = new InventoryCellSaveData[_parameters.EquippedWeaponsCount];
                 for (int i = 0; i < _parameters.EquippedWeaponsCount; i++)
-                    _inventorySaveData.EquippedFirearmWeaponCells[i] = new InventoryCellSaveData();
+                    _inventorySaveData.FirearmWeapons[i] = new InventoryCellSaveData();
             
                 _inventorySaveData.InventoryBagCells = new InventoryCellSaveData[_parameters.DefaultInventoryCellsCount];
                 for (int i = 0; i < _parameters.DefaultInventoryCellsCount; i++)
                     _inventorySaveData.InventoryBagCells[i] = new InventoryCellSaveData();
+
+                _inventorySaveData.IsAddedContentEarly = false;
             }
         }
 
-        private InventoryCellSaveData CreateSaveData(ItemData itemData = null) {
-            InventoryCellData cellData = new() {
+        private InventoryCellData CreateInventoryCellData(ItemData itemData = null, int count = 1, int itemLevel = 1) {
+            return new() {
                     itemData = itemData,
-                    ElementsCount = itemData == null ? 0 : 1,
-                    ItemLevel = 1,
+                    ElementsCount = itemData == null ? 0 : count,
+                    ItemLevel = itemData == null ? 0 :itemLevel,
             };
-
-            InventoryCellSaveData saveData = new InventoryCellSaveData();
-            saveData.UpdateData(cellData);
-            return saveData;
         }
         
         private void SaveData()
         {
             // melee weapon
-            _inventorySaveData.EquippedMeleeWeaponsCell.UpdateData(equippedMeleeWeapon);
+            _inventorySaveData.EquippedMeleeWeaponsCell.UpdateData(_equippedMeleeWeapon);
 
             // firearm weapon
-            for (int i = 0; i < equippedFirearmWeapons.Length; i++)
+            for (int i = 0; i < _equippedFirearmWeapons.Length; i++)
             {
-                _inventorySaveData.EquippedFirearmWeaponCells[i]
-                    .UpdateData(equippedFirearmWeapons[i]);
+                _inventorySaveData.FirearmWeapons[i]
+                    .UpdateData(_equippedFirearmWeapons[i]);
             }
             
             _preferenceManager.SaveValue(_inventorySaveData);

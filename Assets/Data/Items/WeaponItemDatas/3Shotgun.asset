@@ -15,7 +15,7 @@ MonoBehaviour:
   _id: 3
   _nameKey: BJ-17
   _descKey: 
-  _itemType: 2
+  _itemType: 3
   _itemRarity: 0
   _stackCountMax: 1
   _itemMass: 7
@@ -23,17 +23,16 @@ MonoBehaviour:
     mesh: {fileID: 0}
     mass: 0
     materials: []
-  _weaponType: 2
   firearmWeaponData:
-    damageMultiplierByItemLevel: 2
     itemDamageMultiplierByRarity:
       IsSingleLineView: 1
       list: []
-    _bulletPhysicalMight: 10
+    _physicalMight: 10
     _defaultDamage: 7
     _minDamageByLvl: 1
     _maxDamageByLvl: 2
     attackSpeed: 1
+    firearmWeaponClass: 0
     firearmWeaponAttackType: 1
     effectType: 0
     isAutomaticShoot: 0
@@ -43,3 +42,5 @@ MonoBehaviour:
     isFullClipReload: 0
     projectileSpeed: 0
     recoilShakeDefaultValue: 10
+    stunPointMin: 0
+    stunPointMax: 0

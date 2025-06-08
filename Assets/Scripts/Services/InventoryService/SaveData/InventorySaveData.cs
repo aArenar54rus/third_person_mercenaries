@@ -7,14 +7,14 @@ using System.Collections.Generic;
 namespace Arenar
 {
     [Serializable]
-    public class InventorySaveData
+    public struct InventorySaveData
     {
         [JsonProperty]
-        private bool isAddedContentEarly = false;
+        private bool isAddedContentEarly;
         [JsonProperty]
         private InventoryCellSaveData equippedMeleeWeaponsCell;
         [JsonProperty]
-        private InventoryCellSaveData[] equippedFirearmWeaponsCells;
+        private InventoryCellSaveData[] firearmWeaponsCells;
         [JsonProperty]
         private InventoryCellSaveData[] inventoryBagCells;
 
@@ -27,10 +27,10 @@ namespace Arenar
         }
 
         [JsonIgnore]
-        public InventoryCellSaveData[] EquippedFirearmWeaponCells
+        public InventoryCellSaveData[] FirearmWeapons
         {
-            get => equippedFirearmWeaponsCells;
-            set => equippedFirearmWeaponsCells = value;
+            get => firearmWeaponsCells;
+            set => firearmWeaponsCells = value;
         }
         
         [JsonIgnore]

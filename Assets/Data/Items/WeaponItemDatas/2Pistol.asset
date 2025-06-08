@@ -15,7 +15,7 @@ MonoBehaviour:
   _id: 2
   _nameKey: RTT-09
   _descKey: 
-  _itemType: 2
+  _itemType: 3
   _itemRarity: 2
   _stackCountMax: 1
   _itemMass: 3
@@ -24,9 +24,7 @@ MonoBehaviour:
     mass: 5
     materials:
     - {fileID: 2100000, guid: 06d40dc2e1401784eb420a0d2d5d7235, type: 2}
-  _weaponType: 2
   firearmWeaponData:
-    damageMultiplierByItemLevel: 1.05
     itemDamageMultiplierByRarity:
       IsSingleLineView: 1
       list:
@@ -40,7 +38,7 @@ MonoBehaviour:
         Value: 1.17
       - Key: 4
         Value: 1.3
-    _bulletPhysicalMight: 20
+    _physicalMight: 20
     _defaultDamage: 10
     _minDamageByLvl: 2
     _maxDamageByLvl: 3
@@ -55,3 +53,5 @@ MonoBehaviour:
     isFullClipReload: 1
     projectileSpeed: 60
     recoilShakeDefaultValue: 3
+    stunPointMin: 0
+    stunPointMax: 0

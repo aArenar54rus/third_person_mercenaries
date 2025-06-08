@@ -28,7 +28,7 @@ namespace Arenar.Services.InventoryService
             [SerializeField]
             private int equippedWeaponsCount = 4;
             [SerializeField]
-            private ConstantWeaponCellParameters constantMeleeWeaponCellParameters;
+            private int starterMeleeWeaponId = 4;
             [SerializeField]
             private ConstantWeaponCellParameters[] constantWeaponCellParametersArray;
             [SerializeField]
@@ -45,8 +45,7 @@ namespace Arenar.Services.InventoryService
             public int DefaultMassMax => defaultMassMax;
             public int DefaultInventoryCellsCount => defaultInventoryCellsCount;
             public int EquippedWeaponsCount => equippedWeaponsCount;
-            public ConstantWeaponCellParameters ConstantMeleeWeaponCellParameters =>
-                constantMeleeWeaponCellParameters;
+            public int StarterMeleeWeaponId => starterMeleeWeaponId;
             public ConstantWeaponCellParameters[] ConstantWeaponCellParametersArray =>
                 constantWeaponCellParametersArray;
             public StarterBagItemCellParameters[] BagCellParametersArray =>
@@ -75,13 +74,13 @@ namespace Arenar.Services.InventoryService
                 private int itemBagCellIndex;
                 [SerializeField]
                 private int itemCount = 1;
-                [SerializeField]
-                private ItemData bagData;
+                [FormerlySerializedAs("itemIndex"),SerializeField]
+                private int _itemId;
 
 
                 public int ItemBagCellIndex => itemBagCellIndex;
                 public int ItemCount => itemCount;
-                public ItemData  BagData => bagData;
+                public int ItemId => _itemId;
             }
         }
     }

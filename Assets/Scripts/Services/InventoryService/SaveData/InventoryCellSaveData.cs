@@ -1,8 +1,11 @@
 using Newtonsoft.Json;
+using System;
+
 
 namespace Arenar.Services.InventoryService
 {
-    public class InventoryCellSaveData
+    [Serializable]
+    public struct InventoryCellSaveData
     {
         [JsonProperty]
         public int itemId;
@@ -15,8 +18,8 @@ namespace Arenar.Services.InventoryService
         public void UpdateData(InventoryCellData data) {
             bool isEmpty = (data == null || data.itemData == null);
             itemId = !isEmpty ? data.itemData.Id : -1;
-            itemCount = isEmpty ? data.ElementsCount : 0;
-            itemLevel = isEmpty ? data.ItemLevel : 0;
+            itemCount = !isEmpty ? data.ElementsCount : 0;
+            itemLevel = !isEmpty ? data.ItemLevel : 0;
         }
     }
 }

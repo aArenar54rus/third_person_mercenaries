@@ -24,9 +24,29 @@ namespace Arenar
         public SerializableDictionary<int, ItemData> GameItems => gameItems;
 
 
-        public ItemData GetItemByIndex(int index)
+        public bool IsCurrectItemType(int itemIndex, ItemType type) {
+            if (gameItems.ContainsKey(itemIndex)) {
+                return gameItems[itemIndex].ItemType == type;
+            }
+
+            return false;
+        }
+        
+        public ItemData GetFirst(ItemType type) {
+            foreach (var item in gameItems) {
+                if (item.Value.ItemType == type)
+                    return item.Value;
+            }
+
+            return null;
+        }
+
+        public ItemData GetItemByIndex(int itemIndex)
         {
-            return gameItems[index];
+            if (gameItems.ContainsKey(itemIndex))
+                return gameItems[itemIndex];
+
+            return null;
         }
     }
 }
