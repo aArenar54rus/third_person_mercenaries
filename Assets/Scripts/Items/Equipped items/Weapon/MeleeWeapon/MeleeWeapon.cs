@@ -63,7 +63,7 @@ namespace Arenar.Items
                                    Dictionary<System.Type, IEquippedItemComponent> itemComponents)
         {
             if (itemData is not MeleeWeaponItemData weaponInventoryItemData
-                || itemData.ItemType != ItemType.FirearmWeapon)
+                || itemData.ItemType != ItemType.MeleeWeapon)
             {
                 Debug.LogError($"You try initialize weapon as {itemData.ItemType}. Check your code!");
                 return;

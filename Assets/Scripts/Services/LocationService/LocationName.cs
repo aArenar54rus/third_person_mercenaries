@@ -14,5 +14,6 @@ namespace Arenar.LocationService
         Level_ShootingGallery_3 = 9,
         Level_ShootingGallery_4 = 10,
         Level_ShootingGallery_5 = 11,
+        location_01 = 12,
     }
 }

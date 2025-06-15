@@ -15,10 +15,10 @@ MonoBehaviour:
   _levelDatas:
   - _levelIndex: 1
     _levelNameKey: loc_key_level1
-    _levelPortrait: {fileID: 21300000, guid: fa01a32d397234543ba5700283d6c72c, type: 3}
-    _locationName: 2
+    _levelPortrait: {fileID: 0}
+    _locationName: 12
     _difficultData:
-      IsSingleLineView: 0
+      IsSingleLineView: 1
       list:
       - Key: 1
         Value:
