@@ -62,7 +62,7 @@ namespace Arenar.Character
             if (!IsAlive)
                 return;
 
-            var damage = damageData.isCritical ? damageData.WeaponDamageWithUpgrades * 2 : damageData.WeaponDamageWithUpgrades;
+            var damage = damageData.WeaponDamageWithUpgrades;
             HealthContainer.Health -= damage;
             
             OnCharacterChangeHealthValue?.Invoke(HealthContainer.Health, HealthContainer.HealthMax);

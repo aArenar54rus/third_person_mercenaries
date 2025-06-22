@@ -8,21 +8,21 @@ using UnityEngine;
 
 namespace Arenar.Character
 {
-    public class AiStateMachineController
-    {
-	    private ICharacterEntity characterEntity;
+	public class AiStateMachineController
+	{
+		private ICharacterEntity characterEntity;
 
-	    private ICharacterLiveComponent characterLiveComponent;
+		private ICharacterLiveComponent characterLiveComponent;
 	    
-	    private Dictionary<Type, IAIState> aiInitedStates;
-	    private IAIState currentState;
-	    private IAIState stateToSwitch;
+		private Dictionary<Type, IAIState> aiInitedStates;
+		private IAIState currentState;
+		private IAIState stateToSwitch;
 
-	    private Task asyncUpdateTask;
+		private Task asyncUpdateTask;
 	    
-	    private bool _isActiveAsync;
+		private bool _isActiveAsync;
 
-	    protected Vector3 MoveDirection { get; set; }
+		protected Vector3 MoveDirection { get; set; }
 
 		protected Vector3 RotationDirection { get; set; }
 		
@@ -51,7 +51,7 @@ namespace Arenar.Character
 
 
 		public void OnFixedTick() =>
-			HandleBaseLogic();
+				HandleBaseLogic();
 
 		public void Initialize()
 		{
@@ -133,14 +133,14 @@ namespace Arenar.Character
 			if (_isActiveAsync)
 			{
 				asyncUpdateTask = Task.Factory.StartNew(CurrentStateAsyncUpdate,
-					CancellationToken.None, TaskCreationOptions.AttachedToParent, TaskScheduler.Default);
+						CancellationToken.None, TaskCreationOptions.AttachedToParent, TaskScheduler.Default);
 			}
 
 			currentState.OnStateSyncUpdate();
 
 
 			void CurrentStateAsyncUpdate() =>
-				currentState.OnStateAsyncUpdate();
+					currentState.OnStateAsyncUpdate();
 		}
-    }
+	}
 }

@@ -3,7 +3,6 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
-
 namespace Arenar.Character
 {
     [CreateAssetMenu(menuName = "Characters/Enemy Character Parameters")]
@@ -30,7 +29,7 @@ namespace Arenar.Character
         [SerializeField]
         private int addedDamageByLvl;
         [SerializeField]
-        private StunPartData[] stunPartDatas;
+        private SerializableDictionary<ECharacterDamageContainerBodyType, CharacterPartData> _partDatas;
 
 
         public int BaseHealth => Random.Range(baseMinHealth, baseMaxHealth);
@@ -40,18 +39,19 @@ namespace Arenar.Character
         public SerializableDictionary<LevelDifficult, float> BaseRotationSpeed => _baseRotationSpeed;
         public int BaseDamage => baseDamage;
         public int AddedDamageByLvl => addedDamageByLvl;
+        public SerializableDictionary<ECharacterDamageContainerBodyType, CharacterPartData> PartDatas => _partDatas;
 
 
 
         [Serializable]
-        public class StunPartData
+        public class CharacterPartData
         {
-            private CharacterDamageContainerBodyType bodyType;
-            private int neededScoreForStun;
+            [SerializeField, Range(0.1f, 1.0f)] private float _stunScorePercent;
+            [SerializeField, Range(0.1f, 1.0f)] private float _criticalChance;
             
             
-            public CharacterDamageContainerBodyType BodyType => bodyType;
-            public int NeededScoreForStun => neededScoreForStun;
+            public float StunScorePercent => _stunScorePercent;
+            public float CriticalChance => _criticalChance;
         }
     }
 }

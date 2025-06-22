@@ -28,6 +28,12 @@ namespace Arenar.Character
             ShotgunHands = 9,
             RifleHands = 10,
             SwordAttack = 11,
+            StunHead = 12,
+            StunBody = 13,
+            StunLegLeft = 14,
+            StunLegRight = 15,
+            StunHandLeft = 16,
+            StunHandRight = 17,
         }
 
         

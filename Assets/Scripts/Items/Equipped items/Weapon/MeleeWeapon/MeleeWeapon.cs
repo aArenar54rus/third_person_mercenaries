@@ -126,6 +126,7 @@ namespace Arenar.Items
 
                 DamageData damageData = new DamageData(
                     ItemOwner,
+                    ECharacterDamageContainerBodyType.Body,
                     (int)Damage,
                     0,
                     MeleeWeaponItemData.MeleeWeaponData.GetStunPoints(),

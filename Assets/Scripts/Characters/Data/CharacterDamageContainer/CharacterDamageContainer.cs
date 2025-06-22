@@ -1,19 +1,17 @@
 using UnityEngine;
 
-
 namespace Arenar.Character
 {
 	[RequireComponent(typeof(Collider))]
 	public class CharacterDamageContainer : MonoBehaviour
 	{
 		[SerializeField]
-		private Collider collider;
+		private Collider _collider;
 		[SerializeField]
-		private CharacterDamageContainerBodyType bodyType;
-		[SerializeField]
-		private bool alwaysCriticalDamage = false;
+		private ECharacterDamageContainerBodyType _bodyType;
 		
-		private ICharacterLiveComponent characterLiveComponent;
+		private ICharacterLiveComponent _characterLiveComponent;
+		private IStunCharacterComponent _characterStunComponent;
 		
 		
 		public ICharacterEntity CharacterEntity { get; private set; }
@@ -21,19 +19,22 @@ namespace Arenar.Character
 		
 		public void Initialize(ICharacterEntity characterEntity)
 		{
-			collider ??= GetComponent<Collider>();
+			_collider ??= GetComponent<Collider>();
 			
 			CharacterEntity = characterEntity;
-			CharacterEntity.TryGetCharacterComponent<ICharacterLiveComponent>(out characterLiveComponent);
+			CharacterEntity.TryGetCharacterComponent<ICharacterLiveComponent>(out _characterLiveComponent);
+			CharacterEntity.TryGetCharacterComponent<IStunCharacterComponent>(out _characterStunComponent);
 		}
 		
 		public void SetDamage(DamageData damageData)
 		{
-			if (characterLiveComponent == null)
-				return;
-			
-			damageData.isCritical = alwaysCriticalDamage;
-			characterLiveComponent.SetDamage(damageData);
+			if (_characterLiveComponent != null) {
+				_characterLiveComponent.SetDamage(damageData);
+			}
+
+			if (_characterStunComponent != null) {
+				
+			}
 		}
 	}
 }

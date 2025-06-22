@@ -174,9 +174,13 @@ namespace Arenar.Items
         
         protected void CreateBullet(Vector3 direction, int damageByCharacter = 0)
         {
-            DamageData damageData = new DamageData(ItemOwner, (int)Damage,
-                damageByCharacter, FirearmWeaponItemData.FirearmWeaponData.GetStunPoints(),
-                direction * BulletPhysicalMight);
+            DamageData damageData = new DamageData(
+                    ItemOwner,
+                    ECharacterDamageContainerBodyType.None,
+                    (int)Damage, 
+                    damageByCharacter,
+                    FirearmWeaponItemData.FirearmWeaponData.GetStunPoints(),
+                    direction * BulletPhysicalMight);
             
             FirearmWeaponAttackComponent.MakeShoot(gunMuzzleTransform, direction, damageData);
         }

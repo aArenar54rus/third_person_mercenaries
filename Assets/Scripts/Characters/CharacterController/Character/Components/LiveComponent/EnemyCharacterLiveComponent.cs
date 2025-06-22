@@ -2,6 +2,8 @@ using System;
 using Arenar.Services.LevelsService;
 using RootMotion.Dynamics;
 using Zenject;
+using Random = UnityEngine.Random;
+
 
 namespace Arenar.Character
 {
@@ -49,8 +51,14 @@ namespace Arenar.Character
         {
             if (!IsAlive)
                 return;
+
+            var criticalChance = enemyCharacterDataStorage.EnemyCharacterParameters
+                    .PartDatas[damageData.BodyPart].CriticalChance;
+
+            float random = Random.Range(0, 100);
+            bool isCritical = (criticalChance * 100 > random);
             
-            var damage = damageData.isCritical ? damageData.WeaponDamageWithUpgrades * 2 : damageData.WeaponDamageWithUpgrades;
+            var damage = isCritical ? damageData.WeaponDamageWithUpgrades * 2 : damageData.WeaponDamageWithUpgrades;
             HealthContainer.Health -= damage;
             
             OnCharacterChangeHealthValue?.Invoke(HealthContainer.Health, HealthContainer.HealthMax);
@@ -68,8 +76,6 @@ namespace Arenar.Character
         {
             puppetMaster.state = PuppetMaster.State.Dead;
             HealthContainer.Health = 0;
-            //levelsService.CurrentLevelContext.PlayerDeath++;
-
             OnCharacterDie?.Invoke(characterEntity);
         }
 

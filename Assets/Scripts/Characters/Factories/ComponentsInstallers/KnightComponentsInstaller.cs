@@ -57,6 +57,11 @@ namespace Arenar.Character
 			Container.BindInstance(characterAttackComponent).AsSingle();
 			Container.Inject(characterAttackComponent);
 			
+			IStunCharacterComponent characterStunComponent = new BodyPartStunCharacterComponent();
+			characterComponentsPool.Add(typeof(IStunCharacterComponent), characterStunComponent);
+			Container.BindInstance(characterStunComponent).AsSingle();
+			Container.Inject(characterStunComponent);
+			
 			ICharacterDescriptionComponent characterDescriptionComponent = new PuppetCharacterDescriptionComponent();
 			characterComponentsPool.Add(typeof(ICharacterDescriptionComponent), characterDescriptionComponent);
 			Container.BindInstance(characterDescriptionComponent).AsSingle();

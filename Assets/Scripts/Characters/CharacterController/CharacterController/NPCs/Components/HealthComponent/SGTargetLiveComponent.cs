@@ -15,7 +15,7 @@ namespace Arenar.Character
         public event Action<int, int> OnCharacterChangeHealthValue;
         
         private ShootingGalleryTargetCharacterController _character;
-        private EnemyCharacterParameters enemyCharacterParameters;
+        private EnemyCharacterParameters _enemyCharacterParameters;
         
         private Transform _characterTransform;
         private Rigidbody _characterRigidbody;
@@ -43,7 +43,7 @@ namespace Arenar.Character
             _characterTransform = characterPhysicsDataStorage.Data.CharacterTransform;
             _characterRigidbody = characterPhysicsDataStorage.Data.CharacterModelRigidbody;
             _levelsService = levelsService;
-            enemyCharacterParameters = enemyCharacterDataStorage.Data.EnemyCharacterParameters;
+            _enemyCharacterParameters = enemyCharacterDataStorage.Data.EnemyCharacterParameters;
             _effectsSpawner = effectsSpawner;
             _damageNumbersService = damageNumbersService;
         }
@@ -63,8 +63,8 @@ namespace Arenar.Character
             _deathTween?.Kill(false);
 
             HealthContainer = new HealthContainer();
-            HealthContainer.HealthMax = enemyCharacterParameters.BaseHealth
-                + enemyCharacterParameters.AddedHealthByLvl
+            HealthContainer.HealthMax = _enemyCharacterParameters.BaseHealth
+                + _enemyCharacterParameters.AddedHealthByLvl
                 * (_character.CharacterLevel - 1);
             HealthContainer.Health = HealthContainer.HealthMax;
             SetAlive();

@@ -1215,9 +1215,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cad10829601201040b258a6c0ab0cf39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  collider: {fileID: 6831761792917588016}
-  bodyType: 2
-  alwaysCriticalDamage: 0
+  _collider: {fileID: 6831761792917588016}
+  _bodyType: 2
+  _alwaysCriticalDamage: 0
 --- !u!65 &6831761792917588016
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1251,9 +1251,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cad10829601201040b258a6c0ab0cf39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  collider: {fileID: 0}
-  bodyType: 0
-  alwaysCriticalDamage: 0
+  _collider: {fileID: 0}
+  _bodyType: 0
+  _alwaysCriticalDamage: 0
 --- !u!1 &697880648487071484
 GameObject:
   m_ObjectHideFlags: 0
@@ -1487,9 +1487,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cad10829601201040b258a6c0ab0cf39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  collider: {fileID: 1632346631653714370}
-  bodyType: 3
-  alwaysCriticalDamage: 0
+  _collider: {fileID: 1632346631653714370}
+  _bodyType: 5
+  _alwaysCriticalDamage: 0
 --- !u!54 &6701102734775865508
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1752,9 +1752,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cad10829601201040b258a6c0ab0cf39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  collider: {fileID: 340139976496988564}
-  bodyType: 4
-  alwaysCriticalDamage: 0
+  _collider: {fileID: 0}
+  _bodyType: 0
+  _alwaysCriticalDamage: 0
 --- !u!54 &6413347182569308670
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2706,9 +2706,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cad10829601201040b258a6c0ab0cf39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  collider: {fileID: 2661018716476642174}
-  bodyType: 4
-  alwaysCriticalDamage: 0
+  _collider: {fileID: 0}
+  _bodyType: 0
+  _alwaysCriticalDamage: 0
 --- !u!54 &5911842381107213340
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -3126,9 +3126,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cad10829601201040b258a6c0ab0cf39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  collider: {fileID: 428489060232111771}
-  bodyType: 4
-  alwaysCriticalDamage: 0
+  _collider: {fileID: 0}
+  _bodyType: 0
+  _alwaysCriticalDamage: 0
 --- !u!54 &4292973844732867547
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -4609,9 +4609,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cad10829601201040b258a6c0ab0cf39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  collider: {fileID: 933009781472186271}
-  bodyType: 1
-  alwaysCriticalDamage: 0
+  _collider: {fileID: 933009781472186271}
+  _bodyType: 1
+  _alwaysCriticalDamage: 0
 --- !u!54 &7873242375966176644
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -6068,9 +6068,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cad10829601201040b258a6c0ab0cf39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  collider: {fileID: 6113467983671019611}
-  bodyType: 2
-  alwaysCriticalDamage: 0
+  _collider: {fileID: 6113467983671019611}
+  _bodyType: 2
+  _alwaysCriticalDamage: 0
 --- !u!54 &8927304980103479039
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -7220,9 +7220,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cad10829601201040b258a6c0ab0cf39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  collider: {fileID: 1564809782385971775}
-  bodyType: 3
-  alwaysCriticalDamage: 0
+  _collider: {fileID: 1564809782385971775}
+  _bodyType: 3
+  _alwaysCriticalDamage: 0
 --- !u!1 &3493242156263750940
 GameObject:
   m_ObjectHideFlags: 0
@@ -7294,9 +7294,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cad10829601201040b258a6c0ab0cf39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  collider: {fileID: 7301617080468864392}
-  bodyType: 6
-  alwaysCriticalDamage: 1
+  _collider: {fileID: 7301617080468864392}
+  _bodyType: 6
+  _alwaysCriticalDamage: 1
 --- !u!54 &8912167569189031579
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -7343,10 +7343,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.11963797
+  m_Radius: 0.08
   m_Height: 0.21933627
   m_Direction: 1
-  m_Center: {x: -0.000000436271, y: 0.023887036, z: 0.0017247703}
+  m_Center: {x: -0.000000436271, y: 0.07, z: 0.0017247703}
 --- !u!153 &534470774166189110
 ConfigurableJoint:
   m_ObjectHideFlags: 0
@@ -7359,7 +7359,7 @@ ConfigurableJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.0000011996525, y: 0.3900148, z: -0.014102855}
+  m_ConnectedAnchor: {x: -0.0000011934861, y: 0.3900148, z: -0.014102855}
   serializedVersion: 3
   m_SecondaryAxis: {x: 0, y: 0, z: 1}
   m_XMotion: 0
@@ -8315,9 +8315,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cad10829601201040b258a6c0ab0cf39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  collider: {fileID: 45955956104286037}
-  bodyType: 4
-  alwaysCriticalDamage: 0
+  _collider: {fileID: 0}
+  _bodyType: 0
+  _alwaysCriticalDamage: 0
 --- !u!54 &1826555121907603600
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -13199,9 +13199,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cad10829601201040b258a6c0ab0cf39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  collider: {fileID: 7004261978894478064}
-  bodyType: 3
-  alwaysCriticalDamage: 0
+  _collider: {fileID: 7004261978894478064}
+  _bodyType: 3
+  _alwaysCriticalDamage: 0
 --- !u!54 &5971277054560641807
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -14282,7 +14282,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2418ed577100c144b90daff2a7e33c11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterType: 0
+  characterType: 3
   characterAudioDataStorage:
     audioSource: {fileID: 1027822485352485767}
     animationReactionsTriggerController: {fileID: 5834161856062466166}
@@ -14340,6 +14340,9 @@ MonoBehaviour:
     bodyTwoHandedAimPointObject: {fileID: 0}
   enemyCharacterDataStorage:
     parameters: {fileID: 11400000, guid: b8759d72e47c41f4cbd0e1a074dafca6, type: 2}
+    _bodyColliders:
+      IsSingleLineView: 1
+      list: []
 --- !u!114 &5314063536815717514
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15104,9 +15107,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cad10829601201040b258a6c0ab0cf39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  collider: {fileID: 4624297702664148081}
-  bodyType: 4
-  alwaysCriticalDamage: 0
+  _collider: {fileID: 0}
+  _bodyType: 0
+  _alwaysCriticalDamage: 0
 --- !u!54 &1147240137948999791
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -17318,9 +17321,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cad10829601201040b258a6c0ab0cf39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  collider: {fileID: 5954732642375767584}
-  bodyType: 4
-  alwaysCriticalDamage: 0
+  _collider: {fileID: 0}
+  _bodyType: 0
+  _alwaysCriticalDamage: 0
 --- !u!54 &5065219712035544425
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -17803,9 +17806,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cad10829601201040b258a6c0ab0cf39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  collider: {fileID: 3472810450681276666}
-  bodyType: 2
-  alwaysCriticalDamage: 0
+  _collider: {fileID: 3472810450681276666}
+  _bodyType: 2
+  _alwaysCriticalDamage: 0
 --- !u!54 &3101965790757239692
 Rigidbody:
   m_ObjectHideFlags: 0

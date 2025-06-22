@@ -208,9 +208,7 @@ namespace Arenar.Character
         private void MakeMeleeAttack()
         {
             if (InventoryComponent.CurrentActiveMeleeWeapon == null)
-            {
                 return;
-            }
             
             characterAnimationComponent.SetAnimationValue(CharacterAnimationComponent.AnimationValue.SwordAttack, 1);
             InventoryComponent.CurrentActiveMeleeWeapon.MakeMeleeAttack();

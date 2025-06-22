@@ -56,4 +56,14 @@ MonoBehaviour:
       Value: 150
   baseDamage: 20
   addedDamageByLvl: 5
-  stunPartDatas: []
+  stunPartDatas:
+  - bodyType: 1
+    neededScoreForStun: 0.9
+  - bodyType: 2
+    neededScoreForStun: 0.3
+  - bodyType: 3
+    neededScoreForStun: 0.3
+  - bodyType: 4
+    neededScoreForStun: 0.3
+  - bodyType: 5
+    neededScoreForStun: 0.3

@@ -5,6 +5,6 @@ namespace Arenar.Character
         bool IsStunned { get; }
         
         
-        void AddStunPoints(int stunPoints);
+        void AddStunPoints(int stunPoints, ECharacterDamageContainerBodyType bodyType);
     }
 }
