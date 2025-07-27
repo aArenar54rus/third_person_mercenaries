@@ -22,9 +22,9 @@ namespace Arenar.Character
 
         public override void OnStateBegin()
         {
-            characterAnimationComponent.SetAnimationValue(CharacterAnimationComponent.AnimationValue.Speed, 0);
-            characterAnimationComponent.SetAnimationValue(CharacterAnimationComponent.AnimationValue.MotionSpeedX, 0);
-            characterAnimationComponent.SetAnimationValue(CharacterAnimationComponent.AnimationValue.MotionSpeedY, 0);
+            characterAnimationComponent.SetAnimatorValue(CharacterAnimationComponent.AnimationValue.Speed, 0);
+            characterAnimationComponent.SetAnimatorValue(CharacterAnimationComponent.AnimationValue.MotionSpeedX, 0);
+            characterAnimationComponent.SetAnimatorValue(CharacterAnimationComponent.AnimationValue.MotionSpeedY, 0);
         }
 
         public override void OnStateSyncUpdate()

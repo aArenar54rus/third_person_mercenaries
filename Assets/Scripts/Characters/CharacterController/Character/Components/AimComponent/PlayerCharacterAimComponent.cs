@@ -77,7 +77,7 @@ namespace Arenar.Character
                 AimProgress = 0;
             }
 
-            CharacterAnimationComponent.SetAnimationValue(CharacterAnimationComponent.AnimationValue.Aim, AimProgress);
+            CharacterAnimationComponent.SetAnimatorValue(CharacterAnimationComponent.AnimationValue.Aim, AimProgress);
         }
     }
 }

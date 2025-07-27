@@ -33,7 +33,8 @@ namespace Arenar.Character
 			}
 
 			if (_characterStunComponent != null) {
-				
+				damageData.BodyPart = _bodyType;
+				_characterStunComponent.AddStunPoints(damageData);
 			}
 		}
 	}

@@ -35,6 +35,12 @@ namespace Arenar.Character
         [SerializeField]
         private string isHandRilfeAnimationKey = "HandRifle";
         [SerializeField]
+        private string stunStartTrigger = "StartStun";
+        [SerializeField]
+        private string stunCompleteTrigger = "CompleteStun";
+        [SerializeField]
+        private string stunValue = "StunValue";
+        [SerializeField]
         private string shootAnimationName = "Shoot";
         [SerializeField]
         private string reloadAnimationTriggerName = "Reload";
@@ -59,6 +65,9 @@ namespace Arenar.Character
         public string HandPistolAnimationName => handPistolAnimationName;
         public string IsHandShotgunAnimationKey => isHandShotgunAnimationKey;
         public string IsHandRifleAnimationKey => isHandRilfeAnimationKey;
+        public string StunStartTrigger => stunStartTrigger;
+        public string StunCompleteTrigger => stunCompleteTrigger;
+        public string StunValue => stunValue;
         public string ShootAnimationName => shootAnimationName;
         public string ReloadAnimationTriggerName => reloadAnimationTriggerName;
         public string SwordAttack => swordAttackTriggerName;

@@ -4,11 +4,11 @@ namespace Arenar.Character
 {
     public class AiCharacterBaseLogicComponent : IAiCharacterBaseLogicComponent, IFixedTickable
     {
-        private ICharacterEntity characterEntity;
-        private AIState[] aiStates;
+        private ICharacterEntity _characterEntity;
+        private AIState[] _aiStates;
         
-        private TickableManager tickableManager;
-        private AiStateMachineController aiStateMachine;
+        private TickableManager _tickableManager;
+        private AiStateMachineController _aiStateMachine;
         
         private IStunCharacterComponent _stunCharacterComponent;
 
@@ -22,59 +22,58 @@ namespace Arenar.Character
             TickableManager tickableManager,
             AIState[] aiStates)
         {
-            this.aiStates = aiStates;
-            this.characterEntity = characterEntity;
-            this.tickableManager = tickableManager;
+            _aiStates = aiStates;
+            _characterEntity = characterEntity;
+            _tickableManager = tickableManager;
         }
         
         public void Initialize()
         {
-            aiStateMachine = new AiStateMachineController(characterEntity, aiStates);
+            _aiStateMachine = new AiStateMachineController(_characterEntity, _aiStates);
         }
 
         public void DeInitialize()
         {
-            aiStateMachine = null;
+            _aiStateMachine = null;
         }
 
         public void OnActivate()
         {
-            if (IsControlBlocked)
-                tickableManager.AddFixed(this);
-            aiStateMachine.Initialize();
-            aiStateMachine.OnStart();
+            _tickableManager.AddFixed(this);
+            _aiStateMachine.Initialize();
+            _aiStateMachine.OnStart();
             IsControlBlocked = false;
             
-            characterEntity.TryGetCharacterComponent<IStunCharacterComponent>(out _stunCharacterComponent);
+            _characterEntity.TryGetCharacterComponent<IStunCharacterComponent>(out _stunCharacterComponent);
         }
 
         public void OnDeactivate()
         {
             IsControlBlocked = true;
-            tickableManager.RemoveFixed(this);
-            aiStateMachine.DeInitialize();
+            _tickableManager.RemoveFixed(this);
+            _aiStateMachine.DeInitialize();
         }
 
         public void SwitchState<T>() where T : IAIState 
         {
-            aiStateMachine.SwitchState<T>();
+            _aiStateMachine.SwitchState<T>();
         }
 
         public void SwitchStateAsync<T>() where T : IAIState
         {
-            aiStateMachine.SwitchStateAsync<T>();
+            _aiStateMachine.SwitchStateAsync<T>();
         }
 
         public T GetStateInstance<T>() where T : IAIState
         {
-            return aiStateMachine.GetStateInstance<T>();
+            return _aiStateMachine.GetStateInstance<T>();
         }
 
         public void FixedTick() {
-            if (IsControlBlocked || (_stunCharacterComponent != null && !_stunCharacterComponent.IsStunned))
+            if (IsControlBlocked || (_stunCharacterComponent != null && _stunCharacterComponent.IsStunned))
                 return;
             
-            aiStateMachine.OnFixedTick();
+            _aiStateMachine.OnFixedTick();
         }
     }
 }

@@ -1,7 +1,6 @@
+using DG.Tweening;
 using System.Collections.Generic;
-using UnityEngine;
 using Zenject;
-
 
 namespace Arenar.Character
 {
@@ -12,9 +11,9 @@ namespace Arenar.Character
         private ICharacterAnimationComponent<CharacterAnimationComponent.Animation,
                 CharacterAnimationComponent.AnimationValue> _characterAnimationComponent;
 
-        private CharacterAnimationComponent.AnimationValue _lastPlayedStunAnimation;
         private Dictionary<ECharacterDamageContainerBodyType, StunHealthData> _bodyPartsHealths = new();
 
+        private Tween _tween;
 
         public bool IsStunned { get; private set; } = false;
 
@@ -49,70 +48,34 @@ namespace Arenar.Character
         
         public void OnDeactivate()
         {
-            if (_lastPlayedStunAnimation != CharacterAnimationComponent.AnimationValue.None) {
-                _characterAnimationComponent.onAnimationEvent -= OnStunAnimationComplete;
-                _characterAnimationComponent.SetAnimationValue(_lastPlayedStunAnimation, 0);
-            }
-            
-            IsStunned = false;
+            OnStunAnimationComplete();
+            _tween?.Kill(false);
         }
 
-        public void AddStunPoints(int stunPoints, ECharacterDamageContainerBodyType bodyType) {
+        public void AddStunPoints(DamageData damageData) {
             if (IsStunned)
                 return;
             
-            if (!_bodyPartsHealths.ContainsKey(bodyType))
+            if (!_bodyPartsHealths.ContainsKey(damageData.BodyPart))
                 return;
 
-            _bodyPartsHealths[bodyType].StunHealth -= stunPoints;
-            if (_bodyPartsHealths[bodyType].StunHealth <= 0) {
-                MakeStun(bodyType);
+            _bodyPartsHealths[damageData.BodyPart].StunHealth -= damageData.AddedStunPoint;
+            if (_bodyPartsHealths[damageData.BodyPart].StunHealth <= 0) {
+                MakeStun(damageData.BodyPart);
             }
         }
         
         private void MakeStun(ECharacterDamageContainerBodyType bodyType) {
-            if (_lastPlayedStunAnimation != CharacterAnimationComponent.AnimationValue.None) {
-                _characterAnimationComponent.onAnimationEvent -= OnStunAnimationComplete;
-                _characterAnimationComponent.SetAnimationValue(_lastPlayedStunAnimation, 0);
-                IsStunned = false;
-                return;
-            }
+            _characterAnimationComponent.SetAnimatorValue(CharacterAnimationComponent.AnimationValue.StunIndex, (int)bodyType);
+            _characterAnimationComponent.SetAnimatorValue(CharacterAnimationComponent.AnimationValue.StunStart, 1);
 
-            switch (bodyType) {
-                case ECharacterDamageContainerBodyType.Body:
-                    _lastPlayedStunAnimation = CharacterAnimationComponent.AnimationValue.StunBody;
-                    break;
-                case ECharacterDamageContainerBodyType.Head:
-                    _lastPlayedStunAnimation = CharacterAnimationComponent.AnimationValue.StunHead;
-                    break;
-                case ECharacterDamageContainerBodyType.HandLeft:
-                    _lastPlayedStunAnimation = CharacterAnimationComponent.AnimationValue.StunHandLeft;
-                    break;
-                case ECharacterDamageContainerBodyType.HandRight:
-                    _lastPlayedStunAnimation = CharacterAnimationComponent.AnimationValue.StunHandRight;
-                    break;
-                case ECharacterDamageContainerBodyType.LegLeft:
-                    _lastPlayedStunAnimation = CharacterAnimationComponent.AnimationValue.StunLegLeft;
-                    break;
-                case ECharacterDamageContainerBodyType.LegRight:
-                    _lastPlayedStunAnimation = CharacterAnimationComponent.AnimationValue.StunLegRight;
-                    break;
-                default:
-                    Debug.Log($"Unknown body type {bodyType}. Check Stun character component.");
-                    return;
-            }
-            
-            _characterAnimationComponent.SetAnimationValue(_lastPlayedStunAnimation, 1);
-            _characterAnimationComponent.onAnimationEvent += OnStunAnimationComplete;
+            _tween = DOVirtual.DelayedCall(_enemyCharacterParameters.StunTime, OnStunAnimationComplete);
             IsStunned = true;
         }
         
-        private void OnStunAnimationComplete(string animationEventKey) {
-            if (animationEventKey != AnimationEventKeys.COMPLETE_STUN)
-                return;
-
-            _characterAnimationComponent.SetAnimationValue(_lastPlayedStunAnimation, 0);
-            _characterAnimationComponent.onAnimationEvent -= OnStunAnimationComplete;
+        private void OnStunAnimationComplete() {
+            _characterAnimationComponent.SetAnimatorValue(CharacterAnimationComponent.AnimationValue.StunIndex, 0);
+            _characterAnimationComponent.SetAnimatorValue(CharacterAnimationComponent.AnimationValue.StunStart, 0);
             IsStunned = false;
         }
     }

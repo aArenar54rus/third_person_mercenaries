@@ -51,9 +51,10 @@ namespace Arenar.Character
         {
             if (!IsAlive)
                 return;
-
-            var criticalChance = enemyCharacterDataStorage.EnemyCharacterParameters
-                    .PartDatas[damageData.BodyPart].CriticalChance;
+            
+            float criticalChance = 0.0f;
+            if (enemyCharacterDataStorage.EnemyCharacterParameters.PartDatas.ContainsKey(damageData.BodyPart))
+                criticalChance = enemyCharacterDataStorage.EnemyCharacterParameters.PartDatas[damageData.BodyPart].CriticalChance;
 
             float random = Random.Range(0, 100);
             bool isCritical = (criticalChance * 100 > random);

@@ -89,7 +89,7 @@ namespace Arenar.Character
         {
             if (targetPosition == Vector3.zero)
             {
-                characterAnimationComponent?.SetAnimationValue(CharacterAnimationComponent.AnimationValue.Speed, 0);
+                characterAnimationComponent?.SetAnimatorValue(CharacterAnimationComponent.AnimationValue.Speed, 0);
                 return;
             }
             
@@ -99,7 +99,7 @@ namespace Arenar.Character
             }
 
             navMeshAgent.SetDestination(targetPosition);
-            characterAnimationComponent?.SetAnimationValue(CharacterAnimationComponent.AnimationValue.Speed, 0.5f);
+            characterAnimationComponent?.SetAnimatorValue(CharacterAnimationComponent.AnimationValue.Speed, 0.5f);
         }
 
         public void Rotation(Vector2 direction)

@@ -101,27 +101,27 @@ namespace Arenar.Character
 					break;
 				
 				case FirearmWeaponClass.None:
-					characterAnimationComponent.SetAnimationValue(CharacterAnimationComponent.AnimationValue.PistolHands, 0);
-					characterAnimationComponent.SetAnimationValue(CharacterAnimationComponent.AnimationValue.ShotgunHands, 0);
-					characterAnimationComponent.SetAnimationValue(CharacterAnimationComponent.AnimationValue.RifleHands, 0);
+					characterAnimationComponent.SetAnimatorValue(CharacterAnimationComponent.AnimationValue.PistolHands, 0);
+					characterAnimationComponent.SetAnimatorValue(CharacterAnimationComponent.AnimationValue.ShotgunHands, 0);
+					characterAnimationComponent.SetAnimatorValue(CharacterAnimationComponent.AnimationValue.RifleHands, 0);
 					break;
 				
 				case FirearmWeaponClass.Pistol:
-					characterAnimationComponent.SetAnimationValue(CharacterAnimationComponent.AnimationValue.PistolHands, 1);
-					characterAnimationComponent.SetAnimationValue(CharacterAnimationComponent.AnimationValue.ShotgunHands, 0);
-					characterAnimationComponent.SetAnimationValue(CharacterAnimationComponent.AnimationValue.RifleHands, 0);
+					characterAnimationComponent.SetAnimatorValue(CharacterAnimationComponent.AnimationValue.PistolHands, 1);
+					characterAnimationComponent.SetAnimatorValue(CharacterAnimationComponent.AnimationValue.ShotgunHands, 0);
+					characterAnimationComponent.SetAnimatorValue(CharacterAnimationComponent.AnimationValue.RifleHands, 0);
 					break;
 				
 				case FirearmWeaponClass.Shotgun:
-					characterAnimationComponent.SetAnimationValue(CharacterAnimationComponent.AnimationValue.PistolHands, 0);
-					characterAnimationComponent.SetAnimationValue(CharacterAnimationComponent.AnimationValue.ShotgunHands, 1);
-					characterAnimationComponent.SetAnimationValue(CharacterAnimationComponent.AnimationValue.RifleHands, 0);
+					characterAnimationComponent.SetAnimatorValue(CharacterAnimationComponent.AnimationValue.PistolHands, 0);
+					characterAnimationComponent.SetAnimatorValue(CharacterAnimationComponent.AnimationValue.ShotgunHands, 1);
+					characterAnimationComponent.SetAnimatorValue(CharacterAnimationComponent.AnimationValue.RifleHands, 0);
 					break;
 				
 				case FirearmWeaponClass.Rifle:
-					characterAnimationComponent.SetAnimationValue(CharacterAnimationComponent.AnimationValue.PistolHands, 0);
-					characterAnimationComponent.SetAnimationValue(CharacterAnimationComponent.AnimationValue.ShotgunHands, 0);
-					characterAnimationComponent.SetAnimationValue(CharacterAnimationComponent.AnimationValue.RifleHands, 1);
+					characterAnimationComponent.SetAnimatorValue(CharacterAnimationComponent.AnimationValue.PistolHands, 0);
+					characterAnimationComponent.SetAnimatorValue(CharacterAnimationComponent.AnimationValue.ShotgunHands, 0);
+					characterAnimationComponent.SetAnimatorValue(CharacterAnimationComponent.AnimationValue.RifleHands, 1);
 					break;
 			}
 			

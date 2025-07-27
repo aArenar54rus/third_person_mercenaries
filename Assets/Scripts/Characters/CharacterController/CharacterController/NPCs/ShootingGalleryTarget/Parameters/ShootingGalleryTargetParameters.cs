@@ -9,6 +9,10 @@ namespace Arenar.Character
     public class EnemyCharacterParameters : ScriptableObject
     {
         [SerializeField]
+        private SerializableDictionary<ECharacterDamageContainerBodyType, CharacterPartData> _partDatas;
+        
+        [Space(10), Header("Health")]
+        [SerializeField]
         private int baseMinHealth;
         [SerializeField]
         private int baseMaxHealth;
@@ -28,8 +32,10 @@ namespace Arenar.Character
         private int baseDamage;
         [SerializeField]
         private int addedDamageByLvl;
+        
+        [Space(10), Header("Attack")]
         [SerializeField]
-        private SerializableDictionary<ECharacterDamageContainerBodyType, CharacterPartData> _partDatas;
+        private float stunTime;
 
 
         public int BaseHealth => Random.Range(baseMinHealth, baseMaxHealth);
@@ -39,6 +45,7 @@ namespace Arenar.Character
         public SerializableDictionary<LevelDifficult, float> BaseRotationSpeed => _baseRotationSpeed;
         public int BaseDamage => baseDamage;
         public int AddedDamageByLvl => addedDamageByLvl;
+        public float StunTime => stunTime;
         public SerializableDictionary<ECharacterDamageContainerBodyType, CharacterPartData> PartDatas => _partDatas;
 
 

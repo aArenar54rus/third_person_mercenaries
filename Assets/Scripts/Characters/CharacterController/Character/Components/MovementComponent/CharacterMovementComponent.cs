@@ -166,9 +166,9 @@ namespace Arenar.Character
             if (animationBlend > 0.05f)
                 animationSpeedBlend = currentHorizontalSpeed / playerCharacterParametersData.MoveSpeed * runningAnimMultiplier;
 
-            characterAnimationComponent.SetAnimationValue(Character.CharacterAnimationComponent.AnimationValue.Speed, animationSpeedBlend);
-            characterAnimationComponent.SetAnimationValue(Character.CharacterAnimationComponent.AnimationValue.MotionSpeedX, animationBlendX);
-            characterAnimationComponent.SetAnimationValue(Character.CharacterAnimationComponent.AnimationValue.MotionSpeedY, animationBlendZ);
+            characterAnimationComponent.SetAnimatorValue(Character.CharacterAnimationComponent.AnimationValue.Speed, animationSpeedBlend);
+            characterAnimationComponent.SetAnimatorValue(Character.CharacterAnimationComponent.AnimationValue.MotionSpeedX, animationBlendX);
+            characterAnimationComponent.SetAnimatorValue(Character.CharacterAnimationComponent.AnimationValue.MotionSpeedY, animationBlendZ);
         }
 
         public void Rotation(Vector2 direction)
@@ -204,9 +204,9 @@ namespace Arenar.Character
             {
                 fallTimeoutDelta = playerCharacterParametersData.FallTimeout;
 
-                characterAnimationComponent.SetAnimationValue(CharacterAnimationComponent.AnimationValue.Grounded, 1); 
-                characterAnimationComponent.SetAnimationValue(CharacterAnimationComponent.AnimationValue.Jump, 0);
-                characterAnimationComponent.SetAnimationValue(CharacterAnimationComponent.AnimationValue.FreeFall, 0);
+                characterAnimationComponent.SetAnimatorValue(CharacterAnimationComponent.AnimationValue.Grounded, 1); 
+                characterAnimationComponent.SetAnimatorValue(CharacterAnimationComponent.AnimationValue.Jump, 0);
+                characterAnimationComponent.SetAnimatorValue(CharacterAnimationComponent.AnimationValue.FreeFall, 0);
 
                 if (verticalVelocity < 0.0f)
                     verticalVelocity = -2f;
@@ -214,7 +214,7 @@ namespace Arenar.Character
                 if (playerCharacterParametersData.CanJump && jumpAction && jumpTimeoutDelta <= 0.0f)
                 {
                     verticalVelocity = Mathf.Sqrt(playerCharacterParametersData.JumpHeight * -2f * playerCharacterParametersData.Gravity);
-                    characterAnimationComponent.SetAnimationValue(Character.CharacterAnimationComponent.AnimationValue.Jump, 1);
+                    characterAnimationComponent.SetAnimatorValue(Character.CharacterAnimationComponent.AnimationValue.Jump, 1);
                 }
 
                 if (jumpTimeoutDelta >= 0.0f)
@@ -222,7 +222,7 @@ namespace Arenar.Character
             }
             else
             {
-                characterAnimationComponent.SetAnimationValue(CharacterAnimationComponent.AnimationValue.Grounded, 0); 
+                characterAnimationComponent.SetAnimatorValue(CharacterAnimationComponent.AnimationValue.Grounded, 0); 
                 jumpTimeoutDelta = playerCharacterParametersData.JumpTimeout;
 
                 if (fallTimeoutDelta >= 0.0f)
@@ -231,7 +231,7 @@ namespace Arenar.Character
                 }
                 else
                 {
-                    characterAnimationComponent.SetAnimationValue(Character.CharacterAnimationComponent.AnimationValue.FreeFall, 1);
+                    characterAnimationComponent.SetAnimatorValue(Character.CharacterAnimationComponent.AnimationValue.FreeFall, 1);
                 }
             }
 

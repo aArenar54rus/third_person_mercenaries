@@ -72,16 +72,16 @@ namespace Arenar
         
         public void ReturnCharacter(ICharacterEntity characterEntity)
         {
+            characterEntity.DeActivate();
+            characterEntity.DeInitialize();
+            characterEntity.EntityObjectTransform.gameObject.SetActive(false);
+            
             if (!createdHumanoidCharacters.ContainsKey(characterEntity.CharacterType))
                 createdHumanoidCharacters.Add(characterEntity.CharacterType, new Queue<ICharacterEntity>());
             createdHumanoidCharacters[characterEntity.CharacterType].Enqueue(characterEntity);
 
             if (_activeHumanoidCharacters.ContainsKey(characterEntity.CharacterType))
                 _activeHumanoidCharacters[characterEntity.CharacterType].Remove(characterEntity);
-            
-            characterEntity.DeActivate();
-            characterEntity.DeInitialize();
-            characterEntity.EntityObjectTransform.gameObject.SetActive(false);
         }
         
         public void ReturnAllCharacters()

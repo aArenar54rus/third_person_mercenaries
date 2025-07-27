@@ -28,12 +28,9 @@ namespace Arenar.Character
             ShotgunHands = 9,
             RifleHands = 10,
             SwordAttack = 11,
-            StunHead = 12,
-            StunBody = 13,
-            StunLegLeft = 14,
-            StunLegRight = 15,
-            StunHandLeft = 16,
-            StunHandRight = 17,
+            StunStart = 12,
+            StunIndex = 13,
+            StunComplete = 14,
         }
 
         
@@ -101,7 +98,6 @@ namespace Arenar.Character
         {
             tickableManager.Remove(this);
             animationReactionsTriggerController.onAnimationEventTriggered -= AnimationEventTriggeredHandler;
-
         }
 
         public void PlayAnimation(Animation animationType)
@@ -118,7 +114,7 @@ namespace Arenar.Character
             }
         }
 
-        public void SetAnimationValue(AnimationValue animationValue, float value)
+        public void SetAnimatorValue(AnimationValue animationValue, float value)
         {
             switch (animationValue)
             {
@@ -164,6 +160,18 @@ namespace Arenar.Character
                 
                 case AnimationValue.SwordAttack:
                     SetAnimationTrigger(characterAnimatorDataStorage.SwordAttack);
+                    break;
+                
+                case AnimationValue.StunStart:
+                    SetAnimationTrigger(characterAnimatorDataStorage.StunStartTrigger);
+                    break;
+                
+                case AnimationValue.StunComplete:
+                    SetAnimationTrigger(characterAnimatorDataStorage.StunCompleteTrigger);
+                    break;
+                
+                case AnimationValue.StunIndex:
+                    SetAnimationFloat(characterAnimatorDataStorage.StunValue, value);
                     break;
 
                 default:

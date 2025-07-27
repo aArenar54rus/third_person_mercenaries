@@ -210,7 +210,7 @@ namespace Arenar.Character
             if (InventoryComponent.CurrentActiveMeleeWeapon == null)
                 return;
             
-            characterAnimationComponent.SetAnimationValue(CharacterAnimationComponent.AnimationValue.SwordAttack, 1);
+            characterAnimationComponent.SetAnimatorValue(CharacterAnimationComponent.AnimationValue.SwordAttack, 1);
             InventoryComponent.CurrentActiveMeleeWeapon.MakeMeleeAttack();
             _lockAction = true;
         }

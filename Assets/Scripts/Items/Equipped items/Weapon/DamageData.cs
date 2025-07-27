@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Arenar
 {
-    public class DamageData
+    public struct DamageData
     {
         private ICharacterEntity _damageSetterCharacter;
         private ECharacterDamageContainerBodyType _bodyPart;
@@ -13,7 +13,10 @@ namespace Arenar
         private Vector3 _physicalMight;
 
         public ICharacterEntity DamageSetterCharacter => _damageSetterCharacter;
-        public ECharacterDamageContainerBodyType BodyPart => _bodyPart;
+        public ECharacterDamageContainerBodyType BodyPart {
+            get => _bodyPart;
+            set => _bodyPart = value;
+        }
         public int WeaponDamageWithUpgrades => _weaponDamage + _addedDamageByCharacterUpgrades;
         public int AddedDamageByCharacterUpgrades => _addedDamageByCharacterUpgrades;
         public int AddedStunPoint => _addedStunPoint;

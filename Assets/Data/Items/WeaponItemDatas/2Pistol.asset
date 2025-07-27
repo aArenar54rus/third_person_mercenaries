@@ -53,5 +53,5 @@ MonoBehaviour:
     isFullClipReload: 1
     projectileSpeed: 60
     recoilShakeDefaultValue: 3
-    stunPointMin: 0
-    stunPointMax: 0
+    stunPointMin: 15
+    stunPointMax: 25

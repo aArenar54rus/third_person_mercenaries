@@ -17,6 +17,6 @@ namespace Arenar.Character
     {
         void PlayAnimation(TAnimationType animationType);
 
-        void SetAnimationValue(TAnimationValue animationValue, float value);
+        void SetAnimatorValue(TAnimationValue animationValue, float value);
     }
 }
