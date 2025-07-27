@@ -49,6 +49,7 @@ namespace Arenar.Character
         public void OnDeactivate()
         {
             OnStunAnimationComplete();
+            _bodyPartsHealths.Clear();
             _tween?.Kill(false);
         }
 

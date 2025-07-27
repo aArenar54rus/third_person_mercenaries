@@ -13,7 +13,7 @@ namespace Arenar.Character
         private IStunCharacterComponent _stunCharacterComponent;
 
 
-        public bool IsControlBlocked { get; set; } = true;
+        public bool IsAiEnabled { get; set; } = true;
 
 
         [Inject]
@@ -42,14 +42,14 @@ namespace Arenar.Character
             _tickableManager.AddFixed(this);
             _aiStateMachine.Initialize();
             _aiStateMachine.OnStart();
-            IsControlBlocked = false;
+            IsAiEnabled = true;
             
             _characterEntity.TryGetCharacterComponent<IStunCharacterComponent>(out _stunCharacterComponent);
         }
 
         public void OnDeactivate()
         {
-            IsControlBlocked = true;
+            IsAiEnabled = false;
             _tickableManager.RemoveFixed(this);
             _aiStateMachine.DeInitialize();
         }
@@ -70,7 +70,10 @@ namespace Arenar.Character
         }
 
         public void FixedTick() {
-            if (IsControlBlocked || (_stunCharacterComponent != null && _stunCharacterComponent.IsStunned))
+            if (!IsAiEnabled)
+                return;
+            
+            if (_stunCharacterComponent != null && _stunCharacterComponent.IsStunned)
                 return;
             
             _aiStateMachine.OnFixedTick();

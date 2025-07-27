@@ -2,7 +2,7 @@ namespace Arenar.Character
 {
     public interface IAiCharacterBaseLogicComponent : ICharacterComponent
     {
-        bool IsControlBlocked { get; set; }
+        bool IsAiEnabled { get; set; }
         
         
         void SwitchState<T>() where T : IAIState;
