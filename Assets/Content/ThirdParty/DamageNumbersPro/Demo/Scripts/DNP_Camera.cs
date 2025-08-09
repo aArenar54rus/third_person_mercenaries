@@ -139,23 +139,20 @@ namespace DamageNumbersPro.Demo
                 }
                 else
                 {
-                    DNP_Enemy enemy = raycast.collider.GetComponent<DNP_Enemy>();
-                    DNP_Crosshair.instance.HitEnemy();
+                    DNP_Target target = raycast.collider.GetComponent<DNP_Target>();
+                    DNP_Crosshair.instance.HitTarget();
 
-                    if (enemy != null)
+                    if (target != null)
                     {
-                        if(settings.damage > 0)
-                        {
-                            enemy.Hurt(settings.damage);
-                        }
-
                         if(newDamageNumber.spamGroup != "")
                         {
-                            newDamageNumber.spamGroup += enemy.GetInstanceID();
+                            newDamageNumber.spamGroup += target.GetInstanceID();
                         }
 
                         newDamageNumber.enableFollowing = true;
-                        newDamageNumber.followedTarget = enemy.GetPelvis();
+                        newDamageNumber.followedTarget = target.transform;
+
+                        target.Hit();
                     }
                 }
             }

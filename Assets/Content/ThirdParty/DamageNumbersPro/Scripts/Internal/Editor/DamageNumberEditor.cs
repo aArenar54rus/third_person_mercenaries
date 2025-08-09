@@ -13,7 +13,7 @@ namespace DamageNumbersPro
     [CustomEditor(typeof(DamageNumber), true), CanEditMultipleObjects]
     public class DamageNumberEditor : Editor
     {
-        public static string version = "4.32";
+        public static string version = "4.41";
 
         void OnEnable()
         {
@@ -84,6 +84,7 @@ namespace DamageNumbersPro
                     DisplayFeature("enableRotateOverTime", "Rotate Over Time");
                     DisplayFeature("enableScaleByNumber", "Scale By Number");
                     DisplayFeature("enableScaleOverTime", "Scale Over Time");
+                    DisplayFeature("enableOrthographicScaling", "Orthographic Scaling");
                     break;
                 case (6): //Spam Control
                     DisplaySpamControlMain(isMesh);
@@ -121,8 +122,20 @@ namespace DamageNumbersPro
                             DNPEditorInternal.FixTextMeshPro();
                         }
 
-                        damageNumber.UpdateText();
-                        damageNumber.UpdateAlpha(1);
+                        try
+                        {
+                            damageNumber.UpdateText();
+                            damageNumber.UpdateAlpha(1);
+                        }
+                        catch
+                        {
+
+                        }
+
+                        if (isMesh)
+                        {
+                            damageNumber.GetTextMesh().gameObject.SetActive(true);
+                        }
                     }
                 }
             }
@@ -988,6 +1001,13 @@ namespace DamageNumbersPro
                         DNPEditorInternal.Label("<b>Information:</b>");
                         DNPEditorInternal.Label("- Scale over time can be customized in a <b>curve</b>.");
                         break;
+                    case ("Orthographic Scaling"):
+                        DNPEditorInternal.Label("<b>Function:</b>");
+                        DNPEditorInternal.Label("- Scales the popup to keep it's screen size consistent, when zooming in <b>2D projects</b>.");
+                        DNPEditorInternal.Label("");
+                        DNPEditorInternal.Label("<b>Information:</b>");
+                        DNPEditorInternal.Label("- Scale is based on the camera's orthographic size.");
+                        break;
 
                     //Spam Control:
                     case ("Combination"):
@@ -1162,6 +1182,51 @@ namespace DamageNumbersPro
                         GUI.enabled = true;
                         DNPEditorInternal.Lines();
 
+
+                        SerializedProperty scaleWithFOV = serializedObject.FindProperty("scaleWithFov");
+                        EditorGUILayout.PropertyField(scaleWithFOV);
+                        if (scaleWithFOV.boolValue || scaleWithFOV.hasMultipleDifferentValues)
+                        {
+                            EditorGUILayout.PropertyField(serializedObject.FindProperty("defaultFov"));
+                            EditorGUILayout.PropertyField(serializedObject.FindProperty("fovCamera"));
+
+                            bool noFovCameraOverride = true;
+                            foreach (DamageNumber dn in DNPEditorInternal.damageNumbers)
+                            {
+                                if (dn.fovCamera != null)
+                                {
+                                    noFovCameraOverride = false;
+                                    break;
+                                }
+                            }
+                            if (noFovCameraOverride)
+                            {
+                                string overlayString = "Main Camera";
+
+                                if (DNPEditorInternal.currentWidth < 404)
+                                {
+                                    overlayString = "<size=11>Main Camera</size>";
+
+                                    if (DNPEditorInternal.currentWidth < 389)
+                                    {
+                                        overlayString = "";
+                                    }
+                                }
+
+                                if (DNPEditorInternal.currentWidth > 293)
+                                {
+                                    PropertyOverlay(DNPEditorInternal.CheckmarkString(true) + "  " + overlayString + "      ");
+                                }
+                            }
+                            else
+                            {
+                                GUI.color = new Color(1, 1, 1, 0.7f);
+                                DNPEditorInternal.ScalingLabel("Only required if your <b>main camera</b> is not the FOV camera.", 362);
+                                GUI.color = Color.white;
+                            }
+                        }
+                        DNPEditorInternal.Lines();
+
                         EditorGUILayout.PropertyField(serializedObject.FindProperty("cameraOverride"));
                         bool noCameraOverride = true;
                         foreach(DamageNumber dn in DNPEditorInternal.damageNumbers)
@@ -1197,6 +1262,7 @@ namespace DamageNumbersPro
                             DNPEditorInternal.ScalingLabel("Only required if your <b>main camera</b> is not the target camera.", 362);
                             GUI.color = Color.white;
                         }
+
                         break;
 
                     //Text Content:
@@ -1329,6 +1395,46 @@ namespace DamageNumbersPro
                         SerializedProperty scaleOverTimeProperty = serializedObject.FindProperty("scaleOverTime");
                         Color scaleOverTimeColor = Color.Lerp(Color.red, Color.green, scaleOverTimeProperty.animationCurveValue.Evaluate(1));
                         EditorGUILayout.CurveField(scaleOverTimeProperty, scaleOverTimeColor, new Rect(0, 0, 1, 5f));
+                        break;
+                    case ("Orthographic Scaling"):
+                        EditorGUILayout.PropertyField(serializedObject.FindProperty("defaultOrthographicSize"));
+                        EditorGUILayout.PropertyField(serializedObject.FindProperty("maxOrthographicSize"));
+                        EditorGUILayout.PropertyField(serializedObject.FindProperty("orthographicCamera"));
+
+                        bool noOrthographicCameraOverride = true;
+                        foreach (DamageNumber dn in DNPEditorInternal.damageNumbers)
+                        {
+                            if (dn.orthographicCamera != null)
+                            {
+                                noOrthographicCameraOverride = false;
+                                break;
+                            }
+                        }
+                        if (noOrthographicCameraOverride)
+                        {
+                            string overlayString = "Main Camera";
+
+                            if (DNPEditorInternal.currentWidth < 404)
+                            {
+                                overlayString = "<size=11>Main Camera</size>";
+
+                                if (DNPEditorInternal.currentWidth < 389)
+                                {
+                                    overlayString = "";
+                                }
+                            }
+
+                            if (DNPEditorInternal.currentWidth > 293)
+                            {
+                                PropertyOverlay(DNPEditorInternal.CheckmarkString(true) + "  " + overlayString + "      ");
+                            }
+                        }
+                        else
+                        {
+                            GUI.color = new Color(1, 1, 1, 0.7f);
+                            DNPEditorInternal.ScalingLabel("Only required if your <b>main camera</b> is not the orthographic camera.", 362);
+                            GUI.color = Color.white;
+                        }
                         break;
                     //Spam Control:
                     case ("Combination"):
@@ -2155,6 +2261,11 @@ namespace DamageNumbersPro
                         break;
                     case ("Scale Over Time"):
                         dn.scaleOverTime = new AnimationCurve(new Keyframe(0, 1), new Keyframe(1, 0.7f));
+                        break;
+                    case ("Orthographic Scaling"):
+                        dn.defaultOrthographicSize = 5f;
+                        dn.maxOrthographicSize = 1.5f;
+                        dn.orthographicCamera = null;
                         break;
 
                     //Spam Control:

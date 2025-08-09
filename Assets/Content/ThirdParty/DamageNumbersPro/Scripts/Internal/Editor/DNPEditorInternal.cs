@@ -435,7 +435,7 @@ namespace DamageNumbersPro.Internal {
             GUI.backgroundColor = externalInspectorColor;
             EditorGUILayout.BeginVertical();
 
-            bool editingPrefabPreview = EditingPrefabPreview(target); ;
+            bool editingPrefabPreview = EditingPrefabPreview(target);
 
             if (editingPrefabPreview)
             {
@@ -1007,7 +1007,7 @@ namespace DamageNumbersPro.Internal {
                 tmp.gameObject.SetActive(true);
                 for (int n = 0; n < tmp.childCount; n++)
                 {
-                    Object.DestroyImmediate(tmp.GetChild(n).gameObject);
+                    DestroyOrDisable(tmp.GetChild(n).gameObject);
                     destroyedSomething = true;
                 }
                 tmp.gameObject.SetActive(false);
@@ -1021,7 +1021,7 @@ namespace DamageNumbersPro.Internal {
                     if(child.GetComponent<MeshRenderer>() != null)
                     {
                         destroyedSomething = true;
-                        Object.DestroyImmediate(child.gameObject);
+                        DestroyOrDisable(child.gameObject);
                     }
                 }
             }
@@ -1034,7 +1034,7 @@ namespace DamageNumbersPro.Internal {
                     if (child.GetComponent<MeshRenderer>() != null)
                     {
                         destroyedSomething = true;
-                        Object.DestroyImmediate(child.gameObject);
+                        DestroyOrDisable(child.gameObject);
                     }
                 }
             }
@@ -1047,6 +1047,19 @@ namespace DamageNumbersPro.Internal {
                 }
             }
         }
+
+        private static void DestroyOrDisable(GameObject go)
+        {
+            if (PrefabUtility.IsPartOfNonAssetPrefabInstance(go))
+            {
+                go.SetActive(false);
+            }
+            else
+            {
+                Object.DestroyImmediate(go);
+            }
+        }
+
         #endregion
 
         #region Miscellaneous

@@ -51,10 +51,11 @@ namespace DamageNumbersPro.Demo
             mousePosition = Input.mousePosition;
 #endif
 
+            //Raycast.
             Vector3 worldPosition = Camera.main.ScreenToWorldPoint(mousePosition);
-            worldPosition.z = 0;
-
-            RaycastHit2D hit = Physics2D.Raycast(worldPosition, Vector2.down, 0.2f);
+            worldPosition.z = -5;
+            RaycastHit hit;
+            Physics.Raycast(worldPosition, Vector3.forward, out hit, 10f);
 
             //Select Damage Number:
             DNP_PrefabSettings settings = DNP_DemoManager.instance.GetSettings();
@@ -72,6 +73,12 @@ namespace DamageNumbersPro.Demo
 
             if (hit.collider != null)
             {
+                DNP_Target dnpTarget = hit.collider.GetComponent<DNP_Target>();
+                if(dnpTarget != null)
+                {
+                    dnpTarget.Hit();
+                }
+
                 newDamageNumber.SetFollowedTarget(hit.collider.transform);
             }
 

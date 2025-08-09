@@ -47,7 +47,7 @@ namespace DamageNumbersPro.Demo
             }
         }
 
-        public void HitEnemy()
+        public void HitTarget()
         {
             transform.localScale = new Vector3(1.7f, 1.7f, 1f);
             image.color = Color.red;

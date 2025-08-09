@@ -35,6 +35,12 @@ namespace DamageNumbersPro
         [Tooltip("Keeps the screen-size consistent accross different distances.")]
         public bool consistentScreenSize = false;
         public DistanceScalingSettings distanceScalingSettings = new DistanceScalingSettings(0);
+        [Tooltip("Scales the popup with the camera's field of view to keep it's size consistent.")]
+        public bool scaleWithFov = false;
+        [Tooltip("The default field of view, where the popup will be at it's default scale.")]
+        public float defaultFov = 60f;
+        [Tooltip("The camera whose field of view the popup will react to.")]
+        public Camera fovCamera;
         [Tooltip("Override the camera looked at and scaled for.\nIf this set to None the Main Camera will be used.")]
         public Transform cameraOverride;
         #endregion
@@ -166,6 +172,15 @@ namespace DamageNumbersPro
         public bool enableScaleOverTime = false;
         [Tooltip("Will scale over it's lifetime using this curve.")]
         public AnimationCurve scaleOverTime = new AnimationCurve(new Keyframe(0, 1), new Keyframe(1, 0.7f));
+
+        //Scale By Orthographic Size:
+        public bool enableOrthographicScaling = false;
+        [Tooltip("The base orthographic size of the camera, where the popup will use it's default scale.")]
+        public float defaultOrthographicSize = 5f;
+        [Tooltip("Popups wont get larger than this value to prevent overlapping, when zooming out.")]
+        public float maxOrthographicSize = 1.5f;
+        [Tooltip("The camera whose orthographic size will be used to resize the popup. Uses the Main Camera by default.")]
+        public Camera orthographicCamera;
         #endregion
 
         #region Spam Control Settings
@@ -270,7 +285,12 @@ namespace DamageNumbersPro
 
         //3D:
         Transform targetCamera;
+        Camera targetFovCamera;
         float simulatedScale;
+        float lastFOV;
+
+        //Orthographic Sclaing:
+        Camera targetOrthographicCamera;
 
         //Destruction:
         bool isDestroyed;
@@ -284,6 +304,7 @@ namespace DamageNumbersPro
         DamageNumber originalPrefab;
         public static Transform poolParent;
         static Dictionary<int, HashSet<DamageNumber>> pools;
+        public static HashSet<DamageNumber> activeInstances;
         int poolingID;
         bool performRestart;
         bool destroyAfterSpawning;
@@ -335,7 +356,7 @@ namespace DamageNumbersPro
         public void UpdateDamageNumber(float delta, float time)
         {
             //Check activity.
-            if(gameObject.activeInHierarchy == false)
+            if(isActiveAndEnabled == false)
             {
                 startTime += delta;
                 startLifeTime += delta;
@@ -384,13 +405,6 @@ namespace DamageNumbersPro
                 UpdateRotationZ();
             }
 
-            //Offset:
-            finalPosition = position;
-            if (enableShaking)
-            {
-                finalPosition = ApplyShake(finalPosition, shakeSettings, time);
-            }
-
             //Combination:
             if (enableCombination)
             {
@@ -401,6 +415,13 @@ namespace DamageNumbersPro
             if (enableDestruction)
             {
                 HandleDestruction(time);
+            }
+
+            //Offset:
+            finalPosition = position;
+            if (enableShaking)
+            {
+                finalPosition = ApplyShake(finalPosition, shakeSettings, time);
             }
 
             //Apply Transform:
@@ -1024,9 +1045,6 @@ namespace DamageNumbersPro
         /// </summary>
         public void DestroyDNP()
         {
-            //Updater:
-            DNPUpdater.UnregisterPopup(unscaledTime, updateDelay, this);
-
             //Pooling / Destroying:
             if (enablePooling && originalPrefab != null)
             {
@@ -1040,8 +1058,19 @@ namespace DamageNumbersPro
                     pools.Add(poolingID, new HashSet<DamageNumber>());
                 }
 
+                //Static Reference:
+                if (activeInstances != null && activeInstances.Contains(this))
+                {
+                    activeInstances.Remove(this);
+                }
+
+                //Updater:
+                DNPUpdater.UnregisterPopup(unscaledTime, updateDelay, this);
+
+                //Remove from dictionaries.
                 RemoveFromDictionary();
 
+                //Pooling:
                 if (pools[poolingID].Count < poolSize)
                 {
                     PreparePooling();
@@ -1139,8 +1168,116 @@ namespace DamageNumbersPro
                 {
                     for (int n = 0; n < amount; n++)
                     {
-                        DamageNumber dn = Spawn(new Vector3(-9999, -9999, -9999));
+                        DamageNumber dn = Spawn(new Vector3(-9999, -9999, 0));
                         dn.destroyAfterSpawning = true;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Clears all pooled popups.
+        /// </summary>
+        /// <param name="type">The type of pooled popups to clear. All by default.</param>
+        public static void ClearPooled(DNPType type = DNPType.All)
+        {
+            //Check if pools exist.
+            if(pools != null)
+            {
+                //Iterate through pools.
+                foreach (KeyValuePair<int, HashSet<DamageNumber>> entry in pools)
+                {
+                    //Check if pool contains popups.
+                    if (entry.Value != null)
+                    {
+                        //Iterate through the pool's popups.
+                        foreach (DamageNumber popup in entry.Value)
+                        {
+                            //Check type.
+                            if (type == DNPType.All || (popup.IsMesh() == (type == DNPType.Mesh)))
+                            {
+                                //Destroy pooled popup.
+                                Destroy(popup.gameObject);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Destroys all currently active popups.
+        /// </summary>
+        /// <param name="type">The type of popup to destroy. All by default.</param>
+        /// <param name="allowPooling">Whether destroyed popups are allowed to pool.</param>
+        /// <param name="ignorePermanent">Whether permanent popups should be destroyed.</param>
+        public static void ClearActive(DNPType type = DNPType.All, bool allowPooling = true, bool ignorePermanent = true)
+        {
+            if (allowPooling)
+            {
+                //Get all active popups.
+                List<DamageNumber> popups = new List<DamageNumber>();
+                foreach (DamageNumber dn in activeInstances)
+                {
+                    if (dn != null)
+                    {
+                        popups.Add(dn);
+                    }
+                }
+
+                //Destroy all active popups with potential pooling.
+                foreach(DamageNumber popup in popups)
+                {
+                    //Check permanent.
+                    if (!ignorePermanent || !popup.permanent)
+                    {
+                        //Check type.
+                        if (type == DNPType.All || (popup.IsMesh() == (type == DNPType.Mesh)))
+                        {
+                            popup.DestroyDNP();
+                        }
+                    }
+                }
+            }
+            else
+            {
+                foreach (DamageNumber popup in activeInstances)
+                {
+                    if (popup != null)
+                    {
+                        //Check permanent.
+                        if (!ignorePermanent || !popup.permanent)
+                        {
+                            //Check type.
+                            if (type == DNPType.All || (popup.IsMesh() == (type == DNPType.Mesh)))
+                            {
+                                Destroy(popup.gameObject);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Fades out all currently active popups.
+        /// </summary>
+        /// <param name="type">The type of the popup to fade out. All by default.</param>
+        /// <param name="ignorePermanent">Whether permanent popups should be faded out.</param>
+        public static void FadeOutActive(DNPType type = DNPType.All, bool ignorePermanent = true)
+        {
+            foreach(DamageNumber popup in activeInstances)
+            {
+                if (popup != null)
+                {
+                    //Check permanent.
+                    if (!ignorePermanent || !popup.permanent)
+                    {
+                        //Check type.
+                        if (type == DNPType.All || (popup.IsMesh() == (type == DNPType.Mesh)))
+                        {
+                            popup.FadeOut();
+                        }
                     }
                 }
             }
@@ -1148,6 +1285,16 @@ namespace DamageNumbersPro
 
         protected void Restart()
         {
+            //Static Reference:
+            if(activeInstances == null)
+            {
+                activeInstances = new HashSet<DamageNumber>();
+            }
+            if (activeInstances.Contains(this) == false)
+            {
+                activeInstances.Add(this);
+            }
+
             //Updater:
             DNPUpdater.RegisterPopup(unscaledTime, updateDelay, this);
 
@@ -1166,16 +1313,21 @@ namespace DamageNumbersPro
             #region Fallback Fix
             if (IsMesh())
             {
-                //Fix for TMP fallback fonts.
+                //Create fallback dictionary.
                 if (fallbackDictionary == null)
                 {
                     fallbackDictionary = new Dictionary<TMP_FontAsset, GameObject>();
                 }
+
+                //Get font material.
                 TMP_FontAsset fontAsset = GetFontMaterial();
-                if (!fallbackDictionary.ContainsKey(fontAsset))
+
+                //Check if in dictionary.
+                if (!fallbackDictionary.ContainsKey(fontAsset) && fontAsset != null)
                 {
-                    if (fontAsset != null && fontAsset.fallbackFontAssetTable != null && fontAsset.fallbackFontAssetTable.Count > 0)
-                    {
+                    bool usesFallbackFonts = fontAsset.fallbackFontAssetTable != null && fontAsset.fallbackFontAssetTable.Count > 0;
+                    if (fontAsset.isMultiAtlasTexturesEnabled || usesFallbackFonts)
+                    { 
                         //New tmp for fallback assets.
                         GameObject fallbackAsset = Instantiate<GameObject>(textMeshPro.gameObject);
                         fallbackAsset.transform.localScale = Vector3.zero;
@@ -1183,47 +1335,62 @@ namespace DamageNumbersPro
                         fallbackAsset.hideFlags = HideFlags.HideAndDontSave;
                         DontDestroyOnLoad(fallbackAsset);
 
-                        //Create a new string containing various unicode characters of the fallback fonts.
-                        string textString = "" + (char)fontAsset.characterTable[0].unicode;
-                        for (int f = 0; f < fontAsset.fallbackFontAssetTable.Count; f++)
+                        //Create base string containing a single character of the base font.
+                        string textString = System.Char.ConvertFromUtf32((int) fontAsset.characterTable[0].unicode);
+
+                        //Add all characters to support multi-atlas fonts.
+                        if (fontAsset.isMultiAtlasTexturesEnabled)
                         {
-                            TMP_FontAsset fallbackFont = fontAsset.fallbackFontAssetTable[f];
-
-                            if (fallbackFont != null && fallbackFont.characterTable != null)
+                            foreach (TMP_Character character in fontAsset.characterTable)
                             {
-                                foreach (TMP_Character fallbackCharacter in fallbackFont.characterTable)
+                                if(character != null && character.unicode > 0)
                                 {
-                                    if (fallbackCharacter != null)
-                                    {
-                                        if (fontAsset.characterLookupTable.ContainsKey(fallbackCharacter.unicode))
-                                        {
-                                            //Character already in main font.
-                                        }
-                                        else
-                                        {
-                                            bool addCharacter = true;
+                                    textString += System.Char.ConvertFromUtf32((int)character.unicode);
+                                }
+                            }
+                        }
 
-                                            for (int pF = 0; pF < f; pF++)
+                        //Create a new string containing various unicode characters of the fallback fonts.
+                        if (usesFallbackFonts)
+                        {
+                            for (int f = 0; f < fontAsset.fallbackFontAssetTable.Count; f++)
+                            {
+                                TMP_FontAsset fallbackFont = fontAsset.fallbackFontAssetTable[f];
+
+                                if (fallbackFont != null && fallbackFont.characterTable != null)
+                                {
+                                    bool success = false;
+
+                                    foreach (TMP_Character fallbackCharacter in fallbackFont.characterTable)
+                                    {
+                                        if (fallbackCharacter != null)
+                                        {
+                                            if (AddFallbackCharacterToString(ref textString, fallbackCharacter.unicode, fontAsset, f))
                                             {
-                                                TMP_FontAsset previousFallbackFont = fontAsset.fallbackFontAssetTable[pF];
-                                                if (previousFallbackFont != null && previousFallbackFont.characterLookupTable.ContainsKey(fallbackCharacter.unicode))
+                                                success = true;
+                                                break;
+                                            }
+                                        }
+                                    }
+
+                                    if (!success && fallbackFont.atlasPopulationMode == AtlasPopulationMode.Dynamic)
+                                    {
+                                        for (int unicode = 0; unicode < 40959; unicode++)
+                                        {
+                                            if (fallbackFont.TryAddCharacters(new uint[] { (uint) unicode }))
+                                            {
+                                                if (AddFallbackCharacterToString(ref textString, (uint)unicode, fontAsset, f))
                                                 {
-                                                    //Character already in a higher priority fallback font.
-                                                    addCharacter = false;
                                                     break;
                                                 }
-                                            }
-
-                                            if (addCharacter)
-                                            {
-                                                textString += (char)fallbackCharacter.unicode;
-                                                break;
                                             }
                                         }
                                     }
                                 }
                             }
                         }
+
+                        //Assign text and add to dictionary.
                         fallbackAsset.GetComponent<TextMeshPro>().text = textString;
                         fallbackDictionary.Add(fontAsset, fallbackAsset);
                     }
@@ -1256,6 +1423,47 @@ namespace DamageNumbersPro
                 startLifeTime = -100;
             }
         }
+
+        bool AddFallbackCharacterToString(ref string textString, uint unicode, TMP_FontAsset mainFontAsset, int fallbackIndex)
+        {
+            //The unicode 0 can cause issues.
+            if(unicode < 1)
+            {
+                return false;
+            }
+
+            if (mainFontAsset.characterLookupTable.ContainsKey(unicode) || (mainFontAsset.atlasPopulationMode == AtlasPopulationMode.Dynamic && mainFontAsset.TryAddCharacters(new uint[] { unicode })))
+            {
+                //Character already in main font.
+            }
+            else
+            {
+                bool addCharacter = true;
+
+                for (int pF = 0; pF < fallbackIndex; pF++)
+                {
+                    TMP_FontAsset previousFallbackFont = mainFontAsset.fallbackFontAssetTable[pF];
+                    if (previousFallbackFont != null)
+                    {
+                        if (previousFallbackFont.characterLookupTable.ContainsKey(unicode) || (previousFallbackFont.atlasPopulationMode == AtlasPopulationMode.Dynamic && previousFallbackFont.TryAddCharacters(new uint[] { unicode })))
+                        {
+                            //Character already in a higher priority fallback font.
+                            addCharacter = false;
+                            break;
+                        }
+                    }
+                }
+
+                if (addCharacter)
+                {
+                    textString += System.Char.ConvertFromUtf32((int) unicode);
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         void Initialize(float time)
         {
             numberScale = destructionScale = combinationScale = currentFollowSpeed = 1f;
@@ -1280,10 +1488,44 @@ namespace DamageNumbersPro
                 {
                     targetCamera = Camera.current.transform;
                 }
+
+                //Scale with FOV:
+                if (scaleWithFov)
+                {
+                    if (fovCamera != null)
+                    {
+                        targetFovCamera = fovCamera;
+                    }
+                    else if (Camera.main != null)
+                    {
+                        targetFovCamera = Camera.main;
+                    }
+                    else if (Camera.current != null)
+                    {
+                        targetFovCamera = Camera.current;
+                    }
+                }
+            }
+
+            //Orthographic Scaling:
+            if (enableOrthographicScaling)
+            {
+                if (orthographicCamera != null)
+                {
+                    targetOrthographicCamera = orthographicCamera;
+                }
+                else if (Camera.main != null)
+                {
+                    targetOrthographicCamera = Camera.main;
+                }
+                else if (Camera.current != null)
+                {
+                    targetOrthographicCamera = Camera.current;
+                }
             }
 
             //Scale:
-            UpdateScaleAnd3D();
+            UpdateScaleAnd3D(true);
 
             //Rotation:
             if (enableRotateOverTime)
@@ -1386,6 +1628,7 @@ namespace DamageNumbersPro
             myAbsorber = null;
 
             //Reset some Setting Variables:
+            permanent = originalPrefab.permanent;
             spamGroup = originalPrefab.spamGroup;
             leftText = originalPrefab.leftText;
             rightText = originalPrefab.rightText;
@@ -2008,7 +2251,7 @@ namespace DamageNumbersPro
 
         public virtual void SetPosition(Vector3 newPosition)
         {
-            transform.position = newPosition;
+            position = transform.position = newPosition;
         }
 
         /// <summary>
@@ -2075,6 +2318,17 @@ namespace DamageNumbersPro
         #endregion
 
         #region Spam Control
+        /// <summary>
+        /// Use this function to change the spam group of the popup.
+        /// Using the public spamGroup variable will also work within the spawn frame.
+        /// </summary>
+        public void SetSpamGroup(string newSpamGroup)
+        {
+            RemoveFromDictionary();
+            spamGroup = newSpamGroup;
+            AddToDictionary();
+        }
+
         void AddToDictionary()
         {
             if (spamGroup != "")
@@ -2471,7 +2725,7 @@ namespace DamageNumbersPro
             currentRotation += currentRotationSpeed * delta * rotateOverTime.Evaluate((time - startTime) / currentLifetime);
         }
 
-        void UpdateScaleAnd3D()
+        void UpdateScaleAnd3D(bool beforeMeshBuild = false)
         {
             Vector3 appliedScale = originalScale;
             lastScaleFactor = 1f;
@@ -2493,13 +2747,19 @@ namespace DamageNumbersPro
             if (enableScaleOverTime)
             {
                 float time = unscaledTime ? Time.unscaledTime : Time.time;
-                appliedScale *= scaleOverTime.Evaluate(Mathf.Clamp01((time - startTime) / (currentLifetime + durationFadeOut)));
+                appliedScale *= scaleOverTime.Evaluate((time - startTime) / (currentLifetime + durationFadeOut));
             }
 
             //Destruction Scale:
             if (enableDestruction)
             {
                 appliedScale *= destructionScale;
+            }
+
+            //Orthographic Scale:
+            if (enableOrthographicScaling && !beforeMeshBuild)
+            {
+                appliedScale *= Mathf.Min(maxOrthographicSize, targetOrthographicCamera.orthographicSize / defaultOrthographicSize);
             }
 
             //Perspective:
@@ -2547,6 +2807,13 @@ namespace DamageNumbersPro
                     }
                 }
 
+                //FOV Scaling.
+                if (scaleWithFov && !beforeMeshBuild)
+                {
+                    lastScaleFactor *= targetFovCamera.fieldOfView / defaultFov;
+                }
+
+                //Apply scale.
                 appliedScale *= lastScaleFactor;
                 simulatedScale = appliedScale.x;
 
@@ -2584,6 +2851,7 @@ namespace DamageNumbersPro
             //Apply:
             transform.localScale = appliedScale;
 
+            //First Frame Fix:
             if (firstFrameScale)
             {
                 if(durationFadeIn > 0)
@@ -2662,6 +2930,16 @@ namespace DamageNumbersPro
         #region Unity Events
         void OnDestroy()
         {
+            //Static Reference:
+            if (activeInstances != null && activeInstances.Contains(this))
+            {
+                activeInstances.Remove(this);
+            }
+
+            //Updater:
+            DNPUpdater.UnregisterPopup(unscaledTime, updateDelay, this);
+
+            //Remove from dictionaries.
             RemoveFromDictionary();
 
             //Clear Mesh:

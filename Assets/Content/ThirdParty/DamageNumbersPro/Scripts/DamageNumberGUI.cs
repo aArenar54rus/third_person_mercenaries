@@ -189,7 +189,7 @@ namespace DamageNumbersPro
         public override void SetPosition(Vector3 newPosition)
         {
             GetReferencesIfNecessary();
-            myRect.anchoredPosition3D = newPosition;
+            position = myRect.anchoredPosition3D = newPosition;
         }
         public override void SetAnchoredPosition(Transform rectParent, Vector2 anchoredPosition)
         {
@@ -199,7 +199,7 @@ namespace DamageNumbersPro
             //Set Parent and Position:
             GetReferencesIfNecessary();
             myRect.SetParent(rectParent, false);
-            myRect.anchoredPosition = anchoredPosition;
+            myRect.anchoredPosition3D = anchoredPosition;
 
             //New Transform:
             transform.localScale = oldScale;

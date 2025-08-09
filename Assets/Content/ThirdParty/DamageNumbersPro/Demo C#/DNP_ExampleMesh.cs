@@ -35,7 +35,7 @@ namespace DamageNumbersPro.Demo
 
         public void SpawnPopup(float number)
         {
-            DamageNumber newPopup = popupPrefab.Spawn(target.position, number); //Spawn DamageNumber At Target     <-----     [REQUIRED]
+            DamageNumber newPopup = popupPrefab.Spawn(target.position + new Vector3(0, 0.25f, -1), number); //Spawn DamageNumber At Target     <-----     [REQUIRED]
 
 
             //You can do any change you want on the DamageNumber returned by the Spawn(...) function.
@@ -61,6 +61,9 @@ namespace DamageNumbersPro.Demo
                 newPopup.SetScale(1);
                 newPopup.SetColor(new Color(1, 0.7f, 0.5f));
             }
+
+            //Flip the target.
+            target.GetComponent<DNP_Target>().Hit();
         }
     }
 }
