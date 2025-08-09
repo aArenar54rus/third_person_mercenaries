@@ -25,14 +25,14 @@ namespace Arenar
 
             ICharacterLiveComponent characterLiveComponent = null;
             
-            if (hit.transform.TryGetComponent<ICharacterEntity>(out ICharacterEntity characterController)
+            if (hit.transform.TryGetComponent<CharacterDamageContainer>(out CharacterDamageContainer damageContainer))
+            {
+                damageContainer.SetDamage(damageData, hit);
+            }
+            else if (hit.transform.TryGetComponent<ICharacterEntity>(out ICharacterEntity characterController)
                 && characterController.TryGetCharacterComponent<ICharacterLiveComponent>(out characterLiveComponent))
             {
                 characterLiveComponent.SetDamage(damageData);
-            }
-            else if (hit.transform.TryGetComponent<CharacterDamageContainer>(out CharacterDamageContainer damageContainer))
-            {
-                damageContainer.SetDamage(damageData);
             }
                     
             ParticleSystem effect = _effectsSpawner.GetEffect(EffectType.BulletCollision);

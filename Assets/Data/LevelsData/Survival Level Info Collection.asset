@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minSpawnInterval: 1
   maxSpawnInterval: 3
-  maxEnemyCountOnScene: 10
+  maxEnemyCountOnScene: 1
   spawnPatterns:
   - spawnNpcs: 03
