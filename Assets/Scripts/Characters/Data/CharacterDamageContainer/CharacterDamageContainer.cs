@@ -36,8 +36,9 @@ namespace Arenar.Character
 			CharacterEntity.TryGetCharacterComponent<IStunCharacterComponent>(out _characterStunComponent);
 		}
 		
-		public void SetDamage(DamageData damageData, RaycastHit hit)
-		{
+		public void SetDamage(DamageData damageData, RaycastHit hit) {
+			damageData.BodyPart = _bodyType;
+			
 			if (_muscleBroadcaster)
 				UpdatePhysicalHit(damageData, hit).Forget();
 			

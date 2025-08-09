@@ -23,7 +23,7 @@ namespace Arenar.Services.DamageNumbersService
         {
             DamageNumber newPopup = _damageNumbersPrefabsData.DefaultDamageNumberPrefab.Spawn(damageTarget.position, damageNumber);
             
-            newPopup.enableFollowing = true;
+            newPopup.enableFollowing = false;
             newPopup.SetFollowedTarget(damageTarget);
 
             float distance = Vector3.Distance(damageTarget.position, attackerTarget.position);

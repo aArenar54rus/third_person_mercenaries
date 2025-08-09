@@ -1,3 +1,4 @@
+using Arenar.Services.DamageNumbersService;
 using System;
 using Arenar.Services.LevelsService;
 using RootMotion.Dynamics;
@@ -14,12 +15,14 @@ namespace Arenar.Character
         public event Action<int, int> OnCharacterChangeHealthValue;
 
 
-        private CharacterDamageContainer[] damageContainers;
-        private EnemyCharacterDataStorage enemyCharacterDataStorage;
-        private PuppetMaster puppetMaster;
+        private CharacterDamageContainer[] _damageContainers;
+        private EnemyCharacterDataStorage _enemyCharacterDataStorage;
+        private PuppetMaster _puppetMaster;
 
-        private ICharacterEntity characterEntity;
+        private ICharacterEntity _characterEntity;
         private HealthContainer healthContainer;
+        
+        private IDamageNumbersService _damageNumbers;
         
         
         public bool IsAlive => HealthContainer.Health > 0;
@@ -38,13 +41,16 @@ namespace Arenar.Character
         public void Construct(ICharacterEntity characterEntity,
                               ILevelsService levelsService,
                               ICharacterDataStorage<CharacterPhysicsDataStorage> characterPhysicsDataStorage,
-                              ICharacterDataStorage<EnemyCharacterDataStorage> enemyCharacterDataStorage)
+                              ICharacterDataStorage<EnemyCharacterDataStorage> enemyCharacterDataStorage,
+                              IDamageNumbersService damageNumbers)
         {
-            damageContainers = characterPhysicsDataStorage.Data.DamageContainers;
-            puppetMaster = characterPhysicsDataStorage.Data.PuppetMaster;
+            _damageContainers = characterPhysicsDataStorage.Data.DamageContainers;
+            _puppetMaster = characterPhysicsDataStorage.Data.PuppetMaster;
             
-            this.enemyCharacterDataStorage = enemyCharacterDataStorage.Data;
-            this.characterEntity = characterEntity;
+            _enemyCharacterDataStorage = enemyCharacterDataStorage.Data;
+            _characterEntity = characterEntity;
+
+            _damageNumbers = damageNumbers;
         }
 
         public void SetDamage(DamageData damageData)
@@ -53,15 +59,23 @@ namespace Arenar.Character
                 return;
             
             float criticalChance = 0.0f;
-            if (enemyCharacterDataStorage.EnemyCharacterParameters.PartDatas.ContainsKey(damageData.BodyPart))
-                criticalChance = enemyCharacterDataStorage.EnemyCharacterParameters.PartDatas[damageData.BodyPart].CriticalChance;
+            if (_enemyCharacterDataStorage.EnemyCharacterParameters.PartDatas.ContainsKey(damageData.BodyPart))
+                criticalChance = _enemyCharacterDataStorage.EnemyCharacterParameters.PartDatas[damageData.BodyPart].CriticalChance;
 
             float random = Random.Range(0, 100);
             bool isCritical = (criticalChance * 100 > random);
             
             var damage = isCritical ? damageData.WeaponDamageWithUpgrades * 2 : damageData.WeaponDamageWithUpgrades;
             HealthContainer.Health -= damage;
-            
+
+            if (_enemyCharacterDataStorage.BodyColliders.ContainsKey(damageData.BodyPart)) {
+                _damageNumbers.PlayDamageNumber(
+                        damage,
+                        _enemyCharacterDataStorage.BodyColliders[damageData.BodyPart].transform,
+                        damageData.DamageSetterCharacter.CharacterTransform
+                );
+            }
+
             OnCharacterChangeHealthValue?.Invoke(HealthContainer.Health, HealthContainer.HealthMax);
             if (HealthContainer.Health <= 0)
                 SetDeath();
@@ -75,15 +89,15 @@ namespace Arenar.Character
 
         public void SetDeath()
         {
-            puppetMaster.state = PuppetMaster.State.Dead;
+            _puppetMaster.state = PuppetMaster.State.Dead;
             HealthContainer.Health = 0;
-            OnCharacterDie?.Invoke(characterEntity);
+            OnCharacterDie?.Invoke(_characterEntity);
         }
 
         public void Initialize()
         {
-            foreach (var damageContainer in damageContainers)
-                damageContainer.Initialize(characterEntity);
+            foreach (var damageContainer in _damageContainers)
+                damageContainer.Initialize(_characterEntity);
         }
 
         public void DeInitialize() {}
@@ -91,11 +105,11 @@ namespace Arenar.Character
         public void OnActivate()
         {
             HealthContainer = new HealthContainer();
-            HealthContainer.HealthMax = enemyCharacterDataStorage.EnemyCharacterParameters.BaseHealth;
+            HealthContainer.HealthMax = _enemyCharacterDataStorage.EnemyCharacterParameters.BaseHealth;
             
             SetAlive();
 
-            puppetMaster.state = PuppetMaster.State.Alive;
+            _puppetMaster.state = PuppetMaster.State.Alive;
         }
 
         public void OnDeactivate() {}

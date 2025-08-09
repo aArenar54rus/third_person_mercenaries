@@ -14501,7 +14501,19 @@ MonoBehaviour:
     parameters: {fileID: 11400000, guid: b8759d72e47c41f4cbd0e1a074dafca6, type: 2}
     _bodyColliders:
       IsSingleLineView: 1
-      list: []
+      list:
+      - Key: 1
+        Value: {fileID: 933009781472186271}
+      - Key: 6
+        Value: {fileID: 7301617080468864392}
+      - Key: 2
+        Value: {fileID: 3472810450681276666}
+      - Key: 3
+        Value: {fileID: 7004261978894478064}
+      - Key: 4
+        Value: {fileID: 5954732642375767584}
+      - Key: 5
+        Value: {fileID: 45955956104286037}
 --- !u!114 &5314063536815717514
 MonoBehaviour:
   m_ObjectHideFlags: 0
